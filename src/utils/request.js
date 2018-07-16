@@ -1,7 +1,10 @@
 import axios from 'axios'
 import { Message, MessageBox } from 'element-ui'
 import store from '../store'
+import NProgress from 'nprogress' // progress bar
+import 'nprogress/nprogress.css'// progress bar style
 
+NProgress.configure({ easing: 'ease', speed: 500, showSpinner: false })// NProgress Configuration
 // 全局设置方式
 // 超时时间
 // axios.defaults.timeout = 30000
@@ -14,32 +17,31 @@ import store from '../store'
 const service = axios.create({
   baseURL: process.env.BASE_API, // api的base_url
   timeout: 30000, // request timeout
-  withCredentials: true, // 跨域请求，允许保存cookie
-  headers: {
-    'Authorization': 'Basic Y2RwOmRldg=='
-  }
+  withCredentials: true // 跨域请求，允许保存cookie
 })
 
 // request interceptor
 service.interceptors.request.use(config => {
+  NProgress.start() // start progress bar
   if (store.getters.token.access_token) {
     // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
-    config.headers['Authorization'] = titleCase(store.getters.token.token_type) + ' ' + store.getters.token.access_token
+    config.headers['Authorization'] = WordCap(store.getters.token.token_type) + ' ' + store.getters.token.access_token
   }
   return config
 }, error => {
-  // Do something with request error
-  console.log(error) // for debug
+  NProgress.done()
   Promise.reject(error)
 })
 
 // respone interceptor
 service.interceptors.response.use(
   response => {
+    // debugger
+    NProgress.done()
     const data = response.data
     if (response.status !== 200) {
       Message({
-        message: response.message || data.msg,
+        message: 'status:' + response.status + ' message:' + response.message || 'code:' + data.code + ' msg:' + data.msg,
         type: 'error',
         duration: 5 * 1000
       })
@@ -49,14 +51,14 @@ service.interceptors.response.use(
         return response
       } else if (data.code === 100) { // no_action
         Message({
-          message: data.msg,
+          message: 'code:' + data.code + ' msg:' + data.msg,
           type: 'warning',
           duration: 5 * 1000
         })
         return Promise.reject('error')
       } else { // failure
         Message({
-          message: data.msg,
+          message: 'code:' + data.code + ' msg:' + data.msg,
           type: 'error',
           duration: 5 * 1000
         })
@@ -77,16 +79,34 @@ service.interceptors.response.use(
     }
   },
   error => {
-    console.log('err' + error) // for debug
-    Message({
-      message: error.message,
-      type: 'error',
-      duration: 5 * 1000
-    })
+    NProgress.done()
+    if (error.response && error.response.data) {
+      const data = error.response.data
+      Message({
+        message: 'error:' + data.error + ' description:' + data.error_description,
+        type: 'error',
+        duration: 5 * 1000
+      })
+      debugger
+      if (error.response.status && error.response.status >= 400 && error.response.status < 500) {
+        store.dispatch('RefreshAccessToken').then(() => {
+        })
+      }
+    } else {
+      Message({
+        message: error.message,
+        type: 'error',
+        duration: 5 * 1000
+      })
+    }
     return Promise.reject(error)
   })
 
-function titleCase(s) {
+/**
+ * 首字母大写
+ * @return {string}
+ */
+function WordCap(s) {
   return s.toLowerCase().replace(/\b([\w|']+)\b/g, function(word) {
     return word.replace(word.charAt(0), word.charAt(0).toUpperCase())
   })

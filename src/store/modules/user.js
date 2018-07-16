@@ -1,4 +1,4 @@
-import { loginByUsername, logout, getUserInfo } from '@/api/login'
+import { getAccessToken, refreshAccessToken, logout, getUserInfo } from '@/api/login'
 import { getWebStore, setWebStore, removeWebStore } from '@/utils/webStorage'
 
 const user = {
@@ -48,7 +48,12 @@ const user = {
     SET_PERMISSIONS: (state, permissions) => {
       const list = {}
       for (let i = 0; i < permissions.length; i++) {
-        list[permissions[i]] = true
+        list[permissions[i].authority] = true
+        // let authority[permissions[i].authority] = true
+        // list.push({
+        //   authority: permissions[i].authority
+        // })
+        // list[i] = permissions[i].authority
       }
       state.permissions = list
       setWebStore({
@@ -74,23 +79,41 @@ const user = {
 
   actions: {
     // 用户名登录
-    LoginByUsername({ commit }, userInfo) {
-      const username = userInfo.username.trim()
+    LoginByUsername({ commit, dispatch }, loginForm) {
       return new Promise((resolve, reject) => {
-        loginByUsername(username, userInfo.password).then(response => {
+        getAccessToken(loginForm).then(response => {
           commit('SET_TOKEN', response.data)
+          // 根据服务器返回的失效时间定时刷新access_token
+          setTimeout(function() {
+            debugger
+            dispatch('RefreshAccessToken')
+          }, (response.data.expires_in || 7200 - 60) * 1000)
           resolve()
         }).catch(error => {
           reject(error)
         })
       })
     },
-
+    // 刷新toeken
+    RefreshAccessToken({ commit, state }) {
+      return new Promise((resolve, reject) => {
+        const refresh_token = state.token.refresh_token
+        if (refresh_token) {
+          state.token.access_token = ''
+          refreshAccessToken(refresh_token).then(response => {
+            commit('SET_TOKEN', response.data)
+            resolve()
+          }).catch(error => {
+            reject(error)
+          })
+        }
+      })
+    },
     // 获取用户信息
     GetUserInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
         getUserInfo(state.token.access_token).then(response => {
-          if (!response.data || !response.data.data) { // 由于mockjs 不支持自定义状态码只能这样hack
+          if (!response.data || !response.data.data) {
             reject('error')
           }
           const data = response.data.data
@@ -171,7 +194,7 @@ const user = {
 function clearLoginData(commit) {
   commit('SET_TOKEN', {})
   commit('SET_ROLES', [])
-  commit('SET_PERMISSIONS', [])
+  commit('SET_PERMISSIONS', {})
   commit('SET_USER', {})
   commit('SET_CURRENT_ROLE', 0)
   commit('SET_CURRENT_ORGANIZ', {})

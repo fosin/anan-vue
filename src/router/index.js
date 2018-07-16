@@ -27,8 +27,9 @@ import Layout from '@/views/layout/Layout'
 export const constantRouterMap = [
   { path: '/login', component: () => import('@/views/login/login'), hidden: true },
   { path: '/authredirect', component: () => import('@/views/login/authredirect'), hidden: true },
-  { path: '/404', component: () => import('@/views/errorPage/404'), hidden: true },
   { path: '/401', component: () => import('@/views/errorPage/401'), hidden: true },
+  { path: '/404', component: () => import('@/views/errorPage/404'), hidden: true },
+  { path: '/500', component: () => import('@/views/errorPage/500'), hidden: true },
   {
     path: '',
     component: Layout,
@@ -72,6 +73,23 @@ export default new Router({
 
 export const asyncRouterMap = [
   {
+    path: '/platform',
+    component: Layout,
+    redirect: 'noredirect',
+    name: 'platform',
+    meta: {
+      title: 'platform',
+      icon: 'form',
+      permission: 'platform'
+    },
+    children: [
+      { path: 'permission', component: () => import('@/views/permission/index'), name: 'permission', meta: { title: 'permission', noCache: false, permission: 'platform/permission' }},
+      { path: 'organiz', component: () => import('@/views/permission/index'), name: 'organiz', meta: { title: 'organiz', noCache: true, permission: 'platform/organiz' }},
+      { path: 'user', component: () => import('@/views/permission/index'), name: 'user', meta: { title: 'user', noCache: true, permission: 'platform/user' }},
+      { path: 'role', component: () => import('@/views/permission/index'), name: 'role', meta: { title: 'role', noCache: true, permission: 'platform/role' }}
+    ]
+  },
+  /* {
     path: '/error',
     component: Layout,
     redirect: 'noredirect',
@@ -82,8 +100,9 @@ export const asyncRouterMap = [
     },
     children: [
       { path: '401', component: () => import('@/views/errorPage/401'), name: 'page401', meta: { title: 'page401', noCache: true }},
-      { path: '404', component: () => import('@/views/errorPage/404'), name: 'page404', meta: { title: 'page404', noCache: true }}
+      { path: '404', component: () => import('@/views/errorPage/404'), name: 'page404', meta: { title: 'page404', noCache: true }},
+      { path: '500', component: () => import('@/views/errorPage/500'), name: 'page500', meta: { title: 'page500', noCache: true }}
     ]
-  },
+  },*/
   { path: '*', redirect: '/404', hidden: true }
 ]

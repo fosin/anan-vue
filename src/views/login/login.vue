@@ -20,7 +20,7 @@
           <svg-icon icon-class="eye" />
         </span>
       </el-form-item>
-      <el-form-item  prop="roles">
+     <!-- <el-form-item  prop="roles">
         <span class="svg-container">
           <svg-icon icon-class="peoples" />
         </span>
@@ -32,8 +32,8 @@
             :value="role.id">
           </el-option>
         </el-select>
-      </el-form-item>
-        <el-checkbox v-model="checked">{{$t('login.rememberMe')}}</el-checkbox>
+      </el-form-item>-->
+        <!--<el-checkbox v-model="loginForm.rememberMe">{{$t('login.rememberMe')}}</el-checkbox>-->
         <el-button type="primary" style="width:30%;margin-bottom:30px;float: right" :loading="loading" @click.native.prevent="handleLogin">{{$t('login.logIn')}}</el-button>
     </el-form>
   </div>
@@ -65,7 +65,8 @@ export default {
       loginForm: {
         username: '',
         password: '',
-        selectedRole: ''
+        selectedRole: '',
+        rememberMe: false
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -78,6 +79,9 @@ export default {
     }
   },
   methods: {
+    mounted() {
+
+    },
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = ''

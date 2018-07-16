@@ -31,3 +31,9 @@ export default {
   }
 }
 </script>
+
+<style>
+  .el-submenu__icon-arrow.el-icon-arrow-down {
+    color: #ffffff;
+  }
+</style>

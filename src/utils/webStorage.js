@@ -51,10 +51,7 @@ export const getWebStore = (params) => {
 /**
  * 删除localStorage、sessionStorage
  */
-export const removeWebStore = params => {
-  const {
-    name
-  } = params
-  window.localStorage.removeItem(name)
-  window.sessionStorage.removeItem(name)
+export const removeWebStore = (params) => {
+  window.localStorage.removeItem(params)
+  window.sessionStorage.removeItem(params)
 }

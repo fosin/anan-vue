@@ -1,17 +1,36 @@
 import request from '@/utils/request'
 
-export function loginByUsername(username, password) {
+export function getAccessToken(loginForm) {
+  const username = loginForm.username.trim()
+  const password = loginForm.password.trim()
+  const rememberMe = loginForm.rememberMe
   const grant_type = 'password'
-  const scope = 'all'
+  const scope = 'webApp'
   const randomStr = ''
   const code = ''
   return request({
     url: '/auth/oauth/token',
-    // headers: {
-    //   'Authorization': 'Basic Y2RwOmRldg=='
-    // },
     method: 'post',
-    params: { username, password, randomStr, code, grant_type, scope }
+    headers: {
+      'Authorization': 'Basic d2ViQXBwOnQ0ZXQyMzQ2YjJmZmUzNDYyMzQ1NjMy'
+    },
+    params: { username, password, randomStr, code, grant_type, scope, 'remember-me': rememberMe }
+  })
+}
+
+export function refreshAccessToken(refresh_token) {
+  const grant_type = 'refresh_token'
+  const scope = 'webApp'
+  if (!refresh_token) {
+    return {}
+  }
+  return request({
+    url: '/auth/oauth/token',
+    method: 'post',
+    headers: {
+      'Authorization': 'Basic d2ViQXBwOnQ0ZXQyMzQ2YjJmZmUzNDYyMzQ1NjMy'
+    },
+    params: { refresh_token, grant_type, scope }
   })
 }
 
