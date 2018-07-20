@@ -40,7 +40,9 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     quiet: true, // necessary for FriendlyErrorsPlugin
     watchOptions: {
       poll: config.dev.poll,
-    }
+    },
+    // 用于解决通过花生壳域名访问报错Invalid Host header的问题，原理是禁用webpack默认的域名安全检查
+    disableHostCheck: true
   },
   plugins: [
     new webpack.DefinePlugin({
