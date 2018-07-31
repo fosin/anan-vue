@@ -44,11 +44,10 @@ export function refreshAccessToken(refresh_token) {
   })
 }
 
-export function logout(access_token) {
+export function logout() {
   return request({
     url: '/auth/oauth/removeToken',
-    method: 'post',
-    params: { access_token }
+    method: 'post'
   })
 }
 

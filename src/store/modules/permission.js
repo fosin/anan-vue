@@ -1,21 +1,23 @@
 import { asyncRouterMap, constantRouterMap } from '@/router'
 import { getWebStore, setWebStore, removeWebStore } from '@/utils/webStorage'
-import { fetchUserPermissionsTree } from '@/api/permission'
 /**
  * 通过判断是否与当前用户权限匹配
  * @param permissions
  * @param route
  */
+/*
 function hasPermission(permissions, route) {
   if (!route.meta || !route.meta.permission) return true // 当路由未设置perimission标签时则表示不判断权限
   return permissions[route.meta.permission] || false
 }
+*/
 
 /**
  * 递归过滤异步路由表，返回符合用户角色权限的路由表
  * @param asyncRouterMap
  * @param permissions
  */
+/*
 function filterAsyncRouter(asyncRouterMap, permissions) {
   return asyncRouterMap.filter(route => {
     if (hasPermission(permissions, route)) {
@@ -26,12 +28,69 @@ function filterAsyncRouter(asyncRouterMap, permissions) {
     }
     return false
   })
+}*/
+/**
+ * 根据后台权限标识(cdp_sys_perimission.code)在异步路由中查找是否存在，存在则返回对应路由
+ * @param asyncRouterMap
+ * @param permissionCode
+ * @returns {*}
+ */
+function findAsyncRouter(asyncRouterMap, permissionCode) {
+  let rc = {}
+  for (let j = 0; j < asyncRouterMap.length; j++) {
+    const router = asyncRouterMap[j]
+    if (router.name && router.name === permissionCode) {
+      rc = router
+      rc.children = []
+      break
+    }
+  }
+  return rc
+}
+
+function dynamicAddAsyncRouter(permissionTree) {
+  const aRouter = []
+  if (!permissionTree) {
+    return aRouter
+  }
+  permissionTree.forEach(permission => {
+    const {
+      code,
+      type,
+      status,
+      children
+    } = permission
+    // 只遍历菜单类型
+    if (type === 0) {
+      return
+    }
+    // 未开启的权限则也不显示
+    if (status !== 0) {
+      return
+    }
+
+    const singelRouter = findAsyncRouter(asyncRouterMap, code)
+    singelRouter.children = validatenull(children) ? [] : dynamicAddAsyncRouter(children)
+    aRouter.push(singelRouter)
+  })
+  return aRouter
 }
 function clearData(commit) {
   commit('SET_ROUTERS', [])
   removeWebStore('addRouters')
   removeWebStore('routers')
 }
+function validatenull(val) {
+  if (val instanceof Array) {
+    if (val.length === 0) return true
+  } else if (val instanceof Object) {
+    if (JSON.stringify(val) === '{}') return true
+  } else {
+    return val === 'null' || val == null || val === 'undefined' || val === undefined || val === ''
+  }
+  return false
+}
+
 const permission = {
   state: {
     routers: getWebStore({
@@ -63,13 +122,18 @@ const permission = {
         resolve()
       })
     },
-    GenerateRoutes({ commit }, userInfo, permissions) {
-      // fetchUserPermissionsTree(userInfo.id, 1).then(response => {
-      //   // 取所有菜单权限，剔除调根节点
-      //   const permissions = response.data.data.children
-      // })
+    // 前端 登出
+    FedLogOut({ commit }) {
       return new Promise(resolve => {
-        commit('SET_ROUTERS', filterAsyncRouter(asyncRouterMap, permissions))
+        clearData(commit)
+        resolve()
+      })
+    },
+    GenerateRoutes({ commit }, permissionTree) {
+      return new Promise(resolve => {
+        const routes = dynamicAddAsyncRouter(permissionTree.children)
+        routes.push({ path: '*', redirect: '/404', hidden: true })
+        commit('SET_ROUTERS', routes)
         resolve()
       })
     }

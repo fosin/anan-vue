@@ -14,7 +14,7 @@ export default {
     },
     text: {
       type: String,
-      default: 'vue-element-admin'
+      default: 'cdp-ui'
     }
   }
 }

@@ -1,21 +1,35 @@
 export default {
   route: {
     dashboard: 'Dashboard',
-    platform: 'System Manage',
-    permission: 'Permission Manage',
-    user: 'User Manage',
-    organiz: 'Organization Manage',
-    role: 'Role Manage'
+    system: 'System Manage',
+    system_permission: 'Permission Manage',
+    system_user: 'User Manage',
+    system_organiz: 'Organization Manage',
+    system_role: 'Role Manage',
+    config: 'Config',
+    config_application: 'App Config',
+    config_parameter: 'Parameter Config',
+    config_dictionary: 'Dictionary Config',
+    monitor: 'Monitor',
+    monitor_eureka: 'Eureka Monitor',
+    monitor_admin: 'Admin Monitor',
+    monitor_sleuth: 'Sleuth Monitor',
+    monitor_cache: 'Cache Manager',
+    monitor_elk: 'Log Manager',
+    monitor_onlineuser: 'OnlineUser Monitor',
+    authentication: 'Authentication',
+    authentication_client: 'Client Authentication',
+    authentication_service: 'Service Authentication'
   },
   navbar: {
-    logOut: 'LogOut',
+    logOut: 'Logout',
     dashboard: 'Dashboard',
     github: 'Github',
     screenfull: 'screenfull',
     theme: 'theme'
   },
   login: {
-    title: 'System Login',
+    title: 'Cloud Dev Platform',
     logIn: 'Login',
     rememberMe: 'Remember Me',
     username: {
@@ -76,7 +90,15 @@ export default {
     draft: 'Draft',
     delete: 'Delete',
     cancel: 'Cancel',
-    confirm: 'Confirm'
+    confirm: 'Confirm',
+    create: 'Create',
+    update: 'Update',
+    resetPass: 'ResetPass',
+    reset: 'Reset',
+    permission: 'Permission',
+    role: 'Role',
+    user: 'User',
+    refresh: 'Refresh'
   },
   errorLog: {
     tips: 'Please click the bug icon in the upper right corner',

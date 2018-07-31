@@ -5,8 +5,6 @@
 [线上地址](https://github.com/186A8/cdp-ui-vue)
 
 ## Extra
-如果你想要根据用户角色来动态生成侧边栏和router，你可以使用改分支[permission-control](https://github.com/PanJiaChen/cdp-ui-vue/tree/permission-control)
- 
  ## 相关项目
  [vue](https://cn.vuejs.org/)
  [electron-vue-admin](https://github.com/PanJiaChen/electron-vue-admin)

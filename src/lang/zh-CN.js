@@ -1,11 +1,25 @@
 export default {
   route: {
     dashboard: '首页',
-    platform: '系统管理',
-    permission: '权限管理',
-    user: '用户管理',
-    organiz: '机构管理',
-    role: '角色管理'
+    system: '系统管理',
+    system_permission: '权限管理',
+    system_user: '用户管理',
+    system_organiz: '机构管理',
+    system_role: '角色管理',
+    config: '配置管理',
+    config_application: '分布式配置管理',
+    config_parameter: '通用参数管理',
+    config_dictionary: '通用字典管理',
+    monitor: '监控管理',
+    monitor_eureka: '服务注册中心监控',
+    monitor_admin: '服务指标监控',
+    monitor_sleuth: '服务链路监控',
+    monitor_cache: '缓存监控',
+    monitor_elk: '日志监控',
+    monitor_onlineuser: '在线用户监控',
+    authentication: '授权管理',
+    authentication_client: '客户端授权管理',
+    authentication_service: '服务授权管理'
   },
   navbar: {
     logOut: '退出登录',
@@ -15,7 +29,7 @@ export default {
     theme: '换肤'
   },
   login: {
-    title: '系统登录',
+    title: '微服务开发云平台',
     logIn: '登录',
     rememberMe: '记住我',
     username: {
@@ -62,7 +76,7 @@ export default {
     type: '类型',
     remark: '点评',
     search: '搜索',
-    add: '添加',
+    add: '新增',
     export: '导出',
     reviewer: '审核人',
     id: '序号',
@@ -76,7 +90,15 @@ export default {
     draft: '草稿',
     delete: '删除',
     cancel: '取 消',
-    confirm: '确 定'
+    confirm: '确 定',
+    create: '创建',
+    update: '更新',
+    resetPass: '重置密码',
+    reset: '重置',
+    permission: '权限',
+    role: '角色',
+    user: '用户',
+    refresh: '刷新'
   },
   errorLog: {
     tips: '请点击右上角bug小图标',

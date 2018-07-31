@@ -1,10 +1,10 @@
 import axios from 'axios'
-import { Message, MessageBox } from 'element-ui'
+import { MessageBox } from 'element-ui'
 import store from '../store'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'// progress bar style
 
-NProgress.configure({ easing: 'ease', speed: 500, showSpinner: false })// NProgress Configuration
+NProgress.configure({ easing: 'ease', speed: 1000, showSpinner: false })// NProgress Configuration
 // 全局设置方式
 // 超时时间
 // axios.defaults.timeout = 30000
@@ -19,88 +19,58 @@ const service = axios.create({
   timeout: 30000, // request timeout
   withCredentials: true // 跨域请求，允许保存cookie
 })
+let reLogin = false
 
 // request interceptor
 service.interceptors.request.use(config => {
   NProgress.start() // start progress bar
-  if (store.getters.token.access_token) {
+  if (store.getters.token.access_token && store.getters.userInfo) {
     // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
     config.headers['Authorization'] = WordCap(store.getters.token.token_type) + ' ' + store.getters.token.access_token
   }
   return config
 }, error => {
   NProgress.done()
-  Promise.reject(error)
+  return Promise.reject(getRealError(4, error))
 })
 
 // respone interceptor
-service.interceptors.response.use(
-  response => {
-    // debugger
-    NProgress.done()
-    const data = response.data
-    if (response.status !== 200) {
-      Message({
-        message: 'status:' + response.status + ' message:' + response.message || 'code:' + data.code + ' msg:' + data.msg,
-        type: 'error',
-        duration: 5 * 1000
-      })
-      return Promise.reject('error')
-    } else {
-      if (data.code === 1) { // success
-        return response
-      } else if (data.code === 100) { // no_action
-        Message({
-          message: 'code:' + data.code + ' msg:' + data.msg,
-          type: 'warning',
-          duration: 5 * 1000
-        })
-        return Promise.reject('error')
-      } else { // failure
-        Message({
-          message: 'code:' + data.code + ' msg:' + data.msg,
-          type: 'error',
-          duration: 5 * 1000
-        })
-        // 50008:非法的token; 50012:其他客户端登录了;  50014:Token 过期了;
-        if (data.code === 50008 || data.code === 50012 || data.code === 50014) {
-          MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
-            confirmButtonText: '重新登录',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
-            store.dispatch('FedLogOut').then(() => {
-              location.reload() // 为了重新实例化vue-router对象 避免bug
-            })
-          })
-        }
-        return Promise.reject('error')
-      }
+service.interceptors.response.use(response => {
+  NProgress.done()
+  const data = response.data
+  if (response.status !== 200) {
+    return Promise.reject(getRealError(3, response))
+  } else {
+    if (data.code === 1) { // success
+      return response
+    } else { // failure
+      return Promise.reject(getRealError(2, response))
     }
-  },
-  error => {
-    NProgress.done()
-    if (error.response && error.response.data) {
-      const data = error.response.data
-      Message({
-        message: 'error:' + data.error + ' description:' + data.error_description,
-        type: 'error',
-        duration: 5 * 1000
-      })
-      debugger
-      if (error.response.status && error.response.status >= 400 && error.response.status < 500) {
-        store.dispatch('RefreshAccessToken').then(() => {
+  }
+}, error => {
+  NProgress.done()
+  // 尝试刷新access_toekn续用登录状态
+  if (!reLogin && error.response && error.response.status && error.response.status === 401) {
+    reLogin = true
+    store.dispatch('RefreshAccessToken').then(() => {
+      reLogin = false
+    }).catch(() => {
+      MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
+        confirmButtonText: '重新登录',
+        cancelButtonText: '取消',
+        type: 'error'
+      }).then(() => {
+        store.dispatch('FedLogOut').then(() => {
+          location.reload() // 为了重新实例化vue-router对象 避免bug
         })
-      }
-    } else {
-      Message({
-        message: error.message,
-        type: 'error',
-        duration: 5 * 1000
+        reLogin = false
+      }).catch(() => {
+        reLogin = false
       })
-    }
-    return Promise.reject(error)
-  })
+    })
+  }
+  return Promise.reject(getRealError(1, error))
+})
 
 /**
  * 首字母大写
@@ -110,5 +80,24 @@ function WordCap(s) {
   return s.toLowerCase().replace(/\b([\w|']+)\b/g, function(word) {
     return word.replace(word.charAt(0), word.charAt(0).toUpperCase())
   })
+}
+function getRealError(from, error) {
+  switch (from) {
+    case 1:
+      error.message = JSON.stringify(error.response.data)
+      break
+    case 2:
+      error.message = '(' + error.data.code + ')' + error.data.msg
+      break
+    case 3:
+      error.message = '(' + error.status + ')' + error.message || '(' + error.data.code + ')' + error.data.msg
+      break
+    case 4:
+      error.message = error
+      break
+    default:
+      error.message = error
+  }
+  return error
 }
 export default service

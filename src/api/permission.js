@@ -1,31 +1,30 @@
 import request from '@/utils/request'
 
-export function GetPermissions() {
+export function listPermissions() {
   return request({
     url: '/platform/permission/list',
     method: 'get'
   })
 }
-export function fetchTree(type) {
+export function treePermissions(type) {
   return request({
-    url: '/platform/permission/listTree/' + type,
-    method: 'get'
+    url: '/platform/permission/tree/' + type,
+    method: 'post'
   })
 }
-export function fetchUserPermissionsTree(userId, type) {
+export function treeUserPermissions(userId, type) {
   return request({
     url: '/platform/permission/userPermissionsTree/' + userId + '/' + type,
     method: 'get'
   })
 }
-export function fetchChild(pId) {
+export function listChildPermissions(pId) {
   return request({
     url: '/platform/permission/listChild/' + pId,
     method: 'post'
   })
 }
-
-export function postObj(obj) {
+export function postPermission(obj) {
   return request({
     url: '/platform/permission/',
     method: 'post',
@@ -33,21 +32,21 @@ export function postObj(obj) {
   })
 }
 
-export function getObj(id) {
+export function getPermission(id) {
   return request({
     url: '/platform/permission/' + id,
     method: 'get'
   })
 }
 
-export function deleteObj(id) {
+export function deletePermission(id) {
   return request({
     url: '/platform/permission/' + id,
     method: 'delete'
   })
 }
 
-export function putObj(obj) {
+export function putPermission(obj) {
   return request({
     url: '/platform/permission/',
     method: 'put',

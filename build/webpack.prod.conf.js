@@ -68,7 +68,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       template: 'index.html',
       inject: true,
       favicon: resolve('favicon.ico'),
-      title: 'cdp-ui-vue',
+      title: 'cdp-ui',
       minify: {
         removeComments: true,
         collapseWhitespace: true,

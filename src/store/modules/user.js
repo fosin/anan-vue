@@ -1,16 +1,19 @@
 import { getAccessToken, refreshAccessToken, logout, getUserInfo } from '@/api/login'
 import { getWebStore, setWebStore, removeWebStore } from '@/utils/webStorage'
+// import router from '../../router'
+// import { Message } from 'element-ui/types/index'
+// import store from '../index'
 
 const user = {
   state: {
     userInfo: getWebStore({
       name: 'userInfo'
     }) || {},
-    roles: getWebStore({
-      name: 'roles'
-    }) || [],
     permissions: getWebStore({
       name: 'permissions'
+    }) || {},
+    permissionTree: getWebStore({
+      name: 'permissionTree'
     }) || {},
     token: getWebStore({
       name: 'token'
@@ -32,33 +35,31 @@ const user = {
       })
     },
     SET_USER: (state, userInfo) => {
+      if (!userInfo.avatar) {
+        userInfo.avatar = ''
+      }
       state.userInfo = userInfo
       setWebStore({
         name: 'userInfo',
         content: state.userInfo
       })
     },
-    SET_ROLES: (state, roles) => {
-      state.roles = roles
-      setWebStore({
-        name: 'roles',
-        content: state.roles
-      })
-    },
     SET_PERMISSIONS: (state, permissions) => {
       const list = {}
       for (let i = 0; i < permissions.length; i++) {
         list[permissions[i].authority] = true
-        // let authority[permissions[i].authority] = true
-        // list.push({
-        //   authority: permissions[i].authority
-        // })
-        // list[i] = permissions[i].authority
       }
       state.permissions = list
       setWebStore({
         name: 'permissions',
         content: state.permissions
+      })
+    },
+    SET_PERMISSIONTREE: (state, permissionTree) => {
+      state.permissionTree = permissionTree
+      setWebStore({
+        name: 'permissionTree',
+        content: state.permissionTree
       })
     },
     SET_CURRENT_ORGANIZ: (state, current_organiz) => {
@@ -85,8 +86,10 @@ const user = {
           commit('SET_TOKEN', response.data)
           // 根据服务器返回的失效时间定时刷新access_token
           setTimeout(function() {
-            debugger
-            dispatch('RefreshAccessToken')
+            dispatch('RefreshAccessToken').then(res => { // 拉取user_info
+            }).catch((error) => {
+              reject(error)
+            })
           }, (response.data.expires_in || 7200 - 60) * 1000)
           resolve()
         }).catch(error => {
@@ -125,16 +128,15 @@ const user = {
           } else {
             reject('getInfo: invalid user object !')
           }
-
-          if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
-            commit('SET_ROLES', data.roles)
-          } else {
-            reject('getInfo: roles must be a non-null array !')
-          }
           if (data.authorities && data.authorities.length > 0) { // 验证返回的authorities是否是有效数组
             commit('SET_PERMISSIONS', data.authorities)
           } else {
-            commit('SET_PERMISSIONS', [])
+            commit('SET_PERMISSIONS', {})
+          }
+          if (data.permissionTree) { // 验证返回的权限树
+            commit('SET_PERMISSIONTREE', data.permissionTree)
+          } else {
+            commit('SET_PERMISSIONTREE', {})
           }
           resolve(response)
         }).catch(error => {
@@ -160,7 +162,7 @@ const user = {
     // 登出
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {
-        logout(state.token.access_token).then(() => {
+        logout().then(() => {
           clearLoginData(commit)
           resolve()
         }).catch(error => {
@@ -183,7 +185,7 @@ const user = {
         setWebStore(role)
         getUserInfo(role).then(response => {
           const data = response.data.data
-          commit('SET_ROLES', data.roles)
+          commit('SET_CURRENT_ROLE', data.roles)
           resolve()
         })
       })
@@ -193,14 +195,14 @@ const user = {
 
 function clearLoginData(commit) {
   commit('SET_TOKEN', {})
-  commit('SET_ROLES', [])
   commit('SET_PERMISSIONS', {})
+  commit('SET_PERMISSIONTREE', {})
   commit('SET_USER', {})
   commit('SET_CURRENT_ROLE', 0)
   commit('SET_CURRENT_ORGANIZ', {})
   removeWebStore('token')
-  removeWebStore('roles')
   removeWebStore('permissions')
+  removeWebStore('permissionTree')
   removeWebStore('userInfo')
   removeWebStore('current_role')
   removeWebStore('current_organiz')
