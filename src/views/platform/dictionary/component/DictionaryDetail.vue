@@ -90,8 +90,7 @@
     postDictionaryDetail,
     putDictionaryDetail,
     deleteDictionaryDetail,
-    listDictionaryDetailPage,
-    listDictionaryDetailByCode
+    listDictionaryDetailPage
   } from '@/api/dictionary'
   import waves from '@/directive/waves/index.js' // 水波纹指令
   export default {
@@ -100,7 +99,7 @@
       waves
     },
     created() {
-      this.getStatusDictionary()
+      this.listDictionaryDetailsByCode(11, this.getStatusDictionary)
     },
     data() {
       return {
@@ -173,17 +172,8 @@
           })
         })
       },
-      getStatusDictionary() {
-        listDictionaryDetailByCode(11).then(response => {
-          this.statusOptions = response.data.data
-        }).catch(reason => {
-          this.$notify({
-            title: '获取字典明细项失败',
-            message: reason.message,
-            type: 'error',
-            duration: 5000
-          })
-        })
+      getStatusDictionary(data) {
+        this.statusOptions = data
       },
       handleFilter() {
         if (!this.selectedDictionary || !this.selectedDictionary.code) {

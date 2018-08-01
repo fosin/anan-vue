@@ -61,9 +61,10 @@
         </el-form-item>
         <el-form-item label="授权类型" prop="authorizedGrantTypes">
           <el-select  v-model="authorizedGrantTypes" filterable placeholder="请选择授权类型(支持多选)" multiple>
-            <el-option v-for="item in grantTypesOptions" :key="item.value" :label="item.name" :value="item.value">
-              <span style="float: left; color: #8492a6; font-size: 13px">{{ item.value }}</span>
-              <span style="float: right">{{item.name }}</span>
+            <el-option v-for="item in grantTypesOptions" :key="item.scode"
+                       :label="item.value" :value="item.scode" :disabled="item.status === 1">
+              <span style="float: left; color: #8492a6; font-size: 13px">{{ item.scode }}</span>
+              <span style="float: right">{{item.value }}</span>
             </el-option>
           </el-select>
         </el-form-item>
@@ -180,13 +181,7 @@ export default {
           }
         ]
       },
-      grantTypesOptions: [
-        { value: 'authorization_code', name: '授权码模式' },
-        { value: 'password', name: '密码模式' },
-        { value: 'refresh_token', name: '刷新令牌' },
-        { value: 'client_credentials', name: '客户端模式' },
-        { value: 'implicit', name: '简化模式' }
-      ],
+      grantTypesOptions: [],
       dialogFormVisible: false,
       dialogStatus: '',
       authorizedGrantTypes: [],
@@ -196,7 +191,13 @@ export default {
       }
     }
   },
+  created() {
+    this.listDictionaryDetailsByCode(7, this.getAuthoricationType)
+  },
   methods: {
+    getAuthoricationType(data) {
+      this.grantTypesOptions = data
+    },
     getList() {
       this.listLoading = true
       listClientPage(this.pageModule).then(response => {

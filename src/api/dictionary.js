@@ -71,10 +71,10 @@ export function postDictionaryDetail(obj) {
   })
 }
 
-export function listDictionaryDetailByCode(code) {
+export function listDictionaryDetailByCode(code, method) {
   return request({
     url: '/platform/dictionaryDetail/byCode/' + code,
-    method: 'post'
+    method: method || 'post'
   })
 }
 
@@ -95,45 +95,6 @@ export function deleteDictionaryDetail(id) {
 export function putDictionaryDetail(obj) {
   return request({
     url: '/platform/dictionaryDetail',
-    method: 'put',
-    data: obj
-  })
-}
-
-// 以下是字典类型的后台方法
-// 获取所有数据列表
-export function listDictionaryType() {
-  return request({
-    url: '/platform/dictionaryType/list',
-    method: 'post'
-  })
-}
-
-export function postDictionaryType(obj) {
-  return request({
-    url: '/platform/dictionaryType/',
-    method: 'post',
-    data: obj
-  })
-}
-
-export function getDictionaryType(id) {
-  return request({
-    url: '/platform/dictionaryType/' + id,
-    method: 'get'
-  })
-}
-
-export function deleteDictionaryType(id) {
-  return request({
-    url: '/platform/dictionaryType/' + id,
-    method: 'delete'
-  })
-}
-
-export function putDictionaryType(obj) {
-  return request({
-    url: '/platform/dictionaryType',
     method: 'put',
     data: obj
   })

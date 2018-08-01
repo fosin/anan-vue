@@ -84,9 +84,10 @@
         if (value === this.parent.code) {
           callback(new Error('机构编码不能和父机构编码相同!'))
         }
+        callback()
       }
       return {
-        parent: {},
+        parent: { code: '', name: '' },
         list: null,
         total: null,
         formUpdate: true,

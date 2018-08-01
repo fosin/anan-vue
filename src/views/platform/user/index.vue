@@ -114,7 +114,7 @@
             <el-form-item label="所属机构" prop="organizId">
                 <el-select class="filter-item" v-model="form.organizId" filterable placeholder="请选择机构" :filter-method="organizSelectFilter">
                   <el-option v-for="item in oraganizOptions" :key="item.id" :label="item.fullname || item.name" :value="item.id" :disabled="isDisabled[item.status]">
-                    <span style="float: left; color: #8492a6; font-size: 13px">{{ item.id }}</span>
+                    <span style="float: left; color: #8492a6; font-size: 13px">{{ item.code }}</span>
                     <span style="float: right">{{ item.fullname || item.name }}</span>
                   </el-option>
                 </el-select>
@@ -340,7 +340,9 @@ export default {
   },
   created() {
     this.resetTemp()
-    this.loadOrganizList()
+    if (!this.organizList || this.organizList.length < 1) {
+      this.loadOrganizList()
+    }
   },
   methods: {
     tableRowClassName({ row, rowIndex }) {
@@ -425,18 +427,16 @@ export default {
       }
     },
     loadOrganizList() {
-      if (!this.organizList || this.organizList.length < 1) {
-        listOrganiz().then(response => {
-          this.organizList = response.data.data || []
-        }).catch(reason => {
-          this.$notify({
-            title: '查询机构信息失败',
-            message: reason.message,
-            type: 'error',
-            duration: 5000
-          })
+      listOrganiz().then(response => {
+        this.organizList = response.data.data || []
+      }).catch(reason => {
+        this.$notify({
+          title: '查询机构信息失败',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
         })
-      }
+      })
       this.oraganizOptions = this.organizList
     },
     organizSelectFilter(input) {

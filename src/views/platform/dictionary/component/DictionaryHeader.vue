@@ -50,7 +50,7 @@
         </el-form-item>
         <el-form-item label="字典类别" prop="type">
           <el-select class="filter-item" v-model="form.type" placeholder="请选择字典类别">
-            <el-option v-for="item in typeOptions" :key="item.type" :label="item.name" :value="item.type"></el-option>
+            <el-option v-for="item in typeOptions" :key="item.key" :label="item.value" :value="item.key" :disabled="item.status === 1"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -73,8 +73,7 @@
     postDictionary,
     putDictionary,
     deleteDictionary,
-    listDictionaryPage,
-    listDictionaryType
+    listDictionaryPage
   } from '@/api/dictionary'
   import waves from '@/directive/waves/index.js' // 水波纹指令
   export default {
@@ -122,14 +121,14 @@
     filters: {
     },
     created() {
-      this.getDictionaryType()
+      this.listDictionaryDetailsByCode(1, this.getDictionaryType)
     },
     methods: {
       getTypeName(type) {
         const typeOption = this.typeOptions.filter(value => {
-          return value.type === type
+          return value.key === type
         })
-        return typeOption.length > 0 ? typeOption[0].name : type
+        return typeOption.length > 0 ? typeOption[0].value : type
       },
       getList() {
         this.listLoading = true
@@ -149,17 +148,8 @@
           })
         })
       },
-      getDictionaryType() {
-        listDictionaryType().then(response => {
-          this.typeOptions = response.data.data
-        }).catch(reason => {
-          this.$notify({
-            title: '获取字典类型失败',
-            message: reason.message,
-            type: 'error',
-            duration: 5000
-          })
-        })
+      getDictionaryType(data) {
+        this.typeOptions = data
       },
       handleFilter() {
         this.pageModule.pageNumber = 1

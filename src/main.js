@@ -18,8 +18,10 @@ import './utils/permission' // permission control
 // }
 import * as filters from './filters' // global filters
 import permission from './directive/permission/index.js' // 权限判断指令
-require('es6-promise').polyfill()
+import dictionary from './utils/dictionary'
 
+require('es6-promise').polyfill()
+Vue.use(dictionary)
 Vue.use(permission)
 Vue.use(Element, {
   size: 'medium', // set element-ui default size
