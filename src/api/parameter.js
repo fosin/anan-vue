@@ -45,3 +45,21 @@ export function putParameter(obj) {
     data: obj
   })
 }
+
+export function fetchUserParameterValue(key, method) {
+  return fetchParameterValue(2, key, method)
+}
+
+export function fetchOrganizParameterValue(key, method) {
+  return fetchParameterValue(1, key, method)
+}
+
+export function fetchParameterValue(type, key, method) {
+  if (!type || !key) {
+    return ''
+  }
+  return request({
+    url: '/platform/parameter/value/' + type + '/' + key,
+    method: method || 'post'
+  })
+}

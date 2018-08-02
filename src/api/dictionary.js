@@ -71,7 +71,7 @@ export function postDictionaryDetail(obj) {
   })
 }
 
-export function listDictionaryDetailByCode(code, method) {
+export function fetchDictionaryDetailsByCode(code, method) {
   return request({
     url: '/platform/dictionaryDetail/byCode/' + code,
     method: method || 'post'

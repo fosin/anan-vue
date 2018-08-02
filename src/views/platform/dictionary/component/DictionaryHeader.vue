@@ -30,7 +30,7 @@
           <span>{{getTypeName(scope.row.type)}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="类别标识" sortable prop="typeCode">
+      <el-table-column align="center" label="作用域" sortable prop="scope">
       </el-table-column>
     </el-table>
     <div v-show="!listLoading" class="pagination-container">
@@ -45,8 +45,8 @@
         <el-form-item label="字典名称" prop="name">
           <el-input v-model="form.name" placeholder="字典名称"></el-input>
         </el-form-item>
-        <el-form-item label="类别标识" prop="typeCode">
-          <el-input v-model="form.typeCode" placeholder="类别标识"></el-input>
+        <el-form-item label="作用域" prop="scope">
+          <el-input v-model="form.scope" placeholder="作用域"></el-input>
         </el-form-item>
         <el-form-item label="字典类别" prop="type">
           <el-select class="filter-item" v-model="form.type" placeholder="请选择字典类别">
@@ -90,8 +90,8 @@
           pageNumber: 1,
           pageSize: 25,
           searchText: '',
-          sortName: 'code',
-          sortOrder: 'DESC'
+          sortName: '',
+          sortOrder: ''
         },
         form: {},
         rules: {
@@ -121,7 +121,9 @@
     filters: {
     },
     created() {
-      this.listDictionaryDetailsByCode(1, this.getDictionaryType)
+      this.postDictionaryDetailsByCode(1, (data) => {
+        this.typeOptions = data
+      })
     },
     methods: {
       getTypeName(type) {
@@ -147,9 +149,6 @@
             duration: 5000
           })
         })
-      },
-      getDictionaryType(data) {
-        this.typeOptions = data
       },
       handleFilter() {
         this.pageModule.pageNumber = 1
@@ -288,7 +287,7 @@
           code: undefined,
           name: undefined,
           type: undefined,
-          typeCode: undefined
+          scope: undefined
         }
       },
       sortChange(column) {

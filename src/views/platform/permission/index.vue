@@ -54,7 +54,7 @@
             </el-form-item>
             <el-form-item label="类型" prop="type">
               <el-select class="filter-item" v-model="form.type"  :disabled="formUpdate"  placeholder="请选择类型" value="">
-                <el-option v-for="item in typeOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+                <el-option v-for="item in typeOptions" :key="item.key" :label="item.value" :value="item.key" :disabled="item.status === 1"> </el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="排序" prop="sort">
@@ -91,19 +91,7 @@
         formAdd: true,
         formStatus: '',
         showElement: false,
-        typeOptions: [{
-          value: 0,
-          label: '按钮'
-        }, {
-          value: 1,
-          label: '组件菜单'
-        }, {
-          value: 2,
-          label: '链接菜单'
-        }, {
-          value: 3,
-          label: '目录菜单'
-        }],
+        typeOptions: [],
         listQuery: {
           name: undefined
         },
@@ -120,6 +108,9 @@
       }
     },
     created() {
+      this.postDictionaryDetailsByCode(13, (data) => {
+        this.typeOptions = data
+      })
       this.resetForm()
     },
     methods: {

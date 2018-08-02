@@ -192,12 +192,11 @@ export default {
     }
   },
   created() {
-    this.listDictionaryDetailsByCode(7, this.getAuthoricationType)
+    this.postDictionaryDetailsByCode(7, (data) => {
+      this.grantTypesOptions = data
+    })
   },
   methods: {
-    getAuthoricationType(data) {
-      this.grantTypesOptions = data
-    },
     getList() {
       this.listLoading = true
       listClientPage(this.pageModule).then(response => {

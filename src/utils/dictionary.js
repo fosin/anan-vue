@@ -1,8 +1,8 @@
-import { listDictionaryDetailByCode } from '@/api/dictionary'
+import { fetchDictionaryDetailsByCode } from '@/api/dictionary'
 import { Message } from 'element-ui'
 
 export default (Vue) => {
-  Vue.prototype.listDictionaryDetailsByCode = function listDictionaryDetailsByCode(code, callback) {
+  Vue.prototype.postDictionaryDetailsByCode = function postDictionaryDetailsByCode(code, callback) {
     if (!code) {
       Message({
         title: '获取字典明细失败',
@@ -21,8 +21,30 @@ export default (Vue) => {
       })
       return
     }
-    listDictionaryDetailByCode(code).then(response => {
+    fetchDictionaryDetailsByCode(code).then(response => {
       callback(response.data.data)
+    }).catch(reason => {
+      Message({
+        title: '获取字典明细失败',
+        message: reason.message,
+        type: 'error',
+        duration: 5000
+      })
+    })
+  }
+
+  Vue.prototype.getDictionaryDetailsByCode = function getDictionaryDetailsByCode(code) {
+    if (!code) {
+      Message({
+        title: '获取字典明细失败',
+        message: '没有或传入的字典代码code无效!',
+        type: 'error',
+        duration: 5000
+      })
+      return
+    }
+    fetchDictionaryDetailsByCode(code, 'get').then(response => {
+      return response.data.data
     }).catch(reason => {
       Message({
         title: '获取字典明细失败',

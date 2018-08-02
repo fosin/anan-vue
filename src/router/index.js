@@ -59,7 +59,7 @@ export const asyncRouterMap = [
   { path: 'role', component: () => import('@/views/platform/role/index'), name: 'system_role', meta: { title: 'system_role', icon: 'role' }},
   { path: '/config', component: Layout, redirect: 'noredirect', name: 'config', meta: { title: 'config', icon: 'parameter' }},
   { path: 'application', component: () => import('@/views/platform/permission/index'), name: 'config_application', meta: { title: 'config_application', icon: 'list' }},
-  { path: 'parameter', component: () => import('@/views/platform/permission/index'), name: 'config_parameter', meta: { title: 'config_parameter', icon: 'parameter' }},
+  { path: 'parameter', component: () => import('@/views/platform/parameter/index'), name: 'config_parameter', meta: { title: 'config_parameter', icon: 'parameter' }},
   { path: 'dictionary', component: () => import('@/views/platform/dictionary/index'), name: 'config_dictionary', meta: { title: 'config_dictionary', icon: 'dictionary' }},
   { path: '/monitor', component: Layout, redirect: 'noredirect', name: 'monitor', meta: { title: 'monitor', icon: 'monitor' }},
   { path: 'eureka', component: Layout, name: 'monitor_eureka', meta: { title: 'monitor_eureka', icon: 'monitor' }},
