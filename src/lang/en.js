@@ -98,7 +98,9 @@ export default {
     permission: 'Permission',
     role: 'Role',
     user: 'User',
-    refresh: 'Refresh'
+    refresh: 'Refresh',
+    applys: 'Apply Changed',
+    apply: 'Apply Current'
   },
   errorLog: {
     tips: 'Please click the bug icon in the upper right corner',

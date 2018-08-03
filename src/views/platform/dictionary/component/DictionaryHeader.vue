@@ -50,7 +50,7 @@
         </el-form-item>
         <el-form-item label="字典类别" prop="type">
           <el-select class="filter-item" v-model="form.type" placeholder="请选择字典类别">
-            <el-option v-for="item in typeOptions" :key="item.key" :label="item.value" :value="item.key" :disabled="item.status === 1"></el-option>
+            <el-option v-for="item in typeOptions" :key="item.name" :label="item.value" :value="item.name" :disabled="item.status === 1"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -128,7 +128,7 @@
     methods: {
       getTypeName(type) {
         const typeOption = this.typeOptions.filter(value => {
-          return value.key === type
+          return value.name === type
         })
         return typeOption.length > 0 ? typeOption[0].value : type
       },

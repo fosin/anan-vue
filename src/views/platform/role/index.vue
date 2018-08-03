@@ -99,18 +99,21 @@
         <el-button type="primary" @click="updatePermession(form.id, form.value)" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
       </div>
     </el-dialog>
-    <el-dialog :title="textMap[dialogStatus] + '->' + form.name" :visible.sync="dialogRoleUserVisible" width="550px">
+    <el-dialog :title="textMap[dialogStatus] + ' ---> ' + form.name" :visible.sync="dialogRoleUserVisible" width="550px">
       <el-transfer ref="roleUser"
         filterable
         :filter-method="roleUserfilterMethod"
-        filter-placeholder="请输入名称查找"
+        :props = "{
+          key: 'id',
+          label: 'username'
+        }"
         :titles="['未拥有用户', '已拥有用户']"
         v-model="roleUsers"
         :data="allUsers">
       </el-transfer>
       <div slot="footer" class="dialog-footer">
         <el-button @click="cancel('roleUser')" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
-        <el-button type="primary" @click="updateRoleUser(form.id, form.value)" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
+        <el-button type="primary" @click="updateRoleUser()" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -223,15 +226,7 @@ export default {
   },
   created() {
     listUser().then(response => {
-      const allUsers = response.data.data
-      for (let i = 0; i < allUsers.length; i++) {
-        const user = {
-          key: allUsers[i].id,
-          label: allUsers[i].username,
-          pinyin: allUsers[i].usercode
-        }
-        this.allUsers.push(user)
-      }
+      this.allUsers = response.data.data
     }).catch(reason => {
       this.$notify({
         title: '获取所有用户失败',
@@ -243,7 +238,7 @@ export default {
   },
   methods: {
     roleUserfilterMethod(query, item) {
-      return item.pinyin.indexOf(query) > -1 || item.label.indexOf(query) > -1
+      return item.usercode.indexOf(query) > -1 || item.username.indexOf(query) > -1
     },
     getList() {
       this.listLoading = true

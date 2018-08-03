@@ -63,3 +63,17 @@ export function fetchParameterValue(type, key, method) {
     method: method || 'post'
   })
 }
+
+export function applyParameter(id) {
+  return request({
+    url: '/platform/parameter/apply/' + id,
+    method: 'post'
+  })
+}
+
+export function applysParameter() {
+  return request({
+    url: '/platform/parameter/applys',
+    method: 'post'
+  })
+}

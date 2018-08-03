@@ -3,8 +3,8 @@
   <div class="app-container calendar-list-container">
     <div class="filter-container">
       <el-button-group>
-        <el-button type="primary" class="filter-item" icon="el-icon-circle-plus" v-permission="'system_permission_refresh'" @click="handlerRefresh">{{$t('table.refresh')}}</el-button>
-        <el-button type="primary" class="filter-item" icon="el-icon-circle-plus" v-permission="'system_permission_add'" @click="handlerAdd">{{$t('table.add')}}</el-button>
+        <el-button type="primary" class="filter-item" icon="el-icon-refresh" v-permission="'system_permission_refresh'" @click="handlerRefresh">{{$t('table.refresh')}}</el-button>
+        <el-button type="primary" class="filter-item" icon="el-icon-circle-plus" style="margin-left: 10px;" v-permission="'system_permission_add'" @click="handlerAdd">{{$t('table.add')}}</el-button>
         <el-button type="success" class="filter-item" icon="el-icon-edit" style="margin-left: 10px;" v-permission="'system_permission_edit'" @click="handlerUpdate">{{$t('table.edit')}}</el-button>
         <el-button type="danger" class="filter-item" icon="el-icon-delete" style="margin-left: 10px;" v-permission="'system_permission_delete'" @click="handleDelete">{{$t('table.delete')}}</el-button>
       </el-button-group>
@@ -181,22 +181,9 @@
         }
       },
       handlerRefresh() {
-        if (!this.form.id) {
-          this.$message({
-            message: '请选择一个父节点再新增子节点'
-          })
-          return
-        }
-        if (this.form.type === 0) {
-          this.$message({
-            message: '按钮下不能再新增子节点'
-          })
-          return
-        }
-        this.parent = this.form
-        this.resetForm()
-        this.formUpdate = false
-        this.formStatus = 'create'
+        this.$message({
+          message: '该功能还未实现，敬请期待!'
+        })
       },
       handlerAdd() {
         if (!this.form.id) {

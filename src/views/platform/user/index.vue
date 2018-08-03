@@ -29,7 +29,7 @@
       </el-table-column>
       <el-table-column align="center" label="性别" width="80" sortable prop="sex">
         <template slot-scope="scope">
-          <el-tag>{{scope.row.sex | sexFilter}}</el-tag>
+          <span>{{getSexName(scope.row.sex)}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="生日" sortable prop="birthday">
@@ -44,12 +44,6 @@
       <el-table-column prop="organizId" align="center" label="所属机构"
                        show-overflow-tooltip :formatter="getOrganizName" sortable>
       </el-table-column>
-
-      <!--<el-table-column align="center" label="角色">
-        <template slot-scope="scope">
-          <span v-for="role in scope.row.userRoles">{{role.role.name}} </span>
-        </template>
-      </el-table-column>-->
       <el-table-column align="center" label="创建时间" sortable prop="createTime">
         <template slot-scope="scope">
           <span>{{scope.row.createTime | dateFormatFilter('yyyy-MM-dd HH:mm:ss')}}</span>
@@ -123,7 +117,7 @@
           <el-col :span="8">
             <el-form-item label="性别" prop="sex">
               <el-select class="filter-item" v-model="form.sex" placeholder="请选择性别">
-                <el-option v-for="item in sexOptions" :key="item" :label="item | sexFilter" :value="item"> </el-option>
+                <el-option v-for="item in sexOptions" :key="item.name" :label="item.value" :value="item.name"> </el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -166,11 +160,29 @@
         <el-button v-else type="primary" autofocus @click="update('form')" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
       </div>
     </el-dialog>
+    <el-dialog :title="textMap[dialogStatus] + ' ---> ' + form.username" :visible.sync="dialogUserRoleVisible" width="550px">
+      <el-transfer ref="userRole"
+                   filterable
+                   :filter-method="userRolefilterMethod"
+                   :props = "{
+                      key: 'id',
+                      label: 'name'
+                    }"
+                   :titles="['未拥有角色', '已拥有角色']"
+                   v-model="userRoles"
+                   :data="rolesOptions">
+      </el-transfer>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="cancel('userRole')" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
+        <el-button type="primary" @click="updateUserRole()" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { listUserPage, getUser, postUser, putUser, deleteUser, resetPassword } from '@/api/user'
+import { listUserPage, getUser, postUser, putUser, deleteUser, resetPassword,
+  listUserRoles, putUserRoles } from '@/api/user'
 import { formatDate } from '@/utils/date'
 import { listRole } from '@/api/role'
 import { listOrganizChild, treeOrganiz, listOrganiz } from '@/api/organization'
@@ -190,6 +202,7 @@ export default {
   },
   data() {
     return {
+      userRoles: [],
       organizTree: [],
       checkedKeys: [],
       list: [],
@@ -302,10 +315,14 @@ export default {
       oraganizOptions: [],
       organizList: [],
       dialogFormVisible: false,
+      dialogUserRoleVisible: false,
+      dialogUserPermissionVisible: false,
       dialogStatus: '',
       textMap: {
         update: '编辑',
-        create: '创建'
+        create: '创建',
+        role: '分配角色',
+        permission: '分配权限'
       },
       isDisabled: {
         0: false,
@@ -326,25 +343,30 @@ export default {
       }
       return statusMap[status]
     },
-    sexFilter(status) {
-      const statusMap = {
-        1: '男',
-        2: '女',
-        9: '未知'
-      }
-      return statusMap[status]
-    },
     dateFormatFilter(date, pattern) {
       return formatDate(date, pattern || 'yyyy-MM-dd HH:mm:ss')
     }
   },
   created() {
-    this.resetTemp()
     if (!this.organizList || this.organizList.length < 1) {
       this.loadOrganizList()
     }
+    this.postDictionaryDetailsByCode(15, (data) => {
+      this.sexOptions = data
+    })
+    this.loadRoles()
+    this.resetTemp()
   },
   methods: {
+    userRolefilterMethod(query, item) {
+      return item.name.indexOf(query) > -1 || item.value.indexOf(query) > -1
+    },
+    getSexName(type) {
+      const typeOption = this.sexOptions.filter(value => {
+        return value.name === type
+      })
+      return typeOption.length > 0 ? typeOption[0].value : type
+    },
     tableRowClassName({ row, rowIndex }) {
       switch (row.status) {
         case 1:
@@ -454,18 +476,16 @@ export default {
       return organiz[0].fullname || organiz[0].name || row.organizId
     },
     loadRoles() {
-      if (!this.rolesOptions || this.rolesOptions.length < 1) {
-        listRole().then(response => {
-          this.rolesOptions = response.data.data || []
-        }).catch(reason => {
-          this.$notify({
-            title: '查询角色失败',
-            message: reason.message,
-            type: 'error',
-            duration: 5000
-          })
+      listRole().then(response => {
+        this.rolesOptions = response.data.data || []
+      }).catch(reason => {
+        this.$notify({
+          title: '获取所有角色失败',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
         })
-      }
+      })
     },
     handleFilter() {
       this.pageModule.pageNumber = 1
@@ -481,7 +501,6 @@ export default {
     },
     handleAdd() {
       this.resetTemp()
-      this.loadRoles()
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
     },
@@ -504,11 +523,10 @@ export default {
           }
         }
         this.oraganizOptions = this.organizList
-        this.loadRoles()
       }).catch((reason) => {
         this.$notify({
-          title: '提示',
-          message: '获取用户信息出现一个错误:' + reason.message,
+          title: '获取用户信息失败',
+          message: reason.message,
           type: 'warning',
           duration: 5000
         })
@@ -533,16 +551,16 @@ export default {
         resetPassword(this.form.id)
           .then((response) => {
             this.$notify({
-              title: '成功',
-              message: '重置密码成功,用户(' + this.form.username + ')当前密码是:' + response.data.data,
+              title: '重置密码成功',
+              message: '用户(' + this.form.username + ')当前密码是:' + response.data.data,
               type: 'success',
               duration: 5000
             })
           })
           .catch((reason) => {
             this.$notify({
-              title: '失败',
-              message: '重置密码失败:' + reason.message,
+              title: '重置密码失败',
+              message: reason.message,
               type: 'error',
               duration: 5000
             })
@@ -555,8 +573,50 @@ export default {
       })
     },
     handleUserRole(row) {
-      this.$message({
-        message: '该方法还未实现，敬请期待!'
+      listUserRoles(row.id).then(response => {
+        this.dialogStatus = 'role'
+        this.dialogUserRoleVisible = true
+        this.form = row
+        const userRoles = response.data.data
+        this.userRoles = []
+        for (let i = 0; i < userRoles.length; i++) {
+          const role = userRoles[i].id
+          this.userRoles.push(role)
+        }
+      }).catch(reason => {
+        this.$notify({
+          title: '获取用户角色失败',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
+      })
+    },
+    updateUserRole() {
+      const userRoles = []
+      for (let i = 0; i < this.userRoles.length; i++) {
+        const roleUser = {
+          userId: this.form.id,
+          role: { id: this.userRoles[i] },
+          organizId: this.form.organizId
+        }
+        userRoles.push(roleUser)
+      }
+      putUserRoles(userRoles).then(response => {
+        this.dialogUserRoleVisible = false
+        this.$notify({
+          title: '成功',
+          message: '更新用户角色成功!',
+          type: 'success',
+          duration: 2000
+        })
+      }).catch(reason => {
+        this.$notify({
+          title: '更新用户角色失败',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
       })
     },
     create(formName) {
@@ -597,7 +657,11 @@ export default {
     },
     cancel(formName) {
       this.dialogFormVisible = false
-      this.$refs[formName].resetFields()
+      this.dialogUserRoleVisible = false
+      this.dialogUserPermissionVisible = false
+      if (formName === 'form') {
+        this.$refs[formName].resetFields()
+      }
     },
     update(formName) {
       const set = this.$refs

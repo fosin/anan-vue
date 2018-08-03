@@ -16,6 +16,15 @@ export function listOtherRoles(id) {
   })
 }
 
+// 更新用户的角色
+export function putUserRoles(obj) {
+  return request({
+    url: '/platform//user/roles',
+    method: 'put',
+    data: obj
+  })
+}
+
 export function listUserPage(page) {
   return request({
     url: '/platform/user/pageList',

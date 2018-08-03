@@ -1,8 +1,8 @@
 <template>
   <div class="app-container calendar-list-container">
     <div class="filter-container">
-      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item"
-                placeholder="支持名称、类别及标识查找" v-model="pageModule.searchText">
+      <el-input @keyup.enter.native="handleFilter" style="width: 300px;" class="filter-item"
+                placeholder="支持参数键、参数值、说明查找" v-model="pageModule.searchText">
       </el-input>
       <el-button class="filter-item" type="primary" size="small" v-waves icon="el-icon-search" @click="handleFilter">
         {{$t('table.search')}}
@@ -16,23 +16,31 @@
       <el-button type="danger" v-permission="'config_parameter_delete'" size="small" class="filter-item" style="margin-left: 5px;"
                  icon="el-icon-delete" @click="handleDelete()">{{$t('table.delete')}}
       </el-button>
+      <el-button type="warning" v-permission="'config_parameter_apply'" size="small" class="filter-item" style="margin-left: 5px;"
+                 icon="el-icon-upload" @click="handleApply()">{{$t('table.apply')}}
+      </el-button>
+      <el-button type="warning" v-permission="'config_parameter_applys'" size="small" class="filter-item" style="margin-left: 5px;"
+                 icon="el-icon-upload" @click="handleApplys()">{{$t('table.applys')}}
+      </el-button>
     </div>
 
     <el-table :data="parameterList" v-loading="listLoading" element-loading-text="努力加载中" ref="parameterTable"
-              border fit highlight-current-row style="width: 100%" :default-sort="{prop: 'key'}"
+              border fit highlight-current-row style="width: 100%" :default-sort="{prop: 'name'}"
               @sort-change="sortChange" @row-click="rowClick">
-      <el-table-column align="center" label="参数键" sortable prop="key">
+      <el-table-column align="center" label="参数键" sortable prop="name" width="200px">
       </el-table-column>
-      <el-table-column align="center" label="参数值" sortable prop="value">
+      <el-table-column align="center" label="参数值" sortable prop="value" width="120px">
       </el-table-column>
-      <el-table-column align="center" label="默认值" sortable prop="default_value">
+      <el-table-column align="center" label="默认值" sortable prop="defaultValue" width="120px">
       </el-table-column>
-      <el-table-column align="center" label="参数类别" sortable prop="type">
+      <el-table-column align="center" label="说明" sortable prop="description">
+      </el-table-column>
+      <el-table-column align="center" label="参数类别" sortable prop="type" width="120px">
         <template slot-scope="scope">
           <span>{{getTypeName(scope.row.type)}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="作用域" sortable prop="scope">
+      <el-table-column align="center" label="作用域" sortable prop="scope" width="100px">
       </el-table-column>
     </el-table>
     <div v-show="!listLoading" class="pagination-container">
@@ -44,23 +52,26 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
       <el-form :model="form" :rules="rules" ref="form" label-width="100px">
-        <el-form-item label="参数键" prop="key">
-          <el-input v-model="form.key" placeholder="参数键"></el-input>
+        <el-form-item label="参数键" prop="name">
+          <el-input v-model="form.name" placeholder="参数键"></el-input>
         </el-form-item>
         <el-form-item label="参数值" prop="value">
           <el-input v-model="form.value" placeholder="参数值"></el-input>
         </el-form-item>
-        <el-form-item label="默认值" prop="default_value">
-          <el-input v-model="form.default_value" placeholder="默认值"></el-input>
+        <el-form-item label="默认值" prop="defaultValue">
+          <el-input v-model="form.defaultValue" placeholder="默认值"></el-input>
+        </el-form-item>
+        <el-form-item label="说明" prop="description">
+          <el-input v-model="form.description" placeholder="说明"></el-input>
         </el-form-item>
         <el-form-item label="参数类别" prop="type">
           <el-select class="filter-item" v-model="form.type" placeholder="请选择参数类别">
-            <el-option v-for="item in typeOptions" :key="item.key" :label="item.value"
-                       :value="item.key" :disabled="item.status === 1"></el-option>
+            <el-option v-for="item in typeOptions" :key="item.name" :label="item.value"
+                       :value="item.name" :disabled="item.status === 1"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="作用域" prop="scope">
-          <el-input v-model="form.scope" placeholder="作用域"></el-input>
+          <el-input v-model="form.scope" placeholder="作用域，为空时表示适用与所有域"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -82,7 +93,9 @@
     postParameter,
     putParameter,
     deleteParameter,
-    listParameterPage
+    listParameterPage,
+    applyParameter,
+    applysParameter
   } from '@/api/parameter'
   import waves from '@/directive/waves/index.js' // 水波纹指令
   export default {
@@ -104,7 +117,7 @@
         },
         form: {},
         rules: {
-          key: [
+          name: [
             {
               required: true,
               message: '参数键不能为空',
@@ -142,7 +155,7 @@
     methods: {
       getTypeName(type) {
         const typeOption = this.typeOptions.filter(value => {
-          return value.key === type
+          return value.name === type
         })
         return typeOption.length > 0 ? typeOption[0].value : type
       },
@@ -182,13 +195,13 @@
         this.dialogFormVisible = true
       },
       handleEdit() {
-        if (!this.form || !this.form.key) {
+        if (!this.form || !this.form.id) {
           this.$message({
             message: '操作前请先选择一条数据!'
           })
           return
         }
-        getParameter(this.form.key).then(response => {
+        getParameter(this.form.id).then(response => {
           this.form = response.data.data
           this.dialogFormVisible = true
           this.dialogStatus = 'update'
@@ -202,14 +215,14 @@
         })
       },
       handleDelete() {
-        if (!this.form || !this.form.key) {
+        if (!this.form || !this.form.id || !this.form.name) {
           this.$message({
             message: '操作前请先选择一条数据!'
           })
           return
         }
         this.$confirm(
-          '此操作将永久删除参数名( ' + this.form.key + ' )的相关数据, 是否继续?',
+          '此操作将永久删除参数名( ' + this.form.name + ' )的相关数据, 是否继续?',
           '提示',
           {
             confirmButtonText: '确定',
@@ -217,18 +230,80 @@
             type: 'warning'
           }
         ).then(() => {
-          deleteParameter(this.form.key).then(response => {
+          deleteParameter(this.form.id).then(response => {
             this.dialogFormVisible = false
             this.getList()
             this.$notify({
               title: '成功',
-              message: '删除参数成功!',
+              message: '删除参数成功,若要立即生效则需要使用【应用全部】功能!',
+              type: 'success',
+              duration: 5000
+            })
+          }).catch(reason => {
+            this.$notify({
+              title: '删除参数失败',
+              message: reason.message,
+              type: 'error',
+              duration: 5000
+            })
+          })
+        }).catch(reason => {
+        })
+      },
+      handleApply() {
+        if (!this.form || !this.form.id || !this.form.name) {
+          this.$message({
+            message: '操作前请先选择一条数据!'
+          })
+          return
+        }
+        this.$confirm(
+          '此操作将刷新参数名( ' + this.form.name + ' )的缓存数据, 是否继续?',
+          '提示',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }
+        ).then(() => {
+          applyParameter(this.form.id).then(response => {
+            this.$notify({
+              title: '成功',
+              message: '应用参数成功!',
               type: 'success',
               duration: 2000
             })
           }).catch(reason => {
             this.$notify({
-              title: '删除参数失败',
+              title: '应用参数失败',
+              message: reason.message,
+              type: 'error',
+              duration: 5000
+            })
+          })
+        }).catch(reason => {
+        })
+      },
+      handleApplys() {
+        this.$confirm(
+          '此操作将刷新所有更改过参数的缓存数据, 是否继续?',
+          '提示',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }
+        ).then(() => {
+          applysParameter().then(response => {
+            this.$notify({
+              title: '成功',
+              message: '应用参数成功!',
+              type: 'success',
+              duration: 2000
+            })
+          }).catch(reason => {
+            this.$notify({
+              title: '应用参数失败',
               message: reason.message,
               type: 'error',
               duration: 5000
@@ -279,9 +354,9 @@
               this.getList()
               this.$notify({
                 title: '成功',
-                message: '修改成功',
+                message: '修改成功,若要立即生效则需要使用【应用、应用全部】功能!',
                 type: 'success',
-                duration: 2000
+                duration: 5000
               })
             }).catch(reason => {
               this.$notify({
@@ -299,9 +374,9 @@
       resetForm() {
         this.form = {
           id: undefined,
-          key: undefined,
+          name: undefined,
           value: undefined,
-          default_value: undefined,
+          defaultValue: undefined,
           type: undefined,
           scope: undefined
         }

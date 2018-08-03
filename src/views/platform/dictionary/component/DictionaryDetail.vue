@@ -21,8 +21,8 @@
     <el-table :data="dictionaryDetailList" v-loading="listLoading" element-loading-text="努力加载中"
               ref="dictionaryDetailTable"
               border fit highlight-current-row style="width: 100%"
-              @sort-change="sortChange" @row-click="rowClick" :default-sort="{prop: 'key'}">
-      <el-table-column label="明细键" sortable prop="key" width="90px">
+              @sort-change="sortChange" @row-click="rowClick" :default-sort="{prop: 'name'}">
+      <el-table-column label="明细键" sortable prop="name" width="90px">
       </el-table-column>
       <el-table-column align="center" label="明细值" sortable prop="value">
       </el-table-column>
@@ -49,8 +49,8 @@
         <el-form-item label="字典名称" prop="name">
           <el-input v-model="selectedDictionary.name" :disabled="true"></el-input>
         </el-form-item>
-        <el-form-item label="字典明细项键" prop="key">
-          <el-input v-model="form.key" placeholder="字典明细项键,是一个字段的唯一标识，不能重复"></el-input>
+        <el-form-item label="字典明细项键" prop="name">
+          <el-input v-model="form.name" placeholder="字典明细项键,是一个字段的唯一标识，不能重复"></el-input>
         </el-form-item>
         <el-form-item label="字典明细项值" prop="value">
           <el-input v-model="form.value" placeholder="字典明细项键对应的字典明细项值"></el-input>
@@ -129,7 +129,7 @@
               trigger: 'blur'
             }
           ],
-          key: [
+          name: [
             {
               required: true,
               message: '字典明细项键不能为空',
@@ -150,7 +150,7 @@
       getStatusValue(status) {
         if (this.statusOptions && this.statusOptions.length > 0) {
           const statusOption = this.statusOptions.filter(value => {
-            return value.key === status
+            return value.name === status
           })
           return statusOption.length > 0 ? statusOption[0].value : status
         }
@@ -326,7 +326,6 @@
       resetForm() {
         this.form = {
           id: undefined,
-          key: undefined,
           name: undefined,
           value: undefined,
           scode: undefined,

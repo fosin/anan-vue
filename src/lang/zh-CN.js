@@ -98,7 +98,9 @@ export default {
     permission: '权限',
     role: '角色',
     user: '用户',
-    refresh: '刷新'
+    refresh: '刷新',
+    applys: '应用更改',
+    apply: '应用当前'
   },
   errorLog: {
     tips: '请点击右上角bug小图标',
