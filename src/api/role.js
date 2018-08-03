@@ -1,5 +1,30 @@
 import request from '@/utils/request'
 
+// 获取角色的所有用户列表
+export function listRoleUsers(id) {
+  return request({
+    url: '/platform/role/users/' + id,
+    method: 'post'
+  })
+}
+
+// 获取角色的所有未拥有的用户列表
+export function listOtherUsers(id) {
+  return request({
+    url: '/platform/role/otherUsers/' + id,
+    method: 'post'
+  })
+}
+
+// 更新角色的用户
+export function putRoleUsers(obj) {
+  return request({
+    url: '/platform/role/users',
+    method: 'put',
+    data: obj
+  })
+}
+
 // 获取角色分页列表
 export function listRolePage(page) {
   return request({
@@ -16,6 +41,7 @@ export function listRolePermissions(id) {
     method: 'post'
   })
 }
+
 // 更新角色权限
 export function putRolePermissions(rolePermissions) {
   return request({

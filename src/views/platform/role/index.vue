@@ -99,6 +99,20 @@
         <el-button type="primary" @click="updatePermession(form.id, form.value)" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
       </div>
     </el-dialog>
+    <el-dialog :title="textMap[dialogStatus] + '->' + form.name" :visible.sync="dialogRoleUserVisible" width="550px">
+      <el-transfer ref="roleUser"
+        filterable
+        :filter-method="roleUserfilterMethod"
+        filter-placeholder="请输入名称查找"
+        :titles="['未拥有用户', '已拥有用户']"
+        v-model="roleUsers"
+        :data="allUsers">
+      </el-transfer>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="cancel('roleUser')" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
+        <el-button type="primary" @click="updateRoleUser(form.id, form.value)" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -110,8 +124,11 @@ import {
   deleteRole,
   listRolePage,
   putRolePermissions,
-  listRolePermissions
+  listRolePermissions,
+  listRoleUsers,
+  putRoleUsers
 } from '@/api/role'
+import { listUser } from '@/api/user'
 import { formatDate } from '@/utils/date'
 import { listChildPermissions } from '@/api/permission'
 import waves from '@/directive/waves/index.js' // 水波纹指令
@@ -127,6 +144,8 @@ export default {
   },
   data() {
     return {
+      roleUsers: [],
+      allUsers: [],
       filterPermissionText: '',
       checkedKeys: [],
       expandKeys: [],
@@ -180,11 +199,13 @@ export default {
       rolesOptions: undefined,
       dialogFormVisible: false,
       dialogPermissionVisible: false,
+      dialogRoleUserVisible: false,
       dialogStatus: '',
       textMap: {
         update: '编辑',
         create: '创建',
-        permission: '分配权限'
+        permission: '分配权限',
+        user: '分配用户'
       }
     }
   },
@@ -200,7 +221,30 @@ export default {
       return formatDate(date, pattern || 'yyyy-MM-dd HH:mm:ss')
     }
   },
+  created() {
+    listUser().then(response => {
+      const allUsers = response.data.data
+      for (let i = 0; i < allUsers.length; i++) {
+        const user = {
+          key: allUsers[i].id,
+          label: allUsers[i].username,
+          pinyin: allUsers[i].usercode
+        }
+        this.allUsers.push(user)
+      }
+    }).catch(reason => {
+      this.$notify({
+        title: '获取所有用户失败',
+        message: reason.message,
+        type: 'error',
+        duration: 5000
+      })
+    })
+  },
   methods: {
+    roleUserfilterMethod(query, item) {
+      return item.pinyin.indexOf(query) > -1 || item.label.indexOf(query) > -1
+    },
     getList() {
       this.listLoading = true
       listRolePage(this.pageModule).then(response => {
@@ -273,8 +317,50 @@ export default {
         })
     },
     handleRoleUser(row) {
-      this.$message({
-        message: '该方法还未实现，敬请期待!'
+      listRoleUsers(row.id).then(response => {
+        this.dialogStatus = 'user'
+        this.dialogRoleUserVisible = true
+        this.form = row
+        const roleUsers = response.data.data
+        this.roleUsers = []
+        for (let i = 0; i < roleUsers.length; i++) {
+          const user = roleUsers[i].id
+          this.roleUsers.push(user)
+        }
+      }).catch(reason => {
+        this.$notify({
+          title: '获取角色用户失败',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
+      })
+    },
+    updateRoleUser(id, value) {
+      const userRoles = []
+      for (let i = 0; i < this.roleUsers.length; i++) {
+        const roleUser = {
+          userId: this.roleUsers[i],
+          role: { id: this.form.id },
+          organizId: undefined
+        }
+        userRoles.push(roleUser)
+      }
+      putRoleUsers(userRoles).then(response => {
+        this.dialogRoleUserVisible = false
+        this.$notify({
+          title: '成功',
+          message: '修改角色用户成功!',
+          type: 'success',
+          duration: 2000
+        })
+      }).catch(reason => {
+        this.$notify({
+          title: '更新角色用户失败',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
       })
     },
     updatePermession(id, value) {
@@ -430,6 +516,7 @@ export default {
     cancel(formName) {
       this.dialogFormVisible = false
       this.dialogPermissionVisible = false
+      this.dialogRoleUserVisible = false
       if (formName === 'form') {
         this.$refs[formName].resetFields()
       }

@@ -16,18 +16,12 @@
       <el-tooltip effect="dark" :content="$t('navbar.theme')" placement="bottom">
         <theme-picker class="theme-switch right-menu-item"></theme-picker>
       </el-tooltip>
-     <!-- <el-tooltip class="avatar-wrapper" effect="dark" content="用户头像" placement="bottom">
-        <img class="user-avatar" :src="userInfo.avatar+'?imageView2/1/w/40/h/40'">
-      </el-tooltip>-->
-      <el-dropdown class="avatar-container right-menu-item" trigger="click">
+      <el-dropdown class="avatar-container right-menu-item">
         <div class="avatar-wrapper">
           <img class="user-avatar" :src="userInfo.avatar+'?imageView2/1/w/40/h/40'" :title="userInfo.username">
+          <span style="float: right; text-align: center">{{userInfo.username}}</span>
           <i class="el-icon-caret-bottom"></i>
         </div>
-        <!--<span class="el-dropdown-link">
-          {{userInfo.username}}
-          <i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>
-        </span>-->
         <el-dropdown-menu slot="dropdown">
           <router-link to="/">
             <el-dropdown-item>

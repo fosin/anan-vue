@@ -1,5 +1,21 @@
 import request from '@/utils/request'
 
+// 获取用户的所有角色列表
+export function listUserRoles(id) {
+  return request({
+    url: '/platform/user/roles/' + id,
+    method: 'post'
+  })
+}
+
+// 获取用户的所有未拥有的角色列表
+export function listOtherRoles(id) {
+  return request({
+    url: '/platform/user/otherRoles/' + id,
+    method: 'post'
+  })
+}
+
 export function listUserPage(page) {
   return request({
     url: '/platform/user/pageList',
@@ -7,6 +23,14 @@ export function listUserPage(page) {
     data: page
   })
 }
+
+export function listUser() {
+  return request({
+    url: '/platform/user/list',
+    method: 'post'
+  })
+}
+
 export function resetPassword(id) {
   return request({
     url: '/platform/user/resetPassword/' + id,
