@@ -51,14 +51,10 @@ export function logout() {
   })
 }
 
-export function getUserInfo(access_token) {
-  if (!access_token) {
-    return {}
-  }
+export function getUserInfo() {
   return request({
     url: '/auth/auth/principal',
-    method: 'get',
-    params: { access_token }
+    method: 'get'
   })
 }
 

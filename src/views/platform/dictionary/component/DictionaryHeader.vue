@@ -175,7 +175,7 @@
           return
         }
         getDictionary(this.form.code).then(response => {
-          this.form = response.data.data
+          this.form = response.data
           this.dialogFormVisible = true
           this.dialogStatus = 'update'
         }).catch(reason => {

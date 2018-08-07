@@ -26,6 +26,9 @@ export default {
     dashboard: 'Dashboard',
     github: 'Github',
     screenfull: 'screenfull',
+    userInfo: 'User Info',
+    userSetting: 'User Setting',
+    systemSetting: 'System Setting',
     theme: 'theme'
   },
   login: {

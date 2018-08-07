@@ -13,7 +13,7 @@
       </el-button>
     </div>
 
-    <el-table :key='tableKey' :data="list" v-loading="listLoading"
+    <el-table :data="list" v-loading="listLoading"
               element-loading-text="努力加载中..." border fit highlight-current-row
               :row-class-name="tableRowClassName"
               style="width: 100%"  :default-sort = "{prop: 'usercode', order: 'descending'}"
@@ -177,15 +177,64 @@
         <el-button type="primary" @click="updateUserRole()" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
       </div>
     </el-dialog>
+    <el-dialog :title="textMap[dialogStatus] + ' ---> ' + form.username" :visible.sync="dialogUserPermissionVisible" width="550px">
+      <el-tabs type="border-card">
+        <el-tab-pane label="增加权限">
+          <el-input
+            placeholder="输入关键字进行过滤"
+            v-model="filterAddPermissionText">
+          </el-input>
+          <el-tree class="filter-tree"
+                   :default-checked-keys="addCheckedKeys"
+                   node-key="id"
+                   highlight-current
+                   show-checkbox
+                   lazy
+                   check-strictly
+                   :load="loadChildAddPermissions"
+                   :props="defaultProps"
+                   ref="addPermissionTree"
+                   :filter-node-method="filterNode"
+                   :default-expanded-keys="[1]">
+          </el-tree>
+        </el-tab-pane>
+        <el-tab-pane label="减少权限">
+          <el-input
+            placeholder="输入关键字进行过滤"
+            v-model="filterSubPermissionText">
+          </el-input>
+          <el-tree class="filter-tree"
+                   node-key="id"
+                   :default-checked-keys="subCheckedKeys"
+                   highlight-current
+                   show-checkbox
+                   lazy
+                   check-strictly
+                   :load="loadChildSubPermissions"
+                   :props="defaultProps"
+                   ref="subPermissionTree"
+                   :filter-node-method="filterNode"
+                   :default-expanded-keys="[1]">
+          </el-tree>
+        </el-tab-pane>
+      </el-tabs>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="cancel('permissionTree')" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
+        <el-button type="primary" @click="updateUserPermession()" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { listUserPage, getUser, postUser, putUser, deleteUser, resetPassword,
+  putUserPermissions,
+  listUserPermissions,
   listUserRoles, putUserRoles } from '@/api/user'
+import { listChildPermissions } from '@/api/permission'
 import { formatDate } from '@/utils/date'
 import { listRole } from '@/api/role'
-import { listOrganizChild, treeOrganiz, listOrganiz } from '@/api/organization'
+import { listOrganizAllChild, treeOrganiz, listOrganiz } from '@/api/organization'
 import waves from '@/directive/waves/index.js' // 水波纹指令
 import { mapGetters } from 'vuex'
 import ElRadioGroup from 'element-ui/packages/radio/src/radio-group'
@@ -200,8 +249,22 @@ export default {
   directives: {
     waves
   },
+  watch: {
+    filterAddPermissionText(val) {
+      this.$refs.addPermissionTree.filter(val)
+    },
+    filterSubPermissionText(val) {
+      this.$refs.subPermissionTree.filter(val)
+    }
+  },
   data() {
     return {
+      filterAddPermissionText: '',
+      filterSubPermissionText: '',
+      addCheckedKeys: [],
+      subCheckedKeys: [],
+      addExpandKeys: [],
+      subExpandKeys: [],
       userRoles: [],
       organizTree: [],
       checkedKeys: [],
@@ -214,6 +277,12 @@ export default {
         searchText: '',
         sortName: '',
         sortOrder: ''
+      },
+      defaultProps: {
+        children: 'children',
+        label: 'name',
+        isLeaf: 'leaf',
+        disabled: 'disabled'
       },
       selectedRoles: [],
       form: {},
@@ -327,12 +396,11 @@ export default {
       isDisabled: {
         0: false,
         1: true
-      },
-      tableKey: 0
+      }
     }
   },
   computed: {
-    ...mapGetters(['permissions'])
+    ...mapGetters(['permissions', 'userInfo'])
   },
   filters: {
     statusFilter(status) {
@@ -349,7 +417,7 @@ export default {
   },
   created() {
     if (!this.organizList || this.organizList.length < 1) {
-      this.loadOrganizList()
+      this.loadOrganizAllChild(this.userInfo.organizId)
     }
     this.postDictionaryDetailsByCode(15, (data) => {
       this.sexOptions = data
@@ -372,7 +440,7 @@ export default {
         case 1:
           return 'info-row'
         case 9:
-          return 'warning-row'
+          return 'info-row'
         default:
           return ''
       }
@@ -418,26 +486,23 @@ export default {
         }
       }
     },
-    loadOrganizChild(node, resolve) {
-      let pId = '0'
-      if (node.level !== 0) {
-        pId = node.data.id
-      }
-      listOrganizChild(pId).then(response => {
-        return resolve(response.data.data || [])
+    loadOrganizAllChild(pId) {
+      listOrganizAllChild(pId).then(response => {
+        this.organizList = response.data || []
       }).catch(reason => {
         this.$notify({
-          title: '查询子机构信息失败',
+          title: '查询后代机构信息失败',
           message: reason.message,
           type: 'error',
           duration: 5000
         })
       })
+      this.oraganizOptions = this.organizList
     },
     loadOrganizTree() {
       if (!this.organizTree || this.organizTree.length < 1) {
         treeOrganiz().then(response => {
-          this.organizTree = response.data.data || []
+          this.organizTree = response.data || []
         }).catch(reason => {
           this.$notify({
             title: '查询机构信息失败',
@@ -450,7 +515,7 @@ export default {
     },
     loadOrganizList() {
       listOrganiz().then(response => {
-        this.organizList = response.data.data || []
+        this.organizList = response.data || []
       }).catch(reason => {
         this.$notify({
           title: '查询机构信息失败',
@@ -477,7 +542,7 @@ export default {
     },
     loadRoles() {
       listRole().then(response => {
-        this.rolesOptions = response.data.data || []
+        this.rolesOptions = response.data || []
       }).catch(reason => {
         this.$notify({
           title: '获取所有角色失败',
@@ -512,7 +577,7 @@ export default {
         return
       }
       getUser(this.form.id).then(response => {
-        this.form = response.data.data
+        this.form = response.data
         this.dialogFormVisible = true
         this.dialogStatus = 'update'
         this.selectedRoles = []
@@ -552,7 +617,7 @@ export default {
           .then((response) => {
             this.$notify({
               title: '重置密码成功',
-              message: '用户(' + this.form.username + ')当前密码是:' + response.data.data,
+              message: '用户(' + this.form.username + ')当前密码是:' + response.data,
               type: 'success',
               duration: 5000
             })
@@ -567,17 +632,193 @@ export default {
           })
       }).catch(() => {})
     },
-    handleUserPermission(row) {
-      this.$message({
-        message: '该方法还未实现，敬请期待!'
+    filterNode(value, data) {
+      if (!value) return true
+      return data.name.indexOf(value) !== -1
+    },
+    loadChildAddPermissions(node, resolve) {
+      let pId = 0
+      if (node.level !== 0) {
+        pId = node.data.id
+      }
+      listChildPermissions(pId).then(response => {
+        const childPermissions = response.data || []
+        // 记录所有被展开过的节点ID，用于保存时比较数据
+        for (let i = 0; i < childPermissions.length; i++) {
+          const id = childPermissions[i].id
+          this.addExpandKeys.push(id)
+        }
+        return resolve(childPermissions)
+      }).catch(reason => {
+        this.$notify({
+          title: '加载子节点失败',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
       })
+    },
+    loadChildSubPermissions(node, resolve) {
+      let pId = 0
+      if (node.level !== 0) {
+        pId = node.data.id
+      }
+      listChildPermissions(pId).then(response => {
+        const childPermissions = response.data || []
+        // 记录所有被展开过的节点ID，用于保存时比较数据
+        for (let i = 0; i < childPermissions.length; i++) {
+          const id = childPermissions[i].id
+          this.subExpandKeys.push(id)
+        }
+        return resolve(childPermissions)
+      }).catch(reason => {
+        this.$notify({
+          title: '加载子节点失败',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
+      })
+    },
+    handleUserPermission(row) {
+      listUserPermissions(row.id).then(response => {
+        this.addCheckedKeys = this.getCheckedKeys(1, response.data)
+        this.subCheckedKeys = this.getCheckedKeys(2, response.data)
+        this.dialogStatus = 'permission'
+        this.dialogUserPermissionVisible = true
+        this.form = row
+        if (this.$refs) {
+          if (this.$refs.addPermissionTree) {
+            this.$refs.addPermissionTree.setCheckedKeys(this.addCheckedKeys)
+          }
+          if (this.$refs.subPermissionTree) {
+            this.$refs.subPermissionTree.setCheckedKeys(this.subCheckedKeys)
+          }
+        }
+      }).catch(reason => {
+        this.$notify({
+          title: '获取用户权限失败',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
+      })
+    },
+    getUserAddPermession(userHavePermission) {
+      // 得到当前已展开项目中被选中的权限
+      const checkedPermissions = this.$refs.addPermissionTree.getCheckedKeys().sort() // 当前选中的权限集合
+      const halfCheckedPermissions = this.$refs.addPermissionTree.getHalfCheckedKeys().sort() // 当前半选中的权限集合
+      const expandPermissions = this.addExpandKeys.sort() // 树中已展开的权限集合
+
+      // 求并集，到的所有实际被选中的权限 checkedPermissions + halfCheckedPermissions
+      const allCheckedPermissions = checkedPermissions.concat(halfCheckedPermissions.filter(function(v) { return checkedPermissions.indexOf(v) === -1 })).sort()
+
+      // 求差集
+      const differencePermissions = userHavePermission.filter(function(v) { return expandPermissions.indexOf(v) === -1 })
+
+      // 求并集
+      const unionPermissions = differencePermissions.concat(allCheckedPermissions.filter(function(v) { return differencePermissions.indexOf(v) === -1 })).sort()
+
+      return unionPermissions
+    },
+    getUserSubPermession(userHavePermission) {
+      // 得到当前已展开项目中被选中的权限
+      const checkedPermissions = this.$refs.subPermissionTree.getCheckedKeys().sort() // 当前选中的权限集合
+      const halfCheckedPermissions = this.$refs.subPermissionTree.getHalfCheckedKeys().sort() // 当前半选中的权限集合
+      const expandPermissions = this.subExpandKeys.sort() // 树中已展开的权限集合
+
+      // 求并集，到的所有实际被选中的权限 checkedPermissions + halfCheckedPermissions
+      const allCheckedPermissions = checkedPermissions.concat(halfCheckedPermissions.filter(function(v) { return checkedPermissions.indexOf(v) === -1 })).sort()
+
+      // 求差集
+      const differencePermissions = userHavePermission.filter(function(v) { return expandPermissions.indexOf(v) === -1 })
+
+      // 求并集
+      const unionPermissions = differencePermissions.concat(allCheckedPermissions.filter(function(v) { return differencePermissions.indexOf(v) === -1 })).sort()
+
+      return unionPermissions
+    },
+    updateUserPermession() {
+      const userAddPermissions = this.addCheckedKeys.sort() // 当前用户原拥有的加权限集合
+      const resultAddPermission = this.getUserAddPermession(userAddPermissions)
+
+      const userSubPermissions = this.subCheckedKeys.sort() // 当前用户原拥有的减权限集合
+      const resultSubPermission = this.getUserSubPermession(userSubPermissions)
+
+      // 如果没有修改过数据则直接返回
+      if (resultAddPermission.toString() === userAddPermissions.toString() && resultSubPermission.toString() === userSubPermissions.toString()) {
+        this.dialogUserPermissionVisible = false
+        return
+      }
+
+      // 组装成后台需要的数据格式
+      const newRolePermissions = []
+      for (let i = 0; i < resultAddPermission.length; i++) {
+        const permission = {
+          id: undefined,
+          organizId: this.form.organizId,
+          userId: this.form.id,
+          addMode: 0,
+          permission: {
+            id: resultAddPermission[i]
+          }
+        }
+        newRolePermissions.push(permission)
+      }
+      for (let i = 0; i < resultSubPermission.length; i++) {
+        const permission = {
+          id: undefined,
+          organizId: this.form.organizId,
+          userId: this.form.id,
+          addMode: 1,
+          permission: {
+            id: resultSubPermission[i]
+          }
+        }
+        newRolePermissions.push(permission)
+      }
+      putUserPermissions(this.form.id, newRolePermissions).then(() => {
+        this.dialogUserPermissionVisible = false
+        this.$notify({
+          title: '成功',
+          message: '修改用户权限成功!',
+          type: 'success',
+          duration: 2000
+        })
+      }).catch(reason => {
+        this.$notify({
+          title: '更新用户权限失败',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
+      })
+    },
+    getCheckedKeys(type, permissions) {
+      const checkedKeys = []
+      if (!permissions || permissions.length < 1) {
+        return checkedKeys
+      }
+      for (let i = 0; i < permissions.length; i++) {
+        const permission = permissions[i]
+        if (type === 1) {
+          if (permission.addMode === 0) {
+            checkedKeys.push(permission.permission.id)
+          }
+        } else {
+          if (permissions[i].addMode === 1) {
+            checkedKeys.push(permission.permission.id)
+          }
+        }
+      }
+      return checkedKeys
     },
     handleUserRole(row) {
       listUserRoles(row.id).then(response => {
         this.dialogStatus = 'role'
         this.dialogUserRoleVisible = true
         this.form = row
-        const userRoles = response.data.data
+        const userRoles = response.data
         this.userRoles = []
         for (let i = 0; i < userRoles.length; i++) {
           const role = userRoles[i].id
@@ -602,7 +843,7 @@ export default {
         }
         userRoles.push(roleUser)
       }
-      putUserRoles(userRoles).then(response => {
+      putUserRoles(this.form.id, userRoles).then(response => {
         this.dialogUserRoleVisible = false
         this.$notify({
           title: '成功',
@@ -638,7 +879,7 @@ export default {
             this.updateList(this.form)
             this.$notify({
               title: '创建成功,当前用户密码是:',
-              message: response.data.data.password,
+              message: response.data.password,
               type: 'success',
               duration: 2000
             })
@@ -776,21 +1017,5 @@ export default {
 <style scoped>
   .el-select {
     width: 100%;
-  }
-
-  .el-table .warning-row {
-    color: #E6A23C;
-  }
-
-  .el-table .success-row {
-    color: #67C23A;
-  }
-
-  .el-table .danger-row {
-    color: #F56C6C;
-  }
-
-  .el-table .info-row {
-    color: #909399;
   }
 </style>

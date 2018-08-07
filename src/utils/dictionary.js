@@ -22,7 +22,7 @@ export default (Vue) => {
       return
     }
     fetchDictionaryDetailsByCode(code).then(response => {
-      callback(response.data.data)
+      callback(response.data)
     }).catch(reason => {
       Message({
         title: '获取字典明细失败',
@@ -44,7 +44,7 @@ export default (Vue) => {
       return
     }
     fetchDictionaryDetailsByCode(code, 'get').then(response => {
-      return response.data.data
+      return response.data
     }).catch(reason => {
       Message({
         title: '获取字典明细失败',

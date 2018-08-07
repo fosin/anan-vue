@@ -74,8 +74,12 @@
 
 <script>
   import { listOrganizChild, getOrganiz, postOrganiz, deleteOrganiz, putOrganiz } from '@/api/organization'
+  import { mapGetters } from 'vuex'
   export default {
     name: 'system_organiz',
+    computed: {
+      ...mapGetters(['userInfo'])
+    },
     data() {
       const validateCode = (rule, value, callback) => {
         if (value.substring(0, this.parent.code.length) !== this.parent.code) {
@@ -140,15 +144,15 @@
     },
     methods: {
       loadChild(node, resolve) {
-        let pId = 0
+        let pId = this.userInfo.organizId
         if (node.level !== 0) {
           pId = node.data.id
         }
         listOrganizChild(pId).then(response => {
           if (pId === 0) {
-            this.defaultExpandedKeys[0] = response.data.data[0].id
+            this.defaultExpandedKeys[0] = response.data[0].id
           }
-          return resolve(response.data.data || [])
+          return resolve(response.data || [])
         }).catch(reason => {
           this.$notify({
             title: '加载子节点失败',
@@ -171,7 +175,7 @@
           this.formStatus = 'update'
         }
         getOrganiz(data.id).then(response => {
-          this.form = response.data.data
+          this.form = response.data
           this.form.status = this.form.status + ''
         }).catch(reason => {
           this.$notify({
@@ -265,7 +269,7 @@
         putOrganiz(this.form).then(response => {
           const cNode = this.$refs.organizTree.getNode(this.form.id)
           if (cNode) {
-            cNode.data = response.data.data
+            cNode.data = response.data
           }
           this.$notify({
             title: '成功',
@@ -286,8 +290,11 @@
         this.$refs.form.validate(valid => {
           if (valid) {
             postOrganiz(this.form).then(response => {
-              // TODO 以下代码启用后会报错，待解决
-              // this.$refs.organizTree.append(response.data.data, this.form.pId)
+              const pNode = this.$refs.organizTree.getNode(this.form.pId)
+              this.$refs.organizTree.append(response.data, pNode)
+              // TODO 以下代码启用后可以解决tree控件bug(会导致原有子节点丢失问题)
+              pNode.data.children = null
+
               this.resetForm()
               this.$notify({
                 title: '成功',

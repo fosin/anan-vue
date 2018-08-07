@@ -37,16 +37,15 @@ service.interceptors.request.use(config => {
 // respone interceptor
 service.interceptors.response.use(response => {
   NProgress.done()
-  const data = response.data
-  if (response.status !== 200) {
-    return Promise.reject(getRealError(3, response))
-  } else {
-    if (data.code === 1) { // success
-      return response
-    } else { // failure
-      return Promise.reject(getRealError(2, response))
-    }
-  }
+  // const data = response.data
+  // const status = response.status
+  // switch (status) {
+  //   case 200:
+  //   case 201:
+  //   case 202:
+  //   case 203:
+  // }
+  return response
 }, error => {
   NProgress.done()
   // 尝试刷新access_toekn续用登录状态
@@ -84,7 +83,7 @@ function WordCap(s) {
 function getRealError(from, error) {
   switch (from) {
     case 1:
-      error.message = JSON.stringify(error.response.data)
+      error.message = error.response.data
       break
     case 2:
       error.message = '(' + error.data.code + ')' + error.data.msg

@@ -17,9 +17,9 @@ export function listOtherUsers(id) {
 }
 
 // 更新角色的用户
-export function putRoleUsers(obj) {
+export function putRoleUsers(id, obj) {
   return request({
-    url: '/platform/role/users',
+    url: '/platform/role/users/' + id,
     method: 'put',
     data: obj
   })
@@ -43,9 +43,9 @@ export function listRolePermissions(id) {
 }
 
 // 更新角色权限
-export function putRolePermissions(rolePermissions) {
+export function putRolePermissions(id, rolePermissions) {
   return request({
-    url: '/platform/role/permissions',
+    url: '/platform/role/permissions' + id,
     method: 'put',
     data: rolePermissions
   })

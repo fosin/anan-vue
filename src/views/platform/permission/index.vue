@@ -54,7 +54,7 @@
             </el-form-item>
             <el-form-item label="类型" prop="type">
               <el-select class="filter-item" v-model="form.type"  :disabled="formUpdate"  placeholder="请选择类型" value="">
-                <el-option v-for="item in typeOptions" :key="item.key" :label="item.value" :value="item.key" :disabled="item.status === 1"> </el-option>
+                <el-option v-for="item in typeOptions" :key="item.name" :label="item.value" :value="item.name" :disabled="item.status === 1"> </el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="排序" prop="sort">
@@ -121,9 +121,9 @@
         }
         listChildPermissions(pId).then(response => {
           if (pId === 0) {
-            this.defaultExpandedKeys[0] = response.data.data[0].id
+            this.defaultExpandedKeys[0] = response.data[0].id
           }
-          return resolve(response.data.data || [])
+          return resolve(response.data || [])
         }).catch(reason => {
           this.$notify({
             title: '加载子节点失败',
@@ -135,7 +135,7 @@
       },
       filterNode(value, data) {
         if (!value) return true
-        return data.label.indexOf(value) !== -1
+        return data.name.indexOf(value) !== -1
       },
       getNodeData(data) {
         if (data.id === this.currentId) {
@@ -146,7 +146,7 @@
           this.formStatus = 'update'
         }
         getPermission(data.id).then(response => {
-          this.form = response.data.data
+          this.form = response.data
           this.form.status = this.form.status + ''
         }).catch(reason => {
           this.$notify({
@@ -247,7 +247,7 @@
         putPermission(this.form).then(response => {
           const cNode = this.$refs.permissionTree.getNode(this.form.id)
           if (cNode) {
-            cNode.data = response.data.data
+            cNode.data = response.data
           }
           this.$notify({
             title: '成功',
@@ -266,8 +266,10 @@
       },
       create() {
         postPermission(this.form).then(response => {
-          // TODO 以下代码启用后会报错，待解决
-          // this.$refs.permissionTree.append(response.data.data, this.form.pId)
+          const pNode = this.$refs.permissionTree.getNode(this.form.pId)
+          this.$refs.permissionTree.append(response.data, pNode)
+          // TODO 以下代码启用后可以解决tree控件bug(会导致原有子节点丢失问题)
+          pNode.data.children = null
           this.resetForm()
           this.$notify({
             title: '成功',

@@ -26,6 +26,9 @@ export default {
     dashboard: '首页',
     github: '项目地址',
     screenfull: '全屏',
+    userInfo: '用户信息',
+    userSetting: '用户设置',
+    systemSetting: '系统设置',
     theme: '换肤'
   },
   login: {

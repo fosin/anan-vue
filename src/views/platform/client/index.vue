@@ -237,7 +237,7 @@ export default {
         return
       }
       getClient(this.form.clientId).then(response => {
-        this.form = response.data.data
+        this.form = response.data
         this.authorizedGrantTypes = this.form.authorizedGrantTypes.split(',')
         this.dialogFormVisible = true
         this.dialogStatus = 'update'

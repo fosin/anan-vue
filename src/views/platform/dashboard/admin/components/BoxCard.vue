@@ -5,7 +5,7 @@
     </div>
     <div style="position:relative;">
       <pan-thumb class="panThumb" :image="userInfo.avatar"></pan-thumb>
-      <mallki className='mallki-text' text='cdp-ui'></mallki>
+      <mallki className='mallki-text' :text="$t('login.title')"></mallki>
       <div style="padding-top:35px;" class='progress-item'>
         <span>Vue</span>
         <el-progress :percentage="70"></el-progress>

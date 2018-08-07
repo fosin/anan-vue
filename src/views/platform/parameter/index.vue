@@ -4,29 +4,29 @@
       <el-input @keyup.enter.native="handleFilter" style="width: 300px;" class="filter-item"
                 placeholder="支持参数键、参数值、说明查找" v-model="pageModule.searchText">
       </el-input>
-      <el-button class="filter-item" type="primary" size="small" v-waves icon="el-icon-search" @click="handleFilter">
+      <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">
         {{$t('table.search')}}
       </el-button>
-      <el-button v-permission="'config_parameter_add'" size="small" class="filter-item" style="margin-left: 5px;"
+      <el-button v-permission="'config_parameter_add'" class="filter-item" style="margin-left: 5px;"
                  @click="handleAdd" type="primary" icon="el-icon-circle-plus">{{$t('table.add')}}
       </el-button>
-      <el-button type="success" v-permission="'config_parameter_edit'" size="small" class="filter-item" style="margin-left: 5px;"
+      <el-button type="success" v-permission="'config_parameter_edit'" class="filter-item" style="margin-left: 5px;"
                  icon="el-icon-edit" @click="handleEdit()">{{$t('table.edit')}}
       </el-button>
-      <el-button type="danger" v-permission="'config_parameter_delete'" size="small" class="filter-item" style="margin-left: 5px;"
+      <el-button type="danger" v-permission="'config_parameter_delete'" class="filter-item" style="margin-left: 5px;"
                  icon="el-icon-delete" @click="handleDelete()">{{$t('table.delete')}}
       </el-button>
-      <el-button type="warning" v-permission="'config_parameter_apply'" size="small" class="filter-item" style="margin-left: 5px;"
+      <el-button type="warning" v-permission="'config_parameter_apply'" class="filter-item" style="margin-left: 5px;"
                  icon="el-icon-upload" @click="handleApply()">{{$t('table.apply')}}
       </el-button>
-      <el-button type="warning" v-permission="'config_parameter_applys'" size="small" class="filter-item" style="margin-left: 5px;"
+      <el-button type="warning" v-permission="'config_parameter_applys'" class="filter-item" style="margin-left: 5px;"
                  icon="el-icon-upload" @click="handleApplys()">{{$t('table.applys')}}
       </el-button>
     </div>
 
     <el-table :data="parameterList" v-loading="listLoading" element-loading-text="努力加载中" ref="parameterTable"
               border fit highlight-current-row style="width: 100%" :default-sort="{prop: 'name'}"
-              @sort-change="sortChange" @row-click="rowClick">
+              @sort-change="sortChange" @row-click="rowClick" :row-class-name="tableRowClassName">
       <el-table-column align="center" label="参数键" sortable prop="name" width="200px">
       </el-table-column>
       <el-table-column align="center" label="参数值" sortable prop="value" width="120px">
@@ -92,7 +92,6 @@
     getParameter,
     postParameter,
     putParameter,
-    deleteParameter,
     listParameterPage,
     applyParameter,
     applysParameter
@@ -177,6 +176,32 @@
           })
         })
       },
+      updateList(data) {
+        if (!data || !data.id) {
+          return
+        }
+        let index = this.parameterList.length + 1
+        for (let i = 0; i < this.parameterList.length; i++) {
+          const user = this.parameterList[i]
+          if (data.id === user.id) {
+            index = i
+            break
+          }
+        }
+        this.parameterList[index] = data
+      },
+      deleteList(id) {
+        if (!id) {
+          return
+        }
+        for (let i = 0; i < this.parameterList.length; i++) {
+          const user = this.parameterList[i]
+          if (id === user.id) {
+            this.parameterList.splice(i, 1)
+            break
+          }
+        }
+      },
       handleFilter() {
         this.pageModule.pageNumber = 1
         this.getList()
@@ -202,7 +227,7 @@
           return
         }
         getParameter(this.form.id).then(response => {
-          this.form = response.data.data
+          this.form = response.data
           this.dialogFormVisible = true
           this.dialogStatus = 'update'
         }).catch(reason => {
@@ -230,9 +255,10 @@
             type: 'warning'
           }
         ).then(() => {
-          deleteParameter(this.form.id).then(response => {
+          this.form.status = 2
+          putParameter(this.form).then(response => {
             this.dialogFormVisible = false
-            this.getList()
+            this.updateList(this.form)
             this.$notify({
               title: '成功',
               message: '删除参数成功,若要立即生效则需要使用【应用全部】功能!',
@@ -267,6 +293,12 @@
           }
         ).then(() => {
           applyParameter(this.form.id).then(response => {
+            if (this.form.status === 2) {
+              this.deleteList(this.form.id)
+            } else {
+              this.form.status = 0
+              this.updateList(this.form)
+            }
             this.$notify({
               title: '成功',
               message: '应用参数成功!',
@@ -295,6 +327,15 @@
           }
         ).then(() => {
           applysParameter().then(response => {
+            for (let i = 0; i < this.parameterList.length; i++) {
+              const paramter = this.parameterList[i]
+              if (paramter.status === 2) {
+                this.deleteList(paramter.id)
+              } else if (paramter.status === 1) {
+                paramter.status = 0
+                this.updateList(paramter)
+              }
+            }
             this.$notify({
               title: '成功',
               message: '应用参数成功!',
@@ -316,9 +357,9 @@
         const set = this.$refs
         set[formName].validate(valid => {
           if (valid) {
-            postParameter(this.form).then(() => {
+            postParameter(this.form).then((response) => {
               this.dialogFormVisible = false
-              this.getList()
+              this.updateList(response.data)
               this.$notify({
                 title: '成功',
                 message: '创建成功',
@@ -345,16 +386,16 @@
         }
       },
       update(formName) {
-        const set = this.$refs
-        set[formName].validate(valid => {
+        this.$refs[formName].validate(valid => {
           if (valid) {
             this.dialogFormVisible = false
-            putParameter(this.form).then(() => {
+            this.form.status = 1
+            putParameter(this.form).then((response) => {
               this.dialogFormVisible = false
-              this.getList()
+              this.updateList(this.form)
               this.$notify({
-                title: '成功',
-                message: '修改成功,若要立即生效则需要使用【应用、应用全部】功能!',
+                title: '修改成功',
+                message: '若要立即生效则需要使用按钮【应用】!',
                 type: 'success',
                 duration: 5000
               })
@@ -378,7 +419,8 @@
           value: undefined,
           defaultValue: undefined,
           type: undefined,
-          scope: undefined
+          scope: '',
+          status: 0
         }
       },
       sortChange(column) {
@@ -388,7 +430,33 @@
       },
       rowClick(row, event, column) {
         this.form = row
+      },
+      tableRowClassName({ row, rowIndex }) {
+        if (row.status === 1) {
+          return 'warning-row'
+        } else if (row.status === 2) {
+          return 'danger-row'
+        }
+        return ''
       }
     }
   }
 </script>
+
+<style>
+  .el-table .warning-row {
+    color: #E6A23C;
+  }
+
+  .el-table .success-row {
+    color: #67C23A;
+  }
+
+  .el-table .danger-row {
+    color: #F56C6C;
+  }
+
+  .el-table .info-row {
+    color: #909399;
+  }
+</style>

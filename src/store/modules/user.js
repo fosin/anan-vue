@@ -1,8 +1,5 @@
 import { getAccessToken, refreshAccessToken, logout, getUserInfo } from '@/api/login'
 import { getWebStore, setWebStore, removeWebStore } from '@/utils/webStorage'
-// import router from '../../router'
-// import { Message } from 'element-ui/types/index'
-// import store from '../index'
 
 const user = {
   state: {
@@ -102,11 +99,13 @@ const user = {
       return new Promise((resolve, reject) => {
         const refresh_token = state.token.refresh_token
         if (refresh_token) {
+          const access_token = state.token.access_token
           state.token.access_token = ''
           refreshAccessToken(refresh_token).then(response => {
             commit('SET_TOKEN', response.data)
             resolve()
           }).catch(error => {
+            state.token.access_token = access_token
             reject(error)
           })
         }
@@ -115,11 +114,11 @@ const user = {
     // 获取用户信息
     GetUserInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
-        getUserInfo(state.token.access_token).then(response => {
-          if (!response.data || !response.data.data) {
+        getUserInfo().then(response => {
+          if (!response.data || !response.data) {
             reject('error')
           }
-          const data = response.data.data
+          const data = response.data
           if (!data.enabled || !data.accountNonExpired || !data.accountNonLocked || !data.credentialsNonExpired) { // 验证返回的user是否有效用户
             reject('getInfo: user is disabled!')
           }
@@ -184,7 +183,7 @@ const user = {
         commit('SET_TOKEN', role)
         setWebStore(role)
         getUserInfo(role).then(response => {
-          const data = response.data.data
+          const data = response.data
           commit('SET_CURRENT_ROLE', data.roles)
           resolve()
         })

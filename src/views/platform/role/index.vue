@@ -76,7 +76,7 @@
       </div>
     </el-dialog>
 
-    <el-dialog :title="textMap[dialogStatus] + '->' + form.name" :visible.sync="dialogPermissionVisible">
+    <el-dialog :title="textMap[dialogStatus] + '->' + form.name" :visible.sync="dialogPermissionVisible" width="550px">
       <el-input
         placeholder="输入关键字进行过滤"
         v-model="filterPermissionText">
@@ -226,7 +226,7 @@ export default {
   },
   created() {
     listUser().then(response => {
-      this.allUsers = response.data.data
+      this.allUsers = response.data
     }).catch(reason => {
       this.$notify({
         title: '获取所有用户失败',
@@ -280,7 +280,7 @@ export default {
         return
       }
       getRole(this.form.id).then(response => {
-        this.form = response.data.data
+        this.form = response.data
         this.dialogFormVisible = true
         this.dialogStatus = 'update'
       }).catch(reason => {
@@ -295,7 +295,7 @@ export default {
     handleRolePermission(row) {
       listRolePermissions(row.id)
         .then(response => {
-          this.checkedKeys = this.getCheckedKeys(response.data.data)
+          this.checkedKeys = this.getCheckedKeys(response.data)
           this.dialogStatus = 'permission'
           this.dialogPermissionVisible = true
           this.form = row
@@ -316,7 +316,7 @@ export default {
         this.dialogStatus = 'user'
         this.dialogRoleUserVisible = true
         this.form = row
-        const roleUsers = response.data.data
+        const roleUsers = response.data
         this.roleUsers = []
         for (let i = 0; i < roleUsers.length; i++) {
           const user = roleUsers[i].id
@@ -341,7 +341,7 @@ export default {
         }
         userRoles.push(roleUser)
       }
-      putRoleUsers(userRoles).then(response => {
+      putRoleUsers(this.form.id, userRoles).then(response => {
         this.dialogRoleUserVisible = false
         this.$notify({
           title: '成功',
@@ -392,7 +392,7 @@ export default {
         }
         newRolePermissions.push(permission)
       }
-      putRolePermissions(newRolePermissions).then(() => {
+      putRolePermissions(id, newRolePermissions).then(() => {
         this.dialogPermissionVisible = false
         this.$notify({
           title: '成功',
@@ -429,7 +429,7 @@ export default {
         pId = node.data.id
       }
       listChildPermissions(pId).then(response => {
-        const childPermissions = response.data.data || []
+        const childPermissions = response.data || []
         // 记录所有被展开过的节点ID，用于保存时比较数据
         for (let i = 0; i < childPermissions.length; i++) {
           const id = childPermissions[i].id

@@ -12,6 +12,12 @@ export function listOrganizChild(pId) {
     method: 'post'
   })
 }
+export function listOrganizAllChild(pId) {
+  return request({
+    url: '/platform/organiz/listAllChild/' + pId,
+    method: 'post'
+  })
+}
 export function listOrganiz() {
   return request({
     url: '/platform/organiz/list',

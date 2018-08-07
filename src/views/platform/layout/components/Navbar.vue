@@ -18,14 +18,19 @@
       </el-tooltip>
       <el-dropdown class="avatar-container right-menu-item">
         <div class="avatar-wrapper">
-          <img class="user-avatar" :src="userInfo.avatar+'?imageView2/1/w/40/h/40'" :title="userInfo.username">
+          <img class="user-avatar" :src="userInfo.avatar+'?imageView2/1/w/30/h/30'">
           <span style="float: right; text-align: center">{{userInfo.username}}</span>
           <i class="el-icon-caret-bottom"></i>
         </div>
         <el-dropdown-menu slot="dropdown">
+          <router-link to="/userInfo">
+            <el-dropdown-item>
+              {{$t('navbar.userInfo')}}
+            </el-dropdown-item>
+          </router-link>
           <router-link to="/">
             <el-dropdown-item>
-              {{$t('navbar.dashboard')}}
+              {{$t('navbar.userSetting')}}
             </el-dropdown-item>
           </router-link>
           <el-dropdown-item divided>

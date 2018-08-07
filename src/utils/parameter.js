@@ -22,7 +22,7 @@ export default (Vue) => {
       return
     }
     fetchOrganizParameterValue(key).then(response => {
-      callback(response.data.data)
+      callback(response.data)
     }).catch(reason => {
       Message({
         title: '获取参数值失败',
@@ -44,7 +44,7 @@ export default (Vue) => {
       return
     }
     fetchOrganizParameterValue(key, 'get').then(response => {
-      return response.data.data
+      return response.data
     }).catch(reason => {
       Message({
         title: '获取参数值失败',
@@ -75,7 +75,7 @@ export default (Vue) => {
       return
     }
     fetchUserParameterValue(key).then(response => {
-      callback(response.data.data)
+      callback(response.data)
     }).catch(reason => {
       Message({
         title: '获取参数值失败',
@@ -97,7 +97,7 @@ export default (Vue) => {
       return
     }
     fetchUserParameterValue(key, 'get').then(response => {
-      return response.data.data
+      return response.data
     }).catch(reason => {
       Message({
         title: '获取参数值失败',

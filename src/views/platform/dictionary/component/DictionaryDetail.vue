@@ -215,7 +215,7 @@
           return
         }
         getDictionaryDetail(this.form.id).then(response => {
-          this.form = response.data.data
+          this.form = response.data
           this.form.status = this.form.status + ''
           this.dialogFormVisible = true
           this.dialogStatus = 'update'

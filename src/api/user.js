@@ -17,11 +17,28 @@ export function listOtherRoles(id) {
 }
 
 // 更新用户的角色
-export function putUserRoles(obj) {
+export function putUserRoles(id, obj) {
   return request({
-    url: '/platform//user/roles',
+    url: '/platform/user/roles/' + id,
     method: 'put',
     data: obj
+  })
+}
+
+// 获取用户的所有权限列表
+export function listUserPermissions(id) {
+  return request({
+    url: '/platform/user/permissions/' + id,
+    method: 'post'
+  })
+}
+
+// 更新用户权限
+export function putUserPermissions(id, permissions) {
+  return request({
+    url: '/platform/user/permissions/' + id,
+    method: 'put',
+    data: permissions
   })
 }
 
