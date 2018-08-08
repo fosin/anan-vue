@@ -19,15 +19,16 @@ export default {
     monitor_onlineuser: '在线用户监控',
     authentication: '授权管理',
     authentication_client: '客户端授权管理',
-    authentication_service: '服务授权管理'
+    authentication_service: '服务授权管理',
+    userInfo: '用户信息'
   },
   navbar: {
     logOut: '退出登录',
     dashboard: '首页',
     github: '项目地址',
     screenfull: '全屏',
-    userInfo: '用户信息',
-    userSetting: '用户设置',
+    userInfo: '修改信息',
+    userSetting: '设置',
     systemSetting: '系统设置',
     theme: '换肤'
   },

@@ -1,175 +1,193 @@
 <template>
   <div class="app-container calendar-list-container">
-    <el-row>
-      <el-col :span="12">
-        <div class="grid-content bg-purple">
-          <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-width="100px" class="demo-ruleForm">
-            <el-form-item label="用户名" prop="username">
-              <el-input type="text" :value="userInfo.username" disabled></el-input>
+
+    <div class="grid-content bg-purple">
+      <el-form :model="userInfo" :rules="rules2" ref="user" label-width="100px" class="demo-ruleForm">
+        <span>基本信息</span>
+        <hr/>
+        <el-row>
+          <el-col :span="6">
+            <el-form-item label="用户工号:" prop="usercode">
+              <span>{{userInfo.usercode}}</span>
             </el-form-item>
-            <el-form-item label="原密码" prop="password">
-              <el-input type="password" v-model="ruleForm2.password" auto-complete="off"></el-input>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="用户名称:" prop="username">
+              <span>{{userInfo.username}}</span>
             </el-form-item>
-            <el-form-item label="密码" prop="newpassword1">
-              <el-input type="password" v-model="ruleForm2.newpassword1" auto-complete="off"></el-input>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="6">
+            <el-form-item label="性别:" prop="sex">
+              <span>{{getSexName(userInfo.sex)}}</span>
             </el-form-item>
-            <el-form-item label="确认密码" prop="newpassword2">
-              <el-input type="password" v-model="ruleForm2.newpassword2" auto-complete="off" ></el-input>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="用户生日:" prop="birthday">
+              <span>{{userInfo.birthday | dateFormatFilter('yyyy-MM-dd')}}</span>
             </el-form-item>
-            <el-form-item label="手机号" prop="phone">
-              <el-input v-model="ruleForm2.phone" placeholder="验证码登录使用"></el-input>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="6">
+            <el-form-item label="手机号码:" prop="phone">
+              <span>{{userInfo.phone}}</span>
             </el-form-item>
-            <el-form-item label="头像">
-              <my-upload field="file" @crop-upload-success="cropUploadSuccess" v-model="show" :width="300" :height="300" url="/admin/user/upload" :headers="headers" img-format="png"></my-upload>
-              <img :src="ruleForm2.avatar">
-              <el-button type="primary" @click="toggleShow" size="mini">选择
-                <i class="el-icon-upload el-icon--right"></i>
-              </el-button>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="用户邮箱:" prop="email">
+              <span>{{userInfo.email}}</span>
             </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="submitForm('ruleForm2')">提交</el-button>
-              <el-button @click="resetForm('ruleForm2')">重置</el-button>
+          </el-col>
+        </el-row>
+        <span>修改密码</span>
+        <hr/>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="当前密码" prop="password" width>
+              <el-input type="password" v-model="userInfo.password" placeholder="请输入用户当前密码" auto-complete="off"></el-input>
             </el-form-item>
-          </el-form>
-        </div>
-      </el-col>
-    </el-row>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="新密码" prop="confirmPassword1">
+              <el-input type="password" v-model="userInfo.confirmPassword1" placeholder="请输入用户新密码" auto-complete="off"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="确认新密码" prop="confirmPassword2">
+              <el-input type="password" v-model="userInfo.confirmPassword2" placeholder="请再次输入用户新密码" auto-complete="off"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-form-item>
+          <el-button type="primary" autofocus @click="update">{{$t('table.confirm')}}</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
+
   </div>
 </template>
 
 
 <script>
-import { mapState } from 'vuex'
-import myUpload from 'vue-image-crop-upload'
-import { getToken } from '@/util/auth'
-import ElFormItem from 'element-ui/packages/form/src/form-item.vue'
-import request from '@/router/axios'
+  import { mapGetters } from 'vuex'
+  import { changePassword } from '@/api/user'
+  import { formatDate } from '@/utils/date'
 
-export default {
-  components: {
-    ElFormItem,
-    'my-upload': myUpload
-  },
-  data() {
-    var validatePass = (rule, value, callback) => {
-      if (this.ruleForm2.password !== '') {
-        if (value === '') {
-          callback(new Error('请输入密码'))
-        } else if (value.length < 6) {
-          callback(new Error('密码不能小于6位'))
+  export default {
+    filters: {
+      dateFormatFilter(date, pattern) {
+        return formatDate(date, pattern || 'yyyy-MM-dd HH:mm:ss')
+      }
+    },
+    data() {
+      const password = (rule, value, callback) => {
+        if (value === '' || value === undefined || value === null) {
+          callback(new Error('请输入当前密码'))
         } else {
           callback()
         }
-      } else {
-        callback()
       }
-    }
-    var validatePass2 = (rule, value, callback) => {
-      if (this.ruleForm2.password !== '') {
-        if (value === '') {
-          callback(new Error('请再次输入密码'))
-        } else if (value !== this.ruleForm2.newpassword1) {
+      const validateConfirmPassword1 = (rule, value, callback) => {
+        if (value === '' || value === undefined || value === null) {
+          callback(new Error('请输入新密码'))
+        } else if (value.length < 6 || value.length > 30) {
+          callback(new Error('新密码长度需要在6位-30位之间'))
+        } else if (value === this.userInfo.password) {
+          callback(new Error('新密码不能和原密码相同!'))
+        } else {
+          callback()
+        }
+      }
+      const validateConfirmPassword2 = (rule, value, callback) => {
+        if (value === '' || value === undefined || value === null) {
+          callback(new Error('请再次输入新密码'))
+        } else if (value !== this.userInfo.confirmPassword1) {
           callback(new Error('两次输入密码不一致!'))
         } else {
           callback()
         }
-      } else {
-        callback()
       }
-    }
-    return {
-      fileList: [],
-      show: false,
-      headers: {
-        Authorization: 'Bearer ' + getToken()
-      },
-      ruleForm2: {
-        password: '',
-        newpassword1: '',
-        newpassword2: '',
-        avatar: '',
-        phone: ''
-      },
-      rules2: {
-        newpassword1: [{ validator: validatePass, trigger: 'blur' }],
-        newpassword2: [{ validator: validatePass2, trigger: 'blur' }]
+      return {
+        fileList: [],
+        sexOptions: [],
+        show: false,
+        rules2: {
+          password: [{ validator: password, trigger: 'blur', required: true }],
+          confirmPassword1: [{ validator: validateConfirmPassword1, trigger: 'blur', required: true }],
+          confirmPassword2: [{ validator: validateConfirmPassword2, trigger: 'blur', required: true }]
+        }
       }
-    }
-  },
-  created() {
-    this.ruleForm2.avatar = this.userInfo.avatar
-    this.ruleForm2.phone = this.userInfo.phone
-  },
-  computed: {
-    ...mapState({
-      userInfo: state => state.user.userInfo
-    })
-  },
-  methods: {
-    submitForm(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          request({
-            url: '/admin/user/editInfo',
-            method: 'put',
-            data: this.ruleForm2
-          })
-            .then(response => {
-              if (response.data.data) {
-                this.userInfo.phone = this.ruleForm2.phone
-                this.userInfo.avatar = this.ruleForm2.avatar
+    },
+    created() {
+      this.postDictionaryDetailsByCode(15, (data) => {
+        this.sexOptions = data
+      })
+      this.userInfo.password = ''
+      this.userInfo.confirmPassword1 = ''
+      this.userInfo.confirmPassword2 = ''
+    },
+    computed: {
+      ...mapGetters(['userInfo'])
+    },
+    methods: {
+      update() {
+        this.$refs.user.validate(valid => {
+          if (valid) {
+            this.$confirm(
+              '修改密码成功后将需要重新登录系统，确认继续吗?',
+              '提示',
+              {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }
+            ).then(() => {
+              const userPassInfo = {
+                id: this.userInfo.id,
+                password: this.userInfo.password,
+                confirmPassword1: this.userInfo.confirmPassword1,
+                confirmPassword2: this.userInfo.confirmPassword2
+              }
+              changePassword(userPassInfo).then(response => {
                 this.$notify({
-                  title: '成功',
-                  message: '修改成功',
+                  title: '修改信息成功',
+                  message: '',
                   type: 'success',
                   duration: 2000
                 })
                 // 修改密码之后强制重新登录
-                if (this.ruleForm2.newpassword1 !== '') {
-                  this.$store.dispatch('LogOut').then(() => {
-                    location.reload() // 为了重新实例化vue-router对象 避免bug
-                  })
-                } else {
-                  this.$router.push({ path: '/' })
-                }
-              } else {
-                this.$notify({
-                  title: '失败',
-                  message: response.data.msg,
-                  type: 'error',
-                  duration: 2000
+                this.$store.dispatch('LogOut').then(() => {
+                  location.reload() // 为了重新实例化vue-router对象 避免bug
                 })
-              }
-            })
-            .catch(() => {
-              this.$notify({
-                title: '失败',
-                message: '修改失败',
-                type: 'error',
-                duration: 2000
+              }).catch((reason) => {
+                this.$notify({
+                  title: '修改信息失败',
+                  message: reason.message,
+                  type: 'error',
+                  duration: 5000
+                })
               })
-            })
-        } else {
-          return false
-        }
-      })
-    },
-    resetForm(formName) {
-      console.log(formName)
-      this.$refs[formName].resetFields()
-    },
-    toggleShow() {
-      this.show = !this.show
-    },
-    /**
-     * upload success
-     *
-     * [param] jsonData   服务器返回数据，已进行json转码
-     * [param] field
-     */
-    cropUploadSuccess(jsonData, field) {
-      this.$store.commit('SET_AVATAR', jsonData.filename)
+            }).catch(() => {})
+          } else {
+            return false
+          }
+        })
+      },
+      getSexName(type) {
+        const typeOption = this.sexOptions.filter(value => {
+          return value.name === type
+        })
+        return typeOption.length > 0 ? typeOption[0].value : type
+      },
+      resetForm() {
+        this.$refs.user.resetFields()
+      }
     }
   }
-}
 </script>

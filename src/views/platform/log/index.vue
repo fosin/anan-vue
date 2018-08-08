@@ -91,13 +91,13 @@
 </template>
 
 <script>
-import { delObj, fetchList } from "@/api/log";
-import { remote } from "@/api/dict";
-import waves from "@/directive/waves/index.js"; // 水波纹指令
-import { mapGetters } from "vuex";
+import { delObj, fetchList } from '@/api/log'
+import { remote } from '@/api/dict'
+import waves from '@/directive/waves/index.js' // 水波纹指令
+import { mapGetters } from 'vuex'
 
 export default {
-  name: "table_log",
+  name: 'table_log',
   directives: {
     waves
   },
@@ -114,33 +114,33 @@ export default {
         type: undefined
       },
       tableKey: 0
-    };
+    }
   },
   computed: {
-    ...mapGetters(["permissions"])
+    ...mapGetters(['permissions'])
   },
   filters: {
     typeFilter(type) {
       const typeMap = {
-        0: "正常",
-        9: "异常"
-      };
-      return typeMap[type];
+        0: '正常',
+        9: '异常'
+      }
+      return typeMap[type]
     }
   },
   created() {
-    this.getList();
-    this.sys_log_del = this.permissions["sys_log_del"];
-    remote("log_type").then(response => {
-      this.dicts = response.data;
-    });
+    this.getList()
+    this.sys_log_del = this.permissions['sys_log_del']
+    remote('log_type').then(response => {
+      this.dicts = response.data
+    })
   },
   methods: {
     getSerialNumber(index) {
-      return index + 1 + (this.listQuery.page - 1) * this.listQuery.limit;
+      return index + 1 + (this.listQuery.page - 1) * this.listQuery.limit
     },
     getList() {
-      this.listLoading = true;
+      this.listLoading = true
       this.listQuery.orderByField = 'create_time'
       this.listQuery.isAsc = false
       fetchList(this.listQuery).then(response => {

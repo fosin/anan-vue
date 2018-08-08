@@ -100,7 +100,7 @@ export default {
             this.loading = false
             this.$notify({
               title: '登录失败',
-              message: reason.message,
+              message: reason.message.error_description || reason.message,
               type: 'error',
               duration: 5000
             })

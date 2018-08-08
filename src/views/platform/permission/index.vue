@@ -27,12 +27,12 @@
         <el-card class="box-card">
           <el-form :label-position="labelPosition" label-width="80px" :model="form" ref="form">
             <el-form-item v-if="formStatus === 'update'">
-              <el-button type="primary" @click="update">{{$t('table.update')}}</el-button>
-              <el-button @click="onCancel">{{$t('table.cancel')}}</el-button>
+              <el-button @click="onCancel" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
+              <el-button type="primary" @click="update" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
             </el-form-item>
             <el-form-item v-if="formStatus === 'create'">
-              <el-button type="primary" @click="create">{{$t('table.create')}}</el-button>
-              <el-button @click="onCancel">{{$t('table.cancel')}}</el-button>
+              <el-button @click="onCancel" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
+              <el-button type="primary" @click="create" icon="el-icon-circle-check">{{$t('table.create')}}</el-button>
             </el-form-item>
             <el-form-item label="父级节点" prop="pName">
               <el-input v-model="parent.name" :disabled="true"></el-input>

@@ -28,7 +28,7 @@
               {{$t('navbar.userInfo')}}
             </el-dropdown-item>
           </router-link>
-          <router-link to="/">
+          <router-link to="/404">
             <el-dropdown-item>
               {{$t('navbar.userSetting')}}
             </el-dropdown-item>

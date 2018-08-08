@@ -19,15 +19,16 @@ export default {
     monitor_onlineuser: 'OnlineUser Monitor',
     authentication: 'Authentication',
     authentication_client: 'Client Authentication',
-    authentication_service: 'Service Authentication'
+    authentication_service: 'Service Authentication',
+    userInfo: 'User Info'
   },
   navbar: {
     logOut: 'Logout',
     dashboard: 'Dashboard',
     github: 'Github',
     screenfull: 'screenfull',
-    userInfo: 'User Info',
-    userSetting: 'User Setting',
+    userInfo: 'Modify Info',
+    userSetting: 'Setting',
     systemSetting: 'System Setting',
     theme: 'theme'
   },

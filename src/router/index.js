@@ -33,8 +33,6 @@ export const constantRouterMap = [
   { path: '/401', component: () => import('@/views/platform/errorPage/401'), hidden: true },
   { path: '/404', component: () => import('@/views/platform/errorPage/404'), hidden: true },
   { path: '/500', component: () => import('@/views/platform/errorPage/500'), hidden: true },
-  // { path: '/userInfo', component: () => import('@/views/platform/user/info'), hidden: true },
-
   {
     path: '',
     component: Layout,
@@ -44,8 +42,14 @@ export const constantRouterMap = [
       component: () => import('@/views/platform/dashboard/index'),
       name: 'dashboard',
       meta: { title: 'dashboard', icon: 'dashboard' }
+    }, {
+      path: 'userInfo',
+      component: () => import('@/views/platform/user/info'),
+      name: 'userInfo',
+      meta: { title: 'userInfo', icon: 'user' },
+      hidden: true
     }]
-  },
+  }/*,
   {
     path: '/userInfo2',
     component: Layout,
@@ -56,7 +60,7 @@ export const constantRouterMap = [
       component: () => import('@/views/platform/user/info'),
       hidden: true
     }]
-  }
+  }*/
 ]
 
 export default new Router({

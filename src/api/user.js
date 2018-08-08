@@ -1,4 +1,6 @@
 import request from '@/utils/request'
+import { encrypt } from '@/utils/aesUtil'
+import CryptoJS from 'crypto-js'
 
 // 获取用户的所有角色列表
 export function listUserRoles(id) {
@@ -64,10 +66,23 @@ export function resetPassword(id) {
   })
 }
 export function changePassword(passObj) {
+  const iv = CryptoJS.lib.WordArray.random(128 / 8).toString(CryptoJS.enc.Hex)
+  const salt = CryptoJS.lib.WordArray.random(128 / 8).toString(CryptoJS.enc.Hex)
+  const iterationCount = 999
+  const keySize = 128
+  const passPhrase = CryptoJS.lib.WordArray.random(128 / 8).toString(CryptoJS.enc.Hex)
+  const cipherPassword = encrypt(keySize, iterationCount, salt, iv, passPhrase, passObj.password)
+  const cipherConfirmPassword1 = encrypt(keySize, iterationCount, salt, iv, passPhrase, passObj.confirmPassword1)
+  const cipherConfirmPassword2 = encrypt(keySize, iterationCount, salt, iv, passPhrase, passObj.confirmPassword2)
+  const cipher = {
+    a: cipherPassword, b: cipherConfirmPassword1, c: passPhrase, d: iv, e: salt, f: keySize, g: iterationCount,
+    h: cipherConfirmPassword2,
+    i: passObj.id
+  }
   return request({
     url: '/platform/user/changePassword',
     method: 'post',
-    params: passObj
+    params: cipher
   })
 }
 export function postUser(obj) {

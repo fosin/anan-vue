@@ -24,7 +24,7 @@ export function getAccessToken(loginForm) {
     headers: {
       'Authorization': 'Basic d2ViQXBwOnQ0ZXQyMzQ2YjJmZmUzNDYyMzQ1NjMy'
     },
-    params: { cipheru, cipherp, passPhrase, iv, salt, keySize, iterationCount, randomStr, code, grant_type, scope, 'remember-me': rememberMe }
+    params: { a: cipheru, b: cipherp, c: passPhrase, d: iv, e: salt, f: keySize, g: iterationCount, randomStr, code, grant_type, scope, 'remember-me': rememberMe }
   })
 }
 
