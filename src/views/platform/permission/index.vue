@@ -25,7 +25,7 @@
       </el-col>
       <el-col :span="16" style='margin-top:15px;'>
         <el-card class="box-card">
-          <el-form :label-position="labelPosition" label-width="80px" :model="form" ref="form">
+          <el-form :label-position="labelPosition" label-width="80px" :model="form" ref="form" :rules="formRules">
             <el-form-item v-if="formStatus === 'update'">
               <el-button @click="onCancel" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
               <el-button type="primary" @click="update" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
@@ -37,29 +37,34 @@
             <el-form-item label="父级节点" prop="pName">
               <el-input v-model="parent.name" :disabled="true"></el-input>
             </el-form-item>
-            <el-form-item label="父级节点" prop="pId" hidden="hidden">
-              <el-input v-model="form.pId" :disabled="true" placeholder="请输入父级节点"></el-input>
-            </el-form-item>
-            <el-form-item label="节点ID" prop="id" hidden="hidden">
-              <el-input v-model="form.id" :disabled="true" placeholder="节点ID自动生成,无需输入"></el-input>
-            </el-form-item>
-            <el-form-item label="标题" prop="name">
-              <el-input v-model="form.name" :disabled="formUpdate"  placeholder="请输入标题"></el-input>
+            <el-form-item label="权限名称" prop="name">
+              <el-input v-model="form.name" :disabled="formUpdate"  placeholder="请输入权限名称"></el-input>
             </el-form-item>
             <el-form-item label="权限标识" prop="code">
-              <el-input v-model="form.code" :disabled="formUpdate" placeholder="请输入权限标识"></el-input>
+              <el-input v-model="form.code" :disabled="formUpdate" placeholder="请输入权限标识,必须唯一"></el-input>
             </el-form-item>
             <el-form-item label="资源路径" prop="url">
               <el-input v-model="form.url" :disabled="formUpdate" placeholder="请输入资源路径"></el-input>
             </el-form-item>
-            <el-form-item label="类型" prop="type">
-              <el-select class="filter-item" v-model="form.type"  :disabled="formUpdate"  placeholder="请选择类型" value="">
-                <el-option v-for="item in typeOptions" :key="item.name" :label="item.value" :value="item.name" :disabled="item.status === 1"> </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="排序" prop="sort">
-              <el-input v-model="form.sort" :disabled="formUpdate" placeholder="请输入排序"></el-input>
-            </el-form-item>
+            <el-row>
+              <el-col :span="9">
+                <el-form-item label="类型" prop="type">
+                  <el-select class="filter-item" v-model="form.type"  :disabled="formUpdate"  placeholder="请选择类型" value="">
+                    <el-option v-for="item in typeOptions" :key="item.name" :label="item.value" :value="item.name" :disabled="item.status === 1"> </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="10">
+                <el-form-item label="图标" prop="icon">
+                  <el-input v-model="form.icon" :disabled="formUpdate" placeholder="请选择图标，只对菜单类型有效"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="5">
+                <el-form-item label="排序" prop="sort">
+                  <el-input v-model="form.sort" :disabled="formUpdate" placeholder="请输入排序"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
             <el-form-item prop="status">
               <el-switch :disabled="formUpdate"
                 v-model="form.status"
@@ -83,6 +88,15 @@
   export default {
     name: 'system_permission',
     data() {
+      // const validateURL = (rule, value, callback) => {
+      //   if (value.contain('@')) {
+      //     callback(new Error('地址不能包含@!'))
+      //   }
+      //   if (value === this.parent.code) {
+      //     callback(new Error('机构编码不能和父机构编码相同!'))
+      //   }
+      //   callback()
+      // }
       return {
         parent: {},
         list: null,
@@ -104,11 +118,43 @@
         },
         labelPosition: 'right',
         form: {},
-        currentId: -1
+        currentId: -1,
+        formRules: {
+          url: [
+            { pattern: /^[A-Za-z0-9/:.]+$/, message: '资源路径只支持大小写字母 数字 / : .' }
+          ],
+          name: [
+            {
+              required: true,
+              message: '名称不能为空',
+              trigger: 'blur'
+            },
+            {
+              min: 1,
+              max: 64,
+              message: '长度在 1 到 64 个字符',
+              trigger: 'blur'
+            }
+          ],
+          code: [
+            {
+              required: true,
+              message: '编码不能为空',
+              trigger: 'blur'
+            },
+            {
+              min: 1,
+              max: 64,
+              message: '长度在 1 到 64 个字符',
+              trigger: 'blur'
+            },
+            { pattern: /^[A-Za-z0-9_]+$/, message: '编码只支持大小写字母 数字 _' }
+          ]
+        }
       }
     },
     created() {
-      this.postDictionaryDetailsByCode(13, (data) => {
+      this.asyncLoadDictionaryByCode(13, (data) => {
         this.typeOptions = data
       })
       this.resetForm()
@@ -312,11 +358,12 @@
           name: undefined,
           id: undefined,
           pId: this.currentId,
-          url: undefined,
+          url: '',
           sort: sort,
           type: type,
           status: '0',
-          level: this.parent.level + 1
+          icon: '',
+          level: this.parent.level ? this.parent.level + 1 : 0
         }
       }
     }

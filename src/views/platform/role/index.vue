@@ -49,7 +49,7 @@
     </el-table>
 
     <div v-show="!listLoading" class="pagination-container">
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="pageModule.pageNumber" :page-sizes="[10,25,50,100]" :page-size="pageModule.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="pageModule.pageNumber" :page-sizes="pageSizes" :page-size="pageModule.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
@@ -163,11 +163,12 @@ export default {
       listLoading: true,
       pageModule: {
         pageNumber: 1,
-        pageSize: 25,
+        pageSize: 10,
         searchText: '',
         sortName: '',
         sortOrder: ''
       },
+      pageSizes: [],
       form: {
       },
       rules: {
@@ -225,6 +226,9 @@ export default {
     }
   },
   created() {
+    this.asyncOrganizParameterValue('DefaultPageSizes', '10,25,50,100', '表格默认每页记录数可选择项', (data) => {
+      this.pageSizes = data.split(',')
+    })
     listUser().then(response => {
       this.allUsers = response.data
     }).catch(reason => {

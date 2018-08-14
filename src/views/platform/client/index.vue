@@ -39,7 +39,7 @@
     </el-table>
 
     <div v-show="!listLoading" class="pagination-container">
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="pageModule.pageNumber" :page-sizes="[10,25,50,100]" :page-size="pageModule.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="pageModule.pageNumber" :page-sizes="pageSizes" :page-size="pageModule.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
@@ -59,8 +59,8 @@
         <el-form-item label="客户端密钥" prop="clientSecret">
           <el-input v-model="form.clientSecret" placeholder="客户端密钥"></el-input>
         </el-form-item>
-        <el-form-item label="授权类型" prop="authorizedGrantTypes">
-          <el-select  v-model="authorizedGrantTypes" filterable placeholder="请选择授权类型(支持多选)" multiple>
+        <el-form-item label="授权类型" prop="authorizedGrantTypeArray">
+          <el-select  v-model="form.authorizedGrantTypeArray" filterable placeholder="请选择授权类型(支持多选)" multiple>
             <el-option v-for="item in grantTypesOptions" :key="item.scode"
                        :label="item.value" :value="item.scode" :disabled="item.status === 1">
               <span style="float: left; color: #8492a6; font-size: 13px">{{ item.scode }}</span>
@@ -127,11 +127,12 @@ export default {
       listLoading: true,
       pageModule: {
         pageNumber: 1,
-        pageSize: 25,
+        pageSize: 10,
         searchText: '',
         sortName: '',
         sortOrder: ''
       },
+      pageSizes: [],
       form: {},
       rules: {
         clientId: [
@@ -173,18 +174,18 @@ export default {
             trigger: 'blur'
           }
         ],
-        authorizedGrantTypes: [
+        authorizedGrantTypeArray: [
           {
+            type: 'array',
             required: true,
             message: '授权类型至少选择一个',
-            trigger: 'blur'
+            trigger: 'change'
           }
         ]
       },
       grantTypesOptions: [],
       dialogFormVisible: false,
       dialogStatus: '',
-      authorizedGrantTypes: [],
       textMap: {
         update: '编辑',
         create: '创建'
@@ -192,8 +193,11 @@ export default {
     }
   },
   created() {
-    this.postDictionaryDetailsByCode(7, (data) => {
+    this.asyncLoadDictionaryByCode(7, (data) => {
       this.grantTypesOptions = data
+    })
+    this.asyncOrganizParameterValue('DefaultPageSizes', '10,25,50,100', '表格默认每页记录数可选择项', (data) => {
+      this.pageSizes = data.split(',')
     })
   },
   methods: {
@@ -238,7 +242,7 @@ export default {
       }
       getClient(this.form.clientId).then(response => {
         this.form = response.data
-        this.authorizedGrantTypes = this.form.authorizedGrantTypes.split(',')
+        this.form.authorizedGrantTypeArray = this.form.authorizedGrantTypes.split(',')
         this.dialogFormVisible = true
         this.dialogStatus = 'update'
       }).catch(reason => {
@@ -290,7 +294,7 @@ export default {
       const set = this.$refs
       set[formName].validate(valid => {
         if (valid) {
-          this.form.authorizedGrantTypes = this.authorizedGrantTypes.join(',')
+          this.form.authorizedGrantTypes = this.form.authorizedGrantTypeArray.join(',')
           postClient(this.form).then(() => {
             this.dialogFormVisible = false
             this.getList()
@@ -324,7 +328,7 @@ export default {
       set[formName].validate(valid => {
         if (valid) {
           this.dialogFormVisible = false
-          this.form.authorizedGrantTypes = this.authorizedGrantTypes.join(',')
+          this.form.authorizedGrantTypes = this.form.authorizedGrantTypeArray.join(',')
           putClient(this.form).then(() => {
             this.dialogFormVisible = false
             this.getList()
@@ -348,11 +352,11 @@ export default {
       })
     },
     resetForm() {
-      this.authorizedGrantTypes = []
       this.form = {
         clientId: undefined,
         clientSecret: undefined,
         authorizedGrantTypes: undefined,
+        authorizedGrantTypeArray: [],
         scope: undefined,
         resourceIds: undefined,
         webServerRedirectUri: undefined,

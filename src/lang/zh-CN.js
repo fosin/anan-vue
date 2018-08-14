@@ -17,10 +17,12 @@ export default {
     monitor_cache: '缓存监控',
     monitor_elk: '日志监控',
     monitor_onlineuser: '在线用户监控',
+    monitor_database: '数据库连接池监控',
+    monitor_circuitbreaker: '断路器监控',
     authentication: '授权管理',
     authentication_client: '客户端授权管理',
     authentication_service: '服务授权管理',
-    userInfo: '用户信息'
+    userInfo: '修改信息'
   },
   navbar: {
     logOut: '退出登录',
@@ -103,8 +105,8 @@ export default {
     role: '角色',
     user: '用户',
     refresh: '刷新',
-    applys: '应用更改',
-    apply: '应用当前'
+    applys: '发布所有',
+    apply: '发布单条'
   },
   errorLog: {
     tips: '请点击右上角bug小图标',

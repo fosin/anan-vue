@@ -45,7 +45,7 @@
     </el-table>
     <div v-show="!listLoading" class="pagination-container">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                     :current-page.sync="pageModule.pageNumber" :page-sizes="[10,25,50,100]"
+                     :current-page.sync="pageModule.pageNumber" :page-sizes="pageSizes"
                      :page-size="pageModule.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
@@ -109,11 +109,12 @@
         listLoading: false,
         pageModule: {
           pageNumber: 1,
-          pageSize: 25,
+          pageSize: 10,
           searchText: '',
           sortName: '',
           sortOrder: ''
         },
+        pageSizes: [],
         form: {},
         rules: {
           name: [
@@ -147,8 +148,11 @@
       }
     },
     created() {
-      this.postDictionaryDetailsByCode(10, (data) => {
+      this.asyncLoadDictionaryByCode(10, (data) => {
         this.typeOptions = data
+      })
+      this.asyncOrganizParameterValue('DefaultPageSizes', '10,25,50,100', '表格默认每页记录数可选择项', (data) => {
+        this.pageSizes = data.split(',')
       })
     },
     methods: {
@@ -260,8 +264,8 @@
             this.dialogFormVisible = false
             this.updateList(this.form)
             this.$notify({
-              title: '成功',
-              message: '删除参数成功,若要立即生效则需要使用【应用全部】功能!',
+              title: '删除参数成功',
+              message: '若要立即生效则需要使用【发布】功能!',
               type: 'success',
               duration: 5000
             })
@@ -301,13 +305,13 @@
             }
             this.$notify({
               title: '成功',
-              message: '应用参数成功!',
+              message: '发布参数成功!',
               type: 'success',
               duration: 2000
             })
           }).catch(reason => {
             this.$notify({
-              title: '应用参数失败',
+              title: '发布参数失败',
               message: reason.message,
               type: 'error',
               duration: 5000
@@ -338,13 +342,13 @@
             }
             this.$notify({
               title: '成功',
-              message: '应用参数成功!',
+              message: '发布参数成功!',
               type: 'success',
               duration: 2000
             })
           }).catch(reason => {
             this.$notify({
-              title: '应用参数失败',
+              title: '发布参数失败',
               message: reason.message,
               type: 'error',
               duration: 5000
@@ -395,7 +399,7 @@
               this.updateList(this.form)
               this.$notify({
                 title: '修改成功',
-                message: '若要立即生效则需要使用按钮【应用】!',
+                message: '若要立即生效则需要使用【发布】功能!',
                 type: 'success',
                 duration: 5000
               })

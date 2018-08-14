@@ -125,7 +125,7 @@
       }
     },
     created() {
-      this.postDictionaryDetailsByCode(15, (data) => {
+      this.asyncLoadDictionaryByCode(15, (data) => {
         this.sexOptions = data
       })
       this.userInfo.password = ''

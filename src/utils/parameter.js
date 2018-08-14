@@ -2,7 +2,7 @@ import { fetchOrganizParameterValue, fetchUserParameterValue } from '@/api/param
 import { Message } from 'element-ui'
 
 export default (Vue) => {
-  Vue.prototype.postOrganizParameterValue = function(key, callback) {
+  Vue.prototype.asyncOrganizParameterValue = function(key, defaultValue, description, callback) {
     if (!key) {
       Message({
         title: '获取参数值失败',
@@ -21,7 +21,7 @@ export default (Vue) => {
       })
       return
     }
-    fetchOrganizParameterValue(key).then(response => {
+    fetchOrganizParameterValue(key, defaultValue, description).then(response => {
       callback(response.data)
     }).catch(reason => {
       Message({
@@ -33,7 +33,7 @@ export default (Vue) => {
     })
   }
 
-  Vue.prototype.getOrganizParameterValue = function(key) {
+  Vue.prototype.syncOrganizParameterValue = function(key, defaultValue, description) {
     if (!key) {
       Message({
         title: '获取参数值失败',
@@ -43,7 +43,7 @@ export default (Vue) => {
       })
       return
     }
-    fetchOrganizParameterValue(key, 'get').then(response => {
+    fetchOrganizParameterValue(key, defaultValue, description, 'get').then(response => {
       return response.data
     }).catch(reason => {
       Message({
@@ -55,7 +55,7 @@ export default (Vue) => {
     })
   }
 
-  Vue.prototype.postUserParameterValue = function(key, callback) {
+  Vue.prototype.asyncUserParameterValue = function(key, defaultValue, description, callback) {
     if (!key) {
       Message({
         title: '获取参数值失败',
@@ -74,7 +74,7 @@ export default (Vue) => {
       })
       return
     }
-    fetchUserParameterValue(key).then(response => {
+    fetchUserParameterValue(key, defaultValue, description).then(response => {
       callback(response.data)
     }).catch(reason => {
       Message({
@@ -86,7 +86,7 @@ export default (Vue) => {
     })
   }
 
-  Vue.prototype.getUserParameterValue = function(key) {
+  Vue.prototype.syncUserParameterValue = function(key, defaultValue, description) {
     if (!key) {
       Message({
         title: '获取参数值失败',
@@ -96,7 +96,7 @@ export default (Vue) => {
       })
       return
     }
-    fetchUserParameterValue(key, 'get').then(response => {
+    fetchUserParameterValue(key, defaultValue, description, 'get').then(response => {
       return response.data
     }).catch(reason => {
       Message({

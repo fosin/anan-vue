@@ -17,10 +17,12 @@ export default {
     monitor_cache: 'Cache Manager',
     monitor_elk: 'Log Manager',
     monitor_onlineuser: 'OnlineUser Monitor',
+    monitor_database: 'Database Pool',
+    monitor_circuitbreaker: 'Circuit Breaker',
     authentication: 'Authentication',
     authentication_client: 'Client Authentication',
     authentication_service: 'Service Authentication',
-    userInfo: 'User Info'
+    userInfo: 'Modify Info'
   },
   navbar: {
     logOut: 'Logout',
@@ -103,8 +105,8 @@ export default {
     role: 'Role',
     user: 'User',
     refresh: 'Refresh',
-    applys: 'Apply Changed',
-    apply: 'Apply Current'
+    applys: 'Apply All',
+    apply: 'Apply Single'
   },
   errorLog: {
     tips: 'Please click the bug icon in the upper right corner',

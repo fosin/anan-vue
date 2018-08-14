@@ -45,7 +45,7 @@ export function listRolePermissions(id) {
 // 更新角色权限
 export function putRolePermissions(id, rolePermissions) {
   return request({
-    url: '/platform/role/permissions' + id,
+    url: '/platform/role/permissions/' + id,
     method: 'put',
     data: rolePermissions
   })

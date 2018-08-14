@@ -20,7 +20,7 @@
              @sort-change="sortChange" @row-click="rowClick">
       <el-table-column align="center" label="工号" width="80" sortable prop="usercode">
       </el-table-column>
-      <el-table-column align="center" label="名称" sortable prop="username">
+      <el-table-column align="center" label="名称" sortable prop="username" width="140">
         <template slot-scope="scope">
           <span>
             <img v-if="scope.row.avatar" class="user-avatar" style="width: 20px; height: 20px; border-radius: 50%;" :src="scope.row.avatar+'?imageView2/1/w/20/h/20'"> {{scope.row.username}}
@@ -32,23 +32,23 @@
           <span>{{getSexName(scope.row.sex)}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="生日" sortable prop="birthday">
+      <el-table-column align="center" label="生日" sortable prop="birthday" width="100">
         <template slot-scope="scope">
           <span>{{scope.row.birthday | dateFormatFilter('yyyy-MM-dd')}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="手机号" sortable prop="phone">
+      <el-table-column align="center" label="手机号" sortable prop="phone"  width="130">
       </el-table-column>
-      <el-table-column align="center" label="邮箱" sortable prop="email">
+      <el-table-column align="center" label="邮箱" sortable prop="email"  width="150">
       </el-table-column>
       <el-table-column prop="organizId" align="center" label="所属机构"
                        show-overflow-tooltip :formatter="getOrganizName" sortable>
       </el-table-column>
-      <el-table-column align="center" label="创建时间" sortable prop="createTime">
+     <!-- <el-table-column align="center" label="创建时间" sortable prop="createTime">
         <template slot-scope="scope">
           <span>{{scope.row.createTime | dateFormatFilter('yyyy-MM-dd HH:mm:ss')}}</span>
         </template>
-      </el-table-column>
+      </el-table-column>-->
       <el-table-column align="center" class-name="status-col" label="状态" width="80" sortable prop="status">
         <template slot-scope="scope">
           <el-tag>{{scope.row.status | statusFilter}}</el-tag>
@@ -65,7 +65,7 @@
     </el-table>
 
     <div v-show="!listLoading" class="pagination-container">
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="pageModule.pageNumber" :page-sizes="[10,25,50,100]" :page-size="pageModule.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="pageModule.pageNumber" :page-sizes="pageSizes" :page-size="pageModule.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
 
@@ -122,14 +122,14 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="角色" prop="role">
+       <!-- <el-form-item label="角色" prop="role">
           <el-select class="filter-item" v-model="selectedRoles" placeholder="请选择" multiple>
             <el-option v-for="item in rolesOptions" :key="item.id" :label="item.name" :value="item.id" :disabled="isDisabled[item.status]">
               <span style="float: left">{{ item.name }}</span>
               <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span>
             </el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item>-->
         <el-form-item label="用户头像" prop="avatar">
           <el-input v-model="form.avatar" placeholder="请输入用户头像连接地址"></el-input>
         </el-form-item>
@@ -153,6 +153,16 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <el-form-item label="到期时间" prop="expireTime">
+          <el-date-picker
+            v-model="form.expireTime"
+            align="right"
+            type="date"
+            placeholder="请选择用户到期时间"
+            format="yyyy-MM-dd HH:mm:ss"
+            value-format="yyyy-MM-dd HH:mm:ss">
+          </el-date-picker>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="cancel('form')" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
@@ -273,11 +283,12 @@ export default {
       listLoading: true,
       pageModule: {
         pageNumber: 1,
-        pageSize: 25,
+        pageSize: 10,
         searchText: '',
         sortName: '',
         sortOrder: ''
       },
+      pageSizes: [],
       defaultProps: {
         children: 'children',
         label: 'name',
@@ -312,6 +323,13 @@ export default {
         }]
       },
       rules: {
+        expireTime: [
+          {
+            required: true,
+            message: '请输入账户到期时间',
+            trigger: 'blur'
+          }
+        ],
         usercode: [
           {
             required: true,
@@ -419,8 +437,14 @@ export default {
     if (!this.organizList || this.organizList.length < 1) {
       this.loadOrganizAllChild(this.userInfo.organizId)
     }
-    this.postDictionaryDetailsByCode(15, (data) => {
+    this.asyncLoadDictionaryByCode(15, (data) => {
       this.sexOptions = data
+    })
+    this.asyncOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数', (data) => {
+      this.pageModule.pageSize = data
+    })
+    this.asyncOrganizParameterValue('DefaultPageSizes', '10,25,50,100', '表格默认每页记录数可选择项', (data) => {
+      this.pageSizes = data.split(',')
     })
     this.loadRoles()
     this.resetTemp()
@@ -592,7 +616,7 @@ export default {
         this.$notify({
           title: '获取用户信息失败',
           message: reason.message,
-          type: 'warning',
+          type: 'error',
           duration: 5000
         })
       })
@@ -617,9 +641,9 @@ export default {
           .then((response) => {
             this.$notify({
               title: '重置密码成功',
-              message: '用户(' + this.form.username + ')当前密码是:' + response.data,
+              message: '用户[' + this.form.username + ']当前密码是:' + response.data,
               type: 'success',
-              duration: 5000
+              duration: 0
             })
           })
           .catch((reason) => {
@@ -878,10 +902,10 @@ export default {
             this.dialogFormVisible = false
             this.updateList(this.form)
             this.$notify({
-              title: '创建成功,当前用户密码是:',
+              title: '创建成功,用户[' + this.form.username + ']密码是:',
               message: response.data.password,
               type: 'success',
-              duration: 2000
+              duration: 0
             })
           }).catch(reason => {
             this.$notify({
@@ -1000,7 +1024,8 @@ export default {
         password: '123456',
         userRoles: [],
         status: 0,
-        sex: 1
+        sex: 1,
+        expireTime: new Date('2050-12-31 23:59:59')
       }
     },
     sortChange(column) {

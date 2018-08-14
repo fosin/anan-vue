@@ -2,7 +2,7 @@ import { fetchDictionaryDetailsByCode } from '@/api/dictionary'
 import { Message } from 'element-ui'
 
 export default (Vue) => {
-  Vue.prototype.postDictionaryDetailsByCode = function postDictionaryDetailsByCode(code, callback) {
+  Vue.prototype.asyncLoadDictionaryByCode = function(code, callback) {
     if (!code) {
       Message({
         title: '获取字典明细失败',
@@ -33,7 +33,7 @@ export default (Vue) => {
     })
   }
 
-  Vue.prototype.getDictionaryDetailsByCode = function getDictionaryDetailsByCode(code) {
+  Vue.prototype.syncLoadDictionaryByCode = function(code) {
     if (!code) {
       Message({
         title: '获取字典明细失败',

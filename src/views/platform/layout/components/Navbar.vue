@@ -23,19 +23,19 @@
           <i class="el-icon-caret-bottom"></i>
         </div>
         <el-dropdown-menu slot="dropdown">
-          <router-link to="/userInfo">
-            <el-dropdown-item>
-              {{$t('navbar.userInfo')}}
-            </el-dropdown-item>
-          </router-link>
+          <el-dropdown-item divided>
+            <span @click="logout" style="display:block;">{{$t('navbar.logOut')}}</span>
+          </el-dropdown-item>
           <router-link to="/404">
             <el-dropdown-item>
               {{$t('navbar.userSetting')}}
             </el-dropdown-item>
           </router-link>
-          <el-dropdown-item divided>
-            <span @click="logout" style="display:block;">{{$t('navbar.logOut')}}</span>
-          </el-dropdown-item>
+          <router-link to="/userInfo">
+            <el-dropdown-item>
+              {{$t('navbar.userInfo')}}
+            </el-dropdown-item>
+          </router-link>
         </el-dropdown-menu>
       </el-dropdown>
     </div>

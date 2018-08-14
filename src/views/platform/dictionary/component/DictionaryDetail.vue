@@ -39,7 +39,7 @@
     </el-table>
     <div v-show="!listLoading" class="pagination-container">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                     :current-page.sync="pageModule.pageNumber" :page-sizes="[10,25,50,100]"
+                     :current-page.sync="pageModule.pageNumber" :page-sizes="pageSizes"
                      :page-size="pageModule.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
@@ -103,8 +103,14 @@
       waves
     },
     created() {
-      this.postDictionaryDetailsByCode(11, (data) => {
+      this.asyncLoadDictionaryByCode(11, (data) => {
         this.statusOptions = data
+      })
+      this.asyncOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数', (data) => {
+        this.pageModule.pageSize = data
+      })
+      this.asyncOrganizParameterValue('DefaultPageSizes', '10,25,50,100', '表格默认每页记录数可选择项', (data) => {
+        this.pageSizes = data.split(',')
       })
     },
     data() {
@@ -115,11 +121,12 @@
         listLoading: false,
         pageModule: {
           pageNumber: 1,
-          pageSize: 25,
+          pageSize: 10,
           searchText: '',
           sortName: '',
           sortOrder: ''
         },
+        pageSizes: [],
         form: {},
         rules: {
           sort: [

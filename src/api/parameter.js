@@ -46,17 +46,23 @@ export function putParameter(obj) {
   })
 }
 
-export function fetchUserParameterValue(key, method) {
-  return fetchParameterValue(2, key, method)
+export function fetchUserParameterValue(key, defaultValue, description, method) {
+  return fetchParameterValue(2, key, method, defaultValue, description)
 }
 
-export function fetchOrganizParameterValue(key, method) {
-  return fetchParameterValue(1, key, method)
+export function fetchOrganizParameterValue(key, defaultValue, description, method) {
+  return fetchParameterValue(1, key, method, defaultValue, description)
 }
 
-export function fetchParameterValue(type, key, method) {
+export function fetchParameterValue(type, key, method, defaultValue, description) {
   if (!type || !key) {
-    return ''
+    return undefined
+  }
+  if (defaultValue && defaultValue) {
+    return request({
+      url: '/platform/parameter/value/' + type + '/' + key + '/' + defaultValue + '/' + description,
+      method: method || 'post'
+    })
   }
   return request({
     url: '/platform/parameter/value/' + type + '/' + key,

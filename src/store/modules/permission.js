@@ -1,5 +1,9 @@
-import { asyncRouterMap, constantRouterMap } from '@/router'
+import { constantRouterMap, dynamicAddAsyncRouter } from '@/router'
 import { getWebStore, setWebStore, removeWebStore } from '@/utils/webStorage'
+
+/* Layout */
+// import Layout from '@/views/platform/layout/Layout'
+// import Page404 from '@/views/platform/errorPage/404'
 /**
  * 通过判断是否与当前用户权限匹配
  * @param permissions
@@ -35,7 +39,7 @@ function filterAsyncRouter(asyncRouterMap, permissions) {
  * @param permissionCode
  * @returns {*}
  */
-function findAsyncRouter(asyncRouterMap, permissionCode) {
+/* function findAsyncRouter(asyncRouterMap, permissionCode) {
   let rc = {}
   for (let j = 0; j < asyncRouterMap.length; j++) {
     const router = asyncRouterMap[j]
@@ -46,8 +50,8 @@ function findAsyncRouter(asyncRouterMap, permissionCode) {
     }
   }
   return rc
-}
-
+}*/
+/*
 function dynamicAddAsyncRouter(permissionTree) {
   const aRouter = []
   if (!permissionTree) {
@@ -58,27 +62,61 @@ function dynamicAddAsyncRouter(permissionTree) {
       code,
       type,
       status,
+      icon,
+      url,
       children
     } = permission
-    // 只遍历菜单类型
-    if (type === 0) {
-      return
-    }
     // 未开启的权限则也不显示
     if (status !== 0) {
       return
     }
+    let singelRouter = {}
+    const nUrl = (url ? '@/' + url : '@/views/platform/errorPage/404')
+    switch (type) {
+      // 组件菜单
+      case 1:
+        singelRouter = {
+          name: code,
+          path: code,
+          component: () => import(nUrl),
+          // component: (resolve) => require([`${nUrl}`], resolve),
+          // component(resolve) {
+          //   require([`${nUrl}`], resolve)
+          // },
+          meta: {
+            title: code,
+            icon: icon
+          },
+          children: validatenull(children) ? [] : dynamicAddAsyncRouter(children)
+        }
+        break
+      // 链接菜单
+      case 2:
+        return
+      // 目录菜单
+      case 3:
+        singelRouter = {
+          name: code,
+          path: '/' + code,
+          component: Layout,
+          meta: {
+            title: code,
+            icon: icon
+          },
+          redirect: 'noredirect',
+          children: validatenull(children) ? [] : dynamicAddAsyncRouter(children)
+        }
+        break
+      // 只遍历菜单类型
+      default:
+        return
+    }
 
-    const singelRouter = findAsyncRouter(asyncRouterMap, code)
-    singelRouter.children = validatenull(children) ? [] : dynamicAddAsyncRouter(children)
+    // const singelRouter = findAsyncRouter(asyncRouterMap, code)
+    // singelRouter.children = validatenull(children) ? [] : dynamicAddAsyncRouter(children)
     aRouter.push(singelRouter)
   })
   return aRouter
-}
-function clearData(commit) {
-  commit('SET_ROUTERS', [])
-  removeWebStore('addRouters')
-  removeWebStore('routers')
 }
 function validatenull(val) {
   if (val instanceof Array) {
@@ -89,6 +127,12 @@ function validatenull(val) {
     return val === 'null' || val == null || val === 'undefined' || val === undefined || val === ''
   }
   return false
+}
+*/
+function clearData(commit) {
+  commit('SET_ROUTERS', [])
+  removeWebStore('addRouters')
+  removeWebStore('routers')
 }
 
 const permission = {
@@ -132,7 +176,6 @@ const permission = {
     GenerateRoutes({ commit }, permissionTree) {
       return new Promise(resolve => {
         const routes = dynamicAddAsyncRouter(permissionTree.children)
-        routes.push({ path: '*', redirect: '/404', hidden: true })
         commit('SET_ROUTERS', routes)
         resolve()
       })
