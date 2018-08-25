@@ -9,6 +9,13 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
+      '/': {
+        target: 'http://localhost:9000',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/': '/'
+        }
+      }/*,
       '/auth': {
         target: 'http://localhost:9000',
         changeOrigin: true,
@@ -29,7 +36,7 @@ module.exports = {
         pathRewrite: {
           '^/platform': '/platform'
         }
-      }
+      }*/
     },
 
     // Various Dev Server settings

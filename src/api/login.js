@@ -22,7 +22,7 @@ export function getAccessToken(loginForm) {
     url: '/auth/oauth/token',
     method: 'post',
     headers: {
-      'Authorization': 'Basic d2ViQXBwOnQ0ZXQyMzQ2YjJmZmUzNDYyMzQ1NjMy'
+      'Authorization': 'Basic d2ViQXBwOiQyYSQxMCR4S2ZEY2JPYzFJYmgwVlJXUklzUTRPM1ZrOUp4YkYvMzBXZHouZTJoQk5BQVFLUjVVemlJSw=='
     },
     params: { a: cipheru, b: cipherp, c: passPhrase, d: iv, e: salt, f: keySize, g: iterationCount, randomStr, code, grant_type, scope, 'remember-me': rememberMe }
   })
@@ -38,7 +38,7 @@ export function refreshAccessToken(refresh_token) {
     url: '/auth/oauth/token',
     method: 'post',
     headers: {
-      'Authorization': 'Basic d2ViQXBwOnQ0ZXQyMzQ2YjJmZmUzNDYyMzQ1NjMy'
+      'Authorization': 'Basic d2ViQXBwOiQyYSQxMCR4S2ZEY2JPYzFJYmgwVlJXUklzUTRPM1ZrOUp4YkYvMzBXZHouZTJoQk5BQVFLUjVVemlJSw=='
     },
     params: { refresh_token, grant_type, scope }
   })

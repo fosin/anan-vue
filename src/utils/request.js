@@ -4,7 +4,7 @@ import store from '../store'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'// progress bar style
 
-NProgress.configure({ easing: 'ease', speed: 1000, showSpinner: false })// NProgress Configuration
+NProgress.configure({ showSpinner: false })// NProgress Configuration
 // 全局设置方式
 // 超时时间
 // axios.defaults.timeout = 30000

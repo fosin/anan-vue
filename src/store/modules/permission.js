@@ -1,4 +1,4 @@
-import { constantRouterMap, dynamicAddAsyncRouter } from '@/router'
+import { constantRouterMap, dynamicAsyncRouter } from '@/router'
 import { getWebStore, setWebStore, removeWebStore } from '@/utils/webStorage'
 
 /* Layout */
@@ -175,7 +175,7 @@ const permission = {
     },
     GenerateRoutes({ commit }, permissionTree) {
       return new Promise(resolve => {
-        const routes = dynamicAddAsyncRouter(permissionTree.children)
+        const routes = dynamicAsyncRouter(permissionTree.children)
         commit('SET_ROUTERS', routes)
         resolve()
       })

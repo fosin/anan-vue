@@ -1,4 +1,4 @@
-<template>
+<template >
   <section class="app-main" style="min-height: 100%">
     <transition name="fade-transform" mode="out-in">
       <keep-alive :include="cachedViews">

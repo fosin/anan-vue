@@ -77,21 +77,33 @@ const user = {
 
   actions: {
     // 用户名登录
-    LoginByUsername({ commit, dispatch }, loginForm) {
+    LoginByUsername({ commit, state, dispatch }, loginForm) {
       return new Promise((resolve, reject) => {
-        getAccessToken(loginForm).then(response => {
-          commit('SET_TOKEN', response.data)
+        const access_token = state.token.access_token
+        if (access_token) {
           // 根据服务器返回的失效时间定时刷新access_token
           setTimeout(function() {
             dispatch('RefreshAccessToken').then(res => { // 拉取user_info
             }).catch((error) => {
               reject(error)
             })
-          }, (response.data.expires_in || 7200 - 60) * 1000)
+          }, ((state.token.expires_in || 7200) - 120) * 1000)
           resolve()
-        }).catch(error => {
-          reject(error)
-        })
+        } else {
+          getAccessToken(loginForm).then(response => {
+            commit('SET_TOKEN', response.data)
+            // 根据服务器返回的失效时间定时刷新access_token
+            setTimeout(function() {
+              dispatch('RefreshAccessToken').then(res => { // 拉取user_info
+              }).catch((error) => {
+                reject(error)
+              })
+            }, ((response.data.expires_in || 7200) - 60) * 1000)
+            resolve()
+          }).catch(error => {
+            reject(error)
+          })
+        }
       })
     },
     // 刷新toeken
@@ -118,7 +130,7 @@ const user = {
           if (!response.data || !response.data) {
             reject('error')
           }
-          const data = response.data
+          const data = response.data.principal
           if (!data.enabled || !data.accountNonExpired || !data.accountNonLocked || !data.credentialsNonExpired) { // 验证返回的user是否有效用户
             reject('getInfo: user is disabled!')
           }

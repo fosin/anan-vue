@@ -121,7 +121,7 @@
         currentId: -1,
         formRules: {
           url: [
-            { pattern: /^[A-Za-z0-9/:.]+$/, message: '资源路径只支持大小写字母 数字 / : .' }
+            { pattern: /^[A-Za-z0-9/:.@?=& \\-]+$/, message: '资源路径只支持大小写字母 数字 & / : . @ - ? =' }
           ],
           name: [
             {

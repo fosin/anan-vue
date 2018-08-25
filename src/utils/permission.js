@@ -4,7 +4,7 @@ import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'// progress bar style
 
-NProgress.configure({ easing: 'ease', speed: 500, showSpinner: false })// NProgress Configuration
+NProgress.configure({ showSpinner: false })// NProgress Configuration
 
 const whiteList = ['/login', '/authredirect']// no redirect whitelist
 
@@ -19,9 +19,10 @@ router.beforeEach((to, from, next) => {
       const userId = store.getters.userInfo.id
       if (userId === undefined || userId < 1) { // 判断当前用户是否已拉取完user_info信息
         store.dispatch('GetUserInfo').then(res => { // 拉取user_info
-          const permissionTree = store.getters.permissionTree
-          store.dispatch('GenerateRoutes', permissionTree).then(() => { // 根据permissions权限生成可访问的路由表
+          store.dispatch('GenerateRoutes', store.getters.permissionTree).then(() => { // 根据permissions权限生成可访问的路由表
+            // const addrouters = filterPermission(store.getters.addRouters)
             router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
+            // debugger
             next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
           }).catch((reason) => {
             Message.error(reason.message)
@@ -75,6 +76,19 @@ function hasPermission(permissions, metaPermisson) {
   return permissions[metaPermisson] || false
 }
 
+// function filterPermission(routers) {
+//   const aRouter = []
+//   if (!routers) {
+//     return aRouter
+//   }
+//   routers.forEach(router => {
+//     router.children = filterPermission(router.children)
+//     if (router.meta && router.meta.type && router.meta.type !== 2) {
+//       aRouter.push(router)
+//     }
+//   })
+//   return aRouter
+// }
 /**
  * @param {Array} value
  * @returns {Boolean}

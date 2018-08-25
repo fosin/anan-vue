@@ -60,28 +60,13 @@ export default new Router({
 })
 
 export const asyncRouterMap = [
-/* { path: '/system', component: Layout, redirect: 'noredirect', name: 'system', meta: { title: 'system', icon: 'form' }},
- { path: 'permission', component: () => import('@/views/platform/permission/index'), name: 'system_permission', meta: { title: 'system_permission', icon: 'tree' }},
- { path: 'organiz', component: () => import('@/views/platform/organization/index'), name: 'system_organiz', meta: { title: 'system_organiz', icon: 'organization' }},
- { path: 'user', component: () => import('@/views/platform/user/index'), name: 'system_user', meta: { title: 'system_user', icon: 'user' }},
- { path: 'role', component: () => import('@/views/platform/role/index'), name: 'system_role', meta: { title: 'system_role', icon: 'role' }},
- { path: '/config', component: Layout, redirect: 'noredirect', name: 'config', meta: { title: 'config', icon: 'parameter' }},
- { path: 'application', component: () => import('@/views/platform/errorPage/404'), name: 'config_application', meta: { title: 'config_application', icon: 'list' }},
- { path: 'parameter', component: () => import('@/views/platform/parameter/index'), name: 'config_parameter', meta: { title: 'config_parameter', icon: 'parameter' }},
- { path: 'dictionary', component: () => import('@/views/platform/dictionary/index'), name: 'config_dictionary', meta: { title: 'config_dictionary', icon: 'dictionary' }},
- { path: '/monitor', component: Layout, redirect: 'noredirect', name: 'monitor', meta: { title: 'monitor', icon: 'monitor' }},
- { path: 'eureka', component: Page404, name: 'monitor_eureka', meta: { title: 'monitor_eureka', icon: 'monitor' }},
- { path: 'admin', component: () => import('@/views/platform/errorPage/404'), name: 'monitor_admin', meta: { title: 'monitor_admin', icon: 'monitor' }},
- { path: 'sleuth', component: () => import('@/views/platform/errorPage/404'), name: 'monitor_sleuth', meta: { title: 'monitor_sleuth', icon: 'monitor' }},
- { path: 'cache', component: () => import('@/views/platform/errorPage/404'), name: 'monitor_cache', meta: { title: 'monitor_cache', icon: 'monitor' }},
- { path: 'elk', component: () => import('@/views/platform/errorPage/404'), name: 'monitor_elk', meta: { title: 'monitor_elk', icon: 'monitor' }},
- { path: 'onlineuser', component: () => import('@/views/platform/errorPage/404'), name: 'monitor_onlineuser', meta: { title: 'monitor_onlineuser', icon: 'monitor' }},
- { path: '/authentication', component: Layout, redirect: 'noredirect', name: 'authentication', meta: { title: 'authentication', icon: 'permision' }},
- { path: 'client', component: () => import('@/views/platform/client/index'), name: 'authentication_client', meta: { title: 'authentication_client', icon: 'permision' }},
- { path: 'service', component: () => import('@/views/platform/errorPage/404'), name: 'authentication_service', meta: { title: 'authentication_service', icon: 'permision' }},
-
- { path: '*', redirect: '/404', hidden: true }*/
+  { path: '*', redirect: '/404', hidden: true }
 ]
+
+export function dynamicAsyncRouter(permissionTree) {
+  const routers = dynamicAddAsyncRouter(permissionTree)
+  return routers.concat(asyncRouterMap)
+}
 /**
  * 根据后台权限标识(cdp_sys_perimission.code)创建动态路由
  * @returns {*}
@@ -128,18 +113,39 @@ export function dynamicAddAsyncRouter(permissionTree) {
             children: isEmpty(children) ? [] : dynamicAddAsyncRouter(children)
           }
           break
-        // 链接菜单
+        // 直接链接菜单
         case 2:
           singelRouter = {
             name: code,
             path: code,
-            component: () => import(`@/${nUrl}.vue`).catch(error => {
+            component: () => import('@/views/platform/layout/Iframe').catch(error => {
+              Notification.error({
+                title: '获取组件失败',
+                message: error.message
+              })
+            }),
+            props: (route) => ({ src: route.query.src }),
+            meta: {
+              src: url,
+              title: code,
+              icon: icon
+            },
+            children: isEmpty(children) ? [] : dynamicAddAsyncRouter(children)
+          }
+          break
+        // 间接链接菜单
+        case 4:
+          singelRouter = {
+            name: code,
+            path: code,
+            component: () => import('@/views/platform/layout/Iframe').catch(error => {
               Notification.error({
                 title: '获取组件失败',
                 message: error.message
               })
             }),
             meta: {
+              url: url,
               title: code,
               icon: icon
             },
@@ -170,11 +176,9 @@ export function dynamicAddAsyncRouter(permissionTree) {
           return
       }
     }
+    singelRouter.meta.type = type
     aRouter.push(singelRouter)
   })
-  if (permissionTree.level === 0) {
-    aRouter.push({ path: '*', redirect: '/404', hidden: true })
-  }
   return aRouter
 }
 
