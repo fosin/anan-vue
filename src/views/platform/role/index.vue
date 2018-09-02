@@ -390,9 +390,7 @@ export default {
         const permission = {
           id: undefined,
           roleId: id,
-          permission: {
-            id: unionPermissions[i]
-          }
+          permissionId: unionPermissions[i]
         }
         newRolePermissions.push(permission)
       }
@@ -419,7 +417,7 @@ export default {
         return checkedKeys
       }
       for (let i = 0; i < rolePermissions.length; i++) {
-        checkedKeys.push(rolePermissions[i].permission.id)
+        checkedKeys.push(rolePermissions[i].permissionId)
       }
       return checkedKeys
     },

@@ -783,9 +783,7 @@ export default {
           organizId: this.form.organizId,
           userId: this.form.id,
           addMode: 0,
-          permission: {
-            id: resultAddPermission[i]
-          }
+          permissionId: resultAddPermission[i]
         }
         newRolePermissions.push(permission)
       }
@@ -827,11 +825,11 @@ export default {
         const permission = permissions[i]
         if (type === 1) {
           if (permission.addMode === 0) {
-            checkedKeys.push(permission.permission.id)
+            checkedKeys.push(permission.permissionId)
           }
         } else {
           if (permissions[i].addMode === 1) {
-            checkedKeys.push(permission.permission.id)
+            checkedKeys.push(permission.permissionId)
           }
         }
       }
