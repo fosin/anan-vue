@@ -7,7 +7,7 @@
 
 <script>
   import axios from 'axios'
-  import { pageUrl } from '@/api/page'
+  import { loadUIUrl } from '@/api/application'
   import store from '@/store'
   export default {
     name: 'myiframe',
@@ -53,10 +53,19 @@
        */
       geturl: function() {
         if (this.$route.query.src) {
-          this.src = this.$route.query.src + '?access_token=' + store.getters.token.access_token
+          debugger
+          if (this.$route.query.src.startsWith('http')) {
+            this.src = this.$route.query.src + '?access_token=' + store.getters.token.access_token
+          } else {
+            if (process.env.BASE_API && process.env.BASE_API !== '/') {
+              this.src = process.env.BASE_API + this.$route.query.src + '?access_token=' + store.getters.token.access_token
+            } else {
+              this.src = this.$route.query.src + '?access_token=' + store.getters.token.access_token
+            }
+          }
         }
         if (this.$route.query.url) {
-          pageUrl(this.$route.query.url).then(response => {
+          loadUIUrl(this.$route.query.url).then(response => {
             const urlInfo = response.data
             const url = urlInfo.url
             const headers = urlInfo.headers

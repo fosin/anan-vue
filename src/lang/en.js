@@ -6,6 +6,7 @@ export default {
     system_user: 'User Manage',
     system_organiz: 'Organization Manage',
     system_role: 'Role Manage',
+    system_swaggerDevDoc: 'Dev Domcument',
     config: 'Config',
     config_application: 'App Config',
     config_parameter: 'Parameter Config',

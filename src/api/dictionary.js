@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取数据分页列表
 export function listDictionaryPage(page) {
   return request({
-    url: '/platform/dictionary/pageList',
+    url: '/platform/v1/dictionary/pageList',
     method: 'post',
     data: page
   })
@@ -11,14 +11,14 @@ export function listDictionaryPage(page) {
 // 获取所有数据列表
 export function listDictionary() {
   return request({
-    url: '/platform/dictionary/list',
+    url: '/platform/v1/dictionary/list',
     method: 'post'
   })
 }
 
 export function postDictionary(obj) {
   return request({
-    url: '/platform/dictionary/',
+    url: '/platform/v1/dictionary/',
     method: 'post',
     data: obj
   })
@@ -26,21 +26,21 @@ export function postDictionary(obj) {
 
 export function getDictionary(id) {
   return request({
-    url: '/platform/dictionary/' + id,
+    url: '/platform/v1/dictionary/' + id,
     method: 'get'
   })
 }
 
 export function deleteDictionary(id) {
   return request({
-    url: '/platform/dictionary/' + id,
+    url: '/platform/v1/dictionary/' + id,
     method: 'delete'
   })
 }
 
 export function putDictionary(obj) {
   return request({
-    url: '/platform/dictionary',
+    url: '/platform/v1/dictionary',
     method: 'put',
     data: obj
   })
@@ -50,7 +50,7 @@ export function putDictionary(obj) {
 // 获取数据分页列表
 export function listDictionaryDetailPage(page, code) {
   return request({
-    url: '/platform/dictionaryDetail/pageList/' + code,
+    url: '/platform/v1/dictionaryDetail/pageList/' + code,
     method: 'post',
     data: page
   })
@@ -58,14 +58,14 @@ export function listDictionaryDetailPage(page, code) {
 // 获取所有数据列表
 export function listDictionaryDetail() {
   return request({
-    url: '/platform/dictionaryDetail/list',
+    url: '/platform/v1/dictionaryDetail/list',
     method: 'post'
   })
 }
 
 export function postDictionaryDetail(obj) {
   return request({
-    url: '/platform/dictionaryDetail/',
+    url: '/platform/v1/dictionaryDetail/',
     method: 'post',
     data: obj
   })
@@ -73,28 +73,28 @@ export function postDictionaryDetail(obj) {
 
 export function fetchDictionaryDetailsByCode(code, method) {
   return request({
-    url: '/platform/dictionaryDetail/byCode/' + code,
+    url: '/platform/v1/dictionaryDetail/byCode/' + code,
     method: method || 'post'
   })
 }
 
 export function getDictionaryDetail(id) {
   return request({
-    url: '/platform/dictionaryDetail/' + id,
+    url: '/platform/v1/dictionaryDetail/' + id,
     method: 'get'
   })
 }
 
 export function deleteDictionaryDetail(id) {
   return request({
-    url: '/platform/dictionaryDetail/' + id,
+    url: '/platform/v1/dictionaryDetail/' + id,
     method: 'delete'
   })
 }
 
 export function putDictionaryDetail(obj) {
   return request({
-    url: '/platform/dictionaryDetail',
+    url: '/platform/v1/dictionaryDetail',
     method: 'put',
     data: obj
   })

@@ -53,7 +53,7 @@ export function logout() {
 
 export function getUserInfo() {
   return request({
-    url: '/auth/auth/principal',
+    url: '/auth/oauth/principal',
     method: 'get'
   })
 }

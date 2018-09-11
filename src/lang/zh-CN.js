@@ -6,6 +6,7 @@ export default {
     system_user: '用户管理',
     system_organiz: '机构管理',
     system_role: '角色管理',
+    system_swaggerDevDoc: '开发文档',
     config: '配置管理',
     config_application: '分布式配置管理',
     config_parameter: '通用参数管理',

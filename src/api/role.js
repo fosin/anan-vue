@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取角色的所有用户列表
 export function listRoleUsers(id) {
   return request({
-    url: '/platform/role/users/' + id,
+    url: '/platform/v1/role/users/' + id,
     method: 'post'
   })
 }
@@ -11,7 +11,7 @@ export function listRoleUsers(id) {
 // 获取角色的所有未拥有的用户列表
 export function listOtherUsers(id) {
   return request({
-    url: '/platform/role/otherUsers/' + id,
+    url: '/platform/v1/role/otherUsers/' + id,
     method: 'post'
   })
 }
@@ -19,7 +19,7 @@ export function listOtherUsers(id) {
 // 更新角色的用户
 export function putRoleUsers(id, obj) {
   return request({
-    url: '/platform/role/users/' + id,
+    url: '/platform/v1/role/users/' + id,
     method: 'put',
     data: obj
   })
@@ -28,7 +28,7 @@ export function putRoleUsers(id, obj) {
 // 获取角色分页列表
 export function listRolePage(page) {
   return request({
-    url: '/platform/role/pageList',
+    url: '/platform/v1/role/pageList',
     method: 'post',
     data: page
   })
@@ -37,7 +37,7 @@ export function listRolePage(page) {
 // 获取角色的所有权限列表
 export function listRolePermissions(id) {
   return request({
-    url: '/platform/role/permissions/' + id,
+    url: '/platform/v1/role/permissions/' + id,
     method: 'post'
   })
 }
@@ -45,7 +45,7 @@ export function listRolePermissions(id) {
 // 更新角色权限
 export function putRolePermissions(id, rolePermissions) {
   return request({
-    url: '/platform/role/permissions/' + id,
+    url: '/platform/v1/role/permissions/' + id,
     method: 'put',
     data: rolePermissions
   })
@@ -53,14 +53,14 @@ export function putRolePermissions(id, rolePermissions) {
 // 获取所有角色列表
 export function listRole() {
   return request({
-    url: '/platform/role/list',
+    url: '/platform/v1/role/list',
     method: 'post'
   })
 }
 
 export function postRole(obj) {
   return request({
-    url: '/platform/role/',
+    url: '/platform/v1/role/',
     method: 'post',
     data: obj
   })
@@ -68,21 +68,21 @@ export function postRole(obj) {
 
 export function getRole(id) {
   return request({
-    url: '/platform/role/' + id,
+    url: '/platform/v1/role/' + id,
     method: 'get'
   })
 }
 
 export function deleteRole(id) {
   return request({
-    url: '/platform/role/' + id,
+    url: '/platform/v1/role/' + id,
     method: 'delete'
   })
 }
 
 export function putRole(obj) {
   return request({
-    url: '/platform/role',
+    url: '/platform/v1/role',
     method: 'put',
     data: obj
   })

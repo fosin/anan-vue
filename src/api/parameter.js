@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取数据分页列表
 export function listParameterPage(page) {
   return request({
-    url: '/platform/parameter/pageList',
+    url: '/platform/v1/parameter/pageList',
     method: 'post',
     data: page
   })
@@ -11,14 +11,14 @@ export function listParameterPage(page) {
 // 获取所有数据列表
 export function listParameter() {
   return request({
-    url: '/platform/parameter/list',
+    url: '/platform/v1/parameter/list',
     method: 'post'
   })
 }
 
 export function postParameter(obj) {
   return request({
-    url: '/platform/parameter/',
+    url: '/platform/v1/parameter/',
     method: 'post',
     data: obj
   })
@@ -26,21 +26,21 @@ export function postParameter(obj) {
 
 export function getParameter(id) {
   return request({
-    url: '/platform/parameter/' + id,
+    url: '/platform/v1/parameter/' + id,
     method: 'get'
   })
 }
 
 export function deleteParameter(id) {
   return request({
-    url: '/platform/parameter/' + id,
+    url: '/platform/v1/parameter/' + id,
     method: 'delete'
   })
 }
 
 export function putParameter(obj) {
   return request({
-    url: '/platform/parameter',
+    url: '/platform/v1/parameter',
     method: 'put',
     data: obj
   })
@@ -60,26 +60,26 @@ export function fetchParameterValue(type, key, method, defaultValue, description
   }
   if (defaultValue && defaultValue) {
     return request({
-      url: '/platform/parameter/value/' + type + '/' + key + '/' + defaultValue + '/' + description,
+      url: '/platform/v1/parameter/value/' + type + '/' + key + '/' + defaultValue + '/' + description,
       method: method || 'post'
     })
   }
   return request({
-    url: '/platform/parameter/value/' + type + '/' + key,
+    url: '/platform/v1/parameter/value/' + type + '/' + key,
     method: method || 'post'
   })
 }
 
 export function applyParameter(id) {
   return request({
-    url: '/platform/parameter/apply/' + id,
+    url: '/platform/v1/parameter/apply/' + id,
     method: 'post'
   })
 }
 
 export function applysParameter() {
   return request({
-    url: '/platform/parameter/applys',
+    url: '/platform/v1/parameter/applys',
     method: 'post'
   })
 }

@@ -34,18 +34,50 @@
               <el-button @click="onCancel" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
               <el-button type="primary" @click="create" icon="el-icon-circle-check">{{$t('table.create')}}</el-button>
             </el-form-item>
-            <el-form-item label="父级节点" prop="pName">
-              <el-input v-model="parent.name" :disabled="true"></el-input>
-            </el-form-item>
-            <el-form-item label="权限名称" prop="name">
-              <el-input v-model="form.name" :disabled="formUpdate"  placeholder="请输入权限名称"></el-input>
-            </el-form-item>
-            <el-form-item label="权限标识" prop="code">
-              <el-input v-model="form.code" :disabled="formUpdate" placeholder="请输入权限标识,必须唯一"></el-input>
-            </el-form-item>
+
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="父级节点" prop="pName">
+                  <el-input v-model="parent.name" :disabled="true"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="所属应用" prop="appName">
+                  <el-select class="filter-item" v-model="form.appName"  :disabled="this.formUpdate?this.formUpdate:this.parent.level !== 0"  placeholder="请选择权限所属的应用，不能为空" value="">
+                    <el-option v-for="item in appOptions" :key="item" :label="item" :value="item"> </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="权限名称" prop="name">
+                  <el-input v-model="form.name" :disabled="formUpdate"  placeholder="请输入权限名称"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="权限标识" prop="code">
+                  <el-input v-model="form.code" :disabled="formUpdate" placeholder="请输入权限标识,必须唯一"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
             <el-form-item label="资源路径" prop="url">
               <el-input v-model="form.url" :disabled="formUpdate" placeholder="请输入资源路径"></el-input>
             </el-form-item>
+            <el-row>
+              <el-col :span="16">
+                <el-form-item label="匹配路径" prop="path" placeholder="设置权限对应的HTTP请求路径表达式">
+                  <el-input v-model="form.path" :disabled="formUpdate"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="请求方法" prop="method">
+                  <el-select class="filter-item" v-model="form.method" :disabled="formUpdate" placeholder="请选择请求的方法" value="">
+                    <el-option v-for="item in methodOptions" :key="item.value" :label="item.value" :value="item.value"> </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
             <el-row>
               <el-col :span="9">
                 <el-form-item label="类型" prop="type">
@@ -85,27 +117,22 @@
 
 <script>
   import { listChildPermissions, getPermission, postPermission, deletePermission, putPermission } from '@/api/permission'
+  import { loadServiceNames } from '@/api/application'
   export default {
     name: 'system_permission',
     data() {
-      // const validateURL = (rule, value, callback) => {
-      //   if (value.contain('@')) {
-      //     callback(new Error('地址不能包含@!'))
-      //   }
-      //   if (value === this.parent.code) {
-      //     callback(new Error('机构编码不能和父机构编码相同!'))
-      //   }
-      //   callback()
-      // }
       return {
         parent: {},
         list: null,
         total: null,
         formUpdate: true,
+        appNameUpdate: true,
         formAdd: true,
         formStatus: '',
         showElement: false,
         typeOptions: [],
+        methodOptions: [],
+        appOptions: [],
         listQuery: {
           name: undefined
         },
@@ -122,6 +149,9 @@
         formRules: {
           url: [
             { pattern: /^[A-Za-z0-9/:.@?=& \\-]+$/, message: '资源路径只支持大小写字母 数字 & / : . @ - ? =' }
+          ],
+          path: [
+            { pattern: /^[A-Za-z0-9/?*. \\-]+$/, message: '匹配路径只支持大小写字母 数字 / . * - ?' }
           ],
           name: [
             {
@@ -156,6 +186,19 @@
     created() {
       this.asyncLoadDictionaryByCode(13, (data) => {
         this.typeOptions = data
+      })
+      this.asyncLoadDictionaryByCode(12, (data) => {
+        this.methodOptions = data
+      })
+      loadServiceNames().then(response => {
+        this.appOptions = response.data
+      }).catch(reason => {
+        this.$notify({
+          title: '加载应用服务列表失败',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
       })
       this.resetForm()
     },
@@ -336,6 +379,9 @@
         this.formUpdate = true
         this.formStatus = ''
       },
+      appNameDisabled() {
+        return this.formUpdate || this.parent.level === 0
+      },
       resetForm() {
         let code = this.parent.code || ''
         code = code.substr(-1) === '_' ? code : code + '_'
@@ -363,7 +409,9 @@
           type: type,
           status: '0',
           icon: '',
-          level: this.parent.level ? this.parent.level + 1 : 0
+          level: this.parent.level ? this.parent.level + 1 : 0,
+          method: 'POST',
+          appName: this.parent.appName
         }
       }
     }
