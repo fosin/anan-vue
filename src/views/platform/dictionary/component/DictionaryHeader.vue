@@ -295,9 +295,11 @@
         }
       },
       sortChange(column) {
-        this.pageModule.sortOrder = column.column.order === 'descending' ? 'DESC' : 'ASC'
-        this.pageModule.sortName = column.column.property
-        this.getList()
+        this.pageModule.sortOrder = (column.order && column.order === 'descending') ? 'DESC' : 'ASC'
+        this.pageModule.sortName = column.prop
+        if (this.pageModule.sortName) {
+          this.getList()
+        }
       },
       rowClick(row, event, column) {
         this.form = row
