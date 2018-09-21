@@ -24,10 +24,10 @@ export function postDictionary(obj) {
   })
 }
 
-export function getDictionary(id) {
+export function getDictionary(id, method) {
   return request({
     url: '/platform/v1/dictionary/' + id,
-    method: 'get'
+    method: method || 'post'
   })
 }
 
@@ -78,10 +78,10 @@ export function fetchDictionaryDetailsByCode(code, method) {
   })
 }
 
-export function getDictionaryDetail(id) {
+export function getDictionaryDetail(id, method) {
   return request({
     url: '/platform/v1/dictionaryDetail/' + id,
-    method: 'get'
+    method: method || 'post'
   })
 }
 

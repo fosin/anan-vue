@@ -24,10 +24,10 @@ export function postParameter(obj) {
   })
 }
 
-export function getParameter(id) {
+export function getParameter(id, method) {
   return request({
     url: '/platform/v1/parameter/' + id,
-    method: 'get'
+    method: method || 'post'
   })
 }
 

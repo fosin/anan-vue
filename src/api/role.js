@@ -66,10 +66,10 @@ export function postRole(obj) {
   })
 }
 
-export function getRole(id) {
+export function getRole(id, method) {
   return request({
     url: '/platform/v1/role/' + id,
-    method: 'get'
+    method: method || 'post'
   })
 }
 

@@ -53,7 +53,7 @@
        */
       geturl: function() {
         if (this.$route.query.src) {
-          debugger
+          // debugger
           if (this.$route.query.src.startsWith('http')) {
             this.src = this.$route.query.src + '?access_token=' + store.getters.token.access_token
           } else {

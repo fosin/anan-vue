@@ -101,10 +101,10 @@ export function postUserRoles(obj) {
   })
 }
 
-export function getUser(id) {
+export function getUser(id, method) {
   return request({
     url: '/platform/v1/user/' + id,
-    method: 'get'
+    method: method || 'post'
   })
 }
 

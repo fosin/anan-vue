@@ -24,10 +24,10 @@ export function postClient(obj) {
   })
 }
 
-export function getClient(id) {
+export function getClient(id, method) {
   return request({
     url: '/platform/v1/client/' + id,
-    method: 'get'
+    method: method || 'post'
   })
 }
 

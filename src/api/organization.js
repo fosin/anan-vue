@@ -32,10 +32,10 @@ export function postOrganiz(obj) {
   })
 }
 
-export function getOrganiz(id) {
+export function getOrganiz(id, method) {
   return request({
     url: '/platform/v1/organiz/' + id,
-    method: 'get'
+    method: method || 'post'
   })
 }
 

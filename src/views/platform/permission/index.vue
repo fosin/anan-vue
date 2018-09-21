@@ -410,7 +410,7 @@
           status: '0',
           icon: '',
           level: this.parent.level ? this.parent.level + 1 : 0,
-          method: 'POST',
+          method: undefined,
           appName: this.parent.appName
         }
       }

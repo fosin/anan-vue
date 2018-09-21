@@ -32,10 +32,10 @@ export function postPermission(obj) {
   })
 }
 
-export function getPermission(id) {
+export function getPermission(id, method) {
   return request({
     url: '/platform/v1/permission/' + id,
-    method: 'get'
+    method: method || 'post'
   })
 }
 
