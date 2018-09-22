@@ -7,19 +7,19 @@
       <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">
         {{$t('table.search')}}
       </el-button>
-      <el-button v-permission="'config_parameter_add'" class="filter-item" style="margin-left: 5px;"
+      <el-button v-permission="'53'" class="filter-item" style="margin-left: 5px;"
                  @click="handleAdd" type="primary" icon="el-icon-circle-plus">{{$t('table.add')}}
       </el-button>
-      <el-button type="success" v-permission="'config_parameter_edit'" class="filter-item" style="margin-left: 5px;"
+      <el-button type="success" v-permission="'54'" class="filter-item" style="margin-left: 5px;"
                  icon="el-icon-edit" @click="handleEdit()">{{$t('table.edit')}}
       </el-button>
-      <el-button type="danger" v-permission="'config_parameter_delete'" class="filter-item" style="margin-left: 5px;"
+      <el-button type="danger" v-permission="'55'" class="filter-item" style="margin-left: 5px;"
                  icon="el-icon-delete" @click="handleDelete()">{{$t('table.delete')}}
       </el-button>
-      <el-button type="warning" v-permission="'config_parameter_apply'" class="filter-item" style="margin-left: 5px;"
+      <el-button type="warning" v-permission="'56'" class="filter-item" style="margin-left: 5px;"
                  icon="el-icon-upload" @click="handleApply()">{{$t('table.apply')}}
       </el-button>
-      <el-button type="warning" v-permission="'config_parameter_applys'" class="filter-item" style="margin-left: 5px;"
+      <el-button type="warning" v-permission="'57'" class="filter-item" style="margin-left: 5px;"
                  icon="el-icon-upload" @click="handleApplys()">{{$t('table.applys')}}
       </el-button>
     </div>

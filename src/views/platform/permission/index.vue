@@ -4,9 +4,9 @@
     <div class="filter-container">
       <el-button-group>
         <el-button type="primary" class="filter-item" icon="el-icon-refresh" v-permission="'system_permission_refresh'" @click="handlerRefresh">{{$t('table.refresh')}}</el-button>
-        <el-button type="primary" class="filter-item" icon="el-icon-circle-plus" style="margin-left: 10px;" v-permission="'system_permission_add'" @click="handlerAdd">{{$t('table.add')}}</el-button>
-        <el-button type="success" class="filter-item" icon="el-icon-edit" style="margin-left: 10px;" v-permission="'system_permission_edit'" @click="handlerUpdate">{{$t('table.edit')}}</el-button>
-        <el-button type="danger" class="filter-item" icon="el-icon-delete" style="margin-left: 10px;" v-permission="'system_permission_delete'" @click="handleDelete">{{$t('table.delete')}}</el-button>
+        <el-button type="primary" class="filter-item" icon="el-icon-circle-plus" style="margin-left: 10px;" v-permission="'8'" @click="handlerAdd">{{$t('table.add')}}</el-button>
+        <el-button type="success" class="filter-item" icon="el-icon-edit" style="margin-left: 10px;" v-permission="'9'" @click="handlerUpdate">{{$t('table.edit')}}</el-button>
+        <el-button type="danger" class="filter-item" icon="el-icon-delete" style="margin-left: 10px;" v-permission="'10'" @click="handleDelete">{{$t('table.delete')}}</el-button>
       </el-button-group>
     </div>
     <el-row>
@@ -66,13 +66,13 @@
             </el-form-item>
             <el-row>
               <el-col :span="16">
-                <el-form-item label="匹配路径" prop="path" placeholder="设置权限对应的HTTP请求路径表达式">
+                <el-form-item label="权限路径" prop="path" placeholder="设置权限对应的HTTP请求路径ANT风格表达式">
                   <el-input v-model="form.path" :disabled="formUpdate"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="请求方法" prop="method">
-                  <el-select class="filter-item" v-model="form.method" :disabled="formUpdate" placeholder="请选择请求的方法" value="">
+                  <el-select class="filter-item" v-model="form.method" :disabled="formUpdate" placeholder="默认为所有方法" value="">
                     <el-option v-for="item in methodOptions" :key="item.value" :label="item.value" :value="item.value"> </el-option>
                   </el-select>
                 </el-form-item>
@@ -140,7 +140,7 @@
         defaultExpandedKeys: [1],
         defaultProps: {
           children: 'children',
-          label: 'name',
+          label: 'vname',
           isLeaf: 'leaf'
         },
         labelPosition: 'right',
@@ -211,6 +211,12 @@
         listChildPermissions(pId).then(response => {
           if (pId === 0) {
             this.defaultExpandedKeys[0] = response.data[0].id
+          }
+          const permissions = response.data
+          if (permissions && permissions.length > 0) {
+            for (let i = 0; i < permissions.length; i++) {
+              permissions[i].vname = permissions[i].name + ' - ' + this.typeOptions[permissions[i].type].value + '-' + permissions[i].id
+            }
           }
           return resolve(response.data || [])
         }).catch(reason => {
@@ -336,6 +342,7 @@
         putPermission(this.form).then(response => {
           const cNode = this.$refs.permissionTree.getNode(this.form.id)
           if (cNode) {
+            response.data.vname = response.data.name + ' - ' + this.typeOptions[response.data.type].value + '-' + response.data.id
             cNode.data = response.data
           }
           this.$notify({
@@ -356,6 +363,7 @@
       create() {
         postPermission(this.form).then(response => {
           const pNode = this.$refs.permissionTree.getNode(this.form.pId)
+          response.data.vname = response.data.name + ' - ' + this.typeOptions[response.data.type].value + '-' + response.data.id
           this.$refs.permissionTree.append(response.data, pNode)
           // TODO 以下代码启用后可以解决tree控件bug(会导致原有子节点丢失问题)
           pNode.data.children = null

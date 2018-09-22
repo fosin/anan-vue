@@ -4,12 +4,12 @@
       <el-input @keyup.enter.native="handleFilter" style="width: 300px;" class="filter-item" placeholder="支持用户工号、名称、手机号、邮箱查找" v-model="pageModule.searchText">
       </el-input>
       <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>
-      <el-button v-permission="'system_user_add'" class="filter-item" style="margin-left: 10px;" @click="handleAdd" type="primary" icon="el-icon-circle-plus">{{$t('table.add')}}</el-button>
-      <el-button v-permission="'system_user_edit'" class="filter-item" style="margin-left: 10px;" type="success" icon="el-icon-edit" @click="handleEdit">{{$t('table.edit')}}
+      <el-button v-permission="'12'" class="filter-item" style="margin-left: 10px;" @click="handleAdd" type="primary" icon="el-icon-circle-plus">{{$t('table.add')}}</el-button>
+      <el-button v-permission="'14'" class="filter-item" style="margin-left: 10px;" type="success" icon="el-icon-edit" @click="handleEdit">{{$t('table.edit')}}
       </el-button>
-      <el-button v-permission="'system_user_delete'" class="filter-item" style="margin-left: 10px;" type="danger" icon="el-icon-delete" @click="handleDelete">{{$t('table.delete')}}
+      <el-button v-permission="'15'" class="filter-item" style="margin-left: 10px;" type="danger" icon="el-icon-delete" @click="handleDelete">{{$t('table.delete')}}
       </el-button>
-      <el-button v-permission="'system_user_resetPass'" class="filter-item" style="margin-left: 10px;" icon="el-icon-bell" type="info" @click="handleResetPass">{{$t('table.resetPass')}}
+      <el-button v-permission="'27'" class="filter-item" style="margin-left: 10px;" icon="el-icon-bell" type="info" @click="handleResetPass">{{$t('table.resetPass')}}
       </el-button>
     </div>
 
@@ -57,8 +57,8 @@
 
       <el-table-column align="center" label="权限操作" width="200">
         <template slot-scope="scope">
-          <el-button v-permission="'system_user_role'" size="mini" type="primary" @click="handleUserRole(scope.row)">{{$t('table.role')}}</el-button>
-          <el-button v-permission="'system_user_permission'" size="mini" type="warning" @click="handleUserPermission(scope.row)">{{$t('table.permission')}}</el-button>
+          <el-button v-permission="'42'" size="mini" type="primary" @click="handleUserRole(scope.row)">{{$t('table.role')}}</el-button>
+          <el-button v-permission="'48'" size="mini" type="warning" @click="handleUserPermission(scope.row)">{{$t('table.permission')}}</el-button>
         </template>
       </el-table-column>
 

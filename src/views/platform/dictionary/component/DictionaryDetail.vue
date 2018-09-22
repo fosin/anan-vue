@@ -7,13 +7,13 @@
       <el-button class="filter-item" type="primary" size="small" v-waves icon="el-icon-search" @click="handleFilter">
         {{$t('table.search')}}
       </el-button>
-      <el-button v-permission="'config_dictionaryDetail_add'" size="small" class="filter-item" style="margin-left: 5px;"
+      <el-button v-permission="'62'" size="small" class="filter-item" style="margin-left: 5px;"
                  @click="handleAdd" type="primary" icon="el-icon-circle-plus">{{$t('table.add')}}
       </el-button>
-      <el-button type="success" v-permission="'config_dictionaryDetail_edit'" size="small" class="filter-item" style="margin-left: 5px;"
+      <el-button type="success" v-permission="'63'" size="small" class="filter-item" style="margin-left: 5px;"
                  icon="el-icon-edit" @click="handleEdit()">{{$t('table.edit')}}
       </el-button>
-      <el-button type="danger" v-permission="'config_dictionaryDetail_delete'" size="small" class="filter-item" style="margin-left: 5px;"
+      <el-button type="danger" v-permission="'64'" size="small" class="filter-item" style="margin-left: 5px;"
                  icon="el-icon-delete" @click="handleDelete()">{{$t('table.delete')}}
       </el-button>
     </div>

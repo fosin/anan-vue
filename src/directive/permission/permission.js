@@ -10,7 +10,7 @@ export default {
         el.parentNode && el.parentNode.removeChild(el)
       }
     } else {
-      throw new Error(`need permission! Like v-permission="['system-permission-add']"`)
+      throw new Error(`need permission! Like v-permission="['1']"`)
     }
   }
 }

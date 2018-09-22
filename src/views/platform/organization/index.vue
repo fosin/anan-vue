@@ -3,9 +3,9 @@
   <div class="app-container calendar-list-container">
     <div class="filter-container">
       <el-button-group>
-        <el-button type="primary" class="filter-item" icon="el-icon-circle-plus" v-permission="'system_organiz_add'" @click="handlerAdd">{{$t('table.add')}}</el-button>
-        <el-button type="success" class="filter-item" icon="el-icon-edit" style="margin-left: 10px;" v-permission="'system_organiz_edit'" @click="handlerUpdate">{{$t('table.edit')}}</el-button>
-        <el-button type="danger" class="filter-item" icon="el-icon-delete" style="margin-left: 10px;" v-permission="'system_organiz_delete'" @click="handleDelete">{{$t('table.delete')}}</el-button>
+        <el-button type="primary" class="filter-item" icon="el-icon-circle-plus" v-permission="'4'" @click="handlerAdd">{{$t('table.add')}}</el-button>
+        <el-button type="success" class="filter-item" icon="el-icon-edit" style="margin-left: 10px;" v-permission="'5'" @click="handlerUpdate">{{$t('table.edit')}}</el-button>
+        <el-button type="danger" class="filter-item" icon="el-icon-delete" style="margin-left: 10px;" v-permission="'6'" @click="handleDelete">{{$t('table.delete')}}</el-button>
       </el-button-group>
     </div>
     <el-row>
