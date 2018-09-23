@@ -15,8 +15,8 @@
               @sort-change="sortChange" @row-click="rowClick">
       <el-table-column align="center" label="客户端标识" sortable prop="clientId"></el-table-column>
 
-      <el-table-column align="center" label="客户端密钥" sortable prop="clientSecret"></el-table-column>
-
+    <!--  <el-table-column align="center" label="客户端密钥" sortable prop="clientSecret"></el-table-column>
+-->
       <el-table-column align="center" label="作用域" sortable prop="scope"></el-table-column>
 
       <el-table-column align="center" label="授权类型" sortable prop="authorizedGrantTypes" width="250px">
@@ -35,6 +35,11 @@
      <el-table-column align="center" class-name="status-col" label="权限" sortable prop="additionalInformation">
       </el-table-column>-->
       <el-table-column align="center"  label="自动授权" sortable prop="autoapprove">
+      </el-table-column>
+      <el-table-column align="center" label="操作" width="100">
+        <template slot-scope="scope">
+          <el-button v-permission="'42'" size="mini" type="primary" @click="handleClientPermission(scope.row)">{{$t('table.permission')}}</el-button>
+        </template>
       </el-table-column>
     </el-table>
 
@@ -74,9 +79,9 @@
         <el-form-item label="资源信息" prop="resourceIds">
           <el-input v-model="form.resourceIds" placeholder="资源信息,用逗号分隔多条数据"></el-input>
         </el-form-item>
-        <el-form-item label="权限信息" prop="authorities">
+        <!--<el-form-item label="权限信息" prop="authorities">
             <el-input v-model="form.authorities" placeholder="权限信息,用逗号分隔多条数据"></el-input>
-        </el-form-item>
+        </el-form-item>-->
         <el-row>
           <el-col :span="12">
             <el-form-item label="令牌期效" prop="accessTokenValidity">
@@ -110,11 +115,35 @@
         <el-button v-else type="primary" @click="update('form')" icon="el-icon-circle-check" autofocus>{{$t('table.update')}}</el-button>
       </div>
     </el-dialog>
+    <el-dialog :title="textMap[dialogStatus] + '->' + form.clientId" :visible.sync="dialogPermissionVisible" width="550px">
+      <el-input
+        placeholder="输入关键字进行过滤"
+        v-model="filterPermissionText">
+      </el-input>
+      <el-tree class="filter-tree"
+               :default-checked-keys="checkedKeys"
+               node-key="id"
+               highlight-current
+               show-checkbox
+               lazy
+               check-strictly
+               :load="loadChildPermissions"
+               :props="defaultProps"
+               ref="permissionTree"
+               :filter-node-method="filterNode"
+               :default-expanded-keys="[1]">
+      </el-tree>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="cancel('permissionTree')" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
+        <el-button type="primary" @click="updatePermession(form.id, form.value)" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
 import { getClient, postClient, putClient, deleteClient, listClientPage } from '@/api/client'
 import waves from '@/directive/waves/index.js' // 水波纹指令
+import { listChildPermissions } from '@/api/permission'
 export default {
   name: 'authentication_client',
   directives: {
@@ -125,6 +154,16 @@ export default {
       list: null,
       total: null,
       listLoading: true,
+      dialogPermissionVisible: false,
+      filterPermissionText: '',
+      checkedKeys: [],
+      expandKeys: [],
+      defaultProps: {
+        children: 'children',
+        label: 'name',
+        isLeaf: 'leaf',
+        disabled: 'disabled'
+      },
       pageModule: {
         pageNumber: 1,
         pageSize: 10,
@@ -188,7 +227,8 @@ export default {
       dialogStatus: '',
       textMap: {
         update: '编辑',
-        create: '创建'
+        create: '创建',
+        permission: '分配权限'
       }
     }
   },
@@ -201,6 +241,98 @@ export default {
     })
   },
   methods: {
+    updatePermession(id, value) {
+      // 得到当前已展开项目中被选中的权限
+      const checkedPermissions = this.$refs.permissionTree.getCheckedKeys().sort() // 当前选中的权限集合
+      const halfCheckedPermissions = this.$refs.permissionTree.getHalfCheckedKeys().sort() // 当前半选中的权限集合
+      const rolePermissions = this.checkedKeys.sort() // 当前角色已拥有的所有权限集合
+      const expandPermissions = this.expandKeys.sort() // 树中已展开的权限集合
+
+      // 求并集，到的所有实际被选中的权限 checkedPermissions + halfCheckedPermissions
+      const allCheckedPermissions = checkedPermissions.concat(halfCheckedPermissions.filter(function(v) { return checkedPermissions.indexOf(v) === -1 })).sort()
+
+      // 求差集
+      const differencePermissions = rolePermissions.filter(function(v) { return expandPermissions.indexOf(v) === -1 })
+
+      // 求并集
+      const unionPermissions = differencePermissions.concat(allCheckedPermissions.filter(function(v) { return differencePermissions.indexOf(v) === -1 })).sort()
+
+      // 如果没有修改过数据则直接返回
+      if (unionPermissions.toString() === rolePermissions.toString()) {
+        this.dialogPermissionVisible = false
+        return
+      }
+
+      // 组装成后台需要的数据格式
+      // const newRolePermissions = []
+      // for (let i = 0; i < unionPermissions.length; i++) {
+      //   const permission = {
+      //     id: undefined,
+      //     roleId: id,
+      //     permissionId: unionPermissions[i]
+      //   }
+      //   newRolePermissions.push(permission.id)
+      // }
+      debugger
+      this.form.authorities = unionPermissions.join(',')
+      putClient(this.form).then(() => {
+        this.dialogPermissionVisible = false
+        this.$notify({
+          title: '更新权限成功',
+          message: '更新权限成功!',
+          type: 'success',
+          duration: 2000
+        })
+      }).catch(reason => {
+        this.$notify({
+          title: '更新客户端权限信息失败',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
+      })
+    },
+    filterNode(value, data) {
+      if (!value) return true
+      return data.name.indexOf(value) !== -1
+    },
+    loadChildPermissions(node, resolve) {
+      let pId = 0
+      if (node.level !== 0) {
+        pId = node.data.id
+      }
+      listChildPermissions(pId).then(response => {
+        const childPermissions = response.data || []
+        // 记录所有被展开过的节点ID，用于保存时比较数据
+        for (let i = 0; i < childPermissions.length; i++) {
+          const id = childPermissions[i].id
+          this.expandKeys.push(id)
+          // childPermissions[i].disabled = pId === 0
+        }
+        return resolve(childPermissions)
+      }).catch(reason => {
+        this.$notify({
+          title: '加载子节点失败',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
+      })
+    },
+    handleClientPermission(row) {
+      const checkKeys = row && row.authorities ? row.authorities.split(',') : []
+      for (let i = 0; i < checkKeys.length; i++) {
+        this.checkedKeys[i] = parseInt(checkKeys[i])
+      }
+      this.dialogStatus = 'permission'
+      this.dialogPermissionVisible = true
+      this.form = row
+      if (this.$refs) {
+        if (this.$refs.permissionTree) {
+          this.$refs.permissionTree.setCheckedKeys(this.checkedKeys)
+        }
+      }
+    },
     getList() {
       this.listLoading = true
       listClientPage(this.pageModule).then(response => {
@@ -318,6 +450,7 @@ export default {
       })
     },
     cancel(formName) {
+      this.dialogPermissionVisible = false
       this.dialogFormVisible = false
       if (formName === 'form') {
         this.$refs[formName].resetFields()
