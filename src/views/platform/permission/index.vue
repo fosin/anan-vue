@@ -183,7 +183,7 @@
         }
       }
     },
-    created() {
+    mounted() {
       this.asyncLoadDictionaryByCode(13, (data) => {
         this.typeOptions = data
       })
@@ -215,7 +215,7 @@
           const permissions = response.data
           if (permissions && permissions.length > 0) {
             for (let i = 0; i < permissions.length; i++) {
-              permissions[i].vname = permissions[i].name + ' - ' + this.typeOptions[permissions[i].type].value + '-' + permissions[i].id
+              permissions[i].vname = this.getVname(permissions[i])
             }
           }
           return resolve(response.data || [])
@@ -227,6 +227,12 @@
             duration: 5000
           })
         })
+      },
+      getVname(permission) {
+        if (!this.typeOptions || this.typeOptions.length < 1) {
+          return permission.name + '-' + permission.id
+        }
+        return permission.name + '    -    ' + this.typeOptions[permission.type].value + '-' + permission.id
       },
       filterNode(value, data) {
         if (!value) return true
@@ -342,7 +348,7 @@
         putPermission(this.form).then(response => {
           const cNode = this.$refs.permissionTree.getNode(this.form.id)
           if (cNode) {
-            response.data.vname = response.data.name + ' - ' + this.typeOptions[response.data.type].value + '-' + response.data.id
+            response.data.vname = this.getVname(response.data)
             cNode.data = response.data
           }
           this.$notify({
@@ -363,7 +369,7 @@
       create() {
         postPermission(this.form).then(response => {
           const pNode = this.$refs.permissionTree.getNode(this.form.pId)
-          response.data.vname = response.data.name + ' - ' + this.typeOptions[response.data.type].value + '-' + response.data.id
+          response.data.vname = this.getVname(response.data)
           this.$refs.permissionTree.append(response.data, pNode)
           // TODO 以下代码启用后可以解决tree控件bug(会导致原有子节点丢失问题)
           pNode.data.children = null

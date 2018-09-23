@@ -33,7 +33,7 @@ export default (Vue) => {
     })
   }
 
-  Vue.prototype.syncLoadDictionaryByCode = function(code) {
+  Vue.prototype.syncLoadDictionaryByCode = function(code, callback) {
     if (!code) {
       Message({
         title: '获取字典明细失败',
@@ -43,8 +43,17 @@ export default (Vue) => {
       })
       return
     }
+    if (typeof callback !== 'function') {
+      Message({
+        title: '获取字典明细失败',
+        message: '没有或传入的回调函数callback不正确!',
+        type: 'error',
+        duration: 5000
+      })
+      return
+    }
     fetchDictionaryDetailsByCode(code, 'get').then(response => {
-      return response.data
+      callback(response.data)
     }).catch(reason => {
       Message({
         title: '获取字典明细失败',
