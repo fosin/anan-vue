@@ -1,6 +1,6 @@
 import store from '../store'
 import router from '../router'
-import { Message } from 'element-ui'
+import { Notification } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'// progress bar style
 
@@ -25,19 +25,19 @@ router.beforeEach((to, from, next) => {
             // debugger
             next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
           }).catch((reason) => {
-            Message.error(reason.message)
+            Notification.error(reason.message)
             store.dispatch('FedLogOut').then(() => {
               next({ path: '/' })
             }).catch((reason) => {
-              Message.error(reason.message)
+              Notification.error(reason.message)
             })
           })
         }).catch((reason) => {
-          Message.error(reason.message)
+          Notification.error(reason.message)
           store.dispatch('FedLogOut').then(() => {
             next({ path: '/' })
           }).catch((reason) => {
-            Message.error(reason.message)
+            Notification.error(reason.message)
           })
         })
       } else {
