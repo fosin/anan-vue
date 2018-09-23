@@ -64,24 +64,21 @@
             <el-form-item label="资源路径" prop="url">
               <el-input v-model="form.url" :disabled="formUpdate" placeholder="请输入资源路径"></el-input>
             </el-form-item>
-            <el-row>
-              <el-col :span="16">
-                <el-form-item label="权限路径" prop="path" placeholder="设置权限对应的HTTP请求路径ANT风格表达式">
-                  <el-input v-model="form.path" :disabled="formUpdate"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="请求方法" prop="method">
-                  <el-select class="filter-item" v-model="form.method" :disabled="formUpdate" placeholder="默认为所有方法" value="">
-                    <el-option v-for="item in methodOptions" :key="item.value" :label="item.value" :value="item.value"> </el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-            </el-row>
+
+            <el-form-item label="权限路径" prop="path" >
+              <el-input v-model="form.path" :disabled="formUpdate" placeholder="设置权限对应的HTTP请求路径，ANT风格表达式，如果要设置权限该选项必填"></el-input>
+            </el-form-item>
+            <el-form-item label="请求方法" prop="methodArray">
+              <el-select v-model="form.methodArray" :disabled="formUpdate" placeholder="支持多选，不选则为适配所有方法" multiple filterable>
+                <el-option v-for="item in methodOptions" :key="item.scode" :label="item.value" :value="item.scode" >
+                  <!--<span style="float: left">{{item.value }}</span>-->
+                </el-option>
+              </el-select>
+            </el-form-item>
             <el-row>
               <el-col :span="9">
                 <el-form-item label="类型" prop="type">
-                  <el-select class="filter-item" v-model="form.type"  :disabled="formUpdate"  placeholder="请选择类型" value="">
+                  <el-select class="filter-item" v-model="form.type"  :disabled="formUpdate"  placeholder="请选择类型" >
                     <el-option v-for="item in typeOptions" :key="item.name" :label="item.value" :value="item.name" :disabled="item.status === 1"> </el-option>
                   </el-select>
                 </el-form-item>
@@ -249,6 +246,10 @@
         getPermission(data.id).then(response => {
           this.form = response.data
           this.form.status = this.form.status + ''
+          this.form.methodArray = []
+          if (this.form.method) {
+            this.form.methodArray = this.form.method.split(',')
+          }
         }).catch(reason => {
           this.$notify({
             title: '获取权限失败',
@@ -345,6 +346,7 @@
         })
       },
       update() {
+        this.form.method = this.form.methodArray.join(',')
         putPermission(this.form).then(response => {
           const cNode = this.$refs.permissionTree.getNode(this.form.id)
           if (cNode) {
@@ -367,6 +369,7 @@
         })
       },
       create() {
+        this.form.method = this.form.methodArray.join(',')
         postPermission(this.form).then(response => {
           const pNode = this.$refs.permissionTree.getNode(this.form.pId)
           response.data.vname = this.getVname(response.data)
@@ -425,6 +428,7 @@
           icon: '',
           level: this.parent.level ? this.parent.level + 1 : 0,
           method: undefined,
+          methodArray: [],
           appName: this.parent.appName
         }
       }
@@ -432,3 +436,8 @@
   }
 </script>
 
+<style scoped>
+  .el-select {
+  width: 100%;
+}
+</style>
