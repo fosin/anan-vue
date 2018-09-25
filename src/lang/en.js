@@ -29,11 +29,12 @@ export default {
     logOut: 'Logout',
     dashboard: 'Dashboard',
     github: 'Github',
-    screenfull: 'screenfull',
     userInfo: 'Modify Info',
     userSetting: 'Setting',
     systemSetting: 'System Setting',
-    theme: 'theme'
+    screenfull: 'Screenfull',
+    theme: 'Theme',
+    size: 'Global Size'
   },
   login: {
     title: 'Cloud Dev Platform',
@@ -129,11 +130,15 @@ export default {
     tips: 'Tips: It is different from the theme-pick on the navbar is two different skinning methods, each with different application scenarios. Refer to the documentation for details.'
   },
   tagsView: {
+    refresh: 'Refresh',
     close: 'Close',
     closeOthers: 'Close Others',
     closeAll: 'Close All'
   },
   lang: {
-    switchSuccess: 'switch language success'
+    switchSuccess: 'Switch Language Success'
+  },
+  size: {
+    switchSuccess: 'Switch Size Success'
   }
 }

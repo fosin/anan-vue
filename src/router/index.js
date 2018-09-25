@@ -29,6 +29,17 @@ import Page404 from '@/views/platform/errorPage/404'
 }
 **/
 export const constantRouterMap = [
+  {
+    path: '/redirect',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: '/redirect/:path*',
+        component: () => import('@/views/platform/redirect/index')
+      }
+    ]
+  },
   { path: '/login', component: () => import('@/views/platform/login/index'), hidden: true },
   { path: '/authredirect', component: () => import('@/views/platform/login/authredirect'), hidden: true },
   { path: '/401', component: () => import('@/views/platform/errorPage/401'), hidden: true },

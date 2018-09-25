@@ -75,7 +75,16 @@ export default {
       checked: false,
       loading: false,
       passwordType: 'password',
-      userRoles: []
+      // userRoles: [],
+      redirect: undefined
+    }
+  },
+  watch: {
+    $route: {
+      handler: function(route) {
+        this.redirect = route.query && route.query.redirect
+      },
+      immediate: true
     }
   },
   methods: {
@@ -95,7 +104,7 @@ export default {
           this.loading = true
           this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
             this.loading = false
-            this.$router.push({ path: '/' })
+            this.$router.push({ path: this.redirect || '/' })
           }).catch((reason) => {
             this.loading = false
             this.$notify({
