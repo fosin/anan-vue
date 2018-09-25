@@ -320,6 +320,7 @@ export default {
       })
     },
     handleClientPermission(row) {
+      this.checkedKeys = []
       const checkKeys = row && row.authorities ? row.authorities.split(',') : []
       for (let i = 0; i < checkKeys.length; i++) {
         this.checkedKeys[i] = parseInt(checkKeys[i])
