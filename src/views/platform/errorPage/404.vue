@@ -47,6 +47,7 @@ export default {
 .wscn-http404 {
   position: relative;
   width: 1200px;
+  max-width: 100%;
   margin: 20px auto 60px;
   padding: 0 100px;
   overflow: hidden;

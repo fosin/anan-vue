@@ -34,7 +34,8 @@ export default {
     systemSetting: 'System Setting',
     screenfull: 'Screenfull',
     theme: 'Theme',
-    size: 'Global Size'
+    size: 'Global Size',
+    langSelect: 'Lang Select'
   },
   login: {
     title: 'Cloud Dev Platform',

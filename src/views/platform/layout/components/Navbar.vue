@@ -1,25 +1,28 @@
 <template>
-  <el-menu class="navbar" mode="horizontal">
+  <div class="navbar">
     <hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened"></hamburger>
 
     <breadcrumb class="breadcrumb-container"></breadcrumb>
 
     <div class="right-menu">
-      <error-log class="errLog-container right-menu-item"></error-log>
+      <template v-if="device!=='mobile'">
+        <error-log class="errLog-container right-menu-item"></error-log>
 
-      <el-tooltip effect="dark" :content="$t('navbar.screenfull')" placement="bottom">
-        <screenfull class="screenfull right-menu-item"></screenfull>
-      </el-tooltip>
+        <el-tooltip effect="dark" :content="$t('navbar.screenfull')" placement="bottom">
+          <screenfull class="screenfull right-menu-item"></screenfull>
+        </el-tooltip>
 
-      <el-tooltip :content="$t('navbar.size')" effect="dark" placement="bottom">
-        <size-select class="international right-menu-item"/>
-      </el-tooltip>
+        <el-tooltip :content="$t('navbar.size')" effect="dark" placement="bottom">
+          <size-select class="international right-menu-item"/>
+        </el-tooltip>
 
-      <lang-select class="international right-menu-item"></lang-select>
-
-      <el-tooltip effect="dark" :content="$t('navbar.theme')" placement="bottom">
-        <theme-picker class="theme-switch right-menu-item"></theme-picker>
-      </el-tooltip>
+        <el-tooltip :content="$t('navbar.langSelect')" effect="dark" placement="bottom">
+          <lang-select class="international right-menu-item"></lang-select>
+        </el-tooltip>
+        <el-tooltip effect="dark" :content="$t('navbar.theme')" placement="bottom">
+          <theme-picker class="theme-switch right-menu-item"></theme-picker>
+        </el-tooltip>
+      </template>
       <el-dropdown class="avatar-container right-menu-item">
         <div class="avatar-wrapper">
           <img class="user-avatar" :src="userInfo.avatar+'?imageView2/1/w/30/h/30'">
@@ -43,7 +46,7 @@
         </el-dropdown-menu>
       </el-dropdown>
     </div>
-  </el-menu>
+  </div>
 </template>
 
 <script>
@@ -69,7 +72,8 @@ export default {
   computed: {
     ...mapGetters([
       'sidebar',
-      'userInfo'
+      'userInfo',
+      'device'
     ])
   },
   methods: {

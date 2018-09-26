@@ -34,7 +34,8 @@ export default {
     userSetting: '设置',
     systemSetting: '系统设置',
     theme: '换肤',
-    size: '布局大小'
+    size: '布局大小',
+    langSelect: '选择语言'
   },
   login: {
     title: '微服务开发云平台',

@@ -138,6 +138,7 @@ export default {
     bottom: 0;
     width: 480px;
     height: 350px;
+    max-width: 100%;
     padding: 35px 35px 15px 35px;
     margin: auto;
     border-radius: 15px;
