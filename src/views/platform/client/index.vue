@@ -262,18 +262,6 @@ export default {
         this.dialogPermissionVisible = false
         return
       }
-
-      // 组装成后台需要的数据格式
-      // const newRolePermissions = []
-      // for (let i = 0; i < unionPermissions.length; i++) {
-      //   const permission = {
-      //     id: undefined,
-      //     roleId: id,
-      //     permissionId: unionPermissions[i]
-      //   }
-      //   newRolePermissions.push(permission.id)
-      // }
-      debugger
       this.form.authorities = unionPermissions.join(',')
       putClient(this.form).then(() => {
         this.dialogPermissionVisible = false
