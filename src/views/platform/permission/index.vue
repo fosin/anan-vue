@@ -113,7 +113,7 @@
 </template>
 
 <script>
-  import { listChildPermissions, getPermission, postPermission, deletePermission, putPermission } from '@/api/permission'
+  import { listChildPermissions, getPermission, postPermission, deletePermission, putPermission } from './permission'
   import { loadServiceNames } from '@/api/application'
   export default {
     name: 'system_permission',

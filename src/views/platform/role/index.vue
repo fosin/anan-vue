@@ -130,10 +130,10 @@ import {
   listRolePermissions,
   listRoleUsers,
   putRoleUsers
-} from '@/api/role'
-import { listUser } from '@/api/user'
+} from './role'
+import { listUser } from '../user/user'
 import { formatDate } from '@/utils/date'
-import { listChildPermissions } from '@/api/permission'
+import { listChildPermissions } from '../permission/permission'
 import waves from '@/directive/waves/index.js' // 水波纹指令
 export default {
   name: 'system_role',

@@ -240,11 +240,11 @@
 import { listUserPage, getUser, postUser, putUser, deleteUser, resetPassword,
   putUserPermissions,
   listUserPermissions,
-  listUserRoles, putUserRoles } from '@/api/user'
-import { listChildPermissions } from '@/api/permission'
+  listUserRoles, putUserRoles } from './user'
+import { listChildPermissions } from '../permission/permission'
 import { formatDate } from '@/utils/date'
-import { listRole } from '@/api/role'
-import { listOrganizAllChild, treeOrganiz, listOrganiz } from '@/api/organization'
+import { listRole } from '../role/role'
+import { listOrganizAllChild, treeOrganiz, listOrganiz } from '../organization/organization'
 import waves from '@/directive/waves/index.js' // 水波纹指令
 import { mapGetters } from 'vuex'
 import ElRadioGroup from 'element-ui/packages/radio/src/radio-group'

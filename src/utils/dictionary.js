@@ -1,4 +1,4 @@
-import { fetchDictionaryDetailsByCode } from '@/api/dictionary'
+import { fetchDictionaryDetailsByCode } from '@/views/platform/dictionary/dictionary'
 import { Notification } from 'element-ui'
 export default (Vue) => {
   Vue.prototype.asyncLoadDictionaryByCode = function(code, callback) {

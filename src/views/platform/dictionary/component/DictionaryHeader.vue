@@ -74,7 +74,7 @@
     putDictionary,
     deleteDictionary,
     listDictionaryPage
-  } from '@/api/dictionary'
+  } from '../dictionary'
   import waves from '@/directive/waves/index.js' // 水波纹指令
   export default {
     name: 'dictionaryHeader',

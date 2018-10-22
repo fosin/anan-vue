@@ -1,4 +1,4 @@
-import { fetchOrganizParameterValue, fetchUserParameterValue } from '@/api/parameter'
+import { fetchOrganizParameterValue, fetchUserParameterValue } from '@/views/platform/parameter/parameter'
 import { Notification } from 'element-ui'
 
 export default (Vue) => {

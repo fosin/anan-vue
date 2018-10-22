@@ -76,7 +76,7 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import { changePassword } from '@/api/user'
+  import { changePassword } from './user'
   import { formatDate } from '@/utils/date'
 
   export default {

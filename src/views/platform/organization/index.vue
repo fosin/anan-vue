@@ -73,7 +73,7 @@
 </template>
 
 <script>
-  import { listOrganizChild, getOrganiz, postOrganiz, deleteOrganiz, putOrganiz } from '@/api/organization'
+  import { listOrganizChild, getOrganiz, postOrganiz, deleteOrganiz, putOrganiz } from './organization'
   import { mapGetters } from 'vuex'
   export default {
     name: 'system_organiz',

@@ -1,9 +1,9 @@
 <template>
   <div class="app-container calendar-list-container">
     <div class="filter-container">
-      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="支持标识、密钥查找" v-model="pageModule.searchText">
+      <el-input @keyup.enter.native="handleSearch" style="width: 200px;" class="filter-item" placeholder="支持标识、密钥查找" v-model="pageModule.searchText">
       </el-input>
-      <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>
+      <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleSearch">{{$t('table.search')}}</el-button>
       <el-button v-permission="'50'" class="filter-item" style="margin-left: 10px;" @click="handleAdd" type="primary" icon="el-icon-circle-plus">{{$t('table.add')}}</el-button>
       <el-button type="success" v-permission="'51'" class="filter-item" style="margin-left: 10px;" icon="el-icon-edit" @click="handleEdit()">{{$t('table.edit')}}
       </el-button>
@@ -141,9 +141,9 @@
   </div>
 </template>
 <script>
-import { getClient, postClient, putClient, deleteClient, listClientPage } from '@/api/client'
+import { getClient, postClient, putClient, deleteClient, listClientPage } from './client.js'
 import waves from '@/directive/waves/index.js' // 水波纹指令
-import { listChildPermissions } from '@/api/permission'
+import { listChildPermissions } from '../permission/permission'
 export default {
   name: 'authentication_client',
   directives: {
@@ -337,7 +337,7 @@ export default {
         })
       })
     },
-    handleFilter() {
+    handleSearch() {
       this.pageModule.pageNumber = 1
       this.getList()
     },

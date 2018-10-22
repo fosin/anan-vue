@@ -22,21 +22,7 @@ module.exports = {
         pathRewrite: {
           '^/auth': '/auth'
         }
-      },
-      '/admin': {
-        target: 'http://localhost:9000',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/admin': '/admin'
-        }
-      },
-      '/platform': {
-        target: 'http://localhost:9000',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/platform': '/platform'
-        }
-      }*/
+     */
     },
 
     // Various Dev Server settings
@@ -90,7 +76,7 @@ module.exports = {
      * then assetsPublicPath should be set to "/bar/".
      * In most cases please use '/' !!!
      */
-    assetsPublicPath: '/cdp-ui-vue/', // If you are deployed on the root path, please use '/'
+    assetsPublicPath: '/', // If you are deployed on the root path, please use '/'
 
     /**
      * Source Maps
