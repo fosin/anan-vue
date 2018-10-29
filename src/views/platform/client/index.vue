@@ -171,7 +171,7 @@ export default {
         sortName: '',
         sortOrder: ''
       },
-      pageSizes: [],
+      pageSizes: [5, 10, 25, 50, 100],
       form: {},
       rules: {
         clientId: [
@@ -236,8 +236,14 @@ export default {
     this.asyncLoadDictionaryByCode(7, (data) => {
       this.grantTypesOptions = data
     })
-    this.asyncOrganizParameterValue('DefaultPageSizes', '10,25,50,100', '表格默认每页记录数可选择项', (data) => {
-      this.pageSizes = data.split(',')
+    this.asyncOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数', (data) => {
+      this.pageModule.pageSize = parseInt(data)
+    })
+    this.asyncOrganizParameterValue('DefaultPageSizes', '5,10,25,50,100', '表格默认每页记录数可选择项', (data) => {
+      const temp = data.split(',')
+      for (let i = 0; i < temp.length; i++) {
+        this.pageSizes[i] = parseInt(temp[i])
+      }
     })
   },
   methods: {

@@ -33,7 +33,7 @@
               <el-button @click="onCancel" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
               <el-button type="primary" @click="create" icon="el-icon-circle-check">{{$t('table.create')}}</el-button>
             </el-form-item>
-           <el-form-item label="父机构信息" prop="pId">
+           <el-form-item label="父机构信息" prop="pid">
               <el-input v-model="parent.code + ' - ' + parent.name" :disabled="true"></el-input>
             </el-form-item>
             <!-- <el-form-item label="机构编码" prop="id">
@@ -144,12 +144,12 @@
     },
     methods: {
       loadChild(node, resolve) {
-        let pId = this.userInfo.organizId
+        let pid = this.userInfo.organizId
         if (node.level !== 0) {
-          pId = node.data.id
+          pid = node.data.id
         }
-        listOrganizChild(pId).then(response => {
-          if (pId === 0) {
+        listOrganizChild(pid).then(response => {
+          if (pid === 0) {
             this.defaultExpandedKeys[0] = response.data[0].id
           }
           return resolve(response.data || [])
@@ -185,7 +185,7 @@
             duration: 5000
           })
         })
-        const pNode = this.$refs.organizTree.getNode(data.pId)
+        const pNode = this.$refs.organizTree.getNode(data.pid)
         if (pNode) {
           this.parent = pNode.data
         } else {
@@ -195,7 +195,7 @@
         }
       },
       handlerUpdate() {
-        const pNode = this.$refs.organizTree.getNode(this.form.pId)
+        const pNode = this.$refs.organizTree.getNode(this.form.pid)
         if (!pNode) {
           this.$message({
             message: '根节点不能修改'
@@ -290,7 +290,7 @@
         this.$refs.form.validate(valid => {
           if (valid) {
             postOrganiz(this.form).then(response => {
-              const pNode = this.$refs.organizTree.getNode(this.form.pId)
+              const pNode = this.$refs.organizTree.getNode(this.form.pid)
               this.$refs.organizTree.append(response.data, pNode)
               // TODO 以下代码启用后可以解决tree控件bug(会导致原有子节点丢失问题)
               pNode.data.children = null
@@ -328,7 +328,7 @@
           fullname: this.parent.fullname,
           id: undefined,
           splitId: undefined,
-          pId: this.parent.id,
+          pid: this.parent.id,
           status: '0',
           level: this.parent.level + 1
         }

@@ -288,7 +288,7 @@ export default {
         sortName: '',
         sortOrder: ''
       },
-      pageSizes: [],
+      pageSizes: [5, 10, 25, 50, 100],
       defaultProps: {
         children: 'children',
         label: 'name',
@@ -397,7 +397,7 @@ export default {
         ]
       },
       statusOptions: [0, 1, 9],
-      sexOptions: [1, 2, 9],
+      sexOptions: [],
       rolesOptions: [],
       oraganizOptions: [],
       organizList: [],
@@ -441,10 +441,13 @@ export default {
       this.sexOptions = data
     })
     this.asyncOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数', (data) => {
-      this.pageModule.pageSize = data
+      this.pageModule.pageSize = parseInt(data)
     })
-    this.asyncOrganizParameterValue('DefaultPageSizes', '10,25,50,100', '表格默认每页记录数可选择项', (data) => {
-      this.pageSizes = data.split(',')
+    this.asyncOrganizParameterValue('DefaultPageSizes', '5,10,25,50,100', '表格默认每页记录数可选择项', (data) => {
+      const temp = data.split(',')
+      for (let i = 0; i < temp.length; i++) {
+        this.pageSizes[i] = parseInt(temp[i])
+      }
     })
     this.loadRoles()
     this.resetTemp()
@@ -454,10 +457,10 @@ export default {
       return item.name.indexOf(query) > -1 || item.value.indexOf(query) > -1
     },
     getSexName(type) {
-      const typeOption = this.sexOptions.filter(value => {
+      const sexOption = this.sexOptions.filter(value => {
         return value.name === type
       })
-      return typeOption.length > 0 ? typeOption[0].value : type
+      return sexOption.length > 0 ? sexOption[0].value : type
     },
     tableRowClassName({ row, rowIndex }) {
       switch (row.status) {
@@ -1023,7 +1026,7 @@ export default {
         userRoles: [],
         status: 0,
         sex: 1,
-        expireTime: new Date('2050-12-31 23:59:59')
+        expireTime: '2050-12-31 23:59:59'
       }
     },
     sortChange(column) {

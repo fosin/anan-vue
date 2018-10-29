@@ -97,5 +97,15 @@ export default (Vue) => {
       })
     })
   }
+
+  Vue.prototype.getDicNameValue = function(options, name) {
+    if (options && options instanceof Array) {
+      const option = options.filter(value => {
+        return value.name === name
+      })
+      return option.length > 0 ? option[0].value : name
+    }
+    return name
+  }
 }
 

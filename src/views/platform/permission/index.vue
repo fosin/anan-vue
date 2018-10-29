@@ -270,7 +270,7 @@
         }
       },
       handlerUpdate() {
-        const pNode = this.$refs.permissionTree.getNode(this.form.pId)
+        const pNode = this.$refs.permissionTree.getNode(this.form.pid)
         if (!pNode) {
           this.$message({
             message: '根节点不能修改'
@@ -371,7 +371,7 @@
       create() {
         this.form.method = this.form.methodArray.join(',')
         postPermission(this.form).then(response => {
-          const pNode = this.$refs.permissionTree.getNode(this.form.pId)
+          const pNode = this.$refs.permissionTree.getNode(this.form.pid)
           response.data.vname = this.getVname(response.data)
           this.$refs.permissionTree.append(response.data, pNode)
           // TODO 以下代码启用后可以解决tree控件bug(会导致原有子节点丢失问题)
@@ -420,7 +420,7 @@
           code: code,
           name: undefined,
           id: undefined,
-          pId: this.currentId,
+          pid: this.currentId,
           url: '',
           sort: sort,
           type: type,

@@ -39,7 +39,7 @@
     </el-table>
     <div v-show="!listLoading" class="pagination-container">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                     :current-page.sync="pageModule.pageNumber" :page-sizes="pageSizes"
+                     :current-page.sync="pageModule.pageNumber" :page-sizes="pageSizes" small
                      :page-size="pageModule.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
@@ -107,10 +107,16 @@
         this.statusOptions = data
       })
       this.asyncOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数', (data) => {
-        this.pageModule.pageSize = data
+        this.pageModule.pageSize = parseInt(data)
       })
-      this.asyncOrganizParameterValue('DefaultPageSizes', '10,25,50,100', '表格默认每页记录数可选择项', (data) => {
-        this.pageSizes = data.split(',')
+      this.asyncOrganizParameterValue('DefaultPageSizes', '5,10,25,50,100', '表格默认每页记录数可选择项', (data) => {
+        const temp = data.split(',')
+        for (let i = 0; i < temp.length; i++) {
+          this.pageSizes[i] = parseInt(temp[i])
+        }
+      })
+      this.asyncOrganizParameterValue('DefaultDictionaryDetailNameAndSort', '1', '新增字典明细时是否按当前数据总量自动生成字典key和字典Sort，0=不自动 1=自动，默认为自动', (data) => {
+        this.DefaultDictionaryDetailNameAndSort = data
       })
     },
     data() {
@@ -119,6 +125,7 @@
         dictionaryDetailList: null,
         total: null,
         listLoading: false,
+        DefaultDictionaryDetailNameAndSort: 1,
         pageModule: {
           pageNumber: 1,
           pageSize: 10,
@@ -126,7 +133,7 @@
           sortName: '',
           sortOrder: ''
         },
-        pageSizes: [],
+        pageSizes: [5, 10, 25, 50, 100],
         form: {},
         rules: {
           sort: [
@@ -331,13 +338,14 @@
         })
       },
       resetForm() {
+        const sort = this.total + 1
         this.form = {
           id: undefined,
-          name: undefined,
+          name: this.DefaultDictionaryDetailNameAndSort === 1 ? sort : undefined,
           value: undefined,
           scode: undefined,
           scope: undefined,
-          sort: undefined,
+          sort: this.DefaultDictionaryDetailNameAndSort === 1 ? sort : undefined,
           status: '0',
           code: this.selectedDictionary.code
         }

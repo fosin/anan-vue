@@ -109,7 +109,9 @@ export default {
     user: '用户',
     refresh: '刷新',
     applys: '发布所有',
-    apply: '发布单条'
+    apply: '发布单条',
+    logout: '注销',
+    loss: '挂失'
   },
   errorLog: {
     tips: '请点击右上角bug小图标',

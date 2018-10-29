@@ -109,7 +109,9 @@ export default {
     user: 'User',
     refresh: 'Refresh',
     applys: 'Apply All',
-    apply: 'Apply Single'
+    apply: 'Apply Single',
+    logout: 'Logout',
+    loss: 'Report Loss'
   },
   errorLog: {
     tips: 'Please click the bug icon in the upper right corner',
