@@ -4,16 +4,16 @@
       <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item"
                 placeholder="支持字典明细项代码、字典明细项值查找" v-model="pageModule.searchText">
       </el-input>
-      <el-button class="filter-item" type="primary" size="small" v-waves icon="el-icon-search" @click="handleFilter">
+      <el-button round class="filter-item" type="primary" size="small" v-waves icon="el-icon-search" @click="handleFilter">
         {{$t('table.search')}}
       </el-button>
-      <el-button v-permission="'62'" size="small" class="filter-item" style="margin-left: 5px;"
+      <el-button round v-permission="'62'" size="small" class="filter-item" style="margin-left: 5px;"
                  @click="handleAdd" type="primary" icon="el-icon-circle-plus">{{$t('table.add')}}
       </el-button>
-      <el-button type="success" v-permission="'63'" size="small" class="filter-item" style="margin-left: 5px;"
+      <el-button round type="success" v-permission="'63'" size="small" class="filter-item" style="margin-left: 5px;"
                  icon="el-icon-edit" @click="handleEdit()">{{$t('table.edit')}}
       </el-button>
-      <el-button type="danger" v-permission="'64'" size="small" class="filter-item" style="margin-left: 5px;"
+      <el-button round type="danger" v-permission="'64'" size="small" class="filter-item" style="margin-left: 5px;"
                  icon="el-icon-delete" @click="handleDelete()">{{$t('table.delete')}}
       </el-button>
     </div>
@@ -76,11 +76,11 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="cancel('form')" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
-        <el-button v-if="dialogStatus==='create'" type="primary" @click="create('form')" icon="el-icon-circle-check"
+        <el-button round @click="cancel('form')" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
+        <el-button round v-if="dialogStatus==='create'" type="primary" @click="create('form')" icon="el-icon-circle-check"
                    autofocus>{{$t('table.confirm')}}
         </el-button>
-        <el-button v-else type="primary" @click="update('form')" icon="el-icon-circle-check" autofocus>
+        <el-button round v-else type="primary" @click="update('form')" icon="el-icon-circle-check" autofocus>
           {{$t('table.update')}}
         </el-button>
       </div>

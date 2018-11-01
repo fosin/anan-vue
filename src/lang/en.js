@@ -23,7 +23,11 @@ export default {
     authentication: 'Authentication',
     authentication_client: 'Client Authentication',
     authentication_service: 'Service Authentication',
-    userInfo: 'Modify Info'
+    userInfo: 'Modify Info',
+    mpi_manager_patientinfo: 'Patient Info Manager',
+    mpi_manager: 'MPI Manager',
+    mpi_manager_revert: 'Patient Info Revert',
+    mpi_manager_merge: 'Patient Info Merge'
   },
   navbar: {
     logOut: 'Logout',
@@ -100,6 +104,7 @@ export default {
     delete: 'Delete',
     cancel: 'Cancel',
     confirm: 'Confirm',
+    view: 'View',
     create: 'Create',
     update: 'Update',
     resetPass: 'ResetPass',
@@ -111,7 +116,9 @@ export default {
     applys: 'Apply All',
     apply: 'Apply Single',
     logout: 'Logout',
-    loss: 'Report Loss'
+    loss: 'Report Loss',
+    revert: 'Revert',
+    merge: 'Merge'
   },
   errorLog: {
     tips: 'Please click the bug icon in the upper right corner',

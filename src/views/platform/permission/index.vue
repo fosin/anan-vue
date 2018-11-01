@@ -3,10 +3,10 @@
   <div class="app-container calendar-list-container">
     <div class="filter-container">
       <el-button-group>
-        <el-button type="primary" class="filter-item" icon="el-icon-refresh" v-permission="'system_permission_refresh'" @click="handlerRefresh">{{$t('table.refresh')}}</el-button>
-        <el-button type="primary" class="filter-item" icon="el-icon-circle-plus" style="margin-left: 10px;" v-permission="'8'" @click="handlerAdd">{{$t('table.add')}}</el-button>
-        <el-button type="success" class="filter-item" icon="el-icon-edit" style="margin-left: 10px;" v-permission="'9'" @click="handlerUpdate">{{$t('table.edit')}}</el-button>
-        <el-button type="danger" class="filter-item" icon="el-icon-delete" style="margin-left: 10px;" v-permission="'10'" @click="handleDelete">{{$t('table.delete')}}</el-button>
+        <el-button round type="primary" class="filter-item" icon="el-icon-refresh" v-permission="'system_permission_refresh'" @click="handlerRefresh">{{$t('table.refresh')}}</el-button>
+        <el-button round type="primary" class="filter-item" icon="el-icon-circle-plus" style="margin-left: 10px;" v-permission="'8'" @click="handlerAdd">{{$t('table.add')}}</el-button>
+        <el-button round type="success" class="filter-item" icon="el-icon-edit" style="margin-left: 10px;" v-permission="'9'" @click="handlerUpdate">{{$t('table.edit')}}</el-button>
+        <el-button round type="danger" class="filter-item" icon="el-icon-delete" style="margin-left: 10px;" v-permission="'10'" @click="handleDelete">{{$t('table.delete')}}</el-button>
       </el-button-group>
     </div>
     <el-row>
@@ -27,12 +27,12 @@
         <el-card class="box-card">
           <el-form :label-position="labelPosition" label-width="80px" :model="form" ref="form" :rules="formRules">
             <el-form-item v-if="formStatus === 'update'">
-              <el-button @click="onCancel" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
-              <el-button type="primary" @click="update" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
+              <el-button round @click="onCancel" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
+              <el-button round type="primary" @click="update" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
             </el-form-item>
             <el-form-item v-if="formStatus === 'create'">
-              <el-button @click="onCancel" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
-              <el-button type="primary" @click="create" icon="el-icon-circle-check">{{$t('table.create')}}</el-button>
+              <el-button round @click="onCancel" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
+              <el-button round type="primary" @click="create" icon="el-icon-circle-check">{{$t('table.create')}}</el-button>
             </el-form-item>
 
             <el-row>
@@ -68,13 +68,21 @@
             <el-form-item label="权限路径" prop="path" >
               <el-input v-model="form.path" :disabled="formUpdate" placeholder="设置权限对应的HTTP请求路径，ANT风格表达式，如果要设置权限该选项必填"></el-input>
             </el-form-item>
-            <el-form-item label="请求方法" prop="methodArray">
-              <el-select v-model="form.methodArray" :disabled="formUpdate" placeholder="支持多选，不选则为适配所有方法" multiple filterable>
-                <el-option v-for="item in methodOptions" :key="item.scode" :label="item.value" :value="item.scode" >
-                  <!--<span style="float: left">{{item.value }}</span>-->
-                </el-option>
-              </el-select>
-            </el-form-item>
+            <row>
+              <el-col :span="19">
+                <el-form-item label="请求方法" prop="methodArray">
+                  <el-select v-model="form.methodArray" :disabled="formUpdate" placeholder="支持多选，不选则为适配所有方法" multiple filterable>
+                    <el-option v-for="item in methodOptions" :key="item.scode" :label="item.value" :value="item.scode" >
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="5">
+                <el-form-item label="层级" prop="level">
+                  <el-input v-model="form.level" :disabled="true" placeholder="请输入序号"></el-input>
+                </el-form-item>
+              </el-col>
+            </row>
             <el-row>
               <el-col :span="9">
                 <el-form-item label="类型" prop="type">
@@ -288,19 +296,19 @@
         })
       },
       handlerAdd() {
-        if (!this.form.id) {
+        if (!this.parent.id) {
           this.$message({
             message: '请选择一个父节点再新增子节点'
           })
           return
         }
-        if (this.form.type === 0) {
+        if (this.parent.type === 0) {
           this.$message({
             message: '按钮下不能再新增子节点'
           })
           return
         }
-        this.parent = this.form
+        // this.parent = this.form
         this.resetForm()
         this.formUpdate = false
         this.formStatus = 'create'
@@ -426,7 +434,8 @@
           type: type,
           status: '0',
           icon: '',
-          level: this.parent.level ? this.parent.level + 1 : 0,
+          // level: this.parent.level ? this.parent.level + 1 : 0,
+          level: this.parent.level + 1,
           method: undefined,
           methodArray: [],
           appName: this.parent.appName

@@ -34,7 +34,7 @@
         </el-select>
       </el-form-item>-->
         <el-checkbox v-model="loginForm.rememberMe">{{$t('login.rememberMe')}}</el-checkbox>
-        <el-button type="primary" style="width:30%;margin-bottom:30px;float: right" :loading="loading" @click.native.prevent="handleLogin">{{$t('login.logIn')}}</el-button>
+        <el-button round type="primary" style="width:30%;margin-bottom:30px;float: right" :loading="loading" @click.native.prevent="handleLogin">{{$t('login.logIn')}}</el-button>
     </el-form>
   </div>
 </template>

@@ -3,13 +3,13 @@
     <div class="filter-container">
       <el-input @keyup.enter.native="handleFilter" style="width: 300px;" class="filter-item" placeholder="支持用户工号、名称、手机号、邮箱查找" v-model="pageModule.searchText">
       </el-input>
-      <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>
-      <el-button v-permission="'12'" class="filter-item" style="margin-left: 10px;" @click="handleAdd" type="primary" icon="el-icon-circle-plus">{{$t('table.add')}}</el-button>
-      <el-button v-permission="'14'" class="filter-item" style="margin-left: 10px;" type="success" icon="el-icon-edit" @click="handleEdit">{{$t('table.edit')}}
+      <el-button round class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>
+      <el-button round v-permission="'12'" class="filter-item" style="margin-left: 10px;" @click="handleAdd" type="primary" icon="el-icon-circle-plus">{{$t('table.add')}}</el-button>
+      <el-button round v-permission="'14'" class="filter-item" style="margin-left: 10px;" type="success" icon="el-icon-edit" @click="handleEdit">{{$t('table.edit')}}
       </el-button>
-      <el-button v-permission="'15'" class="filter-item" style="margin-left: 10px;" type="danger" icon="el-icon-delete" @click="handleDelete">{{$t('table.delete')}}
+      <el-button round v-permission="'15'" class="filter-item" style="margin-left: 10px;" type="danger" icon="el-icon-delete" @click="handleDelete">{{$t('table.delete')}}
       </el-button>
-      <el-button v-permission="'27'" class="filter-item" style="margin-left: 10px;" icon="el-icon-bell" type="info" @click="handleResetPass">{{$t('table.resetPass')}}
+      <el-button round v-permission="'27'" class="filter-item" style="margin-left: 10px;" icon="el-icon-bell" type="info" @click="handleResetPass">{{$t('table.resetPass')}}
       </el-button>
     </div>
 
@@ -57,8 +57,8 @@
 
       <el-table-column align="center" label="权限操作" width="200">
         <template slot-scope="scope">
-          <el-button v-permission="'42'" size="mini" type="primary" @click="handleUserRole(scope.row)">{{$t('table.role')}}</el-button>
-          <el-button v-permission="'48'" size="mini" type="warning" @click="handleUserPermission(scope.row)">{{$t('table.permission')}}</el-button>
+          <el-button round v-permission="'42'" size="mini" type="primary" @click="handleUserRole(scope.row)">{{$t('table.role')}}</el-button>
+          <el-button round v-permission="'48'" size="mini" type="warning" @click="handleUserPermission(scope.row)">{{$t('table.permission')}}</el-button>
         </template>
       </el-table-column>
 
@@ -165,9 +165,9 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="cancel('form')" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
-        <el-button v-if="dialogStatus==='create'" autofocus type="primary" @click="create('form')" icon="el-icon-circle-check">{{$t('table.confirm')}}</el-button>
-        <el-button v-else type="primary" autofocus @click="update('form')" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
+        <el-button round @click="cancel('form')" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
+        <el-button round v-if="dialogStatus==='create'" autofocus type="primary" @click="create('form')" icon="el-icon-circle-check">{{$t('table.confirm')}}</el-button>
+        <el-button round v-else type="primary" autofocus @click="update('form')" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
       </div>
     </el-dialog>
     <el-dialog :title="textMap[dialogStatus] + ' ---> ' + form.username" :visible.sync="dialogUserRoleVisible" width="550px">
@@ -183,8 +183,8 @@
                    :data="rolesOptions">
       </el-transfer>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="cancel('userRole')" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
-        <el-button type="primary" @click="updateUserRole()" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
+        <el-button round @click="cancel('userRole')" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
+        <el-button round type="primary" @click="updateUserRole()" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
       </div>
     </el-dialog>
     <el-dialog :title="textMap[dialogStatus] + ' ---> ' + form.username" :visible.sync="dialogUserPermissionVisible" width="550px">
@@ -229,8 +229,8 @@
         </el-tab-pane>
       </el-tabs>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="cancel('permissionTree')" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
-        <el-button type="primary" @click="updateUserPermession()" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
+        <el-button round @click="cancel('permissionTree')" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
+        <el-button round type="primary" @click="updateUserPermession()" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
       </div>
     </el-dialog>
   </div>

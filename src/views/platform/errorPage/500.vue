@@ -24,8 +24,8 @@
                 </div>
                 <p class="error500-body-con-message">Oops! the server is wrong</p>
                 <div class="error500-btn-con">
-                    <el-button @click="goHome" size="large" style="width: 200px;" type="text">返回首页</el-button>
-                    <el-button @click="backPage" size="large" style="width: 200px;margin-left: 40px;" type="primary">返回上一页</el-button>
+                    <el-button round @click="goHome" size="large" style="width: 200px;" type="text">返回首页</el-button>
+                    <el-button round @click="backPage" size="large" style="width: 200px;margin-left: 40px;" type="primary">返回上一页</el-button>
                 </div>
             </el-card>
         </div>

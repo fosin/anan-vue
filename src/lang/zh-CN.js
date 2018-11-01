@@ -23,7 +23,11 @@ export default {
     authentication: '授权管理',
     authentication_client: '客户端授权管理',
     authentication_service: '服务授权管理',
-    userInfo: '修改信息'
+    userInfo: '修改信息',
+    mpi_manager_patientinfo: '病人信息管理',
+    mpi_manager: '病人主索引管理',
+    mpi_manager_revert: '病人信息恢复',
+    mpi_manager_merge: '病人信息合并'
   },
   navbar: {
     logOut: '退出登录',
@@ -100,6 +104,7 @@ export default {
     delete: '删除',
     cancel: '取 消',
     confirm: '确 定',
+    view: '查看',
     create: '创建',
     update: '更新',
     resetPass: '重置密码',
@@ -111,7 +116,9 @@ export default {
     applys: '发布所有',
     apply: '发布单条',
     logout: '注销',
-    loss: '挂失'
+    loss: '挂失',
+    revert: '还原',
+    merge: '合并'
   },
   errorLog: {
     tips: '请点击右上角bug小图标',

@@ -3,9 +3,9 @@
   <div class="app-container calendar-list-container">
     <div class="filter-container">
       <el-button-group>
-        <el-button type="primary" class="filter-item" icon="el-icon-circle-plus" v-permission="'4'" @click="handlerAdd">{{$t('table.add')}}</el-button>
-        <el-button type="success" class="filter-item" icon="el-icon-edit" style="margin-left: 10px;" v-permission="'5'" @click="handlerUpdate">{{$t('table.edit')}}</el-button>
-        <el-button type="danger" class="filter-item" icon="el-icon-delete" style="margin-left: 10px;" v-permission="'6'" @click="handleDelete">{{$t('table.delete')}}</el-button>
+        <el-button round type="primary" class="filter-item" icon="el-icon-circle-plus" v-permission="'4'" @click="handlerAdd">{{$t('table.add')}}</el-button>
+        <el-button round type="success" class="filter-item" icon="el-icon-edit" style="margin-left: 10px;" v-permission="'5'" @click="handlerUpdate">{{$t('table.edit')}}</el-button>
+        <el-button round type="danger" class="filter-item" icon="el-icon-delete" style="margin-left: 10px;" v-permission="'6'" @click="handleDelete">{{$t('table.delete')}}</el-button>
       </el-button-group>
     </div>
     <el-row>
@@ -26,12 +26,12 @@
         <el-card class="box-card">
           <el-form :label-position="labelPosition" :rules="rules" label-width="120px" :model="form" ref="form">
             <el-form-item v-if="formStatus === 'update'">
-              <el-button @click="onCancel" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
-              <el-button type="primary" @click="update" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
+              <el-button round @click="onCancel" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
+              <el-button round type="primary" @click="update" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
             </el-form-item>
             <el-form-item v-if="formStatus === 'create'">
-              <el-button @click="onCancel" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
-              <el-button type="primary" @click="create" icon="el-icon-circle-check">{{$t('table.create')}}</el-button>
+              <el-button round @click="onCancel" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
+              <el-button round type="primary" @click="create" icon="el-icon-circle-check">{{$t('table.create')}}</el-button>
             </el-form-item>
            <el-form-item label="父机构信息" prop="pid">
               <el-input v-model="parent.code + ' - ' + parent.name" :disabled="true"></el-input>
