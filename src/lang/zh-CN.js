@@ -27,7 +27,9 @@ export default {
     mpi_manager_patientinfo: '病人信息管理',
     mpi_manager: '病人主索引管理',
     mpi_manager_revert: '病人信息恢复',
-    mpi_manager_merge: '病人信息合并'
+    mpi_manager_merge: '病人信息合并',
+    mpi_manager_overview: '病人信息概览',
+    mpi_manager_house: '健康住宅目的地概览'
   },
   navbar: {
     logOut: '退出登录',

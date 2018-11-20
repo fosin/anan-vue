@@ -33,12 +33,18 @@
               <el-button round @click="onCancel" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
               <el-button round type="primary" @click="create" icon="el-icon-circle-check">{{$t('table.create')}}</el-button>
             </el-form-item>
-           <el-form-item label="父机构信息" prop="pid">
-              <el-input v-model="parent.code + ' - ' + parent.name" :disabled="true"></el-input>
-            </el-form-item>
-            <!-- <el-form-item label="机构编码" prop="id">
-              <el-input v-model="form.id" :disabled="formStatus !== 'create'" placeholder="请输入机构编码,机构编码必须以上级节点为前缀,创建后不能修改"></el-input>
-            </el-form-item>-->
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="顶级机构" prop="topId">
+                  <el-tag>{{getOrganizName(form.topId)}}</el-tag>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="父机构信息" prop="pid">
+                  <el-tag>{{parent.code + ' - ' + parent.name}}</el-tag>
+                </el-form-item>
+              </el-col>
+            </el-row>
             <el-form-item label="机构编码" prop="code">
               <el-input v-model="form.code" :disabled="formUpdate" placeholder="请输入机构编码,机构编码必须以上级节点为前缀"></el-input>
             </el-form-item>
@@ -126,6 +132,20 @@
               trigger: 'blur'
             },
             { validator: validateCode, trigger: 'blur' }
+          ],
+          topId: [
+            {
+              required: true,
+              message: '顶级机构编码不能为空',
+              trigger: 'blur'
+            }
+          ],
+          pid: [
+            {
+              required: true,
+              message: '父机构不能为空',
+              trigger: 'blur'
+            }
           ]
         },
         treeData: [],
@@ -140,6 +160,16 @@
       }
     },
     created() {
+      // getOrganiz(this.userInfo.organizId).then(response => {
+      //   this.topId = response.data.topId
+      // }).catch(reason => {
+      //   this.$notify({
+      //     title: '查询当前用户的机构信息失败',
+      //     message: reason.message,
+      //     type: 'error',
+      //     duration: 5000
+      //   })
+      // })
       this.resetForm()
     },
     methods: {
@@ -165,6 +195,16 @@
       filterNode(value, data) {
         if (!value) return true
         return data.label.indexOf(value) !== -1
+      },
+      getOrganizData(id) {
+        let pNode
+        if (this.$refs && this.$refs.organizTree) {
+          pNode = this.$refs.organizTree.getNode(id)
+        }
+        return pNode ? pNode.data : { id: id, name: id }
+      },
+      getOrganizName(id) {
+        return this.getOrganizData(id).name
       },
       getNodeData(data) {
         if (data.id === this.form.id) {
@@ -329,8 +369,9 @@
           id: undefined,
           splitId: undefined,
           pid: this.parent.id,
+          topId: this.form.topId,
           status: '0',
-          level: this.parent.level + 1
+          level: (this.parent && this.parent.level ? this.parent.level : 0) + 1
         }
       }
     }

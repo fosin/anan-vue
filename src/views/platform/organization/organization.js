@@ -1,8 +1,8 @@
 import request from '@/utils/request'
 
-export function treeOrganiz() {
+export function treeOrganiz(topId) {
   return request({
-    url: '/platform/v1/organiz/tree',
+    url: '/platform/v1/organiz/tree/' + topId,
     method: 'post'
   })
 }

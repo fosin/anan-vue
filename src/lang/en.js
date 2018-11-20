@@ -27,7 +27,9 @@ export default {
     mpi_manager_patientinfo: 'Patient Info Manager',
     mpi_manager: 'MPI Manager',
     mpi_manager_revert: 'Patient Info Revert',
-    mpi_manager_merge: 'Patient Info Merge'
+    mpi_manager_merge: 'Patient Info Merge',
+    mpi_manager_overview: 'Patient Info Overview',
+    mpi_manager_house: 'Patient Health House Info'
   },
   navbar: {
     logOut: 'Logout',

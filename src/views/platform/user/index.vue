@@ -244,7 +244,7 @@ import { listUserPage, getUser, postUser, putUser, deleteUser, resetPassword,
 import { listChildPermissions } from '../permission/permission'
 import { formatDate } from '@/utils/date'
 import { listRole } from '../role/role'
-import { listOrganizAllChild, treeOrganiz, listOrganiz } from '../organization/organization'
+import { listOrganizAllChild, treeOrganiz, listOrganiz, getOrganiz } from '../organization/organization'
 import waves from '@/directive/waves/index.js' // 水波纹指令
 import { mapGetters } from 'vuex'
 import ElRadioGroup from 'element-ui/packages/radio/src/radio-group'
@@ -528,11 +528,21 @@ export default {
     },
     loadOrganizTree() {
       if (!this.organizTree || this.organizTree.length < 1) {
-        treeOrganiz().then(response => {
-          this.organizTree = response.data || []
+        getOrganiz(this.userInfo.organizId).then(response => {
+          const topId = response.data.topId
+          treeOrganiz(topId).then(response => {
+            this.organizTree = response.data || []
+          }).catch(reason => {
+            this.$notify({
+              title: '查询机构信息失败',
+              message: reason.message,
+              type: 'error',
+              duration: 5000
+            })
+          })
         }).catch(reason => {
           this.$notify({
-            title: '查询机构信息失败',
+            title: '查询当前用户的机构信息失败',
             message: reason.message,
             type: 'error',
             duration: 5000
@@ -543,6 +553,7 @@ export default {
     loadOrganizList() {
       listOrganiz().then(response => {
         this.organizList = response.data || []
+        this.oraganizOptions = this.organizList
       }).catch(reason => {
         this.$notify({
           title: '查询机构信息失败',
@@ -551,7 +562,6 @@ export default {
           duration: 5000
         })
       })
-      this.oraganizOptions = this.organizList
     },
     organizSelectFilter(input) {
       this.oraganizOptions = this.organizList.filter((value, index) => {

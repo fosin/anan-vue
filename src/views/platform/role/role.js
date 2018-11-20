@@ -34,6 +34,15 @@ export function listRolePage(page) {
   })
 }
 
+// 根据机构ID获取该机构及下级机构的角色分页列表
+export function listRolePageByOrganizId(page, organizId) {
+  return request({
+    url: '/platform/v1/role/pageList/organizId/' + organizId,
+    method: 'post',
+    data: page
+  })
+}
+
 // 获取角色的所有权限列表
 export function listRolePermissions(id) {
   return request({

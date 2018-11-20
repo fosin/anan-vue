@@ -68,7 +68,7 @@
             <el-form-item label="权限路径" prop="path" >
               <el-input v-model="form.path" :disabled="formUpdate" placeholder="设置权限对应的HTTP请求路径，ANT风格表达式，如果要设置权限该选项必填"></el-input>
             </el-form-item>
-            <row>
+            <el-row>
               <el-col :span="19">
                 <el-form-item label="请求方法" prop="methodArray">
                   <el-select v-model="form.methodArray" :disabled="formUpdate" placeholder="支持多选，不选则为适配所有方法" multiple filterable>
@@ -82,7 +82,7 @@
                   <el-input v-model="form.level" :disabled="true" placeholder="请输入序号"></el-input>
                 </el-form-item>
               </el-col>
-            </row>
+            </el-row>
             <el-row>
               <el-col :span="9">
                 <el-form-item label="类型" prop="type">
