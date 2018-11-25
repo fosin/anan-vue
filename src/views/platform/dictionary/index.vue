@@ -6,7 +6,7 @@
         <dictionaryHeader  v-on:dic-row-click="onDicHeaderRowClick"></dictionaryHeader>
       </el-col>
       <el-col :span="13">
-        <dictionaryDetail ref="dictionaryDetail"></dictionaryDetail>
+        <dictionaryDetail ref="dictionaryDetail" ></dictionaryDetail>
       </el-col>
     </el-row>
   </div>

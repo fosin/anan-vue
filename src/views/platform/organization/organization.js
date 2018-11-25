@@ -53,3 +53,20 @@ export function putOrganiz(obj) {
     data: obj
   })
 }
+
+// 获取机构的所有权限列表
+export function listOrganizPermissions(id) {
+  return request({
+    url: '/platform/v1/organiz/permissions/' + id,
+    method: 'post'
+  })
+}
+
+// 更新机构权限
+export function putOrganizPermissions(id, permissions) {
+  return request({
+    url: '/platform/v1/organiz/permissions/' + id,
+    method: 'put',
+    data: permissions
+  })
+}

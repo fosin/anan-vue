@@ -7,6 +7,8 @@ export default {
     system_organiz: 'Organization Manage',
     system_role: 'Role Manage',
     system_swaggerDevDoc: 'Dev Domcument',
+    system_version: 'Version Manage',
+    system_versionRole: 'Version Role Manage',
     config: 'Config',
     config_application: 'App Config',
     config_parameter: 'Parameter Config',

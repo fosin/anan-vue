@@ -1,19 +1,19 @@
 <template>
   <div class="app-container calendar-list-container">
     <div class="filter-container">
-      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="支持角色名称、标识"
+      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="支持版本角色名称、标识"
                 v-model="pageModule.searchText">
       </el-input>
       <el-button round class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">
         {{$t('table.search')}}
       </el-button>
-      <el-button round v-permission="'24'" class="filter-item" style="margin-left: 10px;" @click="handleAdd"
+      <el-button round v-permission="'121'" class="filter-item" style="margin-left: 10px;" @click="handleAdd"
                  type="primary" icon="el-icon-circle-plus">{{$t('table.add')}}
       </el-button>
-      <el-button round type="success" v-permission="'25'" class="filter-item" style="margin-left: 10px;"
+      <el-button round type="success" v-permission="'122'" class="filter-item" style="margin-left: 10px;"
                  icon="el-icon-edit" @click="handleEdit()">{{$t('table.edit')}}
       </el-button>
-      <el-button round type="danger" v-permission="'26'" class="filter-item" style="margin-left: 10px;"
+      <el-button round type="danger" v-permission="'123'" class="filter-item" style="margin-left: 10px;"
                  icon="el-icon-delete" @click="handleDelete()">{{$t('table.delete')}}
       </el-button>
     </div>
@@ -26,18 +26,16 @@
 
       <el-table-column label="角色名称" align="center" sortable prop="name">
       </el-table-column>
-      <el-table-column prop="organizId" align="center" label="所属机构"
-                       show-overflow-tooltip :formatter="getOrganizName" sortable>
+      <el-table-column prop="versionId" align="center" label="所属版本"
+                       show-overflow-tooltip :formatter="getVersionName" sortable>
       </el-table-column>
-      <!--      <el-table-column align="center" label="角色描述" sortable prop="tips">
-            </el-table-column>-->
-
-      <el-table-column align="center" label="创建时间" sortable prop="createTime">
+      
+      <el-table-column align="center" label="创建时间" sortable prop="createTime" width="160">
         <template slot-scope="scope">
           <span>{{scope.row.createTime | dateFormatFilter('yyyy-MM-dd HH:mm:ss')}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="更新时间" sortable prop="updateTime">
+      <el-table-column align="center" label="更新时间" sortable prop="updateTime" width="160">
         <template slot-scope="scope">
           <span>{{scope.row.updateTime | dateFormatFilter('yyyy-MM-dd HH:mm:ss')}}</span>
         </template>
@@ -47,12 +45,9 @@
           <el-tag>{{scope.row.status | statusFilter}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="权限操作" width="200">
+      <el-table-column align="center" label="权限操作" width="100">
         <template slot-scope="scope">
-          <el-button round size="mini" v-permission="'43'" type="primary" @click="handleRoleUser(scope.row)">
-            {{$t('table.user')}}
-          </el-button>
-          <el-button round size="mini" type="warning" v-permission="'49'" @click="handleRolePermission(scope.row)">
+          <el-button round size="mini" type="warning" v-permission="'126'" @click="handleVersionRolePermission(scope.row)">
             {{$t('table.permission')}}
           </el-button>
         </template>
@@ -69,18 +64,18 @@
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
       <el-form :model="form" :rules="rules" ref="form" label-width="100px">
         <el-form-item label="角色标识" prop="value">
-          <el-input v-model="form.value" placeholder="角色标识"></el-input>
+          <el-input v-model="form.value" placeholder="版本角色标识"></el-input>
         </el-form-item>
         <el-form-item label="角色名称" prop="name">
-          <el-input v-model="form.name" placeholder="角色名称"></el-input>
+          <el-input v-model="form.name" placeholder="版本角色名称"></el-input>
         </el-form-item>
-        <el-form-item label="所属机构" prop="organizId">
-          <el-select class="filter-item" v-model="form.organizId" filterable placeholder="请选择机构"
-                     :filter-method="organizSelectFilter">
-            <el-option v-for="item in oraganizOptions" :key="item.id" :label="item.fullname || item.name"
+        <el-form-item label="所属版本" prop="versionId">
+          <el-select class="filter-item" v-model="form.versionId" filterable placeholder="请选择所属版本"
+                     :filter-method="versionSelectFilter">
+            <el-option v-for="item in versionOptions" :key="item.id" :label="item.name"
                        :value="item.id" :disabled="isDisabled[item.status]">
-              <span style="float: left; color: #8492a6; font-size: 13px">{{ item.code }}</span>
-              <span style="float: right">{{ item.fullname || item.name }}</span>
+              <span style="float: left; color: #8492a6; font-size: 13px">{{ item.id }}</span>
+              <span style="float: right">{{ item.name }}</span>
             </el-option>
           </el-select>
         </el-form-item>
@@ -103,76 +98,27 @@
         </el-button>
       </div>
     </el-dialog>
-
-    <el-dialog :title="textMap[dialogStatus] + '->' + form.name" :visible.sync="dialogPermissionVisible" width="550px">
-      <el-input
-        placeholder="输入关键字进行过滤"
-        v-model="filterPermissionText">
-      </el-input>
-      <el-tree class="filter-tree"
-               :default-checked-keys="checkedKeys"
-               node-key="id"
-               highlight-current
-               show-checkbox
-               lazy
-               check-strictly
-               :load="loadChildPermissions"
-               :props="defaultProps"
-               ref="permissionTree"
-               :filter-node-method="filterNode"
-               :default-expanded-keys="[1]">
-      </el-tree>
-      <div slot="footer" class="dialog-footer">
-        <el-button round @click="cancel('permissionTree')" icon="el-icon-circle-close">{{$t('table.cancel')}}
-        </el-button>
-        <el-button round type="primary" @click="updatePermession(form.id, form.value)" icon="el-icon-circle-check">
-          {{$t('table.update')}}
-        </el-button>
-      </div>
-    </el-dialog>
-    <el-dialog :title="textMap[dialogStatus] + ' ---> ' + form.name" :visible.sync="dialogRoleUserVisible"
-               width="550px">
-      <el-transfer ref="roleUser"
-                   filterable
-                   :filter-method="roleUserfilterMethod"
-                   :props="{
-          key: 'id',
-          label: 'username'
-        }"
-                   :titles="['未拥有用户', '已拥有用户']"
-                   v-model="roleUsers"
-                   :data="allUsers">
-      </el-transfer>
-      <div slot="footer" class="dialog-footer">
-        <el-button round @click="cancel('roleUser')" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
-        <el-button round type="primary" @click="updateRoleUser()" icon="el-icon-circle-check">{{$t('table.update')}}
-        </el-button>
-      </div>
-    </el-dialog>
+    <grantPermission ref="grantPermission" @close="hackReset = false" v-if="hackReset"></grantPermission>
   </div>
 </template>
 
 <script>
   import {
-    getRole,
-    postRole,
-    putRole,
-    deleteRole,
-    putRolePermissions,
-    listRolePermissions,
-    listRoleUsers,
-    putRoleUsers,
-    listRolePageByOrganizId
-  } from './role'
-  import { listUser } from '../user/user'
+    getVersionRole,
+    postVersionRole,
+    putVersionRole,
+    deleteVersionRole,
+    putVersionRolePermissions,
+    listVersionRolePermissions,
+    listVersionRolePage
+  } from './versionRole'
   import { formatDate } from '@/utils/date'
-  import { listChildPermissions } from '../permission/permission'
-  import { listOrganizAllChild } from '../organization/organization'
+  import { listVersion, listVersionChildPermissions } from '../version'
   import waves from '@/directive/waves/index.js' // 水波纹指令
   import { mapGetters } from 'vuex'
-
+  import grantPermission from '../../permission/grantPermission'
   export default {
-    name: 'system_role',
+    name: 'system_versionRole',
     directives: {
       waves
     },
@@ -184,15 +130,14 @@
     computed: {
       ...mapGetters(['permissions', 'userInfo'])
     },
+    components: {
+      grantPermission
+    },
     data() {
       return {
-        oraganizOptions: [],
-        organizList: [],
-        roleUsers: [],
-        allUsers: [],
-        filterPermissionText: '',
-        checkedKeys: [],
-        expandKeys: [],
+        versionOptions: [],
+        versionList: [],
+        hackReset: false,
         defaultProps: {
           children: 'children',
           label: 'name',
@@ -215,7 +160,7 @@
           name: [
             {
               required: true,
-              message: '角色名称',
+              message: '版本角色名称',
               trigger: 'blur'
             },
             {
@@ -225,7 +170,7 @@
               trigger: 'blur'
             }
           ],
-          organizId: [
+          versionId: [
             {
               required: true,
               message: '请选择机构',
@@ -235,7 +180,7 @@
           value: [
             {
               required: true,
-              message: '角色标识',
+              message: '版本角色标识',
               trigger: 'blur'
             },
             {
@@ -249,8 +194,6 @@
         statusOptions: [0, 1],
         rolesOptions: undefined,
         dialogFormVisible: false,
-        dialogPermissionVisible: false,
-        dialogRoleUserVisible: false,
         dialogStatus: '',
         textMap: {
           update: '编辑',
@@ -277,9 +220,7 @@
       }
     },
     created() {
-      if (!this.organizList || this.organizList.length < 1) {
-        this.loadOrganizAllChild(this.userInfo.organizId)
-      }
+      this.loadVersionAll()
       this.asyncOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数', (data) => {
         this.pageModule.pageSize = parseInt(data)
       })
@@ -289,40 +230,27 @@
           this.pageSizes[i] = parseInt(temp[i])
         }
       })
-      listUser().then(response => {
-        this.allUsers = response.data
-      }).catch(reason => {
-        this.$notify({
-          title: '获取所有用户失败',
-          message: reason.message,
-          type: 'error',
-          duration: 5000
-        })
-      })
     },
     methods: {
-      roleUserfilterMethod(query, item) {
-        return item.usercode.indexOf(query) > -1 || item.username.indexOf(query) > -1
-      },
       getList() {
         this.listLoading = true
-        listRolePageByOrganizId(this.pageModule, this.userInfo.organizId).then(response => {
+        listVersionRolePage(this.pageModule).then(response => {
           this.roleList = response.data.rows
           this.total = response.data.total
           this.listLoading = false
         }).catch(reason => {
           this.$notify({
-            title: '获取角色列表失败',
+            title: '获取版本角色列表失败',
             message: reason.message,
             type: 'error',
             duration: 5000
           })
         })
       },
-      loadOrganizAllChild(pId) {
-        listOrganizAllChild(pId).then(response => {
-          this.organizList = response.data || []
-          this.oraganizOptions = this.organizList
+      loadVersionAll() {
+        listVersion().then(response => {
+          this.versionList = response.data || []
+          this.versionOptions = this.versionList
         }).catch(reason => {
           this.$notify({
             title: '查询后代机构信息失败',
@@ -332,19 +260,19 @@
           })
         })
       },
-      organizSelectFilter(input) {
-        this.oraganizOptions = this.organizList.filter((value, index) => {
-          return value.name.indexOf(input) !== -1 || value.id.indexOf(input) !== -1 || value.fullname.indexOf(input) !== -1
+      versionSelectFilter(input) {
+        this.versionOptions = this.versionList.filter((value, index) => {
+          return value.name.indexOf(input) !== -1 || value.id.indexOf(input) !== -1
         })
       },
-      getOrganizName: function(row, column) {
-        const organiz = this.organizList.filter((value) => {
-          return value.id === row.organizId
+      getVersionName: function(row, column) {
+        const version = this.versionList.filter((value) => {
+          return value.id === row.versionId
         })
-        if (!organiz || organiz.length < 1) {
-          return row.organizId
+        if (!version || version.length < 1) {
+          return row.versionId
         }
-        return organiz[0].fullname || organiz[0].name || row.organizId
+        return version[0].name || row.versionId
       },
       handleFilter() {
         this.pageModule.pageNumber = 1
@@ -370,113 +298,38 @@
           })
           return
         }
-        getRole(this.form.id).then(response => {
+        getVersionRole(this.form.id).then(response => {
           this.form = response.data
           this.dialogFormVisible = true
           this.dialogStatus = 'update'
         }).catch(reason => {
           this.$notify({
-            title: '获取角色失败',
+            title: '获取版本角色失败',
             message: reason.message,
             type: 'error',
             duration: 5000
           })
         })
       },
-      handleRolePermission(row) {
-        listRolePermissions(row.id)
-          .then(response => {
-            this.checkedKeys = this.getCheckedKeys(response.data)
-            this.dialogStatus = 'permission'
-            this.dialogPermissionVisible = true
-            this.form = row
-            if (this.$refs && this.$refs.permissionTree) {
-              this.$refs.permissionTree.setCheckedKeys(this.checkedKeys)
-            }
-          }).catch(reason => {
-            this.$notify({
-              title: '获取角色权限失败',
-              message: reason.message,
-              type: 'error',
-              duration: 5000
-            })
-          })
-      },
-      handleRoleUser(row) {
-        listRoleUsers(row.id).then(response => {
-          this.dialogStatus = 'user'
-          this.dialogRoleUserVisible = true
+
+      handleVersionRolePermission(row) {
+        this.hackReset = false
+        this.$nextTick(() => {
+          this.hackReset = true
+        })
+        listVersionRolePermissions(row.id).then(response => {
           this.form = row
-          const roleUsers = response.data
-          this.roleUsers = []
-          for (let i = 0; i < roleUsers.length; i++) {
-            const user = roleUsers[i].id
-            this.roleUsers.push(user)
-          }
+          this.$refs.grantPermission.initData(this, this.form, response.data)
         }).catch(reason => {
           this.$notify({
-            title: '获取角色用户失败',
+            title: '获取版本角色权限失败',
             message: reason.message,
             type: 'error',
             duration: 5000
           })
         })
       },
-      updateRoleUser(id, value) {
-        const userRoles = []
-        for (let i = 0; i < this.roleUsers.length; i++) {
-          const roleUser = {
-            userId: this.roleUsers[i],
-            role: { id: this.form.id },
-            organizId: undefined
-          }
-          userRoles.push(roleUser)
-        }
-        putRoleUsers(this.form.id, userRoles).then(response => {
-          this.dialogRoleUserVisible = false
-          this.$notify({
-            title: '成功',
-            message: '修改角色用户成功!',
-            type: 'success',
-            duration: 2000
-          })
-        }).catch(reason => {
-          this.$notify({
-            title: '更新角色用户失败',
-            message: reason.message,
-            type: 'error',
-            duration: 5000
-          })
-        })
-      },
-      updatePermession(id, value) {
-        // 得到当前已展开项目中被选中的权限
-        const checkedPermissions = this.$refs.permissionTree.getCheckedKeys().sort() // 当前选中的权限集合
-        const halfCheckedPermissions = this.$refs.permissionTree.getHalfCheckedKeys().sort() // 当前半选中的权限集合
-        const rolePermissions = this.checkedKeys.sort() // 当前角色已拥有的所有权限集合
-        const expandPermissions = this.expandKeys.sort() // 树中已展开的权限集合
-
-        // 求并集，到的所有实际被选中的权限 checkedPermissions + halfCheckedPermissions
-        const allCheckedPermissions = checkedPermissions.concat(halfCheckedPermissions.filter(function(v) {
-          return checkedPermissions.indexOf(v) === -1
-        })).sort()
-
-        // 求差集
-        const differencePermissions = rolePermissions.filter(function(v) {
-          return expandPermissions.indexOf(v) === -1
-        })
-
-        // 求并集
-        const unionPermissions = differencePermissions.concat(allCheckedPermissions.filter(function(v) {
-          return differencePermissions.indexOf(v) === -1
-        })).sort()
-
-        // 如果没有修改过数据则直接返回
-        if (unionPermissions.toString() === rolePermissions.toString()) {
-          this.dialogPermissionVisible = false
-          return
-        }
-
+      updatePermession(id, unionPermissions) {
         // 组装成后台需要的数据格式
         const newRolePermissions = []
         for (let i = 0; i < unionPermissions.length; i++) {
@@ -487,57 +340,20 @@
           }
           newRolePermissions.push(permission)
         }
-        putRolePermissions(id, newRolePermissions).then(() => {
-          this.dialogPermissionVisible = false
-          this.$notify({
-            title: '成功',
-            message: '修改角色权限成功!',
-            type: 'success',
-            duration: 2000
-          })
-        }).catch(reason => {
-          this.$notify({
-            title: '更新角色权限失败',
-            message: reason.message,
-            type: 'error',
-            duration: 5000
+        return new Promise((resolve, reject) => {
+          putVersionRolePermissions(id, newRolePermissions).then(() => {
+            resolve(true)
+          }).catch(reason => {
+            reject(reason)
           })
         })
       },
-      getCheckedKeys(rolePermissions) {
-        const checkedKeys = []
-        if (!rolePermissions || rolePermissions.length < 1) {
-          return checkedKeys
-        }
-        for (let i = 0; i < rolePermissions.length; i++) {
-          checkedKeys.push(rolePermissions[i].permissionId)
-        }
-        return checkedKeys
-      },
-      filterNode(value, data) {
-        if (!value) return true
-        return data.name.indexOf(value) !== -1
-      },
-      loadChildPermissions(node, resolve) {
-        let pId = 0
-        if (node.level !== 0) {
-          pId = node.data.id
-        }
-        listChildPermissions(pId).then(response => {
-          const childPermissions = response.data || []
-          // 记录所有被展开过的节点ID，用于保存时比较数据
-          for (let i = 0; i < childPermissions.length; i++) {
-            const id = childPermissions[i].id
-            this.expandKeys.push(id)
-            // childPermissions[i].disabled = pId === 0
-          }
-          return resolve(childPermissions)
-        }).catch(reason => {
-          this.$notify({
-            title: '加载子节点失败',
-            message: reason.message,
-            type: 'error',
-            duration: 5000
+      listChildPermissions(pId) {
+        return new Promise((resolve, reject) => {
+          listVersionChildPermissions(pId, this.form.versionId).then((response) => {
+            resolve(response)
+          }).catch(reason => {
+            reject(reason)
           })
         })
       },
@@ -549,7 +365,7 @@
           return
         }
         this.$confirm(
-          '此操作将永久删除角色名( ' + this.form.name + ' )的相关数据, 是否继续?',
+          '此操作将永久删除版本角色名( ' + this.form.name + ' )的相关数据, 是否继续?',
           '提示',
           {
             confirmButtonText: '确定',
@@ -557,18 +373,18 @@
             type: 'warning'
           }
         ).then(() => {
-          deleteRole(this.form.id).then(response => {
+          deleteVersionRole(this.form.id).then(response => {
             this.dialogFormVisible = false
             this.getList()
             this.$notify({
               title: '成功',
-              message: '删除角色成功!',
+              message: '删除版本角色成功!',
               type: 'success',
               duration: 2000
             })
           }).catch(reason => {
             this.$notify({
-              title: '删除角色失败',
+              title: '删除版本角色失败',
               message: reason.message,
               type: 'error',
               duration: 5000
@@ -581,7 +397,7 @@
         const set = this.$refs
         set[formName].validate(valid => {
           if (valid) {
-            postRole(this.form).then(() => {
+            postVersionRole(this.form).then(() => {
               this.dialogFormVisible = false
               this.getList()
               this.$notify({
@@ -592,7 +408,7 @@
               })
             }).catch(reason => {
               this.$notify({
-                title: '新建角色失败',
+                title: '新建版本角色失败',
                 message: reason.message,
                 type: 'error',
                 duration: 5000
@@ -605,8 +421,6 @@
       },
       cancel(formName) {
         this.dialogFormVisible = false
-        this.dialogPermissionVisible = false
-        this.dialogRoleUserVisible = false
         if (formName === 'form') {
           this.$refs[formName].resetFields()
         }
@@ -616,7 +430,7 @@
         set[formName].validate(valid => {
           if (valid) {
             this.dialogFormVisible = false
-            putRole(this.form).then(() => {
+            putVersionRole(this.form).then(() => {
               this.dialogFormVisible = false
               this.getList()
               this.$notify({
@@ -627,7 +441,7 @@
               })
             }).catch(reason => {
               this.$notify({
-                title: '更新角色信息失败',
+                title: '更新版本角色信息失败',
                 message: reason.message,
                 type: 'error',
                 duration: 5000
@@ -641,7 +455,7 @@
       resetForm() {
         this.form = {
           id: undefined,
-          organizId: undefined,
+          versionId: undefined,
           name: undefined,
           value: undefined,
           tips: undefined,
