@@ -26,11 +26,11 @@ export default {
     authentication_client: '客户端授权管理',
     authentication_service: '服务授权管理',
     userInfo: '修改信息',
-    mpi_manager_patientinfo: '病人信息管理',
-    mpi_manager: '病人主索引管理',
-    mpi_manager_revert: '病人信息恢复',
-    mpi_manager_merge: '病人信息合并',
-    mpi_manager_overview: '病人信息概览',
+    mpi_manager_patientinfo: '患者信息管理',
+    mpi_manager: '患者主索引管理',
+    mpi_manager_revert: '患者信息恢复',
+    mpi_manager_merge: '患者信息合并',
+    mpi_manager_overview: '患者地域分布',
     mpi_manager_house: '健康住宅目的地概览'
   },
   navbar: {
@@ -46,7 +46,7 @@ export default {
     langSelect: '选择语言'
   },
   login: {
-    title: '微服务开发云平台',
+    title: '星医聚云平台',
     logIn: '登录',
     rememberMe: '记住我',
     username: {
