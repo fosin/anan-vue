@@ -52,42 +52,60 @@
       </el-pagination>
     </div>
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="700px">
       <el-form :model="form" :rules="rules" ref="form" label-width="100px">
-        <el-form-item label="版本名称" prop="name">
-          <el-input v-model="form.name" placeholder="版本名称"></el-input>
-        </el-form-item>
-        <el-form-item label="版本类型" prop="type">
-          <el-select class="filter-item" v-model="form.type" placeholder="请选择版本类型">
-            <el-option v-for="item in typeOptions" :key="item.name" :label="item.value" :value="item.name"> </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="版本价格" prop="price">
-          <el-input v-model="form.price" placeholder="版本价格"></el-input>
-        </el-form-item>
-        <el-form-item label="开始日期" prop="beginTime">
-          <el-date-picker
-            v-model="form.beginTime"
-            align="right"
-            type="date"
-            placeholder="请选择版本开始日期"
-            format="yyyy-MM-dd HH:mm:ss"
-            value-format="yyyy-MM-dd HH:mm:ss">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="结束日期" prop="endTime">
-          <el-date-picker
-            v-model="form.endTime"
-            align="right"
-            type="date"
-            placeholder="请选择版本开始结束"
-            format="yyyy-MM-dd HH:mm:ss"
-            value-format="yyyy-MM-dd HH:mm:ss">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="有效期(天)" prop="validity">
-          <el-input v-model="form.validity" placeholder="有效期：按天计算"></el-input>
-        </el-form-item>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="版本名称" prop="name">
+              <el-input v-model="form.name" placeholder="版本名称"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="版本类型" prop="type">
+              <el-select class="filter-item" v-model="form.type" placeholder="请选择版本类型">
+                <el-option v-for="item in typeOptions" :key="item.name" :label="item.value" :value="item.name"> </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="版本价格" prop="price">
+              <el-input v-model="form.price" placeholder="版本价格"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="有效期(天)" prop="validity">
+              <el-input v-model="form.validity" placeholder="有效期：按天计算"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="开始日期" prop="beginTime">
+              <el-date-picker
+                v-model="form.beginTime"
+                align="right"
+                type="date"
+                placeholder="请选择版本开始日期"
+                format="yyyy-MM-dd HH:mm:ss"
+                value-format="yyyy-MM-dd HH:mm:ss">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="结束日期" prop="endTime">
+              <el-date-picker
+                v-model="form.endTime"
+                align="right"
+                type="date"
+                placeholder="请选择版本开始结束"
+                format="yyyy-MM-dd HH:mm:ss"
+                value-format="yyyy-MM-dd HH:mm:ss">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-form-item label="启用状态" prop="status">
           <el-switch v-model="form.status"
                      active-color="#13ce66"
@@ -97,6 +115,9 @@
                      active-value=0
                      inactive-value=1>
           </el-switch>
+        </el-form-item>
+        <el-form-item label="版本说明" prop="description">
+          <el-input type="textarea" v-model="form.description" placeholder="版本说明" :autosize="{ minRows: 4, maxRows: 20}"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

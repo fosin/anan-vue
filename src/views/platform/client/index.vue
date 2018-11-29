@@ -38,7 +38,7 @@
       </el-table-column>
       <el-table-column align="center" label="操作" width="100">
         <template slot-scope="scope">
-          <el-button round v-permission="'42'" size="mini" type="primary" @click="handleClientPermission(scope.row)">{{$t('table.permission')}}</el-button>
+          <el-button round v-permission="'133'" size="mini" type="primary" @click="handleClientPermission(scope.row)">{{$t('table.permission')}}</el-button>
         </template>
       </el-table-column>
     </el-table>
