@@ -145,7 +145,7 @@ import { getClient, postClient, putClient, deleteClient, listClientPage } from '
 import waves from '@/directive/waves/index.js' // 水波纹指令
 import { listChildPermissions } from '../permission/permission'
 export default {
-  name: 'authentication_client',
+  name: 'development_authClient',
   directives: {
     waves
   },

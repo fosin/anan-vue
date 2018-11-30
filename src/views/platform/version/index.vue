@@ -140,7 +140,7 @@
   import { formatDate } from '@/utils/date'
   import grantPermission from '../permission/grantPermission'
   export default {
-    name: 'system_version',
+    name: 'development_version',
     directives: {
       waves
     },

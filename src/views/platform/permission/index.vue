@@ -1,4 +1,3 @@
-
 <template>
   <div class="app-container calendar-list-container">
     <div class="filter-container">
@@ -26,11 +25,11 @@
       <el-col :span="16" style='margin-top:15px;'>
         <el-card class="box-card">
           <el-form :label-position="labelPosition" label-width="80px" :model="form" ref="form" :rules="formRules">
-            <el-form-item v-if="formStatus === 'update'">
+            <el-form-item v-if="this.formStatus === 'update'">
               <el-button round @click="onCancel" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
               <el-button round type="primary" @click="update" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
             </el-form-item>
-            <el-form-item v-if="formStatus === 'create'">
+            <el-form-item v-if="this.formStatus === 'create'">
               <el-button round @click="onCancel" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
               <el-button round type="primary" @click="create" icon="el-icon-circle-check">{{$t('table.create')}}</el-button>
             </el-form-item>
@@ -38,7 +37,7 @@
             <el-row>
               <el-col :span="12">
                 <el-form-item label="父级节点" prop="pName">
-                  <el-input v-model="parent.name" :disabled="true"></el-input>
+                  <el-tag>{{parent.name}}</el-tag>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
@@ -124,7 +123,7 @@
   import { listChildPermissions, getPermission, postPermission, deletePermission, putPermission } from './permission'
   import { loadServiceNames } from '@/api/application'
   export default {
-    name: 'system_permission',
+    name: 'development_permission',
     data() {
       return {
         parent: {},
@@ -268,7 +267,7 @@
         })
         this.currentId = data.id
         this.showElement = true
-        const pNode = this.$refs.permissionTree.getNode(data.pId)
+        const pNode = this.$refs.permissionTree.getNode(data.pid)
         if (pNode) {
           this.parent = pNode.data
         } else {

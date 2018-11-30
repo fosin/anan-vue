@@ -369,7 +369,8 @@
           if (valid) {
             postParameter(this.form).then((response) => {
               this.dialogFormVisible = false
-              this.updateList(response.data)
+              // this.updateList(response.data)
+              this.getList()
               this.$notify({
                 title: '成功',
                 message: '创建成功',
@@ -403,6 +404,7 @@
             putParameter(this.form).then((response) => {
               this.dialogFormVisible = false
               this.updateList(this.form)
+              // this.getList()
               this.$notify({
                 title: '修改成功',
                 message: '若要立即生效则需要使用【发布】功能!',

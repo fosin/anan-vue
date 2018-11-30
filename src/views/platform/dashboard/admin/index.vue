@@ -1,7 +1,18 @@
 <template>
   <div class="dashboard-editor-container">
  <!--   <github-corner></github-corner>-->
-
+    <el-row :gutter="32">
+      <el-col :xs="24" :sm="24" :lg="12">
+        <div class="chart-wrapper">
+          <nest-pie-chart></nest-pie-chart>
+        </div>
+      </el-col>
+      <el-col :xs="24" :sm="24" :lg="12">
+        <div class="chart-wrapper">
+          <shadow-line-chart></shadow-line-chart>
+        </div>
+      </el-col>
+    </el-row>
     <panel-group @handleSetLineChartData="handleSetLineChartData"></panel-group>
 
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
@@ -14,11 +25,7 @@
           <raddar-chart></raddar-chart>
         </div>
       </el-col>
-      <el-col :xs="24" :sm="24" :lg="8">
-        <div class="chart-wrapper">
-          <pie-chart></pie-chart>
-        </div>
-      </el-col>
+
       <el-col :xs="24" :sm="24" :lg="8">
         <div class="chart-wrapper">
           <bar-chart></bar-chart>
@@ -51,7 +58,8 @@ import BarChart from './components/BarChart'
 import TransactionTable from './components/TransactionTable'
 import TodoList from './components/TodoList'
 import BoxCard from './components/BoxCard'
-
+import NestPieChart from './components/NestPieChart'
+import ShadowLineChart from './components/ShadowLineChart'
 const lineChartData = {
   newVisitis: {
     expectedData: [100, 120, 161, 134, 105, 160, 165],
@@ -82,7 +90,9 @@ export default {
     BarChart,
     TransactionTable,
     TodoList,
-    BoxCard
+    BoxCard,
+    NestPieChart,
+    ShadowLineChart
   },
   data() {
     return {

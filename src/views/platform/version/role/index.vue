@@ -118,7 +118,7 @@
   import { mapGetters } from 'vuex'
   import grantPermission from '../../permission/grantPermission'
   export default {
-    name: 'system_versionRole',
+    name: 'development_versionRole',
     directives: {
       waves
     },

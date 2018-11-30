@@ -330,6 +330,13 @@ export default {
             trigger: 'blur'
           }
         ],
+        birthday: [
+          {
+            required: true,
+            message: '请选择生日',
+            trigger: 'blur'
+          }
+        ],
         usercode: [
           {
             required: true,
@@ -911,7 +918,8 @@ export default {
         if (valid) {
           postUser(this.form).then((response) => {
             this.dialogFormVisible = false
-            this.updateList(this.form)
+            // this.updateList(this.form)
+            this.getList()
             this.$notify({
               title: '创建成功,用户[' + this.form.username + ']密码是:',
               message: response.data.password,
@@ -964,7 +972,8 @@ export default {
           this.dialogFormVisible = false
           putUser(this.form).then(() => {
             this.dialogFormVisible = false
-            this.updateList(this.form)
+            // this.updateList(this.form)
+            this.getList()
             this.$notify({
               title: '成功',
               message: '修改成功',
@@ -1002,7 +1011,8 @@ export default {
       ).then(() => {
         deleteUser(this.form.id)
           .then(() => {
-            this.deleteList(this.form.id)
+            // this.deleteList(this.form.id)
+            this.getList()
             this.$notify({
               title: '成功',
               message: '删除用户成功',

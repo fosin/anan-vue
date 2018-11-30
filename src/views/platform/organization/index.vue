@@ -25,11 +25,11 @@
       <el-col :span="16" style='margin-top:15px;'>
         <el-card class="box-card">
           <el-form :label-position="labelPosition" :rules="rules" label-width="120px" :model="form" ref="form">
-            <el-form-item v-if="formStatus === 'update'">
+            <el-form-item v-if="this.formStatus === 'update'">
               <el-button round @click="onCancel" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
               <el-button round type="primary" @click="update" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
             </el-form-item>
-            <el-form-item v-if="formStatus === 'create'">
+            <el-form-item v-if="this.formStatus === 'create'">
               <el-button round @click="onCancel" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
               <el-button round type="primary" @click="create" icon="el-icon-circle-check">{{$t('table.create')}}</el-button>
             </el-form-item>
