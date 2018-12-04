@@ -2,42 +2,42 @@
   <div class="app-container calendar-list-container">
 
     <div class="grid-content bg-purple">
-      <el-form :model="userInfo2" :rules="rules2" ref="user" label-width="100px" class="demo-ruleForm">
+      <el-form :model="userInfo" :rules="rules2" ref="user" label-width="100px" class="demo-ruleForm">
         <span>基本信息</span>
         <hr/>
         <el-row>
           <el-col :span="6">
             <el-form-item label="用户工号:" prop="usercode">
-              <span>{{userInfo2.usercode}}</span>
+              <span>{{userInfo.usercode}}</span>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="用户名称:" prop="username">
-              <span>{{userInfo2.username}}</span>
+              <span>{{userInfo.username}}</span>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="6">
             <el-form-item label="性别:" prop="sex">
-              <span>{{getSexName(userInfo2.sex)}}</span>
+              <span>{{getSexName(userInfo.sex)}}</span>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="用户生日:" prop="birthday">
-              <span>{{userInfo2.birthday | dateFormatFilter('yyyy-MM-dd')}}</span>
+              <span>{{userInfo.birthday | dateFormatFilter('yyyy-MM-dd')}}</span>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="6">
             <el-form-item label="手机号码:" prop="phone">
-              <span>{{userInfo2.phone}}</span>
+              <span>{{userInfo.phone}}</span>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="用户邮箱:" prop="email">
-              <span>{{userInfo2.email}}</span>
+              <span>{{userInfo.email}}</span>
             </el-form-item>
           </el-col>
         </el-row>
@@ -119,9 +119,9 @@
         show: false,
         userInfo2: {
           id: undefined,
-          password: '',
-          confirmPassword1: '',
-          confirmPassword2: ''
+          password: undefined,
+          confirmPassword1: undefined,
+          confirmPassword2: undefined
         },
         rules2: {
           password: [{ validator: password, trigger: 'blur', required: true }],

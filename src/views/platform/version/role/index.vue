@@ -47,7 +47,7 @@
       </el-table-column>
       <el-table-column align="center" label="权限操作" width="100">
         <template slot-scope="scope">
-          <el-button round size="mini" type="warning" v-permission="'126'" @click="handleVersionRolePermission(scope.row)">
+          <el-button round size="mini" type="warning" @click="handleVersionRolePermission(scope.row)">
             {{$t('table.permission')}}
           </el-button>
         </template>
@@ -319,7 +319,7 @@
         })
         listVersionRolePermissions(row.id).then(response => {
           this.form = row
-          this.$refs.grantPermission.initData(this, this.form, response.data)
+          this.$refs.grantPermission.initData(this, this.form, response.data, '126')
         }).catch(reason => {
           this.$notify({
             title: '获取版本角色权限失败',

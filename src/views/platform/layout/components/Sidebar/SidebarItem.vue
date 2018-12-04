@@ -11,7 +11,7 @@
 
     <el-submenu v-else :index="item.name||item.path">
       <template slot="title">
-        <item v-if="item.meta" :icon="item.meta.icon" :title="generateTitle(item.meta.title)" />
+        <item v-if="item.meta" :icon="item.meta.icon" :title="generateTitle(item.meta.title)"></item>
       </template>
 
       <template v-for="child in item.children" v-if="!child.hidden">
@@ -21,11 +21,11 @@
           :item="child"
           :key="child.path"
           :base-path="resolvePath(child.path)"
-          class="nest-menu" />
+          class="nest-menu"></sidebar-item>
 
         <a v-else :href="child.path" :key="child.name" target="_blank" @click="clickLink(child,$event)">
           <el-menu-item :index="resolvePath(child.path)">
-            <item v-if="child.meta" :icon="child.meta.icon" :title="generateTitle(child.meta.title)" />
+            <item v-if="child.meta" :icon="child.meta.icon" :title="generateTitle(child.meta.title)"></item>
           </el-menu-item>
         </a>
       </template>

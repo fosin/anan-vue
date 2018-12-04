@@ -39,7 +39,7 @@
 
       <el-table-column align="center" label="权限操作" width="100">
         <template slot-scope="scope">
-          <el-button round v-permission="'125'" size="mini" type="warning" @click="handlePermission(scope.row)">{{$t('table.permission')}}</el-button>
+          <el-button round size="mini" type="warning" @click="handlePermission(scope.row)">{{$t('table.permission')}}</el-button>
         </template>
       </el-table-column>
 
@@ -357,7 +357,7 @@
         listVersionPermissions(row.id)
           .then(response => {
             this.form = row
-            this.$refs.grantPermission.initData(this, this.form, response.data)
+            this.$refs.grantPermission.initData(this, this.form, response.data, '125')
           }).catch(reason => {
             this.$notify({
               title: '获取版本权限失败',

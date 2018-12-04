@@ -20,7 +20,7 @@
     <div slot="footer" class="dialog-footer">
       <el-button round @click="cancel()" icon="el-icon-circle-close">{{$t('table.cancel')}}
       </el-button>
-      <el-button round type="primary" @click="updatePermession(form.id)" icon="el-icon-circle-check">
+      <el-button round v-if="hasPermission(permissionId)" type="primary" @click="updatePermession(form.id)" icon="el-icon-circle-check">
         {{$t('table.update')}}
       </el-button>
     </div>
@@ -29,6 +29,7 @@
 
 <script>
   import waves from '@/directive/waves/index.js' // 水波纹指令
+  import { mapGetters } from 'vuex'
   export default {
     name: 'grantPermission',
     directives: {
@@ -39,6 +40,9 @@
         this.$refs.permissionTree.filter(val)
       }
     },
+    computed: {
+      ...mapGetters(['permissions'])
+    },
     data() {
       return {
         parent: {},
@@ -47,6 +51,7 @@
         expandKeys: [],
         checkedKeys: [],
         dialogPermissionVisible: false,
+        permissionId: '-1',
         defaultProps: {
           children: 'children',
           label: 'name',
@@ -57,6 +62,17 @@
       }
     },
     methods: {
+      hasPermission(permissionId) {
+        if (permissionId && typeof (permissionId) === 'string') {
+          const hasPermission = this.permissions[permissionId] || false
+          if (!hasPermission) {
+            return false
+          }
+        } else {
+          throw new Error(`need permission! Like "'1'"`)
+        }
+        return true
+      },
       filterNode(value, data) {
         if (!value) return true
         return data.name.indexOf(value) !== -1
@@ -115,9 +131,10 @@
         }
         return checkedKeys
       },
-      initData(parent, form, objectPermissions) {
+      initData(parent, form, objectPermissions, permissionId) {
         this.parent = parent
         this.form = form
+        this.permissionId = permissionId
         this.checkedKeys = this.getCheckedKeys(objectPermissions)
         if (this.$refs && this.$refs.permissionTree) {
           this.$refs.permissionTree.setCheckedKeys(this.checkedKeys)

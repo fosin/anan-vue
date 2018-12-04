@@ -57,8 +57,8 @@
 
       <el-table-column align="center" label="权限操作" width="200">
         <template slot-scope="scope">
-          <el-button round v-permission="'42'" size="mini" type="primary" @click="handleUserRole(scope.row)">{{$t('table.role')}}</el-button>
-          <el-button round v-permission="'48'" size="mini" type="warning" @click="handleUserPermission(scope.row)">{{$t('table.permission')}}</el-button>
+          <el-button round size="mini" type="primary" @click="handleUserRole(scope.row)">{{$t('table.role')}}</el-button>
+          <el-button round size="mini" type="warning" @click="handleUserPermission(scope.row)">{{$t('table.permission')}}</el-button>
         </template>
       </el-table-column>
 
@@ -183,8 +183,8 @@
                    :data="rolesOptions">
       </el-transfer>
       <div slot="footer" class="dialog-footer">
-        <el-button round @click="cancel('userRole')" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
-        <el-button round type="primary" @click="updateUserRole()" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
+        <el-button round  @click="cancel('userRole')" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
+        <el-button round v-permission="'48'" type="primary" @click="updateUserRole()" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
       </div>
     </el-dialog>
     <el-dialog :title="textMap[dialogStatus] + ' ---> ' + form.username" :visible.sync="dialogUserPermissionVisible" width="550px">
@@ -230,7 +230,7 @@
       </el-tabs>
       <div slot="footer" class="dialog-footer">
         <el-button round @click="cancel('permissionTree')" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
-        <el-button round type="primary" @click="updateUserPermession()" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
+        <el-button round v-permission="'42'" type="primary" @click="updateUserPermession()" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
       </div>
     </el-dialog>
   </div>

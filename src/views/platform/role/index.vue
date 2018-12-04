@@ -49,10 +49,10 @@
       </el-table-column>
       <el-table-column align="center" label="权限操作" width="200">
         <template slot-scope="scope">
-          <el-button round size="mini" v-permission="'43'" type="primary" @click="handleRoleUser(scope.row)">
+          <el-button round size="mini" type="primary" @click="handleRoleUser(scope.row)">
             {{$t('table.user')}}
           </el-button>
-          <el-button round size="mini" type="warning" v-permission="'49'" @click="handleRolePermission(scope.row)">
+          <el-button round size="mini" type="warning"  @click="handleRolePermission(scope.row)">
             {{$t('table.permission')}}
           </el-button>
         </template>
@@ -125,7 +125,7 @@
       <div slot="footer" class="dialog-footer">
         <el-button round @click="cancel('permissionTree')" icon="el-icon-circle-close">{{$t('table.cancel')}}
         </el-button>
-        <el-button round type="primary" @click="updatePermession(form.id, form.value)" icon="el-icon-circle-check">
+        <el-button round type="primary" v-permission="'49'" @click="updatePermession(form.id, form.value)" icon="el-icon-circle-check">
           {{$t('table.update')}}
         </el-button>
       </div>
@@ -145,7 +145,7 @@
       </el-transfer>
       <div slot="footer" class="dialog-footer">
         <el-button round @click="cancel('roleUser')" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
-        <el-button round type="primary" @click="updateRoleUser()" icon="el-icon-circle-check">{{$t('table.update')}}
+        <el-button round v-permission="'43'" type="primary" @click="updateRoleUser()" icon="el-icon-circle-check">{{$t('table.update')}}
         </el-button>
       </div>
     </el-dialog>
@@ -371,6 +371,13 @@
           return
         }
         getRole(this.form.id).then(response => {
+          const form = response.data
+          if (form && form.builtIn === 1) {
+            this.$message({
+              message: '系统内置角色不能修改!'
+            })
+            return
+          }
           this.form = response.data
           this.dialogFormVisible = true
           this.dialogStatus = 'update'
@@ -450,6 +457,12 @@
         })
       },
       updatePermession(id, value) {
+        if (this.from && this.from.builtIn === 1) {
+          this.$message({
+            message: '系统内置角色不能修改权限!'
+          })
+          return
+        }
         // 得到当前已展开项目中被选中的权限
         const checkedPermissions = this.$refs.permissionTree.getCheckedKeys().sort() // 当前选中的权限集合
         const halfCheckedPermissions = this.$refs.permissionTree.getHalfCheckedKeys().sort() // 当前半选中的权限集合
@@ -545,6 +558,12 @@
         if (!this.form || !this.form.id || !this.form.name) {
           this.$message({
             message: '操作前请先选择一条数据!'
+          })
+          return
+        }
+        if (this.form && this.form.builtIn === 1) {
+          this.$message({
+            message: '系统内置角色不能删除!'
           })
           return
         }
@@ -645,7 +664,8 @@
           name: undefined,
           value: undefined,
           tips: undefined,
-          status: 0
+          status: 0,
+          builtIn: 0
         }
       },
       sortChange(column) {
