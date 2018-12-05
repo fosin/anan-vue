@@ -35,9 +35,14 @@
             </el-form-item>
 
             <el-row>
-              <el-col :span="12">
+              <el-col :span="7">
                 <el-form-item label="父级节点" prop="pName">
                   <el-tag>{{parent.name}}</el-tag>
+                </el-form-item>
+              </el-col>
+              <el-col :span="5">
+                <el-form-item label="层级" prop="level">
+                  <el-tag>{{form.level}}</el-tag>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
@@ -67,38 +72,42 @@
             <el-form-item label="权限路径" prop="path" >
               <el-input v-model="form.path" :disabled="formUpdate" placeholder="设置权限对应的HTTP请求路径，ANT风格表达式，如果要设置权限该选项必填"></el-input>
             </el-form-item>
+
             <el-row>
-              <el-col :span="19">
-                <el-form-item label="请求方法" prop="methodArray">
-                  <el-select v-model="form.methodArray" :disabled="formUpdate" placeholder="支持多选，不选则为适配所有方法" multiple filterable>
-                    <el-option v-for="item in methodOptions" :key="item.scode" :label="item.value" :value="item.scode" >
-                    </el-option>
-                  </el-select>
-                </el-form-item>
+              <el-col :span="20">
+                <el-row>
+                  <el-col :span="24">
+                    <el-form-item label="请求方法" prop="methodArray">
+                      <el-select v-model="form.methodArray" :disabled="formUpdate" placeholder="支持多选，不选则为适配所有方法" multiple filterable>
+                        <el-option v-for="item in methodOptions" :key="item.scode" :label="item.value" :value="item.scode" >
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="12">
+                    <el-form-item label="类型" prop="type">
+                      <el-select class="filter-item" v-model="form.type"  :disabled="formUpdate"  placeholder="请选择类型" >
+                        <el-option v-for="item in typeOptions" :key="item.name" :label="item.value" :value="item.name" :disabled="item.status === 1"> </el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+
+                  <el-col :span="6">
+                    <el-form-item label="排序" prop="sort">
+                      <el-input v-model="form.sort" :disabled="formUpdate" placeholder="请输入排序"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
               </el-col>
-              <el-col :span="5">
-                <el-form-item label="层级" prop="level">
-                  <el-input v-model="form.level" :disabled="true" placeholder="请输入序号"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="9">
-                <el-form-item label="类型" prop="type">
-                  <el-select class="filter-item" v-model="form.type"  :disabled="formUpdate"  placeholder="请选择类型" >
-                    <el-option v-for="item in typeOptions" :key="item.name" :label="item.value" :value="item.name" :disabled="item.status === 1"> </el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col :span="10">
-                <el-form-item label="图标" prop="icon">
-                  <el-input v-model="form.icon" :disabled="formUpdate" placeholder="请选择图标，只对菜单类型有效"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="5">
-                <el-form-item label="排序" prop="sort">
-                  <el-input v-model="form.sort" :disabled="formUpdate" placeholder="请输入排序"></el-input>
-                </el-form-item>
+              <!--<el-col :span="10">
+                   <el-form-item label="图标" prop="icon">
+                     <el-input v-model="form.icon" :disabled="formUpdate" placeholder="请选择图标，只对菜单类型有效"></el-input>
+                   </el-form-item>
+                 </el-col>-->
+              <el-col :span="4">
+                <img @click="handleSelectAvatar" alt = "点击选择图标" class="user-avatar" style="width: 80px; height: 80px; border-radius: 50%; margin-left: 20px; margin-top: 15px; background: #fff; color: #40c9c6;" :src="form.icon2+'?imageView2/1/w/80/h/80'">
               </el-col>
             </el-row>
             <el-form-item prop="status">
@@ -116,12 +125,15 @@
         </el-card>
       </el-col>
     </el-row>
+    <IconsSelect ref="iconsSelect"> </IconsSelect>
   </div>
 </template>
 
 <script>
   import { listChildPermissions, getPermission, postPermission, deletePermission, putPermission } from './permission'
   import { loadServiceNames } from '@/api/application'
+  import IconsSelect from '@/components/IconsSelect/index'
+
   export default {
     name: 'development_permission',
     data() {
@@ -187,6 +199,9 @@
         }
       }
     },
+    components: {
+      IconsSelect
+    },
     mounted() {
       this.asyncLoadDictionaryByCode(13, (data) => {
         this.typeOptions = data
@@ -207,6 +222,29 @@
       this.resetForm()
     },
     methods: {
+      handleSelectAvatar() {
+        if (!this.formUpdate) {
+          this.$refs.iconsSelect.init(this.setAvatar)
+        }
+      },
+      setAvatar(icon) {
+        this.form.icon = this.getFileName(icon)
+        this.form.icon2 = icon
+      },
+      getFileName(pathFile) {
+        let name = pathFile
+        if (pathFile) {
+          const i = pathFile.lastIndexOf('/')
+          if (i > 0) {
+            const fullName = pathFile.substr(i + 1)
+            const j = fullName.lastIndexOf('.')
+            if (j > 0) {
+              name = fullName.substr(0, j)
+            }
+          }
+        }
+        return name
+      },
       loadChild(node, resolve) {
         let pId = 0
         if (node.level !== 0) {
@@ -257,6 +295,7 @@
           if (this.form.method) {
             this.form.methodArray = this.form.method.split(',')
           }
+          this.form.icon2 = 'src/icons/svg/' + this.form.icon + '.svg'
         }).catch(reason => {
           this.$notify({
             title: '获取权限失败',
@@ -432,7 +471,8 @@
           sort: sort,
           type: type,
           status: '0',
-          icon: '',
+          icon: 'permission',
+          icon2: 'src/icon/svg/permission.svg',
           // level: this.parent.level ? this.parent.level + 1 : 0,
           level: this.parent.level + 1,
           method: undefined,

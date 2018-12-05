@@ -72,35 +72,42 @@
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form :model="form" :rules="rules" ref="form" label-width="80px">
         <el-row>
-          <el-col :span="12">
-            <el-form-item label="用户工号" prop="usercode">
-              <el-input v-model="form.usercode" placeholder="请输入用户工号"></el-input>
-            </el-form-item>
+          <el-col :span="20">
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="用户工号" prop="usercode">
+                  <el-input v-model="form.usercode" placeholder="请输入用户工号"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="用户名称" prop="username">
+                  <el-input v-model="form.username" placeholder="请输入用户名称"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item v-if="dialogStatus === 'create'" label="密码" placeholder="如果不填密码系统将随机生成" prop="password">
+                  <el-input v-model="form.password"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="生日" prop="birthday">
+                  <el-date-picker
+                    v-model="form.birthday"
+                    align="right"
+                    type="date"
+                    placeholder="请选择用户生日"
+                    :picker-options="pickerBirthday"
+                    format="yyyy-MM-dd"
+                    value-format="yyyy-MM-dd HH:mm:ss">
+                  </el-date-picker>
+                </el-form-item>
+              </el-col>
+            </el-row>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="用户名称" prop="username">
-              <el-input v-model="form.username" placeholder="请输入用户名称"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item v-if="dialogStatus === 'create'" label="密码" placeholder="如果不填密码系统将随机生成" prop="password">
-              <el-input type="password" v-model="form.password"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="生日" prop="birthday">
-              <el-date-picker
-                v-model="form.birthday"
-                align="right"
-                type="date"
-                placeholder="请选择用户生日"
-                :picker-options="pickerBirthday"
-                format="yyyy-MM-dd"
-                value-format="yyyy-MM-dd HH:mm:ss">
-              </el-date-picker>
-            </el-form-item>
+          <el-col :span="4">
+              <img @click="handleSelectAvatar"  class="user-avatar" style="width: 80px; height: 80px; border-radius: 50%; margin-left: 20px" :src="form.avatar+'?imageView2/1/w/80/h/80'">
           </el-col>
         </el-row>
         <el-row >
@@ -130,10 +137,6 @@
             </el-option>
           </el-select>
         </el-form-item>-->
-        <el-form-item label="用户头像" prop="avatar">
-          <el-input v-model="form.avatar" placeholder="请输入用户头像连接地址"></el-input>
-        </el-form-item>
-
         <el-row >
           <el-col :span="10">
             <el-form-item label="邮箱" prop="email">
@@ -233,6 +236,7 @@
         <el-button round v-permission="'42'" type="primary" @click="updateUserPermession()" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
       </div>
     </el-dialog>
+    <IconsSelect ref="iconsSelect"> </IconsSelect>
   </div>
 </template>
 
@@ -241,7 +245,6 @@ import { listUserPage, getUser, postUser, putUser, deleteUser, resetPassword,
   putUserPermissions,
   listUserPermissions,
   listUserRoles, putUserRoles } from './user'
-import { listChildPermissions } from '../permission/permission'
 import { formatDate } from '@/utils/date'
 import { listRole } from '../role/role'
 import { listOrganizAllChild, treeOrganiz, listOrganiz, getOrganiz, getOrganizAuth } from '../organization/organization'
@@ -250,12 +253,14 @@ import waves from '@/directive/waves/index.js' // 水波纹指令
 import { mapGetters } from 'vuex'
 import ElRadioGroup from 'element-ui/packages/radio/src/radio-group'
 import ElOption from 'element-ui/packages/select/src/option'
+import IconsSelect from '@/components/IconsSelect/index'
 
 export default {
   name: 'system_user',
   components: {
     ElOption,
-    ElRadioGroup
+    ElRadioGroup,
+    IconsSelect
   },
   directives: {
     waves
@@ -338,6 +343,20 @@ export default {
             trigger: 'blur'
           }
         ],
+        sex: [
+          {
+            required: true,
+            message: '请选择性别',
+            trigger: 'blur'
+          }
+        ],
+        status: [
+          {
+            required: true,
+            message: '请选择状态',
+            trigger: 'blur'
+          }
+        ],
         usercode: [
           {
             required: true,
@@ -381,13 +400,6 @@ export default {
           {
             required: true,
             message: '请选择机构',
-            trigger: 'blur'
-          }
-        ],
-        selectedRoles: [
-          {
-            required: true,
-            message: '请选择角色',
             trigger: 'blur'
           }
         ],
@@ -461,6 +473,12 @@ export default {
     this.resetTemp()
   },
   methods: {
+    handleSelectAvatar() {
+      this.$refs.iconsSelect.init(this.setAvatar)
+    },
+    setAvatar(avatar) {
+      this.form.avatar = avatar
+    },
     userRolefilterMethod(query, item) {
       return item.name.indexOf(query) > -1 || item.value.indexOf(query) > -1
     },
@@ -1080,7 +1098,7 @@ export default {
         phone: undefined,
         email: undefined,
         birthday: undefined,
-        avatar: undefined,
+        avatar: 'src/icons/svg/mavatar.svg',
         id: undefined,
         usercode: undefined,
         password: '123456',
@@ -1105,6 +1123,12 @@ export default {
 </script>
 <style scoped>
   .el-select {
+    width: 100%;
+  }
+  .el-date-picker {
+    width: 100%;
+  }
+  .el-date-editor {
     width: 100%;
   }
 </style>
