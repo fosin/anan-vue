@@ -70,3 +70,10 @@ export function putOrganizPermissions(id, permissions) {
     data: permissions
   })
 }
+
+export function getOrganizAuth(organizId, method) {
+  return request({
+    url: '/platform/v1/organiz/auth/' + organizId,
+    method: method || 'post'
+  })
+}

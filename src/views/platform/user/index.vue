@@ -244,7 +244,8 @@ import { listUserPage, getUser, postUser, putUser, deleteUser, resetPassword,
 import { listChildPermissions } from '../permission/permission'
 import { formatDate } from '@/utils/date'
 import { listRole } from '../role/role'
-import { listOrganizAllChild, treeOrganiz, listOrganiz, getOrganiz } from '../organization/organization'
+import { listOrganizAllChild, treeOrganiz, listOrganiz, getOrganiz, getOrganizAuth } from '../organization/organization'
+import { listVersionChildPermissions } from '../version/version'
 import waves from '@/directive/waves/index.js' // 水波纹指令
 import { mapGetters } from 'vuex'
 import ElRadioGroup from 'element-ui/packages/radio/src/radio-group'
@@ -685,14 +686,34 @@ export default {
       if (node.level !== 0) {
         pId = node.data.id
       }
-      listChildPermissions(pId).then(response => {
-        const childPermissions = response.data || []
-        // 记录所有被展开过的节点ID，用于保存时比较数据
-        for (let i = 0; i < childPermissions.length; i++) {
-          const id = childPermissions[i].id
-          this.addExpandKeys.push(id)
-        }
-        return resolve(childPermissions)
+      getOrganiz(this.form.organizId).then((response) => {
+        const topId = response.data.topId
+        getOrganizAuth(topId).then((response) => {
+          const versionId = response.data.versionId
+          listVersionChildPermissions(pId, versionId).then((response) => {
+            const childPermissions = response.data || []
+            // 记录所有被展开过的节点ID，用于保存时比较数据
+            for (let i = 0; i < childPermissions.length; i++) {
+              const id = childPermissions[i].id
+              this.addExpandKeys.push(id)
+            }
+            return resolve(childPermissions)
+          }).catch(reason => {
+            this.$notify({
+              title: '加载子节点失败',
+              message: reason.message,
+              type: 'error',
+              duration: 5000
+            })
+          })
+        }).catch(reason => {
+          this.$notify({
+            title: '加载子节点失败',
+            message: reason.message,
+            type: 'error',
+            duration: 5000
+          })
+        })
       }).catch(reason => {
         this.$notify({
           title: '加载子节点失败',
@@ -707,14 +728,34 @@ export default {
       if (node.level !== 0) {
         pId = node.data.id
       }
-      listChildPermissions(pId).then(response => {
-        const childPermissions = response.data || []
-        // 记录所有被展开过的节点ID，用于保存时比较数据
-        for (let i = 0; i < childPermissions.length; i++) {
-          const id = childPermissions[i].id
-          this.subExpandKeys.push(id)
-        }
-        return resolve(childPermissions)
+      getOrganiz(this.form.organizId).then((response) => {
+        const topId = response.data.topId
+        getOrganizAuth(topId).then((response) => {
+          const versionId = response.data.versionId
+          listVersionChildPermissions(pId, versionId).then((response) => {
+            const childPermissions = response.data || []
+            // 记录所有被展开过的节点ID，用于保存时比较数据
+            for (let i = 0; i < childPermissions.length; i++) {
+              const id = childPermissions[i].id
+              this.subExpandKeys.push(id)
+            }
+            return resolve(childPermissions)
+          }).catch(reason => {
+            this.$notify({
+              title: '加载子节点失败',
+              message: reason.message,
+              type: 'error',
+              duration: 5000
+            })
+          })
+        }).catch(reason => {
+          this.$notify({
+            title: '加载子节点失败',
+            message: reason.message,
+            type: 'error',
+            duration: 5000
+          })
+        })
       }).catch(reason => {
         this.$notify({
           title: '加载子节点失败',

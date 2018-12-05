@@ -104,7 +104,7 @@
       </div>
     </el-dialog>
 
-    <el-dialog :title="textMap[dialogStatus] + '->' + form.name" :visible.sync="dialogPermissionVisible" width="550px">
+    <!--<el-dialog :title="textMap[dialogStatus] + '->' + form.name" :visible.sync="dialogPermissionVisible" width="550px">
       <el-input
         placeholder="输入关键字进行过滤"
         v-model="filterPermissionText">
@@ -129,7 +129,7 @@
           {{$t('table.update')}}
         </el-button>
       </div>
-    </el-dialog>
+    </el-dialog>-->
     <el-dialog :title="textMap[dialogStatus] + ' ---> ' + form.name" :visible.sync="dialogRoleUserVisible"
                width="550px">
       <el-transfer ref="roleUser"
@@ -149,6 +149,7 @@
         </el-button>
       </div>
     </el-dialog>
+    <grantPermission ref="grantPermission" ></grantPermission>
   </div>
 </template>
 
@@ -166,11 +167,12 @@
   } from './role'
   import { listUser } from '../user/user'
   import { formatDate } from '@/utils/date'
-  import { listChildPermissions } from '../permission/permission'
   import { listOrganizAllChild } from '../organization/organization'
   import waves from '@/directive/waves/index.js' // 水波纹指令
   import { mapGetters } from 'vuex'
-
+  import grantPermission from '../permission/grantPermission'
+  import { listVersionChildPermissions } from '../version/version'
+  import { getOrganiz, getOrganizAuth } from '../organization/organization'
   export default {
     name: 'system_role',
     directives: {
@@ -183,6 +185,9 @@
     },
     computed: {
       ...mapGetters(['permissions', 'userInfo'])
+    },
+    components: {
+      grantPermission
     },
     data() {
       return {
@@ -393,13 +398,8 @@
       handleRolePermission(row) {
         listRolePermissions(row.id)
           .then(response => {
-            this.checkedKeys = this.getCheckedKeys(response.data)
-            this.dialogStatus = 'permission'
-            this.dialogPermissionVisible = true
             this.form = row
-            if (this.$refs && this.$refs.permissionTree) {
-              this.$refs.permissionTree.setCheckedKeys(this.checkedKeys)
-            }
+            this.$refs.grantPermission.initData(this, this.form, response.data, '49')
           }).catch(reason => {
             this.$notify({
               title: '获取角色权限失败',
@@ -408,6 +408,44 @@
               duration: 5000
             })
           })
+      },
+      updatePermession(id, unionPermissions) {
+        // 组装成后台需要的数据格式
+        const newRolePermissions = []
+        for (let i = 0; i < unionPermissions.length; i++) {
+          const permission = {
+            id: undefined,
+            roleId: id,
+            permissionId: unionPermissions[i]
+          }
+          newRolePermissions.push(permission)
+        }
+        return new Promise((resolve, reject) => {
+          putRolePermissions(id, newRolePermissions).then(() => {
+            resolve(true)
+          }).catch(reason => {
+            reject(reason)
+          })
+        })
+      },
+      listChildPermissions(pId) {
+        return new Promise((resolve, reject) => {
+          getOrganiz(this.form.organizId).then((response) => {
+            const topId = response.data.topId
+            getOrganizAuth(topId).then((response) => {
+              const versionId = response.data.versionId
+              listVersionChildPermissions(pId, versionId).then((response) => {
+                resolve(response)
+              }).catch(reason => {
+                reject(reason)
+              })
+            }).catch(reason => {
+              reject(reason)
+            })
+          }).catch(reason => {
+            reject(reason)
+          })
+        })
       },
       handleRoleUser(row) {
         listRoleUsers(row.id).then(response => {
@@ -456,7 +494,7 @@
           })
         })
       },
-      updatePermession(id, value) {
+      /* updatePermession(id, value) {
         if (this.from && this.from.builtIn === 1) {
           this.$message({
             message: '系统内置角色不能修改权限!'
@@ -516,22 +554,12 @@
             duration: 5000
           })
         })
-      },
-      getCheckedKeys(rolePermissions) {
-        const checkedKeys = []
-        if (!rolePermissions || rolePermissions.length < 1) {
-          return checkedKeys
-        }
-        for (let i = 0; i < rolePermissions.length; i++) {
-          checkedKeys.push(rolePermissions[i].permissionId)
-        }
-        return checkedKeys
-      },
+      },*/
       filterNode(value, data) {
         if (!value) return true
         return data.name.indexOf(value) !== -1
       },
-      loadChildPermissions(node, resolve) {
+      /* loadChildPermissions(node, resolve) {
         let pId = 0
         if (node.level !== 0) {
           pId = node.data.id
@@ -553,7 +581,7 @@
             duration: 5000
           })
         })
-      },
+      },*/
       handleDelete() {
         if (!this.form || !this.form.id || !this.form.name) {
           this.$message({
