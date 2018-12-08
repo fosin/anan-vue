@@ -331,6 +331,7 @@
         })
       },
       handlerAdd() {
+        this.parent = this.form
         if (!this.parent.id) {
           this.$message({
             message: '请选择一个父节点再新增子节点'
@@ -343,7 +344,6 @@
           })
           return
         }
-        // this.parent = this.form
         this.resetForm()
         this.formUpdate = false
         this.formStatus = 'create'
