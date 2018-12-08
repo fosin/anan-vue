@@ -45,7 +45,7 @@ export default {
     langSelect: '选择语言'
   },
   login: {
-    title: '星医聚云平台',
+    title: '微服务云平台',
     logIn: '登录',
     rememberMe: '记住我',
     username: {
