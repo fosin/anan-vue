@@ -70,7 +70,7 @@
       </el-pagination>
     </div>
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="700px">
       <el-form :model="form" :rules="rules" ref="form" label-width="80px">
         <el-row>
           <el-col :span="20">
