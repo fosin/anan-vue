@@ -446,7 +446,7 @@ export default {
       return formatDate(date, pattern || 'yyyy-MM-dd HH:mm:ss')
     }
   },
-  created() {
+  mounted() {
     if (!this.organizList || this.organizList.length < 1) {
       this.loadOrganizAllChild(this.userInfo.organizId)
     }
