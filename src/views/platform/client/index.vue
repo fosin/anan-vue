@@ -38,7 +38,7 @@
       </el-table-column>
       <el-table-column align="center" label="操作" width="100">
         <template slot-scope="scope">
-          <el-button round v-permission="'133'" size="mini" type="primary" @click="handleClientPermission(scope.row)">{{$t('table.permission')}}</el-button>
+          <el-button round size="mini" type="warning" @click="handlePermission(scope.row)">{{$t('table.permission')}}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -115,55 +115,28 @@
         <el-button round v-else type="primary" @click="update('form')" icon="el-icon-circle-check" autofocus>{{$t('table.update')}}</el-button>
       </div>
     </el-dialog>
-    <el-dialog :title="textMap[dialogStatus] + '->' + form.clientId" :visible.sync="dialogPermissionVisible" width="550px">
-      <el-input
-        placeholder="输入关键字进行过滤"
-        v-model="filterPermissionText">
-      </el-input>
-      <el-tree class="filter-tree"
-               :default-checked-keys="checkedKeys"
-               node-key="id"
-               highlight-current
-               show-checkbox
-               lazy
-               check-strictly
-               :load="loadChildPermissions"
-               :props="defaultProps"
-               ref="permissionTree"
-               :filter-node-method="filterNode"
-               :default-expanded-keys="[1]">
-      </el-tree>
-      <div slot="footer" class="dialog-footer">
-        <el-button round @click="cancel('permissionTree')" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
-        <el-button round type="primary" @click="updatePermession(form.id, form.value)" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
-      </div>
-    </el-dialog>
+    <grantPermission ref="grantPermission" ></grantPermission>
   </div>
 </template>
 <script>
 import { getClient, postClient, putClient, deleteClient, listClientPage } from './client.js'
 import waves from '@/directive/waves/index.js' // 水波纹指令
 import { listChildPermissions } from '../permission/permission'
+import grantPermission from '../permission/grantPermission'
+
 export default {
   name: 'development_authClient',
   directives: {
     waves
+  },
+  components: {
+    grantPermission
   },
   data() {
     return {
       list: null,
       total: null,
       listLoading: true,
-      dialogPermissionVisible: false,
-      filterPermissionText: '',
-      checkedKeys: [],
-      expandKeys: [],
-      defaultProps: {
-        children: 'children',
-        label: 'name',
-        isLeaf: 'leaf',
-        disabled: 'disabled'
-      },
       pageModule: {
         pageNumber: 1,
         pageSize: 10,
@@ -227,8 +200,7 @@ export default {
       dialogStatus: '',
       textMap: {
         update: '编辑',
-        create: '创建',
-        permission: '分配权限'
+        create: '创建'
       }
     }
   },
@@ -247,86 +219,48 @@ export default {
     })
   },
   methods: {
-    updatePermession(id, value) {
-      // 得到当前已展开项目中被选中的权限
-      const checkedPermissions = this.$refs.permissionTree.getCheckedKeys().sort() // 当前选中的权限集合
-      const halfCheckedPermissions = this.$refs.permissionTree.getHalfCheckedKeys().sort() // 当前半选中的权限集合
-      const rolePermissions = this.checkedKeys.sort() // 当前角色已拥有的所有权限集合
-      const expandPermissions = this.expandKeys.sort() // 树中已展开的权限集合
-
-      // 求并集，到的所有实际被选中的权限 checkedPermissions + halfCheckedPermissions
-      const allCheckedPermissions = checkedPermissions.concat(halfCheckedPermissions.filter(function(v) { return checkedPermissions.indexOf(v) === -1 })).sort()
-
-      // 求差集
-      const differencePermissions = rolePermissions.filter(function(v) { return expandPermissions.indexOf(v) === -1 })
-
-      // 求并集
-      const unionPermissions = differencePermissions.concat(allCheckedPermissions.filter(function(v) { return differencePermissions.indexOf(v) === -1 })).sort()
-
-      // 如果没有修改过数据则直接返回
-      if (unionPermissions.toString() === rolePermissions.toString()) {
-        this.dialogPermissionVisible = false
-        return
+    handlePermission(row) {
+      const checkKeys = []
+      const authorities = row && row.authorities ? row.authorities.split(',') : []
+      for (let i = 0; i < authorities.length; i++) {
+        const key = parseInt(authorities[i])
+        if (key && key > -1) {
+          const permission = {
+            permissionId: key
+          }
+          checkKeys.push(permission)
+        }
       }
-      this.form.authorities = unionPermissions.join(',')
-      putClient(this.form).then(() => {
-        this.dialogPermissionVisible = false
-        this.$notify({
-          title: '更新权限成功',
-          message: '更新权限成功!',
-          type: 'success',
-          duration: 2000
+      this.form = row
+      const data = {
+        id: this.form.clientId,
+        name: this.form.clientId
+      }
+      this.$refs.grantPermission.initData(this, data, checkKeys, '133')
+    },
+    updatePermession(id, unionPermissions) {
+      return new Promise((resolve, reject) => {
+        this.form.authorities = unionPermissions.join(',')
+        putClient(this.form).then(() => {
+          this.dialogPermissionVisible = false
+          resolve(true)
+        }).catch(reason => {
+          reject(reason)
         })
-      }).catch(reason => {
-        this.$notify({
-          title: '更新客户端权限信息失败',
-          message: reason.message,
-          type: 'error',
-          duration: 5000
+      })
+    },
+    listChildPermissions(pId) {
+      return new Promise((resolve, reject) => {
+        listChildPermissions(pId).then((response) => {
+          resolve(response)
+        }).catch(reason => {
+          reject(reason)
         })
       })
     },
     filterNode(value, data) {
       if (!value) return true
       return data.name.indexOf(value) !== -1
-    },
-    loadChildPermissions(node, resolve) {
-      let pId = 0
-      if (node.level !== 0) {
-        pId = node.data.id
-      }
-      listChildPermissions(pId).then(response => {
-        const childPermissions = response.data || []
-        // 记录所有被展开过的节点ID，用于保存时比较数据
-        for (let i = 0; i < childPermissions.length; i++) {
-          const id = childPermissions[i].id
-          this.expandKeys.push(id)
-          // childPermissions[i].disabled = pId === 0
-        }
-        return resolve(childPermissions)
-      }).catch(reason => {
-        this.$notify({
-          title: '加载子节点失败',
-          message: reason.message,
-          type: 'error',
-          duration: 5000
-        })
-      })
-    },
-    handleClientPermission(row) {
-      this.checkedKeys = []
-      const checkKeys = row && row.authorities ? row.authorities.split(',') : []
-      for (let i = 0; i < checkKeys.length; i++) {
-        this.checkedKeys[i] = parseInt(checkKeys[i])
-      }
-      this.dialogStatus = 'permission'
-      this.dialogPermissionVisible = true
-      this.form = row
-      if (this.$refs) {
-        if (this.$refs.permissionTree) {
-          this.$refs.permissionTree.setCheckedKeys(this.checkedKeys)
-        }
-      }
     },
     getList() {
       this.listLoading = true
