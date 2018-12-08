@@ -1,7 +1,7 @@
 <template>
   <div class="app-container calendar-list-container">
     <div class="filter-container">
-      <el-input @keyup.enter.native="handleSearch" style="width: 200px;" class="filter-item" placeholder="支持XXX查找"
+      <el-input @keyup.enter.native="handleSearch" style="width: 200px;" class="filter-item" placeholder="支持名称查找"
                 v-model="pageModule.searchText">
       </el-input>
       <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleSearch">
@@ -27,11 +27,14 @@
         </template>
       </el-table-column>
       <el-table-column align="center" label="版本价格" sortable prop="price"></el-table-column>
-      <el-table-column align="center" label="开始日期" sortable prop="beginTime" width="160"></el-table-column>
+      <el-table-column align="center" label="有效天数" sortable prop="validity"></el-table-column>
+      <el-table-column align="center" label="试用天数" sortable prop="tryoutDays"></el-table-column>
+      <el-table-column align="center" label="保护天数" sortable prop="protectDays"></el-table-column>
+      <el-table-column align="center" label="机构数" sortable prop="maxOrganizs"></el-table-column>
+      <el-table-column align="center" label="用户数" sortable prop="maxUsers"></el-table-column>
+      <!--<el-table-column align="center" label="开始日期" sortable prop="beginTime" width="160"></el-table-column>-->
       <el-table-column align="center" label="结束日期" sortable prop="endTime" width="160"></el-table-column>
-      <el-table-column align="center" label="有效期(天)" sortable prop="validity"></el-table-column>
-      <el-table-column align="center" label="创建日期" sortable prop="createTime" width="160"></el-table-column>
-      <el-table-column align="center" label="启用状态" sortable prop="status">
+      <el-table-column align="center" label="状态" sortable prop="status">
         <template slot-scope="scope">
           <el-tag>{{getDicNameValue(statusOptions,scope.row.status)}}</el-tag>
         </template>
@@ -69,14 +72,19 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12">
+          <el-col :span="8">
             <el-form-item label="版本价格" prop="price">
-              <el-input v-model="form.price" placeholder="版本价格"></el-input>
+              <el-input v-model.number="form.price" placeholder="版本价格"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="有效期(天)" prop="validity">
-              <el-input v-model="form.validity" placeholder="有效期：按天计算"></el-input>
+          <el-col :span="8">
+            <el-form-item label="有效天数" prop="validity">
+              <el-input v-model.number="form.validity" placeholder="有效期：按天计算"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="保护天数" prop="protectDays">
+              <el-input v-model.number="form.protectDays" placeholder="保护期：按天计算"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -87,6 +95,7 @@
                 v-model="form.beginTime"
                 align="right"
                 type="date"
+                style="width: 100%;"
                 placeholder="请选择版本开始日期"
                 format="yyyy-MM-dd HH:mm:ss"
                 value-format="yyyy-MM-dd HH:mm:ss">
@@ -99,23 +108,38 @@
                 v-model="form.endTime"
                 align="right"
                 type="date"
-                placeholder="请选择版本开始结束"
+                style="width: 100%;"
+                placeholder="请选择版本结束日期"
                 format="yyyy-MM-dd HH:mm:ss"
                 value-format="yyyy-MM-dd HH:mm:ss">
               </el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="启用状态" prop="status">
-          <el-switch v-model="form.status"
-                     active-color="#13ce66"
-                     inactive-color="#ff4949"
-                     active-text="启用"
-                     inactive-text="禁用"
-                     active-value=0
-                     inactive-value=1>
-          </el-switch>
-        </el-form-item>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="启用状态" prop="status">
+              <el-switch v-model="form.status"
+                         active-color="#13ce66"
+                         inactive-color="#ff4949"
+                         active-text="启用"
+                         inactive-text="禁用"
+                         active-value=0
+                         inactive-value=1>
+              </el-switch>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item prop="tryout">
+              <el-checkbox v-model="tryout" >试用期</el-checkbox>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item v-if="tryout" label="试用天数" prop="tryoutDays">
+              <el-input v-model.number="form.tryoutDays" placeholder="试用天数"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-form-item label="版本说明" prop="description">
           <el-input type="textarea" v-model="form.description" placeholder="版本说明" :autosize="{ minRows: 4, maxRows: 20}"></el-input>
         </el-form-item>
@@ -152,6 +176,7 @@
         list: null,
         total: null,
         listLoading: true,
+        tryout: false,
         pageModule: {
           pageNumber: 1,
           pageSize: 10,
@@ -161,7 +186,7 @@
         },
         pageSizes: [],
         typeOptions: [{ 'name': 0, 'value': '收费版' }, { 'name': 1, 'value': '免费版' }, { 'name': 2, 'value': '开发版' }],
-        statusOptions: [{ 'name': 0, 'value': '有效' }, { 'name': 1, 'value': '禁用' }],
+        statusOptions: [{ 'name': 0, 'value': '启用' }, { 'name': 1, 'value': '禁用' }],
         form: {},
         rules: {
           name: [
@@ -177,39 +202,87 @@
               trigger: 'blur'
             }
           ],
+          maxOrganizs: [
+            {
+              required: true,
+              message: '可创建机构数不能为空'
+            },
+            {
+              min: 1,
+              type: 'number',
+              message: '不能小于1'
+            }
+          ],
+          maxUsers: [
+            {
+              required: true,
+              message: '可创建用户数不能为空'
+            },
+            {
+              min: 1,
+              type: 'number',
+              message: '不能小于1'
+            }
+          ],
+          protectDays: [
+            {
+              required: true,
+              message: '保护期不能为空'
+            },
+            {
+              min: 0,
+              type: 'number',
+              message: '不能小于0'
+            }
+          ],
+          tryoutDays: [
+            {
+              required: true,
+              message: '试用期不能为空'
+            },
+            {
+              type: 'number',
+              min: 0,
+              message: '不能小于0'
+            }
+          ],
           type: [
             {
               required: true,
               message: '请选择版本类型',
-              trigger: 'blur'
+              trigger: 'change'
             }
           ],
           price: [
             {
+              type: 'number',
               required: true,
-              message: '请输入价格，不能为负数',
-              trigger: 'blur'
+              message: '请输入价格，不能为负数'
             }
           ],
           validity: [
             {
               required: true,
-              message: '请输入有效天数',
-              trigger: 'blur'
+              message: '请输入有效期'
+            },
+            {
+              min: 1,
+              type: 'number',
+              message: '不能小于1'
             }
           ],
-          beginDate: [
+          beginTime: [
             {
               required: true,
               message: '请选择开始日期',
-              trigger: 'blur'
+              trigger: 'change'
             }
           ],
-          endDate: [
+          endTime: [
             {
               required: true,
               message: '请选择结束日期',
-              trigger: 'blur'
+              trigger: 'change'
             }
           ]
         },
@@ -221,7 +294,7 @@
         }
       }
     },
-    created() {
+    mount() {
       this.asyncOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数', (data) => {
         this.pageModule.pageSize = parseInt(data)
       })
@@ -280,6 +353,7 @@
         getVersion(this.form['id']).then(response => {
           this.form = response.data
           this.form.status = this.form.status + ''
+          this.tryout = this.form.tryout === 1
           this.dialogFormVisible = true
           this.dialogStatus = 'update'
         }).catch(reason => {
@@ -331,6 +405,7 @@
         const set = this.$refs
         set[formName].validate(valid => {
           if (valid) {
+            this.form.tryout = this.tryout ? 1 : 0
             postVersion(this.form).then(() => {
               this.dialogFormVisible = false
               this.getList()
@@ -406,6 +481,7 @@
         set[formName].validate(valid => {
           if (valid) {
             this.dialogFormVisible = false
+            this.form.tryout = this.tryout ? 1 : 0
             putVersion(this.form).then(() => {
               this.dialogFormVisible = false
               this.getList()
@@ -435,6 +511,11 @@
           name: undefined,
           price: 0.00,
           validity: 365,
+          tryoutDays: 0,
+          tryout: 0,
+          protectDays: 0,
+          maxOrganizs: 100,
+          maxUsers: 300,
           status: '0'
         }
       },
