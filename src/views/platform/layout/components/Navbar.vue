@@ -25,7 +25,7 @@
       </template>
       <el-dropdown class="avatar-container right-menu-item">
         <div class="avatar-wrapper">
-          <img class="user-avatar" :src="userInfo.avatar+'?imageView2/1/w/30/h/30'">
+          <svg-icon v-if="userInfo.avatar" :icon-class="userInfo.avatar" style="width: 40px; height: 40px; border-radius: 50%; background: #fff;"></svg-icon>
           <span style="float: right; text-align: center">{{userInfo.username}}</span>
           <i class="el-icon-caret-bottom"></i>
         </div>

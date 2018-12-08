@@ -2,7 +2,7 @@
   <div class="app-container calendar-list-container">
     <div class="filter-container">
       <el-button-group>
-        <el-button round type="primary" class="filter-item" icon="el-icon-refresh" v-permission="'system_permission_refresh'" @click="handlerRefresh">{{$t('table.refresh')}}</el-button>
+        <el-button round type="primary" class="filter-item" icon="el-icon-refresh" v-permission="'84'" @click="handlerRefresh">{{$t('table.refresh')}}</el-button>
         <el-button round type="primary" class="filter-item" icon="el-icon-circle-plus" style="margin-left: 10px;" v-permission="'8'" @click="handlerAdd">{{$t('table.add')}}</el-button>
         <el-button round type="success" class="filter-item" icon="el-icon-edit" style="margin-left: 10px;" v-permission="'9'" @click="handlerUpdate">{{$t('table.edit')}}</el-button>
         <el-button round type="danger" class="filter-item" icon="el-icon-delete" style="margin-left: 10px;" v-permission="'10'" @click="handleDelete">{{$t('table.delete')}}</el-button>
@@ -78,7 +78,7 @@
                 <el-row>
                   <el-col :span="24">
                     <el-form-item label="请求方法" prop="methodArray">
-                      <el-select v-model="form.methodArray" :disabled="formUpdate" placeholder="支持多选，不选则为适配所有方法" multiple filterable>
+                      <el-select v-model="form.methodArray" :disabled="formUpdate" placeholder="支持多选，不选则为适配所有方法" multiple>
                         <el-option v-for="item in methodOptions" :key="item.scode" :label="item.value" :value="item.scode" >
                         </el-option>
                       </el-select>
@@ -88,7 +88,7 @@
                 <el-row>
                   <el-col :span="12">
                     <el-form-item label="类型" prop="type">
-                      <el-select class="filter-item" v-model="form.type"  :disabled="formUpdate"  placeholder="请选择类型" >
+                      <el-select class="filter-item" v-model="form.type" :disabled="formUpdate"  placeholder="请选择类型" >
                         <el-option v-for="item in typeOptions" :key="item.name" :label="item.value" :value="item.name" :disabled="item.status === 1"> </el-option>
                       </el-select>
                     </el-form-item>
@@ -101,13 +101,8 @@
                   </el-col>
                 </el-row>
               </el-col>
-              <!--<el-col :span="10">
-                   <el-form-item label="图标" prop="icon">
-                     <el-input v-model="form.icon" :disabled="formUpdate" placeholder="请选择图标，只对菜单类型有效"></el-input>
-                   </el-form-item>
-                 </el-col>-->
               <el-col :span="4">
-                <img @click="handleSelectAvatar" alt = "点击选择图标" class="user-avatar" style="width: 80px; height: 80px; border-radius: 50%; margin-left: 20px; margin-top: 15px; background: #fff; color: #40c9c6;" :src="form.icon2+'?imageView2/1/w/80/h/80'">
+                <svg-icon @click.native="handleSelectAvatar" :icon-class="form.icon" style="width: 80px; height: 80px; border-radius: 50%; margin-left: 20px; margin-top: 15px; background: #fff; color: #40c9c6;"></svg-icon>
               </el-col>
             </el-row>
             <el-form-item prop="status">
@@ -160,7 +155,10 @@
           isLeaf: 'leaf'
         },
         labelPosition: 'right',
-        form: {},
+        form: {
+          icon: 'permission',
+          methodArray: []
+        },
         currentId: -1,
         formRules: {
           url: [
@@ -219,17 +217,17 @@
           duration: 5000
         })
       })
+      this.$refs.iconsSelect.init(this.setAvatar)
       this.resetForm()
     },
     methods: {
       handleSelectAvatar() {
         if (!this.formUpdate) {
-          this.$refs.iconsSelect.init(this.setAvatar)
+          this.$refs.iconsSelect.show()
         }
       },
       setAvatar(icon) {
-        this.form.icon = this.getFileName(icon)
-        this.form.icon2 = icon
+        this.form.icon = icon
       },
       getFileName(pathFile) {
         let name = pathFile
@@ -295,7 +293,6 @@
           if (this.form.method) {
             this.form.methodArray = this.form.method.split(',')
           }
-          this.form.icon2 = 'src/icons/svg/' + this.form.icon + '.svg'
         }).catch(reason => {
           this.$notify({
             title: '获取权限失败',
@@ -462,6 +459,33 @@
             }
           }
         }
+        let icon = 'permission'
+        switch (type) {
+          // 按钮
+          case 0:
+            icon = 'button'
+            break
+          // 组件菜单
+          case 1:
+            icon = 'menu'
+            break
+          // 直接链接菜单
+          case 2:
+            icon = 'link'
+            break
+          // 目录菜单
+          case 3:
+            icon = 'directory'
+            break
+          // 间接链接菜单
+          case 4:
+            icon = 'link'
+            break
+          // 服务
+          case 5:
+            icon = 'service'
+            break
+        }
         this.form = {
           code: code,
           name: undefined,
@@ -471,9 +495,7 @@
           sort: sort,
           type: type,
           status: '0',
-          icon: 'permission',
-          icon2: 'src/icon/svg/permission.svg',
-          // level: this.parent.level ? this.parent.level + 1 : 0,
+          icon: icon,
           level: this.parent.level + 1,
           method: undefined,
           methodArray: [],

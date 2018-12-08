@@ -23,7 +23,8 @@
       <el-table-column align="center" label="名称" sortable prop="username" width="140">
         <template slot-scope="scope">
           <span>
-            <img v-if="scope.row.avatar" class="user-avatar" style="width: 20px; height: 20px; border-radius: 50%;" :src="scope.row.avatar+'?imageView2/1/w/20/h/20'"> {{scope.row.username}}
+            <svg-icon v-if="scope.row.avatar" :icon-class="scope.row.avatar" style="width: 20px; height: 20px; border-radius: 50%; margin-left: 20px; background: #fff;"></svg-icon>
+            {{scope.row.username}}
           </span>
         </template>
       </el-table-column>
@@ -107,7 +108,7 @@
             </el-row>
           </el-col>
           <el-col :span="4">
-              <img @click="handleSelectAvatar"  class="user-avatar" style="width: 80px; height: 80px; border-radius: 50%; margin-left: 20px" :src="form.avatar+'?imageView2/1/w/80/h/80'">
+            <svg-icon @click.native="handleSelectAvatar" :icon-class="form.avatar" class="user-avatar" style="width: 80px; height: 80px; border-radius: 50%; margin-left: 20px; background: #fff;"></svg-icon>
           </el-col>
         </el-row>
         <el-row >
@@ -129,14 +130,6 @@
             </el-form-item>
           </el-col>
         </el-row>
-       <!-- <el-form-item label="角色" prop="role">
-          <el-select class="filter-item" v-model="selectedRoles" placeholder="请选择" multiple>
-            <el-option v-for="item in rolesOptions" :key="item.id" :label="item.name" :value="item.id" :disabled="isDisabled[item.status]">
-              <span style="float: left">{{ item.name }}</span>
-              <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span>
-            </el-option>
-          </el-select>
-        </el-form-item>-->
         <el-row >
           <el-col :span="10">
             <el-form-item label="邮箱" prop="email">
@@ -190,7 +183,7 @@
         <el-button round v-permission="'48'" type="primary" @click="updateUserRole()" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
       </div>
     </el-dialog>
-    <el-dialog :title="textMap[dialogStatus] + ' ---> ' + form.username" :visible.sync="dialogUserPermissionVisible" width="550px">
+    <el-dialog :title="textMap[dialogStatus] + ' ---> ' + form.username" :visible.sync="dialogUserPermissionVisible">
       <el-tabs type="border-card">
         <el-tab-pane label="增加权限">
           <el-input
@@ -469,12 +462,13 @@ export default {
         this.pageSizes[i] = parseInt(temp[i])
       }
     })
+    this.$refs.iconsSelect.init(this.setAvatar)
     this.loadRoles()
     this.resetTemp()
   },
   methods: {
     handleSelectAvatar() {
-      this.$refs.iconsSelect.init(this.setAvatar)
+      this.$refs.iconsSelect.show()
     },
     setAvatar(avatar) {
       this.form.avatar = avatar
@@ -1098,7 +1092,7 @@ export default {
         phone: undefined,
         email: undefined,
         birthday: undefined,
-        avatar: 'src/icons/svg/mavatar.svg',
+        avatar: 'mavatar',
         id: undefined,
         usercode: undefined,
         password: '123456',

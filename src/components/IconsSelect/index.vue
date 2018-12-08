@@ -31,15 +31,18 @@ export default {
   },
   methods: {
     generateIconCode(symbol) {
-      return 'src/icons/svg/' + symbol + '.svg'
+      // return 'src/icons/svg/' + symbol + '.svg'
+      return symbol
     },
     handleClipboard(text, event) {
       this.callback(text)
       this.dialogUserAvatarVisible = false
     },
     init(callback) {
-      this.dialogUserAvatarVisible = true
       this.callback = callback
+    },
+    show() {
+      this.dialogUserAvatarVisible = true
     }
   }
 }
