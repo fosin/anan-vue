@@ -5,7 +5,7 @@
         <el-col :span="24">
           <div class="title-container">
             <h3 class="title">{{$t('login.title')}}</h3>
-            <lang-select class="set-language"></lang-select>
+            <LangSelect class="set-language"></LangSelect>
           </div>
         </el-col>
       </el-row>
@@ -13,7 +13,7 @@
         <el-col :span="24">
           <el-form-item prop="username">
             <span class="svg-container svg-container_login">
-              <svg-icon icon-class="user2"/>
+              <svg-icon icon-class="user"/>
             </span>
             <el-input name="username" type="text" v-model="loginForm.username" autoComplete="on"
                       :placeholder="$t('login.username.placeholder')"/>
@@ -23,7 +23,7 @@
       <el-row>
         <el-col :span="24">
         <el-form-item prop="password">
-          <span class="svg-container">
+          <span class="svg-container svg-container_login">
             <svg-icon icon-class="password"/>
           </span>
           <el-input name="password" :type="passwordType" @keyup.enter.native="handleLogin" v-model="loginForm.password"
@@ -57,6 +57,7 @@
           </el-button>
         </el-col>
       </el-row>
+      <SocialSign></SocialSign>
     </el-form>
   </div>
 </template>
@@ -64,9 +65,9 @@
 <script>
   import { isvalidUsername } from '@/utils/validate'
   import LangSelect from '@/components/LangSelect'
-
+  import SocialSign from './socialsignin'
   export default {
-    components: { LangSelect },
+    components: { LangSelect, SocialSign },
     name: 'login',
     data() {
       const validateUsername = (rule, value, callback) => {
@@ -222,8 +223,8 @@
       width: 20px;
       display: inline-block;
       &_login {
-        padding-left: 8px;
-        font-size: 20px;
+        padding-left: 5px;
+        font-size: 15px;
       }
     }
     .title-container {
