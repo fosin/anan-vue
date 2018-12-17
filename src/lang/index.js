@@ -2,20 +2,26 @@ import Vue from 'vue'
 import VueI18n from 'vue-i18n'
 import Cookies from 'js-cookie'
 import elementEnLocale from 'element-ui/lib/locale/lang/en' // element-ui lang
-import elementZhLocale from 'element-ui/lib/locale/lang/zh-CN'// element-ui lang
-import enLocale from './en'
-import zhLocale from './zh-CN'
+import elementZhCNLocale from 'element-ui/lib/locale/lang/zh-CN'// element-ui lang
+import elementzhTWLocale from 'element-ui/lib/locale/lang/zh-TW'// element-ui lang
+import enUKLocale from './en-UK'
+import zhCNLocale from './zh-CN'
+import zhTWLocale from './zh-HK'
 
 Vue.use(VueI18n)
 
 const messages = {
-  en: {
-    ...enLocale,
+  'en-UK': {
+    ...enUKLocale,
     ...elementEnLocale
   },
   'zh-CN': {
-    ...zhLocale,
-    ...elementZhLocale
+    ...zhCNLocale,
+    ...elementZhCNLocale
+  },
+  'zh-HK': {
+    ...zhTWLocale,
+    ...elementzhTWLocale
   }
 }
 

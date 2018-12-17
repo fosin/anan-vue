@@ -6,7 +6,7 @@ import generateIconsView from './generateIconsView.js'// just for @/views/icons 
 Vue.component('svg-icon', SvgIcon)
 
 const requireAll = requireContext => requireContext.keys().map(requireContext)
-const req = require.context('./svg', false, /\.svg$/)
+const req = require.context('./svg', true, /\.svg$/)
 const iconMap = requireAll(req)
 
 generateIconsView.generate(iconMap) // just for @/views/icons , you can delete it

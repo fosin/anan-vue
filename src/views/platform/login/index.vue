@@ -57,7 +57,7 @@
           </el-button>
         </el-col>
       </el-row>
-      <SocialSign></SocialSign>
+      <SocialSign v-if="false"></SocialSign>
     </el-form>
   </div>
 </template>
@@ -99,7 +99,8 @@
         loading: false,
         passwordType: 'password',
         // userRoles: [],
-        redirect: undefined
+        redirect: undefined,
+        NODE_ENV: process.env.NODE_ENV
       }
     },
     watch: {

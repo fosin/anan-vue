@@ -202,7 +202,7 @@ function isEmpty(val) {
   } else if (val instanceof Object) {
     if (JSON.stringify(val) === '{}') return true
   } else {
-    return val === 'null' || val == null || val === 'undefined' || val === undefined || val === ''
+    return val === 'null' || val == null || val === 'undefined' || val === ''
   }
   return false
 }
