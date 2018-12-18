@@ -4,18 +4,20 @@
       <el-input @keyup.enter.native="handleSearch" style="width: 200px;" class="filter-item" placeholder="支持名称查找"
                 v-model="pageModule.searchText">
       </el-input>
-      <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleSearch">
+      <el-button-group>
+      <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleSearch" round v-waves>
         {{$t('table.search')}}
       </el-button>
-      <el-button v-permission="'112'" class="filter-item" style="margin-left: 10px;" @click="handleAdd" type="primary"
-                 icon="el-icon-circle-plus">{{$t('table.add')}}
+      <el-button v-permission="'112'" class="filter-item" style="margin-left: 5px;" @click="handleAdd" type="primary"
+                 icon="el-icon-circle-plus" round v-waves>{{$t('table.add')}}
       </el-button>
-      <el-button type="success" v-permission="'113'" class="filter-item" style="margin-left: 10px;" icon="el-icon-edit"
-                 @click="handleEdit()">{{$t('table.edit')}}
+      <el-button type="success" v-permission="'113'" class="filter-item" style="margin-left: 5px;" icon="el-icon-edit"
+                 @click="handleEdit()" round v-waves>{{$t('table.edit')}}
       </el-button>
-      <el-button type="danger" v-permission="'114'" class="filter-item" style="margin-left: 10px;" icon="el-icon-delete"
-                 @click="handleDelete()">{{$t('table.delete')}}
+      <el-button type="danger" v-permission="'114'" class="filter-item" style="margin-left: 5px;" icon="el-icon-delete"
+                 @click="handleDelete()" round v-waves>{{$t('table.delete')}}
       </el-button>
+      </el-button-group>
     </div>
     <el-table :data="list" v-loading="listLoading" element-loading-text="努力加载中"
               border fit highlight-current-row style="width: 100%" :default-sort="{prop: 'name', order: 'ascending'}"

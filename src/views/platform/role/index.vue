@@ -4,18 +4,20 @@
       <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="支持角色名称、标识"
                 v-model="pageModule.searchText">
       </el-input>
+      <el-button-group>
       <el-button round class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">
         {{$t('table.search')}}
       </el-button>
-      <el-button round v-permission="'24'" class="filter-item" style="margin-left: 10px;" @click="handleAdd"
+      <el-button round v-permission="'24'" class="filter-item" style="margin-left: 5px;" @click="handleAdd"
                  type="primary" icon="el-icon-circle-plus">{{$t('table.add')}}
       </el-button>
-      <el-button round type="success" v-permission="'25'" class="filter-item" style="margin-left: 10px;"
+      <el-button round v-waves type="success" v-permission="'25'" class="filter-item" style="margin-left: 5px;"
                  icon="el-icon-edit" @click="handleEdit()">{{$t('table.edit')}}
       </el-button>
-      <el-button round type="danger" v-permission="'26'" class="filter-item" style="margin-left: 10px;"
+      <el-button round v-waves type="danger" v-permission="'26'" class="filter-item" style="margin-left: 5px;"
                  icon="el-icon-delete" @click="handleDelete()">{{$t('table.delete')}}
       </el-button>
+      </el-button-group>
     </div>
 
     <el-table :data="roleList" v-loading="listLoading" element-loading-text="努力加载中"
@@ -125,7 +127,7 @@
       <div slot="footer" class="dialog-footer">
         <el-button round @click="cancel('permissionTree')" icon="el-icon-circle-close">{{$t('table.cancel')}}
         </el-button>
-        <el-button round type="primary" v-permission="'49'" @click="updatePermession(form.id, form.value)" icon="el-icon-circle-check">
+        <el-button round v-waves type="primary" v-permission="'49'" @click="updatePermession(form.id, form.value)" icon="el-icon-circle-check">
           {{$t('table.update')}}
         </el-button>
       </div>

@@ -4,18 +4,20 @@
       <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item"
                 placeholder="支持字典明细项代码、字典明细项值查找" v-model="pageModule.searchText">
       </el-input>
-      <el-button round class="filter-item" type="primary" size="small" v-waves icon="el-icon-search" @click="handleFilter">
-        {{$t('table.search')}}
-      </el-button>
-      <el-button round v-permission="'62'" size="small" class="filter-item" style="margin-left: 5px;"
-                 @click="handleAdd" type="primary" icon="el-icon-circle-plus">{{$t('table.add')}}
-      </el-button>
-      <el-button round type="success" v-permission="'63'" size="small" class="filter-item" style="margin-left: 5px;"
-                 icon="el-icon-edit" @click="handleEdit()">{{$t('table.edit')}}
-      </el-button>
-      <el-button round type="danger" v-permission="'64'" size="small" class="filter-item" style="margin-left: 5px;"
-                 icon="el-icon-delete" @click="handleDelete()">{{$t('table.delete')}}
-      </el-button>
+      <el-button-group>
+        <el-button round v-waves class="filter-item" type="primary" size="small" icon="el-icon-search" @click="handleFilter">
+          {{$t('table.search')}}
+        </el-button>
+        <el-button round v-waves v-permission="'62'" size="small" class="filter-item" style="margin-left: 5px;"
+                   @click="handleAdd" type="primary" icon="el-icon-circle-plus">{{$t('table.add')}}
+        </el-button>
+        <el-button round v-waves type="success" v-permission="'63'" size="small" class="filter-item" style="margin-left: 5px;"
+                   icon="el-icon-edit" @click="handleEdit()">{{$t('table.edit')}}
+        </el-button>
+        <el-button round v-waves type="danger" v-permission="'64'" size="small" class="filter-item" style="margin-left: 5px;"
+                   icon="el-icon-delete" @click="handleDelete()">{{$t('table.delete')}}
+        </el-button>
+      </el-button-group>
     </div>
 
     <el-table :data="dictionaryDetailList" v-loading="listLoading" element-loading-text="努力加载中"

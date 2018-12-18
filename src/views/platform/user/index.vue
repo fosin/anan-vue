@@ -3,14 +3,16 @@
     <div class="filter-container">
       <el-input @keyup.enter.native="handleFilter" style="width: 300px;" class="filter-item" placeholder="支持用户工号、名称、手机号、邮箱查找" v-model="pageModule.searchText">
       </el-input>
-      <el-button round class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>
-      <el-button round v-permission="'12'" class="filter-item" style="margin-left: 10px;" @click="handleAdd" type="primary" icon="el-icon-circle-plus">{{$t('table.add')}}</el-button>
-      <el-button round v-permission="'14'" class="filter-item" style="margin-left: 10px;" type="success" icon="el-icon-edit" @click="handleEdit">{{$t('table.edit')}}
-      </el-button>
-      <el-button round v-permission="'15'" class="filter-item" style="margin-left: 10px;" type="danger" icon="el-icon-delete" @click="handleDelete">{{$t('table.delete')}}
-      </el-button>
-      <el-button round v-permission="'27'" class="filter-item" style="margin-left: 10px;" icon="el-icon-bell" type="info" @click="handleResetPass">{{$t('table.resetPass')}}
-      </el-button>
+      <el-button-group>
+        <el-button round v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>
+        <el-button round v-waves v-permission="'12'" class="filter-item" style="margin-left: 5px;" @click="handleAdd" type="primary" icon="el-icon-circle-plus">{{$t('table.add')}}</el-button>
+        <el-button round v-waves v-permission="'14'" class="filter-item" style="margin-left: 5px;" type="success" icon="el-icon-edit" @click="handleEdit">{{$t('table.edit')}}
+        </el-button>
+        <el-button round v-waves v-permission="'15'" class="filter-item" style="margin-left: 5px;" type="danger" icon="el-icon-delete" @click="handleDelete">{{$t('table.delete')}}
+        </el-button>
+        <el-button round v-waves v-permission="'27'" class="filter-item" style="margin-left: 5px;" icon="el-icon-bell" type="info" @click="handleResetPass">{{$t('table.resetPass')}}
+        </el-button>
+      </el-button-group>
     </div>
 
     <el-table :data="list" v-loading="listLoading"

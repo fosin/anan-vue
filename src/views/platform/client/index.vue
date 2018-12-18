@@ -3,12 +3,14 @@
     <div class="filter-container">
       <el-input @keyup.enter.native="handleSearch" style="width: 200px;" class="filter-item" placeholder="支持标识、密钥查找" v-model="pageModule.searchText">
       </el-input>
-      <el-button round class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleSearch">{{$t('table.search')}}</el-button>
-      <el-button round v-permission="'50'" class="filter-item" style="margin-left: 10px;" @click="handleAdd" type="primary" icon="el-icon-circle-plus">{{$t('table.add')}}</el-button>
-      <el-button round type="success" v-permission="'51'" class="filter-item" style="margin-left: 10px;" icon="el-icon-edit" @click="handleEdit()">{{$t('table.edit')}}
-      </el-button>
-      <el-button round type="danger" v-permission="'52'" class="filter-item" style="margin-left: 10px;" icon="el-icon-delete" @click="handleDelete()">{{$t('table.delete')}}
-      </el-button>
+      <el-button-group>
+        <el-button round v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleSearch">{{$t('table.search')}}</el-button>
+        <el-button round v-waves v-permission="'50'" class="filter-item" style="margin-left: 5px;" @click="handleAdd" type="primary" icon="el-icon-circle-plus">{{$t('table.add')}}</el-button>
+        <el-button round v-waves type="success" v-permission="'51'" class="filter-item" style="margin-left: 5px;" icon="el-icon-edit" @click="handleEdit()">{{$t('table.edit')}}
+        </el-button>
+        <el-button round v-waves type="danger" v-permission="'52'" class="filter-item" style="margin-left: 5px;" icon="el-icon-delete" @click="handleDelete()">{{$t('table.delete')}}
+        </el-button>
+      </el-button-group>
     </div>
     <el-table :data="list" v-loading="listLoading" element-loading-text="努力加载中"
               border fit highlight-current-row style="width: 100%" :default-sort = "{prop: 'clientId', order: 'ascending'}"

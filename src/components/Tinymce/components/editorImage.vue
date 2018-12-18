@@ -8,7 +8,7 @@
         <el-button round size="small" type="primary">点击上传</el-button>
       </el-upload>
       <el-button round @click="dialogVisible = false">取 消</el-button>
-      <el-button round type="primary" @click="handleSubmit">确 定</el-button>
+      <el-button round v-waves type="primary" @click="handleSubmit">确 定</el-button>
     </el-dialog>
   </div>
 </template>

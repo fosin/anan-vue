@@ -65,7 +65,7 @@
           </el-col>
         </el-row>
         <el-form-item>
-          <el-button round type="primary" autofocus @click="update">{{$t('table.confirm')}}</el-button>
+          <el-button round v-waves type="primary" autofocus @click="update">{{$t('table.confirm')}}</el-button>
         </el-form-item>
       </el-form>
     </div>

@@ -2,10 +2,10 @@
   <div class="app-container calendar-list-container">
     <div class="filter-container">
       <el-button-group>
-        <el-button round type="primary" class="filter-item" icon="el-icon-refresh" v-permission="'84'" @click="handlerRefresh">{{$t('table.refresh')}}</el-button>
-        <el-button round type="primary" class="filter-item" icon="el-icon-circle-plus" style="margin-left: 10px;" v-permission="'8'" @click="handlerAdd">{{$t('table.add')}}</el-button>
-        <el-button round type="success" class="filter-item" icon="el-icon-edit" style="margin-left: 10px;" v-permission="'9'" @click="handlerUpdate">{{$t('table.edit')}}</el-button>
-        <el-button round type="danger" class="filter-item" icon="el-icon-delete" style="margin-left: 10px;" v-permission="'10'" @click="handleDelete">{{$t('table.delete')}}</el-button>
+        <el-button round v-waves type="primary" class="filter-item" icon="el-icon-refresh" v-permission="'84'" @click="handlerRefresh">{{$t('table.refresh')}}</el-button>
+        <el-button round v-waves type="primary" class="filter-item" icon="el-icon-circle-plus" style="margin-left: 5px;" v-permission="'8'" @click="handlerAdd">{{$t('table.add')}}</el-button>
+        <el-button round v-waves type="success" class="filter-item" icon="el-icon-edit" style="margin-left: 5px;" v-permission="'9'" @click="handlerUpdate">{{$t('table.edit')}}</el-button>
+        <el-button round v-waves type="danger" class="filter-item" icon="el-icon-delete" style="margin-left: 5px;" v-permission="'10'" @click="handleDelete">{{$t('table.delete')}}</el-button>
       </el-button-group>
     </div>
     <el-row>
@@ -27,11 +27,11 @@
           <el-form :label-position="labelPosition" label-width="80px" :model="form" ref="form" :rules="formRules">
             <el-form-item v-if="this.formStatus === 'update'">
               <el-button round @click="onCancel" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
-              <el-button round type="primary" @click="update" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
+              <el-button round v-waves type="primary" @click="update" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
             </el-form-item>
             <el-form-item v-if="this.formStatus === 'create'">
               <el-button round @click="onCancel" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
-              <el-button round type="primary" @click="create" icon="el-icon-circle-check">{{$t('table.create')}}</el-button>
+              <el-button round v-waves type="primary" @click="create" icon="el-icon-circle-check">{{$t('table.create')}}</el-button>
             </el-form-item>
 
             <el-row>
