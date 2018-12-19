@@ -1,7 +1,7 @@
 <template>
   <div class="app-container calendar-list-container">
     <div class="filter-container">
-      <el-input @keyup.enter.native="handleSearch" style="width: 200px;" class="filter-item" placeholder="支持名称查找"
+      <el-input @keyup.enter.native="handleSearch" style="width: 200px;" class="filter-item" :placeholder="$t('cdp_sys_version.searchText')"
                 v-model="pageModule.searchText">
       </el-input>
       <el-button-group>
@@ -22,27 +22,27 @@
     <el-table :data="list" v-loading="listLoading" element-loading-text="努力加载中"
               border fit highlight-current-row style="width: 100%" :default-sort="{prop: 'name', order: 'ascending'}"
               @sort-change="sortChange" @row-click="rowClick">
-      <el-table-column align="center" label="版本名称" sortable prop="name"></el-table-column>
-      <el-table-column align="center" label="版本类型" sortable prop="type">
+      <el-table-column align="center" :label="$t('cdp_sys_version.name.label')" sortable prop="name"></el-table-column>
+      <el-table-column align="center" :label="$t('cdp_sys_version.type.label')" sortable prop="type">
         <template slot-scope="scope">
           <el-tag>{{getDicNameValue(typeOptions,scope.row.type)}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="版本价格" sortable prop="price"></el-table-column>
-      <el-table-column align="center" label="有效天数" sortable prop="validity"></el-table-column>
-      <el-table-column align="center" label="试用天数" sortable prop="tryoutDays"></el-table-column>
-      <el-table-column align="center" label="保护天数" sortable prop="protectDays"></el-table-column>
-      <el-table-column align="center" label="机构数" sortable prop="maxOrganizs"></el-table-column>
-      <el-table-column align="center" label="用户数" sortable prop="maxUsers"></el-table-column>
-      <!--<el-table-column align="center" label="开始日期" sortable prop="beginTime" width="160"></el-table-column>-->
-      <el-table-column align="center" label="结束日期" sortable prop="endTime" width="160"></el-table-column>
-      <el-table-column align="center" label="状态" sortable prop="status">
+      <el-table-column align="center" :label="$t('cdp_sys_version.price.label')" sortable prop="price"></el-table-column>
+      <el-table-column align="center" :label="$t('cdp_sys_version.validity.label')" sortable prop="validity"></el-table-column>
+      <el-table-column align="center" :label="$t('cdp_sys_version.tryoutDays.label')" sortable prop="tryoutDays"></el-table-column>
+      <el-table-column align="center" :label="$t('cdp_sys_version.protectDays.label')" sortable prop="protectDays"></el-table-column>
+      <el-table-column align="center" :label="$t('cdp_sys_version.maxOrganizs.label')" sortable prop="maxOrganizs" width="140px"></el-table-column>
+      <el-table-column align="center" :label="$t('cdp_sys_version.maxUsers.label')" sortable prop="maxUsers" width="120px"></el-table-column>
+      <!--<el-table-column align="center" :label="$t('cdp_sys_version.beginTime.label')" sortable prop="beginTime" width="160"></el-table-column>
+      <el-table-column align="center" :label="$t('cdp_sys_version.endTime.label')" sortable prop="endTime" width="160"></el-table-column>-->
+      <el-table-column align="center" :label="$t('cdp_sys_version.status.label')" sortable prop="status">
         <template slot-scope="scope">
           <el-tag>{{getDicNameValue(statusOptions,scope.row.status)}}</el-tag>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="权限操作" width="100">
+      <el-table-column align="center" :label="$t('table.permission')" width="100">
         <template slot-scope="scope">
           <el-button round size="mini" type="warning" @click="handlePermission(scope.row)">{{$t('table.permission')}}</el-button>
         </template>
@@ -59,13 +59,13 @@
       <el-form :model="form" :rules="rules" ref="form" label-width="100px">
         <el-row>
           <el-col :span="12">
-            <el-form-item label="版本名称" prop="name">
-              <el-input v-model="form.name" placeholder="版本名称"></el-input>
+            <el-form-item :label="$t('cdp_sys_version.name.label')" prop="name">
+              <el-input v-model="form.name" :placeholder="$t('cdp_sys_version.name.placeholder')"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="版本类型" prop="type">
-              <el-select class="filter-item" v-model="form.type" placeholder="请选择版本类型">
+            <el-form-item :label="$t('cdp_sys_version.type.label')" prop="type">
+              <el-select class="filter-item" v-model="form.type" :placeholder="$t('cdp_sys_version.type.placeholder')">
                 <el-option v-for="item in typeOptions" :key="item.name" :label="item.value" :value="item.name"> </el-option>
               </el-select>
             </el-form-item>
@@ -73,43 +73,43 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="版本价格" prop="price">
-              <el-input v-model.number="form.price" placeholder="版本价格"></el-input>
+            <el-form-item :label="$t('cdp_sys_version.price.label')" prop="price">
+              <el-input v-model.number="form.price" :placeholder="$t('cdp_sys_version.price.placeholder')"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="有效天数" prop="validity">
-              <el-input v-model.number="form.validity" placeholder="有效期：按天计算"></el-input>
+            <el-form-item :label="$t('cdp_sys_version.validity.label')" prop="validity">
+              <el-input v-model.number="form.validity" :placeholder="$t('cdp_sys_version.validity.placeholder')"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="保护天数" prop="protectDays">
-              <el-input v-model.number="form.protectDays" placeholder="保护期：按天计算"></el-input>
+            <el-form-item :label="$t('cdp_sys_version.protectDays.label')" prop="protectDays">
+              <el-input v-model.number="form.protectDays" :placeholder="$t('cdp_sys_version.protectDays.placeholder')"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="开始日期" prop="beginTime">
+            <el-form-item :label="$t('cdp_sys_version.beginTime.label')" prop="beginTime" label-width="120px">
               <el-date-picker
                 v-model="form.beginTime"
                 align="right"
                 type="date"
                 style="width: 100%;"
-                placeholder="请选择版本开始日期"
+                :placeholder="$t('cdp_sys_version.beginTime.placeholder')"
                 format="yyyy-MM-dd HH:mm:ss"
                 value-format="yyyy-MM-dd HH:mm:ss">
               </el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="结束日期" prop="endTime">
+            <el-form-item :label="$t('cdp_sys_version.endTime.label')" prop="endTime" label-width="120px">
               <el-date-picker
                 v-model="form.endTime"
                 align="right"
                 type="date"
                 style="width: 100%;"
-                placeholder="请选择版本结束日期"
+                :placeholder="$t('cdp_sys_version.endTime.placeholder')"
                 format="yyyy-MM-dd HH:mm:ss"
                 value-format="yyyy-MM-dd HH:mm:ss">
               </el-date-picker>
@@ -118,12 +118,10 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="启用状态" prop="status">
+            <el-form-item :label="$t('cdp_sys_version.status.label')" prop="status">
               <el-switch v-model="form.status"
                          active-color="#13ce66"
                          inactive-color="#ff4949"
-                         active-text="启用"
-                         inactive-text="禁用"
                          active-value=0
                          inactive-value=1>
               </el-switch>
@@ -131,17 +129,17 @@
           </el-col>
           <el-col :span="8">
             <el-form-item prop="tryout">
-              <el-checkbox v-model="tryout" >试用期</el-checkbox>
+              <el-checkbox v-model="tryout" >{{$t('cdp_sys_version.tryout.label')}}</el-checkbox>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item v-if="tryout" label="试用天数" prop="tryoutDays">
-              <el-input v-model.number="form.tryoutDays" placeholder="试用天数"></el-input>
+            <el-form-item v-if="tryout" :label="$t('cdp_sys_version.tryoutDays.label')" prop="tryoutDays">
+              <el-input v-model.number="form.tryoutDays" :placeholder="$t('cdp_sys_version.tryoutDays.placeholder')"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="版本说明" prop="description">
-          <el-input type="textarea" v-model="form.description" placeholder="版本说明" :autosize="{ minRows: 4, maxRows: 20}"></el-input>
+        <el-form-item :label="$t('cdp_sys_version.description.label')" prop="description">
+          <el-input type="textarea" v-model="form.description" :placeholder="$t('cdp_sys_version.description.placeholder')" :autosize="{ minRows: 4, maxRows: 20}"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -160,14 +158,12 @@
 <script>
   import { getVersion, postVersion, putVersion, deleteVersion, listVersionPage, listVersionPermissions, putVersionPermissions } from './version'
   import { listChildPermissions } from '../permission/permission'
-  import waves from '@/directive/waves/index.js' // 水波纹指令
+
   import { formatDate } from '@/utils/date'
   import grantPermission from '../permission/grantPermission'
   export default {
     name: 'development_version',
-    directives: {
-      waves
-    },
+
     components: {
       grantPermission
     },

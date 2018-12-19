@@ -52,7 +52,7 @@
           <el-checkbox v-model="loginForm.rememberMe">{{$t('login.rememberMe')}}</el-checkbox>
         </el-col>
         <el-col :span="20">
-          <el-button round v-waves type="primary" style="width:30%;margin-bottom:30px;float: right" :loading="loading"
+          <el-button round type="primary" style="width:30%;margin-bottom:30px;float: right" :loading="loading"
                      @click.native.prevent="handleLogin">{{$t('login.logIn')}}
           </el-button>
         </el-col>

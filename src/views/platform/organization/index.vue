@@ -26,47 +26,45 @@
         <el-card class="box-card">
           <el-form :label-position="labelPosition" :rules="rules" label-width="120px" :model="form" ref="form">
             <el-form-item v-if="this.formStatus === 'update'">
-              <el-button round @click="onCancel" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
+              <el-button round v-waves @click="onCancel" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
               <el-button round v-waves type="primary" @click="update" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
             </el-form-item>
             <el-form-item v-if="this.formStatus === 'create'">
-              <el-button round @click="onCancel" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
+              <el-button round v-waves @click="onCancel" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
               <el-button round v-waves type="primary" @click="create" icon="el-icon-circle-check">{{$t('table.create')}}</el-button>
             </el-form-item>
             <el-row>
               <el-col :span="12">
-                <el-form-item label="顶级机构" prop="topId">
+                <el-form-item :label="$t('cdp_sys_organization.topId.label')" prop="topId">
                   <el-tag>{{getOrganizName(form.topId)}}</el-tag>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="父机构信息" prop="pid">
+                <el-form-item :label="$t('cdp_sys_organization.pId.label')" prop="pid">
                   <el-tag>{{parent.code + ' - ' + parent.name}}</el-tag>
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-form-item label="机构编码" prop="code">
-              <el-input v-model="form.code" :disabled="formUpdate" placeholder="请输入机构编码,机构编码必须以上级节点为前缀"></el-input>
+            <el-form-item :label="$t('cdp_sys_organization.code.label')" prop="code">
+              <el-input v-model="form.code" :disabled="formUpdate" :placeholder="$t('cdp_sys_organization.code.placeholder')"></el-input>
             </el-form-item>
-            <el-form-item label="机构简称" prop="name">
-              <el-input v-model="form.name" :disabled="formUpdate"  placeholder="请输入机构简称"></el-input>
+            <el-form-item :label="$t('cdp_sys_organization.name.label')" prop="name">
+              <el-input v-model="form.name" :disabled="formUpdate"  :placeholder="$t('cdp_sys_organization.name.placeholder')"></el-input>
             </el-form-item>
-            <el-form-item label="机构全称" prop="fullname">
-              <el-input v-model="form.fullname" :disabled="formUpdate"  placeholder="请输入机构全称"></el-input>
+            <el-form-item :label="$t('cdp_sys_organization.fullname.label')" prop="fullname">
+              <el-input v-model="form.fullname" :disabled="formUpdate"  :placeholder="$t('cdp_sys_organization.fullname.placeholder')"></el-input>
             </el-form-item>
-            <el-form-item label="机构地址" prop="address">
-              <el-input v-model="form.address" :disabled="formUpdate" placeholder="请输入机构地址"></el-input>
+            <el-form-item :label="$t('cdp_sys_organization.address.label')" prop="address">
+              <el-input v-model="form.address" :disabled="formUpdate" :placeholder="$t('cdp_sys_organization.address.placeholder')"></el-input>
             </el-form-item>
-            <el-form-item label="机构电话" prop="phone">
-              <el-input v-model="form.phone" :disabled="formUpdate" placeholder="请输入机构电话"></el-input>
+            <el-form-item :label="$t('cdp_sys_organization.telphone.label')" prop="telphone">
+              <el-input v-model="form.telphone" :disabled="formUpdate" :placeholder="$t('cdp_sys_organization.telphone.placeholder')"></el-input>
             </el-form-item>
-            <el-form-item prop="status">
+            <el-form-item prop="status" :label="$t('cdp_sys_organization.status.label')">
               <el-switch :disabled="formUpdate"
                 v-model="form.status"
                 active-color="#13ce66"
                 inactive-color="#ff4949"
-                active-text="启用"
-                inactive-text="禁用"
                 active-value=0
                 inactive-value=1>
               </el-switch>

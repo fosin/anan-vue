@@ -1,7 +1,7 @@
 <template>
   <div class="app-container calendar-list-container">
     <div class="filter-container">
-      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="支持版本角色名称、标识"
+      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('cdp_sys_version_role.searchText')"
                 v-model="pageModule.searchText">
       </el-input>
       <el-button-group>
@@ -23,31 +23,31 @@
     <el-table :data="roleList" v-loading="listLoading" element-loading-text="努力加载中"
               border fit highlight-current-row style="width: 100%" :default-sort="{prop: 'value', order: 'descending'}"
               @sort-change="sortChange" @row-click="rowClick">
-      <el-table-column align="center" label="角色标识" sortable prop="value">
+      <el-table-column align="center" :label="$t('cdp_sys_version_role.value.label')" sortable prop="value">
       </el-table-column>
 
-      <el-table-column label="角色名称" align="center" sortable prop="name">
+      <el-table-column :label="$t('cdp_sys_version_role.name.label')" align="center" sortable prop="name">
       </el-table-column>
-      <el-table-column prop="versionId" align="center" label="所属版本"
+      <el-table-column prop="versionId" align="center" :label="$t('cdp_sys_version_role.versionId.label')"
                        show-overflow-tooltip :formatter="getVersionName" sortable>
       </el-table-column>
       
-      <el-table-column align="center" label="创建时间" sortable prop="createTime" width="160">
+      <el-table-column align="center" :label="$t('cdp_sys_version_role.createTime.label')" sortable prop="createTime" width="160">
         <template slot-scope="scope">
           <span>{{scope.row.createTime | dateFormatFilter('yyyy-MM-dd HH:mm:ss')}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="更新时间" sortable prop="updateTime" width="160">
+      <el-table-column align="center" :label="$t('cdp_sys_version_role.updateTime.label')" sortable prop="updateTime" width="160">
         <template slot-scope="scope">
           <span>{{scope.row.updateTime | dateFormatFilter('yyyy-MM-dd HH:mm:ss')}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" class-name="status-col" label="状态" width="80" sortable prop="status">
+      <el-table-column align="center" class-name="status-col" :label="$t('cdp_sys_version_role.status.label')" width="80" sortable prop="status">
         <template slot-scope="scope">
           <el-tag>{{scope.row.status | statusFilter}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="权限操作" width="100">
+      <el-table-column align="center" :label="$t('table.permission')" width="100">
         <template slot-scope="scope">
           <el-button round size="mini" type="warning" @click="handleVersionRolePermission(scope.row)">
             {{$t('table.permission')}}
@@ -65,14 +65,14 @@
     </div>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
       <el-form :model="form" :rules="rules" ref="form" label-width="100px">
-        <el-form-item label="角色标识" prop="value">
-          <el-input v-model="form.value" placeholder="版本角色标识"></el-input>
+        <el-form-item :label="$t('cdp_sys_version_role.value.label')" prop="value">
+          <el-input v-model="form.value" :placeholder="$t('cdp_sys_version_role.value.placeholder')"></el-input>
         </el-form-item>
-        <el-form-item label="角色名称" prop="name">
-          <el-input v-model="form.name" placeholder="版本角色名称"></el-input>
+        <el-form-item :label="$t('cdp_sys_version_role.name.label')" prop="name">
+          <el-input v-model="form.name" :placeholder="$t('cdp_sys_version_role.name.placeholder')"></el-input>
         </el-form-item>
-        <el-form-item label="所属版本" prop="versionId">
-          <el-select class="filter-item" v-model="form.versionId" filterable placeholder="请选择所属版本"
+        <el-form-item :label="$t('cdp_sys_version_role.versionId.label')" prop="versionId">
+          <el-select class="filter-item" v-model="form.versionId" filterable :placeholder="$t('cdp_sys_version_role.versionId.placeholder')"
                      :filter-method="versionSelectFilter">
             <el-option v-for="item in versionOptions" :key="item.id" :label="item.name"
                        :value="item.id" :disabled="isDisabled[item.status]">
@@ -81,11 +81,11 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="描述" prop="tips">
-          <el-input v-model="form.tips" placeholder="描述"></el-input>
+        <el-form-item :label="$t('cdp_sys_version_role.tips.label')" prop="tips">
+          <el-input v-model="form.tips" :placeholder="$t('cdp_sys_version_role.tips.placeholder')"></el-input>
         </el-form-item>
-        <el-form-item label="状态" prop="status">
-          <el-select class="filter-item" v-model="form.status" placeholder="请选择">
+        <el-form-item :label="$t('cdp_sys_version_role.status.label')" prop="status">
+          <el-select class="filter-item" v-model="form.status" :placeholder="$t('cdp_sys_version_role.status.placeholder')">
             <el-option v-for="item in statusOptions" :key="item" :label="item | statusFilter" :value="item"></el-option>
           </el-select>
         </el-form-item>
@@ -116,14 +116,12 @@
   } from './versionRole'
   import { formatDate } from '@/utils/date'
   import { listVersion, listVersionChildPermissions } from '../version'
-  import waves from '@/directive/waves/index.js' // 水波纹指令
+
   import { mapGetters } from 'vuex'
   import grantPermission from '../../permission/grantPermission'
   export default {
     name: 'development_versionRole',
-    directives: {
-      waves
-    },
+
     watch: {
       filterPermissionText(val) {
         this.$refs.permissionTree.filter(val)

@@ -1,7 +1,7 @@
 <template>
   <div class="app-container calendar-list-container">
     <div class="filter-container">
-      <el-input @keyup.enter.native="handleFilter" style="width: 300px;" class="filter-item" placeholder="支持用户工号、名称、手机号、邮箱查找" v-model="pageModule.searchText">
+      <el-input @keyup.enter.native="handleFilter" style="width: 300px;" class="filter-item" :placeholder="$t('cdp_sys_user.searchText')" v-model="pageModule.searchText">
       </el-input>
       <el-button-group>
         <el-button round v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>
@@ -20,9 +20,9 @@
               :row-class-name="tableRowClassName"
               style="width: 100%"  :default-sort = "{prop: 'usercode', order: 'descending'}"
              @sort-change="sortChange" @row-click="rowClick">
-      <el-table-column align="center" label="工号" width="80" sortable prop="usercode">
+      <el-table-column align="center" :label="$t('cdp_sys_user.usercode.label')" width="110px" sortable prop="usercode">
       </el-table-column>
-      <el-table-column align="center" label="名称" sortable prop="username" width="140">
+      <el-table-column align="center" :label="$t('cdp_sys_user.username.label')" sortable prop="username" width="140">
         <template slot-scope="scope">
           <span>
             <svg-icon v-if="scope.row.avatar" :icon-class="scope.row.avatar" style="width: 20px; height: 20px; border-radius: 50%; margin-left: 20px; background: #fff;"></svg-icon>
@@ -30,35 +30,35 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="性别" width="80" sortable prop="sex">
+      <el-table-column align="center" :label="$t('cdp_sys_user.sex.label')" width="80" sortable prop="sex">
         <template slot-scope="scope">
           <span>{{getSexName(scope.row.sex)}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="生日" sortable prop="birthday" width="100">
+      <el-table-column align="center" :label="$t('cdp_sys_user.birthday.label')" sortable prop="birthday" width="100">
         <template slot-scope="scope">
           <span>{{scope.row.birthday | dateFormatFilter('yyyy-MM-dd')}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="手机号" sortable prop="phone"  width="130">
+      <el-table-column align="center" :label="$t('cdp_sys_user.phone.label')" sortable prop="phone"  width="130">
       </el-table-column>
-      <el-table-column align="center" label="邮箱" sortable prop="email"  width="150">
+      <el-table-column align="center" :label="$t('cdp_sys_user.email.label')" sortable prop="email"  width="150">
       </el-table-column>
-      <el-table-column prop="organizId" align="center" label="所属机构"
+      <el-table-column prop="organizId" align="center" :label="$t('cdp_sys_user.organizId.label')"
                        show-overflow-tooltip :formatter="getOrganizName" sortable>
       </el-table-column>
-     <!-- <el-table-column align="center" label="创建时间" sortable prop="createTime">
+     <!-- <el-table-column align="center" :label="$t('cdp_sys_user.createTime.label')" sortable prop="createTime">
         <template slot-scope="scope">
           <span>{{scope.row.createTime | dateFormatFilter('yyyy-MM-dd HH:mm:ss')}}</span>
         </template>
       </el-table-column>-->
-      <el-table-column align="center" class-name="status-col" label="状态" width="80" sortable prop="status">
+      <el-table-column align="center" class-name="status-col" :label="$t('cdp_sys_user.status.label')" width="80" sortable prop="status">
         <template slot-scope="scope">
           <el-tag>{{scope.row.status | statusFilter}}</el-tag>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="权限操作" width="200">
+      <el-table-column align="center" :label="$t('table.permission')" width="200">
         <template slot-scope="scope">
           <el-button round size="mini" type="primary" @click="handleUserRole(scope.row)">{{$t('table.role')}}</el-button>
           <el-button round size="mini" type="warning" @click="handleUserPermission(scope.row)">{{$t('table.permission')}}</el-button>
@@ -78,29 +78,29 @@
           <el-col :span="20">
             <el-row>
               <el-col :span="12">
-                <el-form-item label="用户工号" prop="usercode">
-                  <el-input v-model="form.usercode" placeholder="请输入用户工号"></el-input>
+                <el-form-item :label="$t('cdp_sys_user.usercode.label')" prop="usercode">
+                  <el-input v-model="form.usercode" :placeholder="$t('cdp_sys_user.usercode.placeholder')"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="用户名称" prop="username">
-                  <el-input v-model="form.username" placeholder="请输入用户名称"></el-input>
+                <el-form-item :label="$t('cdp_sys_user.username.label')" prop="username">
+                  <el-input v-model="form.username" :placeholder="$t('cdp_sys_user.username.placeholder')"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="12">
-                <el-form-item v-if="dialogStatus === 'create'" label="密码" placeholder="如果不填密码系统将随机生成" prop="password">
+                <el-form-item v-if="dialogStatus === 'create'" :label="$t('cdp_sys_user.password.label')" :placeholder="$t('cdp_sys_user.password.placeholder')" prop="password">
                   <el-input v-model="form.password"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="生日" prop="birthday">
+                <el-form-item :label="$t('cdp_sys_user.birthday.label')" prop="birthday">
                   <el-date-picker
                     v-model="form.birthday"
                     align="right"
                     type="date"
-                    placeholder="请选择用户生日"
+                    :placeholder="$t('cdp_sys_user.birthday.placeholder')"
                     :picker-options="pickerBirthday"
                     format="yyyy-MM-dd"
                     value-format="yyyy-MM-dd HH:mm:ss">
@@ -115,8 +115,8 @@
         </el-row>
         <el-row >
           <el-col :span="16">
-            <el-form-item label="所属机构" prop="organizId">
-                <el-select class="filter-item" v-model="form.organizId" filterable placeholder="请选择机构" :filter-method="organizSelectFilter">
+            <el-form-item :label="$t('cdp_sys_user.organizId.label')" prop="organizId">
+                <el-select class="filter-item" v-model="form.organizId" filterable :placeholder="$t('cdp_sys_user.organizId.placeholder')" :filter-method="organizSelectFilter">
                   <el-option v-for="item in oraganizOptions" :key="item.id" :label="item.fullname || item.name" :value="item.id" :disabled="isDisabled[item.status]">
                     <span style="float: left; color: #8492a6; font-size: 13px">{{ item.code }}</span>
                     <span style="float: right">{{ item.fullname || item.name }}</span>
@@ -125,8 +125,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="性别" prop="sex">
-              <el-select class="filter-item" v-model="form.sex" placeholder="请选择性别">
+            <el-form-item :label="$t('cdp_sys_user.sex.label')" prop="sex">
+              <el-select class="filter-item" v-model="form.sex" :placeholder="$t('cdp_sys_user.sex.placeholder')">
                 <el-option v-for="item in sexOptions" :key="item.name" :label="item.value" :value="item.name"> </el-option>
               </el-select>
             </el-form-item>
@@ -134,29 +134,29 @@
         </el-row>
         <el-row >
           <el-col :span="10">
-            <el-form-item label="邮箱" prop="email">
-              <el-input v-model="form.email" placeholder="员工邮箱地址"></el-input>
+            <el-form-item :label="$t('cdp_sys_user.email.label')" prop="email">
+              <el-input v-model="form.email" :placeholder="$t('cdp_sys_user.email.placeholder')"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="手机号" prop="phone">
-              <el-input v-model="form.phone" placeholder="验证码登录使用"></el-input>
+            <el-form-item :label="$t('cdp_sys_user.phone.label')" prop="phone">
+              <el-input v-model="form.phone" :placeholder="$t('cdp_sys_user.phone.placeholder')"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="状态" prop="status">
-              <el-select class="filter-item" v-model="form.status" placeholder="请选择">
+            <el-form-item :label="$t('cdp_sys_user.status.label')" prop="status">
+              <el-select class="filter-item" v-model="form.status" :placeholder="$t('cdp_sys_user.status.placeholder')">
                 <el-option v-for="item in statusOptions" :key="item" :label="item | statusFilter" :value="item"> </el-option>
               </el-select>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="到期时间" prop="expireTime">
+        <el-form-item :label="$t('cdp_sys_user.expireTime.label')" prop="expireTime">
           <el-date-picker
             v-model="form.expireTime"
             align="right"
             type="date"
-            placeholder="请选择用户到期时间"
+            :placeholder="$t('cdp_sys_user.expireTime.placeholder')"
             format="yyyy-MM-dd HH:mm:ss"
             value-format="yyyy-MM-dd HH:mm:ss">
           </el-date-picker>
@@ -244,7 +244,6 @@ import { formatDate } from '@/utils/date'
 import { listRole } from '../role/role'
 import { listOrganizAllChild, treeOrganiz, listOrganiz, getOrganiz, getOrganizAuth } from '../organization/organization'
 import { listVersionChildPermissions } from '../version/version'
-import waves from '@/directive/waves/index.js' // 水波纹指令
 import { mapGetters } from 'vuex'
 import ElRadioGroup from 'element-ui/packages/radio/src/radio-group'
 import ElOption from 'element-ui/packages/select/src/option'
@@ -256,9 +255,6 @@ export default {
     ElOption,
     ElRadioGroup,
     IconsSelect
-  },
-  directives: {
-    waves
   },
   watch: {
     filterAddPermissionText(val) {

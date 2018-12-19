@@ -1,157 +1,157 @@
 export default {
   route: {
-    dashboard: '首页',
-    system: '系统管理',
-    system_user: '用户管理',
-    system_organiz: '机构管理',
+    dashboard: '首頁',
+    system: '系統管理',
+    system_user: '用戶管理',
+    system_organiz: '機构管理',
     system_role: '角色管理',
-    development: '开发管理',
-    development_permission: '权限管理',
-    development_swaggerDoc: '开发文档',
+    development: '開發管理',
+    development_permission: '許可權管理',
+    development_swaggerDoc: '開發檔案',
     development_version: '版本管理',
     development_versionRole: '版本角色管理',
-    development_authClient: '客户端授权管理',
+    development_authClient: '用戶端授權管理',
     config: '配置管理',
-    config_application: '分布式配置管理',
-    config_parameter: '通用参数管理',
+    config_application: '分佈式配置管理',
+    config_parameter: '通用參數管理',
     config_dictionary: '通用字典管理',
-    monitor: '监控管理',
-    monitor_eureka: '服务注册中心监控',
-    monitor_admin: '服务指标监控',
-    monitor_sleuth: '服务链路监控',
-    monitor_cache: '缓存监控',
-    monitor_elk: '日志监控',
-    monitor_onlineuser: '在线用户监控',
-    monitor_database: '数据库连接池监控',
-    monitor_circuitbreaker: '断路器监控',
-    userInfo: '修改信息',
-    mpi_manager_patientinfo: '患者信息管理',
+    monitor: '監控管理',
+    monitor_eureka: '服務注册中心監控',
+    monitor_admin: '服務名額監控',
+    monitor_sleuth: '服務連結監控',
+    monitor_cache: '緩存監控',
+    monitor_elk: '日誌監控',
+    monitor_onlineuser: '線上用戶監控',
+    monitor_database: '資料庫連接池監控',
+    monitor_circuitbreaker: '斷路器監控',
+    userInfo: '修改資訊',
+    mpi_manager_patientinfo: '患者資訊管理',
     mpi_manager: '患者主索引管理',
-    mpi_manager_revert: '患者信息恢复',
-    mpi_manager_merge: '患者信息合并',
-    mpi_manager_overview: '患者地域分布',
-    mpi_manager_house: '健康住宅目的地概览'
+    mpi_manager_revert: '患者資訊恢復',
+    mpi_manager_merge: '患者資訊合併',
+    mpi_manager_overview: '患者地域分佈',
+    mpi_manager_house: '健康住宅目的地概覽'
   },
   navbar: {
-    logOut: '退出登录',
-    dashboard: '首页',
-    github: '项目地址',
+    logOut: '登出',
+    dashboard: '首頁',
+    github: '項目地址',
     screenfull: '全屏',
-    userInfo: '修改信息',
-    userSetting: '设置',
-    systemSetting: '系统设置',
-    theme: '换肤',
-    size: '布局大小',
-    langSelect: '选择语言'
+    userInfo: '修改資訊',
+    userSetting: '設定',
+    systemSetting: '系統設置',
+    theme: '換膚',
+    size: '佈局大小',
+    langSelect: '選擇語言'
   },
   login: {
-    title: '微服务云平台',
-    logIn: '登录',
-    rememberMe: '记住我',
+    title: '微服務雲平臺',
+    logIn: '登入',
+    rememberMe: '記住我',
     username: {
-      lable: '账号',
-      placeholder: '请输入账户'
+      lable: '帳號',
+      placeholder: '請輸入帳戶'
     },
     password: {
-      lable: '密码',
-      placeholder: '密码不能为空'
+      lable: '密碼',
+      placeholder: '密碼不能為空'
     },
     role: {
       lable: '角色',
-      placeholder: '请选择一个角色'
+      placeholder: '請選擇一個角色'
     }
   },
   documentation: {
-    documentation: '文档',
-    github: 'Github 地址'
+    documentation: '檔案',
+    github: 'Github地址'
   },
   permission: {
-    roles: '你的权限',
-    switchRoles: '切换权限'
+    roles: '你的許可權',
+    switchRoles: '切換許可權'
   },
   guide: {
-    description: '引导页对于一些第一次进入项目的人很有用，你可以简单介绍下项目的功能。本 Demo 是基于',
-    button: '打开引导'
+    description: '引導頁對於一些第一次進入項目的人很有用,你可以簡單介紹下項目的功能。本Demo是基於',
+    button: '打開引導'
   },
   components: {
-    documentation: '文档',
-    tinymceTips: '富文本是管理后台一个核心的功能，但同时又是一个有很多坑的地方。在选择富文本的过程中我也走了不少的弯路，市面上常见的富文本都基本用过了，最终权衡了一下选择了Tinymce。更详细的富文本比较和介绍见',
-    dropzoneTips: '由于我司业务有特殊需求，而且要传七牛 所以没用第三方，选择了自己封装。代码非常的简单，具体代码你可以在这里看到 @/components/Dropzone',
-    stickyTips: '当页面滚动到预设的位置会吸附在顶部',
-    backToTopTips1: '页面滚动到指定位置会在右下角出现返回顶部按钮',
-    backToTopTips2: '可自定义按钮的样式、show/hide、出现的高度、返回的位置 如需文字提示，可在外部使用Element的el-tooltip元素',
-    imageUploadTips: '由于我在使用时它只有vue@1版本，而且和mockjs不兼容，所以自己改造了一下，如果大家要使用的话，优先还是使用官方版本。'
+    documentation: '檔案',
+    tinymceTips: '富文字是管理後臺一個覈心的功能,但同時又是一個有很多坑的地方。在選擇富文字的過程中我也走了不少的彎路,市面上常見的富文字都基本用過了,最終權衡了一下選擇了Tinymce。更詳細的富文字比較和介紹見',
+    dropzoneTips: '由於我司業務有特殊需求,而且要傳七牛所以沒用協力廠商,選擇了自己封裝。程式碼非常的簡單,具體程式碼你可以在這裡看到@/components/Dropzone',
+    stickyTips: '當頁面滾動到預設的位置會吸附在頂部',
+    backToTopTips1: '頁面滾動到指定位置會在右下角出現返回頂部按鈕',
+    backToTopTips2: '可自定義按鈕的樣式、show/hide、出現的高度、返回的位置如需文字提示,可在外部使用Element的el-tooltip元素',
+    imageUploadTips: '由於我在使用時它只有vue@1版本,而且和mockjs不相容,所以自己改造了一下,如果大家要使用的話,優先還是使用官方版本。'
   },
   table: {
-    dynamicTips1: '固定表头, 按照表头顺序排序',
-    dynamicTips2: '不固定表头, 按照点击顺序排序',
-    dragTips1: '默认顺序',
-    dragTips2: '拖拽后顺序',
-    title: '标题',
+    dynamicTips1: '固定表頭,按照表頭順序排序',
+    dynamicTips2: '不固定表頭,按照點擊順序排序',
+    dragTips1: '默認順序',
+    dragTips2: '拖拽後順序',
+    title: '標題',
     importance: '重要性',
-    type: '类型',
-    remark: '点评',
-    search: '搜索',
+    type: '類型',
+    remark: '點評',
+    search: '蒐索',
     add: '新增',
-    export: '导出',
-    reviewer: '审核人',
-    id: '序号',
-    date: '时间',
+    export: '匯出',
+    reviewer: '稽核人',
+    id: '序號',
+    date: '時間',
     author: '作者',
-    readings: '阅读数',
-    status: '状态',
+    readings: '閱讀數',
+    status: '狀態',
     actions: '操作',
-    edit: '编辑',
-    publish: '发布',
+    edit: '編輯',
+    publish: '發佈',
     draft: '草稿',
     delete: '删除',
-    cancel: '取 消',
-    confirm: '确 定',
+    cancel: '取消',
+    confirm: '確定',
     view: '查看',
-    create: '创建',
+    create: '創建',
     update: '更新',
-    resetPass: '重置密码',
+    resetPass: '重置密碼',
     reset: '重置',
-    permission: '权限',
+    permission: '許可權',
     role: '角色',
-    user: '用户',
-    refresh: '刷新',
-    applys: '发布所有',
-    apply: '发布单条',
-    logout: '注销',
-    loss: '挂失',
-    revert: '还原',
-    merge: '合并'
+    user: '用戶',
+    refresh: '重繪',
+    applys: '發佈所有',
+    apply: '發佈單條',
+    logout: '註銷',
+    loss: '掛失',
+    revert: '還原',
+    merge: '合併'
   },
   errorLog: {
-    tips: '请点击右上角bug小图标',
-    description: '现在的管理后台基本都是spa的形式了，它增强了用户体验，但同时也会增加页面出问题的可能性，可能一个小小的疏忽就导致整个页面的死锁。好在 Vue 官网提供了一个方法来捕获处理异常，你可以在其中进行错误处理或者异常上报。',
-    documentation: '文档介绍'
+    tips: '請點擊右上角bug小圖標',
+    description: '現在的管理後臺基本都是spa的形式了,它增强了用戶體驗,但同時也會新增頁面出問題的可能性,可能一個小小的疏忽就導致整個頁面的鎖死。好在Vue官網提供了一個方法來捕獲處理异常,你可以在其中進行錯誤處理或者异常上報。',
+    documentation: '檔案介紹'
   },
   excel: {
-    export: '导出',
-    selectedExport: '导出已选择项',
-    placeholder: '请输入文件名(默认excel-list)'
+    export: '匯出',
+    selectedExport: '匯出已選擇項',
+    placeholder: '請輸入檔名（默認excel-list）'
   },
   zip: {
-    export: '导出',
-    placeholder: '请输入文件名(默认file)'
+    export: '匯出',
+    placeholder: '請輸入檔名（默認'
   },
   theme: {
-    change: '换肤',
-    documentation: '换肤文档',
-    tips: 'Tips: 它区别于 navbar 上的 theme-pick, 是两种不同的换肤方法，各自有不同的应用场景，具体请参考文档。'
+    change: '換膚',
+    documentation: '換膚檔案',
+    tips: 'Tips:它區別於navbar上的theme-pick,是兩種不同的換膚方法,各自有不同的應用場景,具體請參攷檔案。'
   },
   tagsView: {
-    refresh: '刷新',
-    close: '关闭',
-    closeOthers: '关闭其它',
-    closeAll: '关闭所有'
+    refresh: '重繪',
+    close: '關閉',
+    closeOthers: '關閉其它',
+    closeAll: '關閉所有'
   },
   lang: {
-    switchSuccess: '切换默认语言成功'
+    switchSuccess: '切換默認語言成功'
   },
   size: {
-    switchSuccess: '切换布局成功'
+    switchSuccess: '切換佈局成功'
   }
 }

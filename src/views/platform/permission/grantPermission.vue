@@ -28,13 +28,9 @@
 </template>
 
 <script>
-  import waves from '@/directive/waves/index.js' // 水波纹指令
   import { mapGetters } from 'vuex'
   export default {
     name: 'grantPermission',
-    directives: {
-      waves
-    },
     watch: {
       filterPermissionText(val) {
         this.$refs.permissionTree.filter(val)

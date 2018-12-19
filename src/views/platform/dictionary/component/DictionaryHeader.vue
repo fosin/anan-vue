@@ -2,7 +2,7 @@
   <div class="app-container calendar-list-container">
     <div class="filter-container">
       <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item"
-                placeholder="支持名称、类别及标识查找" v-model="pageModule.searchText">
+                :placeholder="$t('cdp_sys_dictionary.searchText')" v-model="pageModule.searchText">
       </el-input>
       <el-button-group>
         <el-button round v-waves class="filter-item" type="primary" size="small" icon="el-icon-search" @click="handleFilter">
@@ -23,16 +23,16 @@
     <el-table :data="dictionaryList" v-loading="listLoading" element-loading-text="努力加载中" ref="dictionaryTable"
               border fit highlight-current-row style="width: 100%" :default-sort="{prop: 'code'}"
               @sort-change="sortChange" @row-click="rowClick" v-on:row-click="$emit('dic-row-click', $event)">
-      <el-table-column label="字典编号" sortable prop="code">
+      <el-table-column align="center" :label="$t('cdp_sys_dictionary.code.label')" sortable prop="code">
       </el-table-column>
-      <el-table-column label="字典名称" sortable prop="name">
+      <el-table-column align="center" :label="$t('cdp_sys_dictionary.name.label')" sortable prop="name">
       </el-table-column>
-      <el-table-column align="center" label="字典类别" sortable prop="type">
+      <el-table-column align="center" :label="$t('cdp_sys_dictionary.type.label')" sortable prop="type">
         <template slot-scope="scope">
           <span>{{getTypeName(scope.row.type)}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="作用域" sortable prop="scope">
+      <el-table-column align="center" :label="$t('cdp_sys_dictionary.scope.label')" sortable prop="scope">
       </el-table-column>
     </el-table>
     <div v-show="!listLoading" class="pagination-container">
@@ -44,14 +44,14 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
       <el-form :model="form" :rules="rules" ref="form" label-width="100px">
-        <el-form-item label="字典名称" prop="name">
-          <el-input v-model="form.name" placeholder="字典名称"></el-input>
+        <el-form-item :label="$t('cdp_sys_dictionary.name.label')" prop="name">
+          <el-input v-model="form.name" :placeholder="$t('cdp_sys_dictionary.name.placeholder')"></el-input>
         </el-form-item>
-        <el-form-item label="作用域" prop="scope">
-          <el-input v-model="form.scope" placeholder="作用域"></el-input>
+        <el-form-item :label="$t('cdp_sys_dictionary.scope.label')" prop="scope">
+          <el-input v-model="form.scope" :placeholder="$t('cdp_sys_dictionary.scope.placeholder')"></el-input>
         </el-form-item>
-        <el-form-item label="字典类别" prop="type">
-          <el-select class="filter-item" v-model="form.type" placeholder="请选择字典类别">
+        <el-form-item :label="$t('cdp_sys_dictionary.type.label')" prop="type">
+          <el-select class="filter-item" v-model="form.type" :placeholder="$t('cdp_sys_dictionary.type.placeholder')">
             <el-option v-for="item in typeOptions" :key="item.name" :label="item.value" :value="item.name" :disabled="item.status === 1"></el-option>
           </el-select>
         </el-form-item>
@@ -77,12 +77,8 @@
     deleteDictionary,
     listDictionaryPage
   } from '../dictionary'
-  import waves from '@/directive/waves/index.js' // 水波纹指令
   export default {
     name: 'dictionaryHeader',
-    directives: {
-      waves
-    },
     data() {
       return {
         dictionaryList: null,

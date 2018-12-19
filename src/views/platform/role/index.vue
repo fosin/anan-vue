@@ -1,7 +1,7 @@
 <template>
   <div class="app-container calendar-list-container">
     <div class="filter-container">
-      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="支持角色名称、标识"
+      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('cdp_sys_role.searchText')"
                 v-model="pageModule.searchText">
       </el-input>
       <el-button-group>
@@ -23,33 +23,33 @@
     <el-table :data="roleList" v-loading="listLoading" element-loading-text="努力加载中"
               border fit highlight-current-row style="width: 100%" :default-sort="{prop: 'value', order: 'descending'}"
               @sort-change="sortChange" @row-click="rowClick">
-      <el-table-column align="center" label="角色标识" sortable prop="value">
+      <el-table-column align="center" :label="$t('cdp_sys_role.value.label')" sortable prop="value">
       </el-table-column>
 
-      <el-table-column label="角色名称" align="center" sortable prop="name">
+      <el-table-column :label="$t('cdp_sys_role.name.label')" align="center" sortable prop="name">
       </el-table-column>
-      <el-table-column prop="organizId" align="center" label="所属机构"
+      <el-table-column prop="organizId" align="center" :label="$t('cdp_sys_role.organizId.label')"
                        show-overflow-tooltip :formatter="getOrganizName" sortable>
       </el-table-column>
-      <!--      <el-table-column align="center" label="角色描述" sortable prop="tips">
+      <!--      <el-table-column align="center" :label="$t('cdp_sys_role.tips.label')" sortable prop="tips">
             </el-table-column>-->
 
-      <el-table-column align="center" label="创建时间" sortable prop="createTime">
+      <el-table-column align="center" :label="$t('cdp_sys_role.createTime.label')" sortable prop="createTime">
         <template slot-scope="scope">
           <span>{{scope.row.createTime | dateFormatFilter('yyyy-MM-dd HH:mm:ss')}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="更新时间" sortable prop="updateTime">
+      <el-table-column align="center" :label="$t('cdp_sys_role.updateTime.label')" sortable prop="updateTime">
         <template slot-scope="scope">
           <span>{{scope.row.updateTime | dateFormatFilter('yyyy-MM-dd HH:mm:ss')}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" class-name="status-col" label="状态" width="80" sortable prop="status">
+      <el-table-column align="center" class-name="status-col" :label="$t('cdp_sys_role.status.label')" width="80" sortable prop="status">
         <template slot-scope="scope">
           <el-tag>{{scope.row.status | statusFilter}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="权限操作" width="200">
+      <el-table-column align="center" :label="$t('table.permission')" width="200">
         <template slot-scope="scope">
           <el-button round size="mini" type="primary" @click="handleRoleUser(scope.row)">
             {{$t('table.user')}}
@@ -70,14 +70,14 @@
     </div>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
       <el-form :model="form" :rules="rules" ref="form" label-width="100px">
-        <el-form-item label="角色标识" prop="value">
-          <el-input v-model="form.value" placeholder="角色标识"></el-input>
+        <el-form-item :label="$t('cdp_sys_role.value.label')" prop="value">
+          <el-input v-model="form.value" :placeholder="$t('cdp_sys_role.value.placeholder')"></el-input>
         </el-form-item>
-        <el-form-item label="角色名称" prop="name">
-          <el-input v-model="form.name" placeholder="角色名称"></el-input>
+        <el-form-item :label="$t('cdp_sys_role.name.label')" prop="name">
+          <el-input v-model="form.name" :placeholder="$t('cdp_sys_role.name.placeholder')"></el-input>
         </el-form-item>
-        <el-form-item label="所属机构" prop="organizId">
-          <el-select class="filter-item" v-model="form.organizId" filterable placeholder="请选择机构"
+        <el-form-item :label="$t('cdp_sys_role.organizId.label')" prop="organizId">
+          <el-select class="filter-item" v-model="form.organizId" filterable :placeholder="$t('cdp_sys_role.organizId.placeholder')"
                      :filter-method="organizSelectFilter">
             <el-option v-for="item in oraganizOptions" :key="item.id" :label="item.fullname || item.name"
                        :value="item.id" :disabled="isDisabled[item.status]">
@@ -86,11 +86,11 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="描述" prop="tips">
-          <el-input v-model="form.tips" placeholder="描述"></el-input>
+        <el-form-item :label="$t('cdp_sys_role.tips.label')" prop="tips">
+          <el-input v-model="form.tips" :placeholder="$t('cdp_sys_role.tips.placeholder')"></el-input>
         </el-form-item>
-        <el-form-item label="状态" prop="status">
-          <el-select class="filter-item" v-model="form.status" placeholder="请选择">
+        <el-form-item :label="$t('cdp_sys_role.status.label')" prop="status">
+          <el-select class="filter-item" v-model="form.status" :placeholder="$t('cdp_sys_role.status.placeholder')">
             <el-option v-for="item in statusOptions" :key="item" :label="item | statusFilter" :value="item"></el-option>
           </el-select>
         </el-form-item>
@@ -108,7 +108,7 @@
 
     <!--<el-dialog :title="textMap[dialogStatus] + '->' + form.name" :visible.sync="dialogPermissionVisible" width="550px">
       <el-input
-        placeholder="输入关键字进行过滤"
+        :placeholder="$t('cdp_sys_role.name.placeholder')输入关键字进行过滤"
         v-model="filterPermissionText">
       </el-input>
       <el-tree class="filter-tree"
@@ -170,16 +170,12 @@
   import { listUser } from '../user/user'
   import { formatDate } from '@/utils/date'
   import { listOrganizAllChild } from '../organization/organization'
-  import waves from '@/directive/waves/index.js' // 水波纹指令
   import { mapGetters } from 'vuex'
   import grantPermission from '../permission/grantPermission'
   import { listVersionChildPermissions } from '../version/version'
   import { getOrganiz, getOrganizAuth } from '../organization/organization'
   export default {
     name: 'system_role',
-    directives: {
-      waves
-    },
     watch: {
       filterPermissionText(val) {
         this.$refs.permissionTree.filter(val)

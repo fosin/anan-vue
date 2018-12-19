@@ -24,30 +24,30 @@
       </el-col>
       <el-col :span="16" style='margin-top:15px;'>
         <el-card class="box-card">
-          <el-form :label-position="labelPosition" label-width="80px" :model="form" ref="form" :rules="formRules">
+          <el-form :label-position="labelPosition" label-width="100px" :model="form" ref="form" :rules="formRules">
             <el-form-item v-if="this.formStatus === 'update'">
-              <el-button round @click="onCancel" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
+              <el-button round v-waves @click="onCancel" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
               <el-button round v-waves type="primary" @click="update" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
             </el-form-item>
             <el-form-item v-if="this.formStatus === 'create'">
-              <el-button round @click="onCancel" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
+              <el-button round v-waves @click="onCancel" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
               <el-button round v-waves type="primary" @click="create" icon="el-icon-circle-check">{{$t('table.create')}}</el-button>
             </el-form-item>
 
             <el-row>
               <el-col :span="7">
-                <el-form-item label="父级节点" prop="pName">
+                <el-form-item :label="$t('cdp_sys_permission.pId.label')" prop="pName">
                   <el-tag>{{parent.name}}</el-tag>
                 </el-form-item>
               </el-col>
               <el-col :span="5">
-                <el-form-item label="层级" prop="level">
+                <el-form-item :label="$t('cdp_sys_permission.level.label')" prop="level">
                   <el-tag>{{form.level}}</el-tag>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="所属应用" prop="appName">
-                  <el-select class="filter-item" v-model="form.appName"  :disabled="this.formUpdate?this.formUpdate:this.parent.level !== 0"  placeholder="请选择权限所属的应用，不能为空" value="">
+                <el-form-item :label="$t('cdp_sys_permission.appName.label')" prop="appName">
+                  <el-select class="filter-item" v-model="form.appName"  :disabled="this.formUpdate?this.formUpdate:this.parent.level !== 0"  :placeholder="$t('cdp_sys_permission.appName.placeholder')" value="">
                     <el-option v-for="item in appOptions" :key="item" :label="item" :value="item"> </el-option>
                   </el-select>
                 </el-form-item>
@@ -55,30 +55,30 @@
             </el-row>
             <el-row>
               <el-col :span="12">
-                <el-form-item label="权限名称" prop="name">
-                  <el-input v-model="form.name" :disabled="formUpdate"  placeholder="请输入权限名称"></el-input>
+                <el-form-item :label="$t('cdp_sys_permission.name.label')" prop="name">
+                  <el-input v-model="form.name" :disabled="formUpdate"  :placeholder="$t('cdp_sys_permission.name.placeholder')"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="权限标识" prop="code">
-                  <el-input v-model="form.code" :disabled="formUpdate" placeholder="请输入权限标识,必须唯一"></el-input>
+                <el-form-item :label="$t('cdp_sys_permission.code.label')" prop="code">
+                  <el-input v-model="form.code" :disabled="formUpdate" :placeholder="$t('cdp_sys_permission.code.placeholder')"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-form-item label="资源路径" prop="url">
-              <el-input v-model="form.url" :disabled="formUpdate" placeholder="请输入资源路径"></el-input>
+            <el-form-item :label="$t('cdp_sys_permission.url.label')" prop="url">
+              <el-input v-model="form.url" :disabled="formUpdate" :placeholder="$t('cdp_sys_permission.url.placeholder')"></el-input>
             </el-form-item>
 
-            <el-form-item label="权限路径" prop="path" >
-              <el-input v-model="form.path" :disabled="formUpdate" placeholder="设置权限对应的HTTP请求路径，ANT风格表达式，如果要设置权限该选项必填"></el-input>
+            <el-form-item :label="$t('cdp_sys_permission.path.label')" prop="path" >
+              <el-input v-model="form.path" :disabled="formUpdate" :placeholder="$t('cdp_sys_permission.path.placeholder')"></el-input>
             </el-form-item>
 
             <el-row>
               <el-col :span="20">
                 <el-row>
                   <el-col :span="24">
-                    <el-form-item label="请求方法" prop="methodArray">
-                      <el-select v-model="form.methodArray" :disabled="formUpdate" placeholder="支持多选，不选则为适配所有方法" multiple>
+                    <el-form-item :label="$t('cdp_sys_permission.method.label')" prop="methodArray">
+                      <el-select v-model="form.methodArray" :disabled="formUpdate" :placeholder="$t('cdp_sys_permission.method.placeholder')" multiple>
                         <el-option v-for="item in methodOptions" :key="item.scode" :label="item.value" :value="item.scode" >
                         </el-option>
                       </el-select>
@@ -87,16 +87,16 @@
                 </el-row>
                 <el-row>
                   <el-col :span="12">
-                    <el-form-item label="类型" prop="type">
-                      <el-select class="filter-item" v-model="form.type" :disabled="formUpdate"  placeholder="请选择类型" >
+                    <el-form-item :label="$t('cdp_sys_permission.type.label')" prop="type">
+                      <el-select class="filter-item" v-model="form.type" :disabled="formUpdate"  :placeholder="$t('cdp_sys_permission.type.placeholder')" >
                         <el-option v-for="item in typeOptions" :key="item.name" :label="item.value" :value="item.name" :disabled="item.status === 1"> </el-option>
                       </el-select>
                     </el-form-item>
                   </el-col>
 
                   <el-col :span="6">
-                    <el-form-item label="排序" prop="sort">
-                      <el-input v-model="form.sort" :disabled="formUpdate" placeholder="请输入排序"></el-input>
+                    <el-form-item :label="$t('cdp_sys_permission.sort.label')" prop="sort">
+                      <el-input v-model="form.sort" :disabled="formUpdate" :placeholder="$t('cdp_sys_permission.sort.placeholder')"></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -105,13 +105,11 @@
                 <svg-icon @click.native="handleSelectAvatar" :icon-class="form.icon" style="width: 80px; height: 80px; border-radius: 50%; margin-left: 20px; margin-top: 15px; background: #fff; color: #40c9c6;"></svg-icon>
               </el-col>
             </el-row>
-            <el-form-item prop="status">
+            <el-form-item prop="status" :label="$t('cdp_sys_permission.status.label')">
               <el-switch :disabled="formUpdate"
                 v-model="form.status"
                 active-color="#13ce66"
                 inactive-color="#ff4949"
-                active-text="启用"
-                inactive-text="禁用"
                 active-value=0
                 inactive-value=1>
               </el-switch>

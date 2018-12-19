@@ -8,20 +8,34 @@ import enUKLocale from './en-UK'
 import zhCNLocale from './zh-CN'
 import zhTWLocale from './zh-HK'
 
+import PlatformEnUKLocale from '../views/platform/lang/en-UK'
+import PlatformZhCNLocale from '../views/platform/lang/zh-CN'
+import PlatformZhHKLocale from '../views/platform/lang/zh-HK'
+
+import MpiEnUKLocale from '../views/mpi/lang/en-UK'
+import MpiZhCNLocale from '../views/mpi/lang/zh-CN'
+import MpiZhHKLocale from '../views/mpi/lang/zh-HK'
+
 Vue.use(VueI18n)
 
 const messages = {
   'en-UK': {
     ...enUKLocale,
-    ...elementEnLocale
+    ...elementEnLocale,
+    ...PlatformEnUKLocale,
+    ...MpiEnUKLocale
   },
   'zh-CN': {
     ...zhCNLocale,
-    ...elementZhCNLocale
+    ...elementZhCNLocale,
+    ...PlatformZhCNLocale,
+    ...MpiZhCNLocale
   },
   'zh-HK': {
     ...zhTWLocale,
-    ...elementzhTWLocale
+    ...elementzhTWLocale,
+    ...PlatformZhHKLocale,
+    ...MpiZhHKLocale
   }
 }
 

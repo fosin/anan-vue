@@ -1,7 +1,8 @@
 <template>
   <div class="app-container calendar-list-container">
     <div class="filter-container">
-      <el-input @keyup.enter.native="handleSearch" style="width: 200px;" class="filter-item" placeholder="支持标识、密钥查找" v-model="pageModule.searchText">
+      <el-input @keyup.enter.native="handleSearch" style="width: 200px;" class="filter-item"
+                :placeholder="$t('oauth_client_details.searchText')" v-model="pageModule.searchText">
       </el-input>
       <el-button-group>
         <el-button round v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleSearch">{{$t('table.search')}}</el-button>
@@ -15,30 +16,31 @@
     <el-table :data="list" v-loading="listLoading" element-loading-text="努力加载中"
               border fit highlight-current-row style="width: 100%" :default-sort = "{prop: 'clientId', order: 'ascending'}"
               @sort-change="sortChange" @row-click="rowClick">
-      <el-table-column align="center" label="客户端标识" sortable prop="clientId"></el-table-column>
+      <el-table-column align="center" :label="$t('oauth_client_details.clientId.label')" sortable prop="clientId"></el-table-column>
 
-    <!--  <el-table-column align="center" label="客户端密钥" sortable prop="clientSecret"></el-table-column>
+    <!--  <el-table-column align="center" :label="$t('oauth_client_details.clientSecret.label')" sortable prop="clientSecret"></el-table-column>
+          <el-table-column align="center" :label="$t('oauth_client_details.webServerRedirectUri.label')" sortable prop="webServerRedirectUri" width="250px"></el-table-column>
+
 -->
-      <el-table-column align="center" label="作用域" sortable prop="scope"></el-table-column>
+      <el-table-column align="center" :label="$t('oauth_client_details.scope.label')" sortable prop="scope"></el-table-column>
 
-      <el-table-column align="center" label="授权类型" sortable prop="authorizedGrantTypes" width="250px">
+      <el-table-column align="center" :label="$t('oauth_client_details.authorizedGrantTypes.label')" sortable prop="authorizedGrantTypes" width="250px">
       </el-table-column>
-      <el-table-column align="center" label="重定向地址" sortable prop="webServerRedirectUri"></el-table-column>
 
-      <el-table-column align="center" label="令牌期效" sortable prop="accessTokenValidity">
+      <el-table-column align="center" :label="$t('oauth_client_details.accessTokenValidity.label')" sortable prop="accessTokenValidity">
       </el-table-column>
-      <el-table-column align="center" label="刷新令牌期效" sortable prop="refreshTokenValidity">
+      <el-table-column align="center" :label="$t('oauth_client_details.refreshTokenValidity.label')" sortable prop="refreshTokenValidity">
       </el-table-column>
      <!--
-      <el-table-column align="center" class-name="status-col" label="资源信息" sortable prop="resourceIds">
+      <el-table-column align="center" class-name="status-col" :label="$t('oauth_client_details.resourceIds.label')" sortable prop="resourceIds">
       </el-table-column>
-      <el-table-column align="center" class-name="status-col" label="权限信息" sortable prop="authorities">
+      <el-table-column align="center" class-name="status-col" :label="$t('oauth_client_details.authorities.label')" sortable prop="authorities">
       </el-table-column>
-     <el-table-column align="center" class-name="status-col" label="权限" sortable prop="additionalInformation">
+     <el-table-column align="center" class-name="status-col" :label="$t('oauth_client_details.additionalInformation.label')" sortable prop="additionalInformation">
       </el-table-column>-->
-      <el-table-column align="center"  label="自动授权" sortable prop="autoapprove">
+      <el-table-column align="center"  :label="$t('oauth_client_details.autoapprove.label')" sortable prop="autoapprove">
       </el-table-column>
-      <el-table-column align="center" label="操作" width="100">
+      <el-table-column align="center" :label="$t('table.permission')" width="110">
         <template slot-scope="scope">
           <el-button round size="mini" type="warning" @click="handlePermission(scope.row)">{{$t('table.permission')}}</el-button>
         </template>
@@ -50,24 +52,24 @@
       </el-pagination>
     </div>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
-      <el-form :model="form" :rules="rules" ref="form" label-width="100px">
+      <el-form :model="form" :rules="rules" ref="form" label-width="150px">
         <el-row>
           <el-col :span="12">
-            <el-form-item v-if="dialogStatus === 'create'" label="客户端标识" prop="clientId" >
-              <el-input v-model="form.clientId" placeholder="客户端标识"></el-input>
+            <el-form-item v-if="dialogStatus === 'create'" :label="$t('oauth_client_details.clientId.label')" prop="clientId" >
+              <el-input v-model="form.clientId" :placeholder="$t('oauth_client_details.clientId.placeholder')"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="作用域" prop="scope">
-              <el-input v-model="form.scope" placeholder="作用域"></el-input>
+            <el-form-item :label="$t('oauth_client_details.scope.label')" prop="scope">
+              <el-input v-model="form.scope" :placeholder="$t('oauth_client_details.scope.placeholder')"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="客户端密钥" prop="clientSecret">
-          <el-input v-model="form.clientSecret" placeholder="客户端密钥"></el-input>
+        <el-form-item :label="$t('oauth_client_details.clientSecret.label')" prop="clientSecret">
+          <el-input v-model="form.clientSecret" :placeholder="$t('oauth_client_details.clientSecret.placeholder')"></el-input>
         </el-form-item>
-        <el-form-item label="授权类型" prop="authorizedGrantTypeArray">
-          <el-select  v-model="form.authorizedGrantTypeArray" filterable placeholder="请选择授权类型(支持多选)" multiple>
+        <el-form-item :label="$t('oauth_client_details.authorizedGrantTypes.label')" prop="authorizedGrantTypeArray">
+          <el-select  v-model="form.authorizedGrantTypeArray" filterable :placeholder="$t('oauth_client_details.authorizedGrantTypes.placeholder')" multiple>
             <el-option v-for="item in grantTypesOptions" :key="item.scode"
                        :label="item.value" :value="item.scode" :disabled="item.status === 1">
               <span style="float: left; color: #8492a6; font-size: 13px">{{ item.scode }}</span>
@@ -75,37 +77,35 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="重定向地址" prop="webServerRedirectUri">
-            <el-input v-model="form.webServerRedirectUri" placeholder="客户端密钥重定向地址"></el-input>
+        <el-form-item :label="$t('oauth_client_details.webServerRedirectUri.label')" prop="webServerRedirectUri">
+            <el-input v-model="form.webServerRedirectUri" :placeholder="$t('oauth_client_details.webServerRedirectUri.placeholder')"></el-input>
         </el-form-item>
-        <el-form-item label="资源信息" prop="resourceIds">
-          <el-input v-model="form.resourceIds" placeholder="资源信息,用逗号分隔多条数据"></el-input>
+        <el-form-item :label="$t('oauth_client_details.resourceIds.label')" prop="resourceIds">
+          <el-input v-model="form.resourceIds" :placeholder="$t('oauth_client_details.resourceIds.placeholder')"></el-input>
         </el-form-item>
-        <!--<el-form-item label="权限信息" prop="authorities">
-            <el-input v-model="form.authorities" placeholder="权限信息,用逗号分隔多条数据"></el-input>
+        <!--<el-form-item :label="$t('oauth_client_details.authorities.label')" prop="authorities">
+            <el-input v-model="form.authorities" :placeholder="$t('oauth_client_details.authorities.placeholder')"></el-input>
         </el-form-item>-->
         <el-row>
           <el-col :span="12">
-            <el-form-item label="令牌期效" prop="accessTokenValidity">
-              <el-input v-model="form.accessTokenValidity" placeholder="令牌期效,单位秒"></el-input>
+            <el-form-item :label="$t('oauth_client_details.accessTokenValidity.label')" prop="accessTokenValidity">
+              <el-input v-model="form.accessTokenValidity" :placeholder="$t('oauth_client_details.accessTokenValidity.placeholder')"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="刷新令牌期效" prop="refreshTokenValidity">
-              <el-input v-model="form.refreshTokenValidity" placeholder="刷新令牌期效,单位秒"></el-input>
+            <el-form-item :label="$t('oauth_client_details.refreshTokenValidity.label')" prop="refreshTokenValidity">
+              <el-input v-model="form.refreshTokenValidity" :placeholder="$t('oauth_client_details.refreshTokenValidity.placeholder')"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="附加信息" prop="additionalInformation">
-            <el-input v-model="form.additionalInformation" placeholder="附加信息"></el-input>
+        <el-form-item :label="$t('oauth_client_details.additionalInformation.label')" prop="additionalInformation">
+            <el-input v-model="form.additionalInformation" :placeholder="$t('oauth_client_details.additionalInformation.placeholder')"></el-input>
         </el-form-item>
-        <el-form-item prop="autoapprove">
+        <el-form-item prop="autoapprove" :label="$t('oauth_client_details.autoapprove.label')">
           <el-switch
                      v-model="form.autoapprove"
                      active-color="#13ce66"
                      inactive-color="#ff4949"
-                     active-text="自动授权"
-                     inactive-text="手动授权"
                      active-value=true
                      inactive-value=false>
           </el-switch>
@@ -122,15 +122,12 @@
 </template>
 <script>
 import { getClient, postClient, putClient, deleteClient, listClientPage } from './client.js'
-import waves from '@/directive/waves/index.js' // 水波纹指令
+
 import { listChildPermissions } from '../permission/permission'
 import grantPermission from '../permission/grantPermission'
 
 export default {
   name: 'development_authClient',
-  directives: {
-    waves
-  },
   components: {
     grantPermission
   },

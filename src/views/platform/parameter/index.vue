@@ -2,13 +2,13 @@
   <div class="app-container calendar-list-container">
     <div class="filter-container">
       <el-input @keyup.enter.native="handleFilter" style="width: 300px;" class="filter-item"
-                placeholder="支持参数键、参数值、说明查找" v-model="pageModule.searchText">
+                :placeholder="$t('cdp_sys_parameter.searchText')" v-model="pageModule.searchText">
       </el-input>
       <el-button-group>
         <el-button round class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">
           {{$t('table.search')}}
         </el-button>
-        <el-button round v-permission="'53'" class="filter-item" style="margin-left: 5px;"
+        <el-button round v-waves v-permission="'53'" class="filter-item" style="margin-left: 5px;"
                    @click="handleAdd" type="primary" icon="el-icon-circle-plus">{{$t('table.add')}}
         </el-button>
         <el-button round v-waves type="success" v-permission="'54'" class="filter-item" style="margin-left: 5px;"
@@ -29,20 +29,20 @@
     <el-table :data="parameterList" v-loading="listLoading" element-loading-text="努力加载中" ref="parameterTable"
               border fit highlight-current-row style="width: 100%" :default-sort="{prop: 'name'}"
               @sort-change="sortChange" @row-click="rowClick" :row-class-name="tableRowClassName">
-      <el-table-column align="center" label="参数键" sortable prop="name" width="200px">
+      <el-table-column align="center" :label="$t('cdp_sys_parameter.name.label')" sortable prop="name" width="200px">
       </el-table-column>
-      <el-table-column align="center" label="参数值" sortable prop="value" width="120px">
+      <el-table-column align="center" :label="$t('cdp_sys_parameter.value.label')" sortable prop="value" width="120px">
       </el-table-column>
-      <el-table-column align="center" label="默认值" sortable prop="defaultValue" width="120px">
+      <el-table-column align="center" :label="$t('cdp_sys_parameter.defaultValue.label')" sortable prop="defaultValue" width="130px">
       </el-table-column>
-      <el-table-column align="center" label="说明" sortable prop="description">
+      <el-table-column align="center" :label="$t('cdp_sys_parameter.description.label')" sortable prop="description">
       </el-table-column>
-      <el-table-column align="center" label="参数类别" sortable prop="type" width="120px">
+      <el-table-column align="center" :label="$t('cdp_sys_parameter.type.label')" sortable prop="type" width="120px">
         <template slot-scope="scope">
           <span>{{getTypeName(scope.row.type)}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="作用域" sortable prop="scope" width="100px">
+      <el-table-column align="center" :label="$t('cdp_sys_parameter.scope.label')" sortable prop="scope" width="100px">
       </el-table-column>
     </el-table>
     <div v-show="!listLoading" class="pagination-container">
@@ -54,26 +54,26 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
       <el-form :model="form" :rules="rules" ref="form" label-width="100px">
-        <el-form-item label="参数键" prop="name">
-          <el-input v-model="form.name" placeholder="参数键"></el-input>
+        <el-form-item :label="$t('cdp_sys_parameter.name.label')" prop="name">
+          <el-input v-model="form.name" :placeholder="$t('cdp_sys_parameter.name.placeholder')"></el-input>
         </el-form-item>
-        <el-form-item label="参数值" prop="value">
-          <el-input v-model="form.value" placeholder="参数值"></el-input>
+        <el-form-item :label="$t('cdp_sys_parameter.value.label')" prop="value">
+          <el-input v-model="form.value" :placeholder="$t('cdp_sys_parameter.value.placeholder')"></el-input>
         </el-form-item>
-        <el-form-item label="默认值" prop="defaultValue">
-          <el-input v-model="form.defaultValue" placeholder="默认值"></el-input>
+        <el-form-item :label="$t('cdp_sys_parameter.defaultValue.label')" prop="defaultValue">
+          <el-input v-model="form.defaultValue" :placeholder="$t('cdp_sys_parameter.defaultValue.placeholder')"></el-input>
         </el-form-item>
-        <el-form-item label="说明" prop="description">
-          <el-input v-model="form.description" placeholder="说明"></el-input>
+        <el-form-item :label="$t('cdp_sys_parameter.description.label')" prop="description">
+          <el-input v-model="form.description" :placeholder="$t('cdp_sys_parameter.description.placeholder')"></el-input>
         </el-form-item>
-        <el-form-item label="参数类别" prop="type">
-          <el-select class="filter-item" v-model="form.type" placeholder="请选择参数类别">
+        <el-form-item :label="$t('cdp_sys_parameter.type.label')" prop="type">
+          <el-select class="filter-item" v-model="form.type" :placeholder="$t('cdp_sys_parameter.type.placeholder')">
             <el-option v-for="item in typeOptions" :key="item.name" :label="item.value"
                        :value="item.name" :disabled="item.status === 1"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="作用域" prop="scope">
-          <el-input v-model="form.scope" placeholder="作用域，为空时表示适用与所有域"></el-input>
+        <el-form-item :label="$t('cdp_sys_parameter.scope.label')" prop="scope">
+          <el-input v-model="form.scope" :placeholder="$t('cdp_sys_parameter.scope.placeholder')"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -98,12 +98,10 @@
     applyParameter,
     applysParameter
   } from './parameter'
-  import waves from '@/directive/waves/index.js' // 水波纹指令
+
   export default {
     name: 'config_parameter',
-    directives: {
-      waves
-    },
+
     data() {
       return {
         parameterList: null,

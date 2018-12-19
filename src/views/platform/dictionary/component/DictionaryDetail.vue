@@ -2,7 +2,7 @@
   <div class="app-container calendar-list-container">
     <div class="filter-container">
       <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item"
-                placeholder="支持字典明细项代码、字典明细项值查找" v-model="pageModule.searchText">
+                :placeholder="$t('cdp_sys_dictionary_detail.searchText')" v-model="pageModule.searchText">
       </el-input>
       <el-button-group>
         <el-button round v-waves class="filter-item" type="primary" size="small" icon="el-icon-search" @click="handleFilter">
@@ -24,15 +24,15 @@
               ref="dictionaryDetailTable"
               border fit highlight-current-row style="width: 100%"
               @sort-change="sortChange" @row-click="rowClick" :default-sort="{prop: 'name'}">
-      <el-table-column label="明细键" sortable prop="name" width="90px">
+      <el-table-column align="center" :label="$t('cdp_sys_dictionary_detail.name.label')" sortable prop="name" width="120px">
       </el-table-column>
-      <el-table-column align="center" label="明细值" sortable prop="value">
+      <el-table-column align="center" :label="$t('cdp_sys_dictionary_detail.value.label')" sortable prop="value">
       </el-table-column>
-      <el-table-column align="center" label="标准代码" sortable prop="scode" width="120px">
+      <el-table-column align="center" :label="$t('cdp_sys_dictionary_detail.scode.label')" sortable prop="scode" width="120px">
       </el-table-column>
-      <el-table-column align="center" label="顺序" sortable prop="sort" width="80px">
+      <el-table-column align="center" :label="$t('cdp_sys_dictionary_detail.sort.label')" sortable prop="sort" width="80px">
       </el-table-column>
-      <el-table-column align="center" label="状态" sortable prop="status" width="80px">
+      <el-table-column align="center" :label="$t('cdp_sys_dictionary_detail.status.label')" sortable prop="status" width="90px">
         <template slot-scope="scope">
           <span>{{getStatusValue(scope.row.status)}}</span>
         </template>
@@ -48,30 +48,28 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
       <el-form :model="form" :rules="rules" ref="form" label-width="120px">
-        <el-form-item label="字典名称" prop="name">
+        <el-form-item :label="$t('cdp_sys_dictionary.name.label')">
           <el-input v-model="selectedDictionary.name" :disabled="true"></el-input>
         </el-form-item>
-        <el-form-item label="字典明细项键" prop="name">
-          <el-input v-model="form.name" placeholder="字典明细项键,是一个字段的唯一标识，不能重复"></el-input>
+        <el-form-item :label="$t('cdp_sys_dictionary_detail.name.label')" prop="name">
+          <el-input v-model="form.name" :placeholder="$t('cdp_sys_dictionary_detail.name.placeholder')"></el-input>
         </el-form-item>
-        <el-form-item label="字典明细项值" prop="value">
-          <el-input v-model="form.value" placeholder="字典明细项键对应的字典明细项值"></el-input>
+        <el-form-item :label="$t('cdp_sys_dictionary_detail.value.label')" prop="value">
+          <el-input v-model="form.value" :placeholder="$t('cdp_sys_dictionary_detail.value.placeholder')"></el-input>
         </el-form-item>
-        <el-form-item label="顺序" prop="sort">
-          <el-input v-model="form.sort" placeholder="排列顺序，用于展示数据时的上下顺序，值越小越靠前"></el-input>
+        <el-form-item :label="$t('cdp_sys_dictionary_detail.sort.label')" prop="sort">
+          <el-input v-model="form.sort" :placeholder="$t('cdp_sys_dictionary_detail.sort.placeholder')"></el-input>
         </el-form-item>
-        <el-form-item label="标准代码" prop="scode">
-          <el-input v-model="form.scode" placeholder="标准代码"></el-input>
+        <el-form-item :label="$t('cdp_sys_dictionary_detail.scode.label')" prop="scode">
+          <el-input v-model="form.scode" :placeholder="$t('cdp_sys_dictionary_detail.scode.placeholder')"></el-input>
         </el-form-item>
-        <el-form-item label="作用域" prop="scope">
-          <el-input v-model="form.scope" placeholder="作用域"></el-input>
+        <el-form-item :label="$t('cdp_sys_dictionary_detail.scope.label')" prop="scope">
+          <el-input v-model="form.scope" :placeholder="$t('cdp_sys_dictionary_detail.scope.placeholder')"></el-input>
         </el-form-item>
-        <el-form-item prop="status">
+        <el-form-item prop="status" :label="$t('cdp_sys_dictionary_detail.status.label')">
           <el-switch v-model="form.status"
                      active-color="#13ce66"
                      inactive-color="#ff4949"
-                     active-text="启用"
-                     inactive-text="禁用"
                      active-value=0
                      inactive-value=1>
           </el-switch>
@@ -98,12 +96,8 @@
     deleteDictionaryDetail,
     listDictionaryDetailPage
   } from '../dictionary'
-  import waves from '@/directive/waves/index.js' // 水波纹指令
   export default {
     name: 'dictionaryDetail',
-    directives: {
-      waves
-    },
     created() {
       this.asyncLoadDictionaryByCode(11, (data) => {
         this.statusOptions = data

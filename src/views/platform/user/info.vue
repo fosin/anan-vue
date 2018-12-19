@@ -3,64 +3,64 @@
 
     <div class="grid-content bg-purple">
       <el-form :model="userInfo" :rules="rules2" ref="user" label-width="100px" class="demo-ruleForm">
-        <span>基本信息</span>
+        <span>{{$t('cdp_sys_user.baseInfo')}}</span>
         <hr/>
         <el-row>
           <el-col :span="6">
-            <el-form-item label="用户工号:" prop="usercode">
+            <el-form-item :label="$t('cdp_sys_user.usercode.label')" prop="usercode">
               <span>{{userInfo.usercode}}</span>
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="用户名称:" prop="username">
+            <el-form-item :label="$t('cdp_sys_user.username.label')" prop="username">
               <span>{{userInfo.username}}</span>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="6">
-            <el-form-item label="性别:" prop="sex">
+            <el-form-item :label="$t('cdp_sys_user.sex.label')" prop="sex">
               <span>{{getSexName(userInfo.sex)}}</span>
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="用户生日:" prop="birthday">
+            <el-form-item :label="$t('cdp_sys_user.birthday.label')" prop="birthday">
               <span>{{userInfo.birthday | dateFormatFilter('yyyy-MM-dd')}}</span>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="6">
-            <el-form-item label="手机号码:" prop="phone">
+            <el-form-item :label="$t('cdp_sys_user.phone.label')" prop="phone">
               <span>{{userInfo.phone}}</span>
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="用户邮箱:" prop="email">
+            <el-form-item :label="$t('cdp_sys_user.email.label')" prop="email">
               <span>{{userInfo.email}}</span>
             </el-form-item>
           </el-col>
         </el-row>
-        <span>修改密码</span>
+        <span>{{$t('cdp_sys_user.modifyPassword')}}</span>
         <hr/>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="当前密码" prop="password" width>
-              <el-input type="password" v-model="userInfo2.password" placeholder="请输入用户当前密码" auto-complete="off"></el-input>
+            <el-form-item :label="$t('cdp_sys_user.oldPassword.label')" prop="password" width>
+              <el-input type="password" v-model="userInfo2.password" :placeholder="$t('cdp_sys_user.oldPassword.placeholder')" auto-complete="off"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="新密码" prop="confirmPassword1">
-              <el-input type="password" v-model="userInfo2.confirmPassword1" placeholder="请输入用户新密码" auto-complete="off"></el-input>
+            <el-form-item :label="$t('cdp_sys_user.confirmPassword1.label')" prop="confirmPassword1">
+              <el-input type="password" v-model="userInfo2.confirmPassword1" :placeholder="$t('cdp_sys_user.confirmPassword1.placeholder')" auto-complete="off"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="确认新密码" prop="confirmPassword2">
-              <el-input type="password" v-model="userInfo2.confirmPassword2" placeholder="请再次输入用户新密码" auto-complete="off"></el-input>
+            <el-form-item :label="$t('cdp_sys_user.confirmPassword2.label')" prop="confirmPassword2">
+              <el-input type="password" v-model="userInfo2.confirmPassword2" :placeholder="$t('cdp_sys_user.confirmPassword2.placeholder')" auto-complete="off"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
