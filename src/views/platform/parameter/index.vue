@@ -5,7 +5,7 @@
                 :placeholder="$t('cdp_sys_parameter.searchText')" v-model="pageModule.searchText">
       </el-input>
       <el-button-group>
-        <el-button round class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">
+        <el-button round v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
           {{$t('table.search')}}
         </el-button>
         <el-button round v-waves v-permission="'53'" class="filter-item" style="margin-left: 5px;"
@@ -43,6 +43,9 @@
         </template>
       </el-table-column>
       <el-table-column align="center" :label="$t('cdp_sys_parameter.scope.label')" sortable prop="scope" width="100px">
+        <template slot-scope="scope">
+          <span>{{getScopeName(scope.row.type, scope.row.scope)}}</span>
+        </template>
       </el-table-column>
     </el-table>
     <div v-show="!listLoading" class="pagination-container">
@@ -67,21 +70,27 @@
           <el-input v-model="form.description" :placeholder="$t('cdp_sys_parameter.description.placeholder')"></el-input>
         </el-form-item>
         <el-form-item :label="$t('cdp_sys_parameter.type.label')" prop="type">
-          <el-select class="filter-item" v-model="form.type" :placeholder="$t('cdp_sys_parameter.type.placeholder')">
+          <el-select class="filter-item" v-model="form.type" :placeholder="$t('cdp_sys_parameter.type.placeholder')" @change="typeChange" :disabled="dialogStatus!=='create'">
             <el-option v-for="item in typeOptions" :key="item.name" :label="item.value"
-                       :value="item.name" :disabled="item.status === 1"></el-option>
+                       :value="item.name" :disabled="item.status === 1" ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item :label="$t('cdp_sys_parameter.scope.label')" prop="scope">
-          <el-input v-model="form.scope" :placeholder="$t('cdp_sys_parameter.scope.placeholder')"></el-input>
+        <el-form-item v-if="form.type ===1 || form.type === 2" :label="$t('cdp_sys_parameter.scope.label')" prop="scope">
+          <el-select class="filter-item" v-model="form.scope" :placeholder="$t('cdp_sys_parameter.scope.placeholder')">
+            <el-option v-for="item in scopeOptions" :key="item.name" :label="item.value"
+                       :value="item.name">
+              <span style="float: left; color: #8492a6; font-size: 13px">{{ item.code }}</span>
+              <span style="float: right">{{ item.value }}</span>
+            </el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button round @click="cancel('form')" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
-        <el-button round v-if="dialogStatus==='create'" type="primary" @click="create('form')" icon="el-icon-circle-check"
+        <el-button round v-waves @click="cancel('form')" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
+        <el-button round v-waves v-if="dialogStatus==='create'" type="primary" @click="create('form')" icon="el-icon-circle-check"
                    autofocus>{{$t('table.confirm')}}
         </el-button>
-        <el-button round v-else type="primary" @click="update('form')" icon="el-icon-circle-check" autofocus>
+        <el-button round v-waves v-else type="primary" @click="update('form')" icon="el-icon-circle-check" autofocus>
           {{$t('table.update')}}
         </el-button>
       </div>
@@ -98,10 +107,15 @@
     applyParameter,
     applysParameter
   } from './parameter'
+  import { listOrganizUser } from '../user/user'
+  import { listOrganizAllChild } from '../organization/organization'
+  import { mapGetters } from 'vuex'
 
   export default {
     name: 'config_parameter',
-
+    computed: {
+      ...mapGetters(['userInfo'])
+    },
     data() {
       return {
         parameterList: null,
@@ -144,10 +158,14 @@
         textMap: {
           update: '编辑',
           create: '创建'
-        }
+        },
+        typeScopeOptions: {},
+        scopeOptions: [],
+        oraganizOptions: [],
+        organizUserOptions: []
       }
     },
-    created() {
+    mounted() {
       this.asyncLoadDictionaryByCode(10, (data) => {
         this.typeOptions = data
       })
@@ -161,13 +179,76 @@
           this.pageSizes[i] = parseInt(temp[i])
         }
       })
+      this.listOrganizUser(this.userInfo.organizId)
+      this.listOrganizAllChild(this.userInfo.organizId)
     },
     methods: {
+      typeChange(type) {
+        let scopeOptions = this.typeScopeOptions[type]
+        if (!scopeOptions) {
+          scopeOptions = []
+          this.typeScopeOptions[type] = []
+        }
+        this.scopeOptions = scopeOptions
+      },
+      listOrganizUser(organizId) {
+        listOrganizUser(organizId).then(response => {
+          this.organizUserOptions = response.data
+          const scopeOptions = []
+          for (let i = 0; i < this.organizUserOptions.length; i++) {
+            const user = this.organizUserOptions[i]
+            const scope = {
+              name: user.id + '',
+              code: user.usercode,
+              value: user.username
+            }
+            scopeOptions.push(scope)
+          }
+          this.typeScopeOptions[2] = scopeOptions
+        }).catch(reason => {
+          this.$notify({
+            title: '获取所有用户失败',
+            message: reason.message,
+            type: 'error',
+            duration: 5000
+          })
+        })
+      },
+      listOrganizAllChild(organizId) {
+        listOrganizAllChild(organizId).then(response => {
+          this.oraganizOptions = response.data || []
+          const scopeOptions = []
+          for (let i = 0; i < this.oraganizOptions.length; i++) {
+            const organiz = this.oraganizOptions[i]
+            const scope = {
+              name: organiz.id + '',
+              code: organiz.code,
+              value: organiz.name
+            }
+            scopeOptions.push(scope)
+          }
+          this.typeScopeOptions[1] = scopeOptions
+        }).catch(reason => {
+          this.$notify({
+            title: '查询后代机构信息失败',
+            message: reason.message,
+            type: 'error',
+            duration: 5000
+          })
+        })
+      },
       getTypeName(type) {
         const typeOption = this.typeOptions.filter(value => {
           return value.name === type
         })
         return typeOption.length > 0 ? typeOption[0].value : type
+      },
+      getScopeName(type, scope) {
+        const scopeOptions = this.typeScopeOptions[type]
+        const scopeOption = scopeOptions.filter(value => {
+          return value.name === scope
+        })
+        return scopeOption.length > 0 ? scopeOption[0].value : scope
       },
       getList() {
         this.listLoading = true
@@ -239,6 +320,7 @@
         }
         getParameter(this.form.id).then(response => {
           this.form = response.data
+          this.scopeOptions = this.typeScopeOptions[this.form.type]
           this.dialogFormVisible = true
           this.dialogStatus = 'update'
         }).catch(reason => {
@@ -458,7 +540,7 @@
   }
 </script>
 
-<style>
+<style scoped>
   .el-table .warning-row {
     color: #E6A23C;
   }
@@ -473,5 +555,8 @@
 
   .el-table .info-row {
     color: #909399;
+  }
+  .el-select {
+    width: 100%;
   }
 </style>

@@ -59,6 +59,14 @@ export function listUser() {
   })
 }
 
+// 根据机构ID查询该机构及子机构的所有用户
+export function listOrganizUser(organizId) {
+  return request({
+    url: '/platform/v1/user/childList/organizId/' + organizId,
+    method: 'post'
+  })
+}
+
 export function resetPassword(id) {
   return request({
     url: '/platform/v1/user/resetPassword/' + id,

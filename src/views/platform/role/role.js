@@ -67,6 +67,13 @@ export function listRole() {
   })
 }
 
+// 根据机构ID查询该机构及子机构的所有角色
+export function listOrganizRole(organizId) {
+  return request({
+    url: '/platform/v1/role/childList/organizId/' + organizId,
+    method: 'post'
+  })
+}
 export function postRole(obj) {
   return request({
     url: '/platform/v1/role/',

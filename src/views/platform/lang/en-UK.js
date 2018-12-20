@@ -3,92 +3,92 @@ export default {
     searchText: 'Support name, type , code search',
     code: {
       label: 'code',
-      placeholder: '字典代码'
+      placeholder: 'Dictionary code'
     },
     name: {
       label: 'name',
-      placeholder: '字典名称'
+      placeholder: 'Dictionary code'
     },
     type: {
       label: 'type',
-      placeholder: '字典类别，区别字典的大分类，取值于表cdp_sys_dictionary.code = 1数据'
+      placeholder: 'Dictionary Category, which distinguishes the large categories of dictionaries, is based on table cdp_sys_dictionary.code = 1 data'
     },
     scope: {
       label: 'scope',
-      placeholder: '字典作用域，以字典类别为前提，在字典类别基础上再次细化分类字典'
+      placeholder: 'Dictionary scope, based on dictionary category, refines classification dictionary again'
     }
   },
   cdp_sys_dictionary_detail: {
     searchText: 'Support name, value search',
     id: {
       label: 'id',
-      placeholder: '字典明细ID'
+      placeholder: 'Dictionary detail ID'
     },
     name: {
       label: 'name',
-      placeholder: '字典明细键，不能重复，字典内明细项唯一代码'
+      placeholder: 'Dictionary detail key, can not be repeated, dictionary details unique code'
     },
     value: {
       label: 'value',
-      placeholder: '字典明细值表示字面意义'
+      placeholder: 'Dictionary detail values denote literal meaning'
     },
     code: {
       label: 'code',
-      placeholder: '取值于字典明细表CdpSysDictionaryDetailEntity.code'
+      placeholder: 'The value is taken from the dictionary detail table CdpSysDictionary Detail Entity.code'
     },
     sort: {
       label: 'sort',
-      placeholder: '顺序，用于显示数据时的顺序，数值越小越靠前'
+      placeholder: 'Sequence, the order in which data is displayed, the smaller the value, the higher the value'
     },
     status: {
       label: 'status',
-      placeholder: '使用状态：0=启用，1=禁用，具体取值于字典表cdp_sys_dictionary.code=11'
+      placeholder: 'Use status: 0 = enabled, 1 = disabled, specific value in the dictionary table cdp_sys_dictionary. code = 11'
     },
     scode: {
       label: 'scode',
-      placeholder: '标准代码，该字段通常用于对接标准字典'
+      placeholder: 'Standard code, which is usually used to dock standard dictionaries'
     },
     scope: {
       label: 'scope',
-      placeholder: '作用域，用于字典明细项的作用域'
+      placeholder: 'Scope, used for the scope of dictionary details'
     },
     used: {
       label: 'used',
-      placeholder: '使用标志：0=未使用，1=已使用，已使用的字典就不能再修改name属性'
+      placeholder: 'Use flag: 0 = unused, 1 = used, the used dictionary can no longer modify the name attribute'
     },
     createBy: {
       label: 'createBy',
-      placeholder: '该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id'
+      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_sys_user.id.'
     },
     createTime: {
       label: 'createTime',
-      placeholder: '创建日期，该值由后台维护，更改数据时前端不需要关心'
+      placeholder: 'Create date, which is maintained by the background, and the front end does not need to care when changing data'
     },
     updateBy: {
       label: 'updateBy',
-      placeholder: '该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id'
+      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_sys_user.id.'
     },
     updateTime: {
       label: 'updateTime',
-      placeholder: '更新日期，该值由后台维护，更改数据时前端不需要关心'
+      placeholder: 'Update date date, which is maintained by the background. The front end does not need to care when changing data.'
     }
   },
   cdp_sys_organization: {
     id: {
       label: 'id',
-      placeholder: '机构ID'
+      placeholder: 'Organization id'
     },
     pId: {
       label: 'pId',
-      placeholder: '父机构编码，取值于id，表示当前数据所属的父类机构'
+      placeholder: 'Parent encoding, with an ID value, denotes the parent to which the current data belongs.'
     },
     topId: {
       label: 'topId',
-      placeholder: '顶级机构编码：一般指用户注册的机构，通常是一个集团组的最高级别机构，取值于id'
+      placeholder: 'Top-level organization coding: generally refers to a user-registered organization, usually the highest-level organization of a group, valued at ID'
     },
     code: {
       label: 'code',
-      placeholder: '机构编码，自定义机构编码，下级机构必须以上级机构编码为前缀'
+      placeholder: 'Mechanism coding, custom mechanism coding, lower mechanism must be prefixed by higher mechanism coding'
     },
     name: {
       label: 'name',
@@ -116,19 +116,19 @@ export default {
     },
     createTime: {
       label: 'createTime',
-      placeholder: '创建日期，该值由后台维护，更改数据时前端不需要关心'
+      placeholder: 'Create date, which is maintained by the background, and the front end does not need to care when changing data'
     },
     createBy: {
       label: 'createBy',
-      placeholder: '该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id'
+      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_sys_user.id.'
     },
     updateTime: {
       label: 'updateTime',
-      placeholder: '更新日期，该值由后台维护，更改数据时前端不需要关心'
+      placeholder: 'Update date date, which is maintained by the background. The front end does not need to care when changing data.'
     },
     updateBy: {
       label: 'updateBy',
-      placeholder: '该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id'
+      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_sys_user.id.'
     }
   },
   cdp_sys_organization_auth: {
@@ -138,7 +138,7 @@ export default {
     },
     organizId: {
       label: 'organizId',
-      placeholder: '机构ID'
+      placeholder: 'Organization id'
     },
     versionId: {
       label: 'versionId',
@@ -154,11 +154,11 @@ export default {
     },
     createTime: {
       label: 'createTime',
-      placeholder: '创建日期，该值由后台维护，更改数据时前端不需要关心'
+      placeholder: 'Create date, which is maintained by the background, and the front end does not need to care when changing data'
     },
     createBy: {
       label: 'createBy',
-      placeholder: '该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id'
+      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_sys_user.id.'
     },
     validity: {
       label: 'validity',
@@ -192,7 +192,7 @@ export default {
     },
     organizId: {
       label: 'organizId',
-      placeholder: '机构ID'
+      placeholder: 'Organization id'
     },
     permissionId: {
       label: 'permissionId',
@@ -204,54 +204,54 @@ export default {
     },
     createBy: {
       label: 'createBy',
-      placeholder: '创建人，该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id'
+      placeholder: '创建人，The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_sys_user.id.'
     }
   },
   cdp_sys_parameter: {
     searchText: 'Support name、value、description search',
     id: {
       label: 'id',
-      placeholder: '参数ID'
+      placeholder: 'Parameter id'
     },
     name: {
       label: 'name',
-      placeholder: '参数键'
+      placeholder: 'Paramter key'
     },
     value: {
       label: 'value',
-      placeholder: '参数值'
+      placeholder: 'Paramter value'
     },
     type: {
       label: 'type',
-      placeholder: '参数分类：具体取值于字典表cdp_sys_dictionary.code=10'
+      placeholder: 'Paramtertype：Specific values are taken from dictionary tables cdp_sys_dictionary.code=10'
     },
     scope: {
       label: 'scope',
-      placeholder: '参数作用域'
+      placeholder: 'Paramter scope'
     },
     defaultValue: {
       label: 'defaultValue',
-      placeholder: '默认值'
+      placeholder: 'Paramter default value'
     },
     description: {
       label: 'description',
-      placeholder: '参数描述'
+      placeholder: 'Paramter description'
     },
     createTime: {
       label: 'createTime',
-      placeholder: '创建日期，该值由后台维护，更改数据时前端不需要关心'
+      placeholder: 'Create date, which is maintained by the background, and the front end does not need to care when changing data'
     },
     createBy: {
       label: 'createBy',
-      placeholder: '该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id'
+      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_sys_user.id.'
     },
     updateTime: {
       label: 'updateTime',
-      placeholder: '更新日期，该值由后台维护，更改数据时前端不需要关心'
+      placeholder: 'Update date date, which is maintained by the background. The front end does not need to care when changing data.'
     },
     updateBy: {
       label: 'updateBy',
-      placeholder: '该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id'
+      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_sys_user.id.'
     },
     applyTime: {
       label: 'applyTime',
@@ -259,7 +259,7 @@ export default {
     },
     applyBy: {
       label: 'applyBy',
-      placeholder: '该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id'
+      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_sys_user.id.'
     },
     status: {
       label: 'status',
@@ -453,19 +453,19 @@ export default {
     },
     createTime: {
       label: 'createTime',
-      placeholder: '创建日期，该值由后台维护，更改数据时前端不需要关心'
+      placeholder: 'Create date, which is maintained by the background, and the front end does not need to care when changing data'
     },
     createBy: {
       label: 'createBy',
-      placeholder: '该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id'
+      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_sys_user.id.'
     },
     updateTime: {
       label: 'updateTime',
-      placeholder: '更新日期，该值由后台维护，更改数据时前端不需要关心'
+      placeholder: 'Update date date, which is maintained by the background. The front end does not need to care when changing data.'
     },
     updateBy: {
       label: 'updateBy',
-      placeholder: '该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id'
+      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_sys_user.id.'
     }
   },
   cdp_sys_role: {
@@ -476,7 +476,7 @@ export default {
     },
     organizId: {
       label: 'organizId',
-      placeholder: '机构ID'
+      placeholder: 'Organization id'
     },
     name: {
       label: 'name',
@@ -500,7 +500,7 @@ export default {
     },
     createBy: {
       label: 'createBy',
-      placeholder: '创建人，该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id'
+      placeholder: '创建人，The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_sys_user.id.'
     },
     updateTime: {
       label: 'updateTime',
@@ -508,7 +508,7 @@ export default {
     },
     updateBy: {
       label: 'updateBy',
-      placeholder: '更新人，该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id'
+      placeholder: '更新人，The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_sys_user.id.'
     },
     builtIn: {
       label: 'builtIn',
@@ -534,7 +534,7 @@ export default {
     },
     createBy: {
       label: 'createBy',
-      placeholder: '创建人，该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id'
+      placeholder: '创建人，The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_sys_user.id.'
     }
   },
   cdp_sys_user: {
@@ -559,7 +559,7 @@ export default {
     },
     organizId: {
       label: 'organizId',
-      placeholder: '机构ID'
+      placeholder: 'Organization id'
     },
     usercode: {
       label: 'usercode',
@@ -599,19 +599,19 @@ export default {
     },
     createTime: {
       label: 'createTime',
-      placeholder: '创建日期，该值由后台维护，更改数据时前端不需要关心'
+      placeholder: 'Create date, which is maintained by the background, and the front end does not need to care when changing data'
     },
     createBy: {
       label: 'createBy',
-      placeholder: '创建人，该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id'
+      placeholder: '创建人，The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_sys_user.id.'
     },
     updateTime: {
       label: 'updateTime',
-      placeholder: '更新日期，该值由后台维护，更改数据时前端不需要关心'
+      placeholder: 'Update date date, which is maintained by the background. The front end does not need to care when changing data.'
     },
     updateBy: {
       label: 'updateBy',
-      placeholder: '更新人，该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id'
+      placeholder: '更新人，The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_sys_user.id.'
     },
     expireTime: {
       label: 'expireTime',
@@ -625,7 +625,7 @@ export default {
     },
     organizId: {
       label: 'organizId',
-      placeholder: '机构ID'
+      placeholder: 'Organization id'
     },
     userId: {
       label: 'userId',
@@ -641,7 +641,7 @@ export default {
     },
     createBy: {
       label: 'createBy',
-      placeholder: '该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id'
+      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_sys_user.id.'
     },
     addMode: {
       label: 'addMode',
@@ -655,7 +655,7 @@ export default {
     },
     organizId: {
       label: 'organizId',
-      placeholder: '机构ID'
+      placeholder: 'Organization id'
     },
     userId: {
       label: 'userId',
@@ -667,11 +667,11 @@ export default {
     },
     createTime: {
       label: 'createTime',
-      placeholder: '创建日期，该值由后台维护，更改数据时前端不需要关心'
+      placeholder: 'Create date, which is maintained by the background, and the front end does not need to care when changing data'
     },
     createBy: {
       label: 'createBy',
-      placeholder: '该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id'
+      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_sys_user.id.'
     }
   },
   cdp_sys_version: {
@@ -756,7 +756,7 @@ export default {
     },
     createBy: {
       label: 'createBy',
-      placeholder: '创建人，该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id'
+      placeholder: '创建人，The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_sys_user.id.'
     }
   },
   cdp_sys_version_role: {
@@ -791,7 +791,7 @@ export default {
     },
     createBy: {
       label: 'createBy',
-      placeholder: '创建人，该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id'
+      placeholder: '创建人，The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_sys_user.id.'
     },
     updateTime: {
       label: 'updateTime',
@@ -799,7 +799,7 @@ export default {
     },
     updateBy: {
       label: 'updateBy',
-      placeholder: '更新人，该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id'
+      placeholder: '更新人，The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_sys_user.id.'
     }
   },
   cdp_sys_version_role_permission: {
@@ -821,18 +821,18 @@ export default {
     },
     createBy: {
       label: 'createBy',
-      placeholder: '创建人，该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id'
+      placeholder: '创建人，The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_sys_user.id.'
     }
   },
   oauth_client_details: {
     searchText: '支持标识、密钥查找',
     clientId: {
       label: 'clientId',
-      placeholder: ''
+      placeholder: 'clientId'
     },
     resourceIds: {
       label: 'resourceIds',
-      placeholder: ''
+      placeholder: 'resourceIds'
     },
     clientSecret: {
       label: 'clientSecret',

@@ -241,7 +241,7 @@ import { listUserPage, getUser, postUser, putUser, deleteUser, resetPassword,
   listUserPermissions,
   listUserRoles, putUserRoles } from './user'
 import { formatDate } from '@/utils/date'
-import { listRole } from '../role/role'
+import { listOrganizRole } from '../role/role'
 import { listOrganizAllChild, treeOrganiz, listOrganiz, getOrganiz, getOrganizAuth } from '../organization/organization'
 import { listVersionChildPermissions } from '../version/version'
 import { mapGetters } from 'vuex'
@@ -462,7 +462,6 @@ export default {
       }
     })
     this.$refs.iconsSelect.init(this.setAvatar)
-    this.loadRoles()
     this.resetTemp()
   },
   methods: {
@@ -597,7 +596,7 @@ export default {
       return organiz[0].fullname || organiz[0].name || row.organizId
     },
     loadRoles() {
-      listRole().then(response => {
+      listOrganizRole(this.form.organizId).then(response => {
         this.rolesOptions = response.data || []
       }).catch(reason => {
         this.$notify({
@@ -912,6 +911,7 @@ export default {
         this.dialogStatus = 'role'
         this.dialogUserRoleVisible = true
         this.form = row
+        this.loadRoles()
         const userRoles = response.data
         this.userRoles = []
         for (let i = 0; i < userRoles.length; i++) {

@@ -167,7 +167,7 @@
     putRoleUsers,
     listRolePageByOrganizId
   } from './role'
-  import { listUser } from '../user/user'
+  import { listOrganizUser } from '../user/user'
   import { formatDate } from '@/utils/date'
   import { listOrganizAllChild } from '../organization/organization'
   import { mapGetters } from 'vuex'
@@ -292,16 +292,6 @@
         for (let i = 0; i < temp.length; i++) {
           this.pageSizes[i] = parseInt(temp[i])
         }
-      })
-      listUser().then(response => {
-        this.allUsers = response.data
-      }).catch(reason => {
-        this.$notify({
-          title: '获取所有用户失败',
-          message: reason.message,
-          type: 'error',
-          duration: 5000
-        })
       })
     },
     methods: {
@@ -446,11 +436,24 @@
           })
         })
       },
+      listOrganizUser() {
+        listOrganizUser(this.form.organizId).then(response => {
+          this.allUsers = response.data
+        }).catch(reason => {
+          this.$notify({
+            title: '获取所有用户失败',
+            message: reason.message,
+            type: 'error',
+            duration: 5000
+          })
+        })
+      },
       handleRoleUser(row) {
         listRoleUsers(row.id).then(response => {
           this.dialogStatus = 'user'
           this.dialogRoleUserVisible = true
           this.form = row
+          this.listOrganizUser()
           const roleUsers = response.data
           this.roleUsers = []
           for (let i = 0; i < roleUsers.length; i++) {
