@@ -48,17 +48,17 @@ export const constantRouterMap = [
   {
     path: '',
     component: Layout,
-    redirect: 'dashboard',
+    redirect: 'Dashboard',
     children: [{
-      path: 'dashboard',
+      path: 'Dashboard',
       component: () => import('@/views/platform/dashboard/index'),
-      name: 'dashboard',
-      meta: { title: 'dashboard', icon: 'dashboard' }
+      name: 'Dashboard',
+      meta: { title: 'Dashboard', icon: 'dashboard' }
     }, {
-      path: 'userInfo',
+      path: 'UserInfo',
       component: () => import('@/views/platform/user/info'),
-      name: 'userInfo',
-      meta: { title: 'userInfo', icon: 'user' },
+      name: 'UserInfo',
+      meta: { title: 'UserInfo', icon: 'user' },
       hidden: true
     }]
   }

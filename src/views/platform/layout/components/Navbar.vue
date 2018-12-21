@@ -1,15 +1,15 @@
 <template>
   <div class="navbar">
-    <hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened"></hamburger>
+    <hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container"/>
 
-    <breadcrumb class="breadcrumb-container"></breadcrumb>
+    <breadcrumb class="breadcrumb-container"/>
 
     <div class="right-menu">
       <template v-if="device!=='mobile'">
-        <error-log class="errLog-container right-menu-item"></error-log>
+        <error-log class="errLog-container right-menu-item"/>
 
-        <el-tooltip effect="dark" :content="$t('navbar.screenfull')" placement="bottom">
-          <screenfull class="screenfull right-menu-item"></screenfull>
+        <el-tooltip :content="$t('navbar.screenfull')" effect="dark" placement="bottom">
+          <screenfull class="screenfull right-menu-item"/>
         </el-tooltip>
 
         <el-tooltip :content="$t('navbar.size')" effect="dark" placement="bottom">
@@ -17,30 +17,30 @@
         </el-tooltip>
 
         <el-tooltip :content="$t('navbar.langSelect')" effect="dark" placement="bottom">
-          <lang-select class="international right-menu-item"></lang-select>
+          <lang-select class="international right-menu-item"/>
         </el-tooltip>
-        <el-tooltip effect="dark" :content="$t('navbar.theme')" placement="bottom">
-          <theme-picker class="theme-switch right-menu-item"></theme-picker>
+        <el-tooltip :content="$t('navbar.theme')" effect="dark" placement="bottom">
+          <theme-picker class="theme-switch right-menu-item"/>
         </el-tooltip>
       </template>
       <el-dropdown class="avatar-container right-menu-item">
         <div class="avatar-wrapper">
-          <svg-icon v-if="userInfo.avatar" :icon-class="userInfo.avatar" style="width: 40px; height: 40px; border-radius: 50%; background: #fff;"></svg-icon>
-          <span style="float: right; text-align: center">{{userInfo.username}}</span>
-          <i class="el-icon-caret-bottom"></i>
+          <svg-icon v-if="userInfo.avatar" :icon-class="userInfo.avatar" style="width: 40px; height: 40px; border-radius: 50%; background: #fff;"/>
+          <span style="float: right; text-align: center">{{ userInfo.username }}</span>
+          <i class="el-icon-caret-bottom"/>
         </div>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item divided>
-            <span @click="logout" style="display:block;">{{$t('navbar.logOut')}}</span>
+            <span style="display:block;" @click="logout">{{ $t('navbar.logOut') }}</span>
           </el-dropdown-item>
           <router-link to="/404">
             <el-dropdown-item>
-              {{$t('navbar.userSetting')}}
+              {{ $t('navbar.userSetting') }}
             </el-dropdown-item>
           </router-link>
           <router-link to="/userInfo">
             <el-dropdown-item>
-              {{$t('navbar.userInfo')}}
+              {{ $t('navbar.userInfo') }}
             </el-dropdown-item>
           </router-link>
         </el-dropdown-menu>

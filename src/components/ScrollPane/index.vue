@@ -1,7 +1,7 @@
 <template>
-  <div class="scroll-container" ref="scrollContainer" @wheel.prevent="handleScroll">
-    <div class="scroll-wrapper" ref="scrollWrapper" :style="{left: left + 'px'}">
-      <slot></slot>
+  <div ref="scrollContainer" class="scroll-container" @wheel.prevent="handleScroll">
+    <div ref="scrollWrapper" :style="{left: left + 'px'}" class="scroll-wrapper">
+      <slot/>
     </div>
   </div>
 </template>
@@ -10,7 +10,7 @@
 const padding = 15 // tag's padding
 
 export default {
-  name: 'scrollPane',
+  name: 'ScrollPane',
   data() {
     return {
       left: 0
@@ -49,7 +49,7 @@ export default {
         this.left = -$targetLeft + padding
       } else if ($targetLeft + padding > -this.left && $targetLeft + $targetWidth < -this.left + $containerWidth - padding) {
         // tag in the current view
-        // eslint-disable-line
+          // eslint-disable-line
       } else {
         // tag in the right
         this.left = -($targetLeft - ($containerWidth - $targetWidth) + padding)
@@ -60,13 +60,13 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.scroll-container {
-  white-space: nowrap;
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  .scroll-wrapper {
-    position: absolute;
+  .scroll-container {
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    .scroll-wrapper {
+      position: absolute;
+    }
   }
-}
 </style>

@@ -10,47 +10,46 @@
     </el-dropdown-menu>
   </el-dropdown>
 </template>
+
 <script>
-  export default {
-    computed: {
-      size() {
-        return this.$store.getters.size
-      }
+export default {
+  computed: {
+    size() {
+      return this.$store.getters.size
+    }
+  },
+  methods: {
+    handleSetSize(size) {
+      this.$ELEMENT.size = size
+      this.$store.dispatch('setSize', size)
+      this.refreshView()
+      this.$message({
+        message: 'Switch Size Success',
+        type: 'success'
+      })
     },
-    methods: {
-      handleSetSize(size) {
-        this.$ELEMENT.size = size
-        this.$store.dispatch('setSize', size)
-        this.refreshView()
-        this.$message({
-          message: this.$t('size.switchSuccess'),
-          type: 'success'
-        })
-      },
-      refreshView() {
-        // In order to make the cached page re-rendered
-        const visitedViews = [...this.$store.getters.visitedViews].map(i => {
-          i.meta.noCache = true
-          return i
-        })
-        this.$store.dispatch('delAllViews', this.$route).then(() => {
-          console.log(visitedViews)
-          for (const i of visitedViews) {
-            this.$store.dispatch('addView', i)
-          }
-        })
-        const { path } = this.$route
+    refreshView() {
+      // In order to make the cached page re-rendered
+      this.$store.dispatch('delAllCachedViews', this.$route)
+
+      const { fullPath } = this.$route
+
+      this.$nextTick(() => {
         this.$router.replace({
-          path: '/redirect' + path
+          path: '/redirect' + fullPath
         })
-      }
+      })
     }
   }
+
+}
 </script>
+
 <style scoped>
-  .size-icon {
-    font-size: 20px;
-    cursor: pointer;
-    vertical-align: -4px!important;
-  }
+.size-icon {
+  font-size: 20px;
+  cursor: pointer;
+  vertical-align: -4px!important;
+}
 </style>
+

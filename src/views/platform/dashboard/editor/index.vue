@@ -1,17 +1,17 @@
 <template>
   <div class="dashboard-editor-container">
     <div class=" clearfix">
-      <pan-thumb style="float: left" :image="userInfo.avatar"> Your roles:
-        <span class="pan-info-roles" :key='item' v-for="item in roles">{{item}}</span>
+      <pan-thumb :image="userInfo.avatar" style="float: left"> Your roles:
+        <span v-for="item in roles" :key="item" class="pan-info-roles">{{ item }}</span>
       </pan-thumb>
-      <github-corner></github-corner>
+      <github-corner/>
       <div class="info-container">
-        <span class="display_name">{{userInfo.username}}</span>
+        <span class="display_name">{{ userInfo.username }}</span>
         <span style="font-size:20px;padding-top:20px;display:inline-block;">editor : dashboard</span>
       </div>
     </div>
     <div>
-      <img class="emptyGif" :src="emptyGif">
+      <img :src="emptyGif" class="emptyGif">
     </div>
   </div>
 </template>
@@ -22,7 +22,7 @@ import PanThumb from '@/components/PanThumb'
 import GithubCorner from '@/components/GithubCorner'
 
 export default {
-  name: 'dashboard-editor',
+  name: 'DashboardEditor',
   components: { PanThumb, GithubCorner },
   data() {
     return {

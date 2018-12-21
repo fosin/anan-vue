@@ -78,71 +78,88 @@ export default {
   methods: {
     setOptions({ expectedData, actualData } = {}) {
       this.chart.setOption({
-        xAxis: {
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-          boundaryGap: false,
-          axisTick: {
-            show: false
-          }
-        },
-        grid: {
-          left: 10,
-          right: 10,
-          bottom: 20,
-          top: 30,
-          containLabel: true
+        title: {
+          text: 'ETL主流程运行时长'
         },
         tooltip: {
           trigger: 'axis',
           axisPointer: {
-            type: 'cross'
-          },
-          padding: [5, 10]
-        },
-        yAxis: {
-          axisTick: {
-            show: false
+            type: 'cross',
+            label: {
+              backgroundColor: '#6a7985'
+            }
           }
         },
         legend: {
-          data: ['expected', 'actual']
+          data: ['', '', '', '', ''],
+          show: false
         },
-        series: [{
-          name: 'expected', itemStyle: {
-            normal: {
-              color: '#FF005A',
-              lineStyle: {
-                color: '#FF005A',
-                width: 2
-              }
-            }
-          },
-          smooth: true,
-          type: 'line',
-          data: expectedData,
-          animationDuration: 2800,
-          animationEasing: 'cubicInOut'
+        toolbox: {
+          feature: {
+            saveAsImage: {}
+          }
         },
-        {
-          name: 'actual',
-          smooth: true,
-          type: 'line',
-          itemStyle: {
-            normal: {
-              color: '#3888fa',
-              lineStyle: {
-                color: '#3888fa',
-                width: 2
-              },
-              areaStyle: {
-                color: '#f3f8ff'
-              }
-            }
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: [
+          {
+            type: 'category',
+            boundaryGap: false,
+            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value'
+          }
+        ],
+        series: [
+          {
+            name: '住院收费提取',
+            type: 'line',
+            stack: '总量',
+            areaStyle: {},
+            data: [120, 132, 101, 134, 690, 230, 210]
           },
-          data: actualData,
-          animationDuration: 2800,
-          animationEasing: 'quadraticOut'
-        }]
+          {
+            name: '门诊收费提取',
+            type: 'line',
+            stack: '运行时长',
+            areaStyle: {},
+            data: [220, 182, 191, 234, 290, 330, 310]
+          },
+          {
+            name: '医嘱信息提取',
+            type: 'line',
+            stack: '运行时长',
+            areaStyle: {},
+            data: [150, 232, 201, 154, 190, 330, 410]
+          },
+          {
+            name: '药品出库数据',
+            type: 'line',
+            stack: '运行时长',
+            areaStyle: { normal: {}},
+            data: [320, 332, 301, 334, 390, 330, 320]
+          },
+          {
+            name: '患者信息提取',
+            type: 'line',
+            stack: '运行时长',
+            label: {
+              normal: {
+                show: true,
+                position: 'top'
+              }
+            },
+            areaStyle: { normal: {}},
+            data: [820, 932, 901, 934, 643, 234, 589]
+          }
+        ]
       })
     },
     initChart() {

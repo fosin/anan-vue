@@ -1,11 +1,11 @@
 <template>
   <div class="login-container">
-    <el-form class="login-form" autoComplete="on" :model="loginForm" ref="loginForm" label-position="left">
+    <el-form ref="loginForm" :model="loginForm" class="login-form" auto-complete="on" label-position="left">
       <el-row>
         <el-col :span="24">
           <div class="title-container">
-            <h3 class="title">{{$t('login.title')}}</h3>
-            <LangSelect class="set-language"></LangSelect>
+            <h3 class="title">{{ $t('login.title') }}</h3>
+            <LangSelect class="set-language"/>
           </div>
         </el-col>
       </el-row>
@@ -15,23 +15,32 @@
             <span class="svg-container svg-container_login">
               <svg-icon icon-class="user"/>
             </span>
-            <el-input name="username" type="text" v-model="loginForm.username" autoComplete="on"
-                      :placeholder="$t('login.username.placeholder')"/>
+            <el-input
+              v-model="loginForm.username"
+              :placeholder="$t('login.username.placeholder')"
+              name="username"
+              type="text"
+              auto-complete="on"/>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="24">
-        <el-form-item prop="password">
-          <span class="svg-container svg-container_login">
-            <svg-icon icon-class="password"/>
-          </span>
-          <el-input name="password" :type="passwordType" @keyup.enter.native="handleLogin" v-model="loginForm.password"
-                    autoComplete="on" :placeholder="$t('login.password.placeholder')"/>
-          <span class="show-pwd" @click="showPwd">
-            <svg-icon icon-class="eye"/>
-          </span>
-        </el-form-item>
+          <el-form-item prop="password">
+            <span class="svg-container svg-container_login">
+              <svg-icon icon-class="password"/>
+            </span>
+            <el-input
+              :type="passwordType"
+              v-model="loginForm.password"
+              :placeholder="$t('login.password.placeholder')"
+              name="password"
+              auto-complete="on"
+              @keyup.enter.native="handleLogin"/>
+            <span class="show-pwd" @click="showPwd">
+              <svg-icon icon-class="eye"/>
+            </span>
+          </el-form-item>
         </el-col>
       </el-row>
       <!-- <el-form-item  prop="roles">
@@ -49,102 +58,106 @@
        </el-form-item>-->
       <el-row>
         <el-col :span="4">
-          <el-checkbox v-model="loginForm.rememberMe">{{$t('login.rememberMe')}}</el-checkbox>
+          <el-checkbox v-model="loginForm.rememberMe">{{ $t('login.rememberMe') }}</el-checkbox>
         </el-col>
         <el-col :span="20">
-          <el-button round type="primary" style="width:30%;margin-bottom:30px;float: right" :loading="loading"
-                     @click.native.prevent="handleLogin">{{$t('login.logIn')}}
+          <el-button
+            :loading="loading"
+            round
+            type="primary"
+            style="width:30%;margin-bottom:30px;float: right"
+            @click.native.prevent="handleLogin">{{ $t('login.logIn') }}
           </el-button>
         </el-col>
       </el-row>
-      <SocialSign v-if="false"></SocialSign>
+      <SocialSign v-if="false"/>
     </el-form>
   </div>
 </template>
 
 <script>
-  import { isvalidUsername } from '@/utils/validate'
-  import LangSelect from '@/components/LangSelect'
-  import SocialSign from './socialsignin'
-  export default {
-    components: { LangSelect, SocialSign },
-    name: 'login',
-    data() {
-      const validateUsername = (rule, value, callback) => {
-        if (!isvalidUsername(value)) {
-          callback(new Error('请输入用户名'))
-        } else {
-          callback()
-        }
-      }
-      const validatePass = (rule, value, callback) => {
-        if (value.length < 1) {
-          callback(new Error('密码不能为空'))
-        } else {
-          callback()
-        }
-      }
-      return {
-        loginForm: {
-          username: '',
-          password: '',
-          selectedRole: '',
-          rememberMe: false
-        },
-        loginRules: {
-          username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-          password: [{ required: true, trigger: 'blur', validator: validatePass }]
-        },
-        checked: false,
-        loading: false,
-        passwordType: 'password',
-        // userRoles: [],
-        redirect: undefined,
-        NODE_ENV: process.env.NODE_ENV
-      }
-    },
-    watch: {
-      $route: {
-        handler: function(route) {
-          this.redirect = route.query && route.query.redirect
-        },
-        immediate: true
-      }
-    },
-    methods: {
-      mounted() {
-
-      },
-      showPwd() {
-        if (this.passwordType === 'password') {
-          this.passwordType = ''
-        } else {
-          this.passwordType = 'password'
-        }
-      },
-      handleLogin() {
-        this.$refs.loginForm.validate(valid => {
-          if (valid) {
-            this.loading = true
-            this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
-              this.loading = false
-              this.$router.push({ path: this.redirect || '/' })
-            }).catch((reason) => {
-              this.loading = false
-              this.$notify({
-                title: '登录失败',
-                message: reason.message.error_description || reason.message,
-                type: 'error',
-                duration: 5000
-              })
-            })
-          } else {
-            return false
-          }
-        })
+import { isvalidUsername } from '@/utils/validate'
+import LangSelect from '@/components/LangSelect'
+import SocialSign from './socialsignin'
+export default {
+  name: 'Login',
+  components: { LangSelect, SocialSign },
+  data() {
+    const validateUsername = (rule, value, callback) => {
+      if (!isvalidUsername(value)) {
+        callback(new Error('请输入用户名'))
+      } else {
+        callback()
       }
     }
+    const validatePass = (rule, value, callback) => {
+      if (value.length < 1) {
+        callback(new Error('密码不能为空'))
+      } else {
+        callback()
+      }
+    }
+    return {
+      loginForm: {
+        username: '',
+        password: '',
+        selectedRole: '',
+        rememberMe: false
+      },
+      loginRules: {
+        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        password: [{ required: true, trigger: 'blur', validator: validatePass }]
+      },
+      checked: false,
+      loading: false,
+      passwordType: 'password',
+      // userRoles: [],
+      redirect: undefined,
+      NODE_ENV: process.env.NODE_ENV
+    }
+  },
+  watch: {
+    $route: {
+      handler: function(route) {
+        this.redirect = route.query && route.query.redirect
+      },
+      immediate: true
+    }
+  },
+  methods: {
+    mounted() {
+
+    },
+    showPwd() {
+      if (this.passwordType === 'password') {
+        this.passwordType = ''
+      } else {
+        this.passwordType = 'password'
+      }
+    },
+    handleLogin() {
+      this.$refs.loginForm.validate(valid => {
+        if (valid) {
+          this.loading = true
+          this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
+            this.loading = false
+            this.$router.push({ path: this.redirect || '/' })
+          }).catch((reason) => {
+            this.loading = false
+            this.$notify({
+              title: '登录失败',
+              message: reason.message.error_description || reason.message,
+              type: 'error',
+              duration: 5000
+            })
+          })
+        } else {
+          return false
+        }
+      })
+    }
   }
+}
 </script>
 
 <style rel="stylesheet/scss" lang="scss">

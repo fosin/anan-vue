@@ -1,11 +1,11 @@
 <template>
-  <div class="pan-item" :style="{zIndex:zIndex,height:height,width:width}">
+  <div :style="{zIndex:zIndex,height:height,width:width}" class="pan-item">
     <div class="pan-info">
       <div class="pan-info-roles-container">
-        <slot></slot>
+        <slot/>
       </div>
     </div>
-    <img class="pan-thumb" :src="image">
+    <img :src="image" class="pan-thumb">
   </div>
 </template>
 
@@ -106,6 +106,7 @@ export default {
 
 .pan-info p a {
   display: block;
+  color: #333;
   width: 80px;
   height: 80px;
   background: rgba(255, 255, 255, 0.3);

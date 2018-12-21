@@ -1,15 +1,14 @@
 <template>
-  <div :class="className" :style="{height:height,width:width}"></div>
+  <div :class="className" :style="{height:height,width:width}"/>
 </template>
 
 <script>
 import echarts from 'echarts'
 require('echarts/theme/macarons') // echarts theme
 import { debounce } from '@/utils'
-
 const animationDuration = 6000
-
 export default {
+  name: 'Charts',
   props: {
     className: {
       type: String,
@@ -103,4 +102,9 @@ export default {
     }
   }
 }
+
 </script>
+
+<style scoped>
+
+</style>

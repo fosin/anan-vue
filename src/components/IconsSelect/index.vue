@@ -1,20 +1,20 @@
 <template>
-  <el-dialog title="选择图标" :visible.sync="dialogUserAvatarVisible" width="90%">
-  <div class="icons-container">
-    <div class="icons-wrapper">
-      <div v-for="item of iconsMap" :key="item" @click="handleClipboard(generateIconCode(item),$event)">
-        <el-tooltip placement="top">
-          <div slot="content">
-            {{ generateIconCode(item) }}
-          </div>
-          <div class="icon-item">
-            <svg-icon :icon-class="item" class-name="disabled" />
-            <span>{{ item }}</span>
-          </div>
-        </el-tooltip>
+  <el-dialog :visible.sync="dialogUserAvatarVisible" title="选择图标" width="90%">
+    <div class="icons-container">
+      <div class="icons-wrapper">
+        <div v-for="item of iconsMap" :key="item" @click="handleClipboard(generateIconCode(item),$event)">
+          <el-tooltip placement="top">
+            <div slot="content">
+              {{ generateIconCode(item) }}
+            </div>
+            <div class="icon-item">
+              <svg-icon :icon-class="item" class-name="disabled" />
+              <span>{{ item }}</span>
+            </div>
+          </el-tooltip>
+        </div>
       </div>
     </div>
-  </div>
   </el-dialog>
 </template>
 

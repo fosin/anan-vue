@@ -1,133 +1,138 @@
 <template>
   <div class="app-container calendar-list-container">
     <div class="filter-container">
-      <el-input @keyup.enter.native="handleFilter" style="width: 300px;" class="filter-item" :placeholder="$t('cdp_sys_user.searchText')" v-model="pageModule.searchText">
-      </el-input>
+      <el-input :placeholder="$t('cdp_sys_user.searchText')" v-model="pageModule.searchText" style="width: 300px;" class="filter-item" @keyup.enter.native="handleFilter"/>
       <el-button-group>
-        <el-button round v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>
-        <el-button round v-waves v-permission="'12'" class="filter-item" style="margin-left: 5px;" @click="handleAdd" type="primary" icon="el-icon-circle-plus">{{$t('table.add')}}</el-button>
-        <el-button round v-waves v-permission="'14'" class="filter-item" style="margin-left: 5px;" type="success" icon="el-icon-edit" @click="handleEdit">{{$t('table.edit')}}
+        <el-button v-waves round class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.search') }}</el-button>
+        <el-button v-waves v-permission="'12'" round class="filter-item" style="margin-left: 5px;" type="primary" icon="el-icon-circle-plus" @click="handleAdd">{{ $t('table.add') }}</el-button>
+        <el-button v-waves v-permission="'14'" round class="filter-item" style="margin-left: 5px;" type="success" icon="el-icon-edit" @click="handleEdit">{{ $t('table.edit') }}
         </el-button>
-        <el-button round v-waves v-permission="'15'" class="filter-item" style="margin-left: 5px;" type="danger" icon="el-icon-delete" @click="handleDelete">{{$t('table.delete')}}
+        <el-button v-waves v-permission="'15'" round class="filter-item" style="margin-left: 5px;" type="danger" icon="el-icon-delete" @click="handleDelete">{{ $t('table.delete') }}
         </el-button>
-        <el-button round v-waves v-permission="'27'" class="filter-item" style="margin-left: 5px;" icon="el-icon-bell" type="info" @click="handleResetPass">{{$t('table.resetPass')}}
+        <el-button v-waves v-permission="'27'" round class="filter-item" style="margin-left: 5px;" icon="el-icon-bell" type="info" @click="handleResetPass">{{ $t('table.resetPass') }}
         </el-button>
       </el-button-group>
     </div>
 
-    <el-table :data="list" v-loading="listLoading"
-              element-loading-text="努力加载中..." border fit highlight-current-row
-              :row-class-name="tableRowClassName"
-              style="width: 100%"  :default-sort = "{prop: 'usercode', order: 'descending'}"
-             @sort-change="sortChange" @row-click="rowClick">
-      <el-table-column align="center" :label="$t('cdp_sys_user.usercode.label')" width="110px" sortable prop="usercode">
-      </el-table-column>
-      <el-table-column align="center" :label="$t('cdp_sys_user.username.label')" sortable prop="username" width="140">
+    <el-table
+      v-loading="listLoading"
+      :data="list"
+      :row-class-name="tableRowClassName"
+      :default-sort = "{prop: 'usercode', order: 'descending'}"
+      element-loading-text="努力加载中..."
+      border
+      fit
+      highlight-current-row
+      style="width: 100%"
+      @sort-change="sortChange"
+      @row-click="rowClick">
+      <el-table-column :label="$t('cdp_sys_user.usercode.label')" align="center" width="110px" sortable prop="usercode"/>
+      <el-table-column :label="$t('cdp_sys_user.username.label')" align="center" sortable prop="username" width="140">
         <template slot-scope="scope">
           <span>
-            <svg-icon v-if="scope.row.avatar" :icon-class="scope.row.avatar" style="width: 20px; height: 20px; border-radius: 50%; margin-left: 20px; background: #fff;"></svg-icon>
-            {{scope.row.username}}
+            <svg-icon v-if="scope.row.avatar" :icon-class="scope.row.avatar" style="width: 20px; height: 20px; border-radius: 50%; margin-left: 20px; background: #fff;"/>
+            {{ scope.row.username }}
           </span>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="$t('cdp_sys_user.sex.label')" width="80" sortable prop="sex">
+      <el-table-column :label="$t('cdp_sys_user.sex.label')" align="center" width="80" sortable prop="sex">
         <template slot-scope="scope">
-          <span>{{getSexName(scope.row.sex)}}</span>
+          <span>{{ getSexName(scope.row.sex) }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="$t('cdp_sys_user.birthday.label')" sortable prop="birthday" width="100">
+      <el-table-column :label="$t('cdp_sys_user.birthday.label')" align="center" sortable prop="birthday" width="100">
         <template slot-scope="scope">
-          <span>{{scope.row.birthday | dateFormatFilter('yyyy-MM-dd')}}</span>
+          <span>{{ scope.row.birthday | dateFormatFilter('yyyy-MM-dd') }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="$t('cdp_sys_user.phone.label')" sortable prop="phone"  width="130">
-      </el-table-column>
-      <el-table-column align="center" :label="$t('cdp_sys_user.email.label')" sortable prop="email"  width="150">
-      </el-table-column>
-      <el-table-column prop="organizId" align="center" :label="$t('cdp_sys_user.organizId.label')"
-                       show-overflow-tooltip :formatter="getOrganizName" sortable>
-      </el-table-column>
-     <!-- <el-table-column align="center" :label="$t('cdp_sys_user.createTime.label')" sortable prop="createTime">
+      <el-table-column :label="$t('cdp_sys_user.phone.label')" align="center" sortable prop="phone" width="130"/>
+      <el-table-column :label="$t('cdp_sys_user.email.label')" align="center" sortable prop="email" width="150"/>
+      <el-table-column
+        :label="$t('cdp_sys_user.organizId.label')"
+        :formatter="getOrganizName"
+        prop="organizId"
+        align="center"
+        show-overflow-tooltip
+        sortable/>
+      <!-- <el-table-column align="center" :label="$t('cdp_sys_user.createTime.label')" sortable prop="createTime">
         <template slot-scope="scope">
           <span>{{scope.row.createTime | dateFormatFilter('yyyy-MM-dd HH:mm:ss')}}</span>
         </template>
       </el-table-column>-->
-      <el-table-column align="center" class-name="status-col" :label="$t('cdp_sys_user.status.label')" width="80" sortable prop="status">
+      <el-table-column :label="$t('cdp_sys_user.status.label')" align="center" class-name="status-col" width="80" sortable prop="status">
         <template slot-scope="scope">
-          <el-tag>{{scope.row.status | statusFilter}}</el-tag>
+          <el-tag>{{ scope.row.status | statusFilter }}</el-tag>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" :label="$t('table.permission')" width="200">
+      <el-table-column :label="$t('table.permission')" align="center" width="200">
         <template slot-scope="scope">
-          <el-button round size="mini" type="primary" @click="handleUserRole(scope.row)">{{$t('table.role')}}</el-button>
-          <el-button round size="mini" type="warning" @click="handleUserPermission(scope.row)">{{$t('table.permission')}}</el-button>
+          <el-button round size="mini" type="primary" @click="handleUserRole(scope.row)">{{ $t('table.role') }}</el-button>
+          <el-button round size="mini" type="warning" @click="handleUserPermission(scope.row)">{{ $t('table.permission') }}</el-button>
         </template>
       </el-table-column>
 
     </el-table>
 
     <div v-show="!listLoading" class="pagination-container">
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="pageModule.pageNumber" :page-sizes="pageSizes" :page-size="pageModule.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
-      </el-pagination>
+      <el-pagination :current-page.sync="pageModule.pageNumber" :page-sizes="pageSizes" :page-size="pageModule.pageSize" :total="total" layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange"/>
     </div>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="700px">
-      <el-form :model="form" :rules="rules" ref="form" label-width="80px">
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="20">
             <el-row>
               <el-col :span="12">
                 <el-form-item :label="$t('cdp_sys_user.usercode.label')" prop="usercode">
-                  <el-input v-model="form.usercode" :placeholder="$t('cdp_sys_user.usercode.placeholder')"></el-input>
+                  <el-input v-model="form.usercode" :placeholder="$t('cdp_sys_user.usercode.placeholder')"/>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item :label="$t('cdp_sys_user.username.label')" prop="username">
-                  <el-input v-model="form.username" :placeholder="$t('cdp_sys_user.username.placeholder')"></el-input>
+                  <el-input v-model="form.username" :placeholder="$t('cdp_sys_user.username.placeholder')"/>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="12">
                 <el-form-item v-if="dialogStatus === 'create'" :label="$t('cdp_sys_user.password.label')" :placeholder="$t('cdp_sys_user.password.placeholder')" prop="password">
-                  <el-input v-model="form.password"></el-input>
+                  <el-input v-model="form.password"/>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item :label="$t('cdp_sys_user.birthday.label')" prop="birthday">
                   <el-date-picker
                     v-model="form.birthday"
-                    align="right"
-                    type="date"
                     :placeholder="$t('cdp_sys_user.birthday.placeholder')"
                     :picker-options="pickerBirthday"
+                    align="right"
+                    type="date"
                     format="yyyy-MM-dd"
-                    value-format="yyyy-MM-dd HH:mm:ss">
-                  </el-date-picker>
+                    value-format="yyyy-MM-dd HH:mm:ss"/>
                 </el-form-item>
               </el-col>
             </el-row>
           </el-col>
           <el-col :span="4">
-            <svg-icon @click.native="handleSelectAvatar" :icon-class="form.avatar" class="user-avatar" style="width: 80px; height: 80px; border-radius: 50%; margin-left: 20px; background: #fff;"></svg-icon>
+            <svg-icon :icon-class="form.avatar" class="user-avatar" style="width: 80px; height: 80px; border-radius: 50%; margin-left: 20px; background: #fff;" @click.native="handleSelectAvatar"/>
           </el-col>
         </el-row>
         <el-row >
           <el-col :span="16">
             <el-form-item :label="$t('cdp_sys_user.organizId.label')" prop="organizId">
-                <el-select class="filter-item" v-model="form.organizId" filterable :placeholder="$t('cdp_sys_user.organizId.placeholder')" :filter-method="organizSelectFilter">
-                  <el-option v-for="item in oraganizOptions" :key="item.id" :label="item.fullname || item.name" :value="item.id" :disabled="isDisabled[item.status]">
-                    <span style="float: left; color: #8492a6; font-size: 13px">{{ item.code }}</span>
-                    <span style="float: right">{{ item.fullname || item.name }}</span>
-                  </el-option>
-                </el-select>
+              <el-select v-model="form.organizId" :placeholder="$t('cdp_sys_user.organizId.placeholder')" :filter-method="organizSelectFilter" class="filter-item" filterable>
+                <el-option v-for="item in oraganizOptions" :key="item.id" :label="item.fullname || item.name" :value="item.id" :disabled="isDisabled[item.status]">
+                  <span style="float: left; color: #8492a6; font-size: 13px">{{ item.code }}</span>
+                  <span style="float: right">{{ item.fullname || item.name }}</span>
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item :label="$t('cdp_sys_user.sex.label')" prop="sex">
-              <el-select class="filter-item" v-model="form.sex" :placeholder="$t('cdp_sys_user.sex.placeholder')">
-                <el-option v-for="item in sexOptions" :key="item.name" :label="item.value" :value="item.name"> </el-option>
+              <el-select v-model="form.sex" :placeholder="$t('cdp_sys_user.sex.placeholder')" class="filter-item">
+                <el-option v-for="item in sexOptions" :key="item.name" :label="item.value" :value="item.name"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -135,18 +140,18 @@
         <el-row >
           <el-col :span="10">
             <el-form-item :label="$t('cdp_sys_user.email.label')" prop="email">
-              <el-input v-model="form.email" :placeholder="$t('cdp_sys_user.email.placeholder')"></el-input>
+              <el-input v-model="form.email" :placeholder="$t('cdp_sys_user.email.placeholder')"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item :label="$t('cdp_sys_user.phone.label')" prop="phone">
-              <el-input v-model="form.phone" :placeholder="$t('cdp_sys_user.phone.placeholder')"></el-input>
+              <el-input v-model="form.phone" :placeholder="$t('cdp_sys_user.phone.placeholder')"/>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item :label="$t('cdp_sys_user.status.label')" prop="status">
-              <el-select class="filter-item" v-model="form.status" :placeholder="$t('cdp_sys_user.status.placeholder')">
-                <el-option v-for="item in statusOptions" :key="item" :label="item | statusFilter" :value="item"> </el-option>
+              <el-select v-model="form.status" :placeholder="$t('cdp_sys_user.status.placeholder')" class="filter-item">
+                <el-option v-for="item in statusOptions" :key="item" :label="item | statusFilter" :value="item"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -154,84 +159,81 @@
         <el-form-item :label="$t('cdp_sys_user.expireTime.label')" prop="expireTime">
           <el-date-picker
             v-model="form.expireTime"
+            :placeholder="$t('cdp_sys_user.expireTime.placeholder')"
             align="right"
             type="date"
-            :placeholder="$t('cdp_sys_user.expireTime.placeholder')"
             format="yyyy-MM-dd HH:mm:ss"
-            value-format="yyyy-MM-dd HH:mm:ss">
-          </el-date-picker>
+            value-format="yyyy-MM-dd HH:mm:ss"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button round @click="cancel('form')" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
-        <el-button round v-if="dialogStatus==='create'" autofocus type="primary" @click="create('form')" icon="el-icon-circle-check">{{$t('table.confirm')}}</el-button>
-        <el-button round v-else type="primary" autofocus @click="update('form')" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
+        <el-button round icon="el-icon-circle-close" @click="cancel('form')">{{ $t('table.cancel') }}</el-button>
+        <el-button v-if="dialogStatus==='create'" round autofocus type="primary" icon="el-icon-circle-check" @click="create('form')">{{ $t('table.confirm') }}</el-button>
+        <el-button v-else round type="primary" autofocus icon="el-icon-circle-check" @click="update('form')">{{ $t('table.update') }}</el-button>
       </div>
     </el-dialog>
     <el-dialog :title="textMap[dialogStatus] + ' ---> ' + form.username" :visible.sync="dialogUserRoleVisible" width="550px">
-      <el-transfer ref="userRole"
-                   filterable
-                   :filter-method="userRolefilterMethod"
-                   :props = "{
-                      key: 'id',
-                      label: 'name'
-                    }"
-                   :titles="['未拥有角色', '已拥有角色']"
-                   v-model="userRoles"
-                   :data="rolesOptions">
-      </el-transfer>
+      <el-transfer
+        ref="userRole"
+        :filter-method="userRolefilterMethod"
+        :props = "{
+          key: 'id',
+          label: 'name'
+        }"
+        :titles="['未拥有角色', '已拥有角色']"
+        v-model="userRoles"
+        :data="rolesOptions"
+        filterable/>
       <div slot="footer" class="dialog-footer">
-        <el-button round  @click="cancel('userRole')" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
-        <el-button round v-permission="'48'" type="primary" @click="updateUserRole()" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
+        <el-button round icon="el-icon-circle-close" @click="cancel('userRole')">{{ $t('table.cancel') }}</el-button>
+        <el-button v-permission="'48'" round type="primary" icon="el-icon-circle-check" @click="updateUserRole()">{{ $t('table.update') }}</el-button>
       </div>
     </el-dialog>
     <el-dialog :title="textMap[dialogStatus] + ' ---> ' + form.username" :visible.sync="dialogUserPermissionVisible">
       <el-tabs type="border-card">
         <el-tab-pane label="增加权限">
           <el-input
-            placeholder="输入关键字进行过滤"
-            v-model="filterAddPermissionText">
-          </el-input>
-          <el-tree class="filter-tree"
-                   :default-checked-keys="addCheckedKeys"
-                   node-key="id"
-                   highlight-current
-                   show-checkbox
-                   lazy
-                   check-strictly
-                   :load="loadChildAddPermissions"
-                   :props="defaultProps"
-                   ref="addPermissionTree"
-                   :filter-node-method="filterNode"
-                   :default-expanded-keys="[1]">
-          </el-tree>
+            v-model="filterAddPermissionText"
+            placeholder="输入关键字进行过滤"/>
+          <el-tree
+            ref="addPermissionTree"
+            :default-checked-keys="addCheckedKeys"
+            :load="loadChildAddPermissions"
+            :props="defaultProps"
+            :filter-node-method="filterNode"
+            :default-expanded-keys="[1]"
+            class="filter-tree"
+            node-key="id"
+            highlight-current
+            show-checkbox
+            lazy
+            check-strictly/>
         </el-tab-pane>
         <el-tab-pane label="减少权限">
           <el-input
-            placeholder="输入关键字进行过滤"
-            v-model="filterSubPermissionText">
-          </el-input>
-          <el-tree class="filter-tree"
-                   node-key="id"
-                   :default-checked-keys="subCheckedKeys"
-                   highlight-current
-                   show-checkbox
-                   lazy
-                   check-strictly
-                   :load="loadChildSubPermissions"
-                   :props="defaultProps"
-                   ref="subPermissionTree"
-                   :filter-node-method="filterNode"
-                   :default-expanded-keys="[1]">
-          </el-tree>
+            v-model="filterSubPermissionText"
+            placeholder="输入关键字进行过滤"/>
+          <el-tree
+            ref="subPermissionTree"
+            :default-checked-keys="subCheckedKeys"
+            :load="loadChildSubPermissions"
+            :props="defaultProps"
+            :filter-node-method="filterNode"
+            :default-expanded-keys="[1]"
+            class="filter-tree"
+            node-key="id"
+            highlight-current
+            show-checkbox
+            lazy
+            check-strictly/>
         </el-tab-pane>
       </el-tabs>
       <div slot="footer" class="dialog-footer">
-        <el-button round @click="cancel('permissionTree')" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
-        <el-button round v-permission="'42'" type="primary" @click="updateUserPermession()" icon="el-icon-circle-check">{{$t('table.update')}}</el-button>
+        <el-button round icon="el-icon-circle-close" @click="cancel('permissionTree')">{{ $t('table.cancel') }}</el-button>
+        <el-button v-permission="'42'" round type="primary" icon="el-icon-circle-check" @click="updateUserPermession()">{{ $t('table.update') }}</el-button>
       </div>
     </el-dialog>
-    <IconsSelect ref="iconsSelect"> </IconsSelect>
+    <IconsSelect ref="iconsSelect"/>
   </div>
 </template>
 
@@ -250,18 +252,23 @@ import ElOption from 'element-ui/packages/select/src/option'
 import IconsSelect from '@/components/IconsSelect/index'
 
 export default {
-  name: 'system_user',
+  name: 'SystemUser',
   components: {
     ElOption,
     ElRadioGroup,
     IconsSelect
   },
-  watch: {
-    filterAddPermissionText(val) {
-      this.$refs.addPermissionTree.filter(val)
+  filters: {
+    statusFilter(status) {
+      const statusMap = {
+        0: '有效',
+        1: '禁用',
+        9: '锁定'
+      }
+      return statusMap[status]
     },
-    filterSubPermissionText(val) {
-      this.$refs.subPermissionTree.filter(val)
+    dateFormatFilter(date, pattern) {
+      return formatDate(date, pattern || 'yyyy-MM-dd HH:mm:ss')
     }
   },
   data() {
@@ -431,17 +438,12 @@ export default {
   computed: {
     ...mapGetters(['permissions', 'userInfo'])
   },
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        0: '有效',
-        1: '禁用',
-        9: '锁定'
-      }
-      return statusMap[status]
+  watch: {
+    filterAddPermissionText(val) {
+      this.$refs.addPermissionTree.filter(val)
     },
-    dateFormatFilter(date, pattern) {
-      return formatDate(date, pattern || 'yyyy-MM-dd HH:mm:ss')
+    filterSubPermissionText(val) {
+      this.$refs.subPermissionTree.filter(val)
     }
   },
   mounted() {
