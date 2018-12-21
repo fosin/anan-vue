@@ -45,28 +45,32 @@
         <hr/>
         <el-row>
           <el-col :span="8">
-            <el-form-item :label="$t('cdp_sys_user.oldPassword.label')" prop="password" width>
+            <el-form-item :label="$t('cdp_sys_user.oldPassword.label')" prop="password" label-width="200px">
               <el-input type="password" v-model="userInfo2.password" :placeholder="$t('cdp_sys_user.oldPassword.placeholder')" auto-complete="off"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item :label="$t('cdp_sys_user.confirmPassword1.label')" prop="confirmPassword1">
+            <el-form-item :label="$t('cdp_sys_user.confirmPassword1.label')" prop="confirmPassword1" label-width="200px">
               <el-input type="password" v-model="userInfo2.confirmPassword1" :placeholder="$t('cdp_sys_user.confirmPassword1.placeholder')" auto-complete="off"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item :label="$t('cdp_sys_user.confirmPassword2.label')" prop="confirmPassword2">
+            <el-form-item :label="$t('cdp_sys_user.confirmPassword2.label')" prop="confirmPassword2" label-width="200px">
               <el-input type="password" v-model="userInfo2.confirmPassword2" :placeholder="$t('cdp_sys_user.confirmPassword2.placeholder')" auto-complete="off"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item>
-          <el-button round v-waves type="primary" autofocus @click="update">{{$t('table.confirm')}}</el-button>
-        </el-form-item>
+        <el-row>
+          <el-col :span="8" :push="4">
+            <el-form-item>
+              <el-button round v-waves type="primary" autofocus @click="update" icon="el-icon-circle-check">{{$t('table.confirm')}}</el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
     </div>
 

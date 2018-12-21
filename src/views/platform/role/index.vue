@@ -146,8 +146,8 @@
                    :data="allUsers">
       </el-transfer>
       <div slot="footer" class="dialog-footer">
-        <el-button round @click="cancel('roleUser')" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
-        <el-button round v-permission="'43'" type="primary" @click="updateRoleUser()" icon="el-icon-circle-check">{{$t('table.update')}}
+        <el-button round v-waves @click="cancel('roleUser')" icon="el-icon-circle-close">{{$t('table.cancel')}}</el-button>
+        <el-button round v-waves v-permission="'43'" type="primary" @click="updateRoleUser()" icon="el-icon-circle-check">{{$t('table.update')}}
         </el-button>
       </div>
     </el-dialog>

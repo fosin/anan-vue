@@ -14,7 +14,7 @@ export default {
     },
     text: {
       type: String,
-      default: 'cdp-ui'
+      default: 'cdp-vue'
     }
   }
 }
