@@ -11,6 +11,7 @@
     <el-row>
       <el-col :span="8" style="margin-top:15px;">
         <el-tree
+          v-if="hackReset"
           ref="permissionTree"
           :load="loadChild"
           :default-expanded-keys="defaultExpandedKeys"
@@ -138,6 +139,7 @@ export default {
       total: null,
       formUpdate: true,
       appNameUpdate: true,
+      hackReset: true,
       formAdd: true,
       formStatus: '',
       showElement: false,
@@ -291,6 +293,9 @@ export default {
         if (this.form.method) {
           this.form.methodArray = this.form.method.split(',')
         }
+        if (!this.form.icon) {
+          this.form.icon = ''
+        }
       }).catch(reason => {
         this.$notify({
           title: '获取权限失败',
@@ -324,8 +329,9 @@ export default {
       }
     },
     handlerRefresh() {
-      this.$message({
-        message: '该功能还未实现，敬请期待!'
+      this.hackReset = false
+      this.$nextTick(() => {
+        this.hackReset = true
       })
     },
     handlerAdd() {

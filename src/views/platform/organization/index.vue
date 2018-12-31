@@ -3,7 +3,8 @@
   <div class="app-container calendar-list-container">
     <div class="filter-container">
       <el-button-group>
-        <el-button v-waves v-permission="'4'" round type="primary" class="filter-item" icon="el-icon-circle-plus" @click="handlerAdd">{{ $t('table.add') }}</el-button>
+        <el-button v-waves v-permission="'86'" round type="primary" class="filter-item" icon="el-icon-refresh" @click="handlerRefresh">{{ $t('table.refresh') }}</el-button>
+        <el-button v-waves v-permission="'4'" round type="primary" class="filter-item" icon="el-icon-circle-plus" style="margin-left: 5px;" @click="handlerAdd">{{ $t('table.add') }}</el-button>
         <el-button v-waves v-permission="'5'" round type="success" class="filter-item" icon="el-icon-edit" style="margin-left: 5px;" @click="handlerUpdate">{{ $t('table.edit') }}</el-button>
         <el-button v-waves v-permission="'6'" round type="danger" class="filter-item" icon="el-icon-delete" style="margin-left: 5px;" @click="handleDelete">{{ $t('table.delete') }}</el-button>
       </el-button-group>
@@ -11,6 +12,7 @@
     <el-row>
       <el-col :span="8" style="margin-top:15px;">
         <el-tree
+          v-if="hackReset"
           ref="organizTree"
           :load="loadChild"
           :default-expanded-keys="defaultExpandedKeys"
@@ -96,10 +98,12 @@ export default {
       list: null,
       total: null,
       formUpdate: true,
+      hackReset: true,
       formStatus: '',
       listQuery: {
         name: undefined
       },
+      topId: -1,
       rules: {
         name: [
           {
@@ -158,37 +162,51 @@ export default {
     ...mapGetters(['userInfo'])
   },
   mounted() {
-    // getOrganiz(this.userInfo.organizId).then(response => {
-    //   this.topId = response.data.topId
-    // }).catch(reason => {
-    //   this.$notify({
-    //     title: '查询当前用户的机构信息失败',
-    //     message: reason.message,
-    //     type: 'error',
-    //     duration: 5000
-    //   })
-    // })
     this.resetForm()
   },
   methods: {
     loadChild(node, resolve) {
-      let pid = this.userInfo.organizId
-      if (node.level !== 0) {
-        pid = node.data.id
-      }
-      listOrganizChild(pid).then(response => {
-        if (pid === 0) {
-          this.defaultExpandedKeys[0] = response.data[0].id
+      if (node.level === 0) {
+        const organizId = this.userInfo.organizId
+        if (organizId === 0) {
+          listOrganizChild(organizId).then(response => {
+            this.defaultExpandedKeys[0] = response.data[0].id
+            return resolve(response.data || [])
+          }).catch(reason => {
+            this.$notify({
+              title: '加载子节点失败',
+              message: reason.message,
+              type: 'error',
+              duration: 5000
+            })
+          })
+        } else {
+          getOrganiz(organizId).then((response2) => {
+            const organizs = []
+            organizs.push(response2.data)
+            this.defaultExpandedKeys[0] = organizId
+            return resolve(organizs || [])
+          }).catch(reason => {
+            this.$notify({
+              title: '加载子节点失败',
+              message: reason.message,
+              type: 'error',
+              duration: 5000
+            })
+          })
         }
-        return resolve(response.data || [])
-      }).catch(reason => {
-        this.$notify({
-          title: '加载子节点失败',
-          message: reason.message,
-          type: 'error',
-          duration: 5000
+      } else {
+        listOrganizChild(node.data.id).then(response => {
+          return resolve(response.data || [])
+        }).catch(reason => {
+          this.$notify({
+            title: '加载子节点失败',
+            message: reason.message,
+            type: 'error',
+            duration: 5000
+          })
         })
-      })
+      }
     },
     filterNode(value, data) {
       if (!value) return true
@@ -231,6 +249,12 @@ export default {
         this.formStatus = ''
         this.formUpdate = true
       }
+    },
+    handlerRefresh() {
+      this.hackReset = false
+      this.$nextTick(() => {
+        this.hackReset = true
+      })
     },
     handlerUpdate() {
       const pNode = this.$refs.organizTree.getNode(this.form.pid)
