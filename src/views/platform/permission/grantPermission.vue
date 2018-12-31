@@ -4,6 +4,7 @@
       v-model="filterPermissionText"
       placeholder="输入关键字进行过滤"/>
     <el-tree
+      v-if="hackReset"
       ref="permissionTree"
       :default-checked-keys="checkedKeys"
       :load="loadChildPermissions"
@@ -38,6 +39,7 @@ export default {
       expandKeys: [],
       checkedKeys: [],
       dialogPermissionVisible: false,
+      hackReset: false,
       permissionId: '-1',
       defaultProps: {
         children: 'children',
@@ -126,7 +128,7 @@ export default {
       }
       return checkedKeys
     },
-    initData(parent, form, objectPermissions, permissionId) {
+    initData(parent, form, objectPermissions, permissionId, hackReset) {
       this.parent = parent
       this.form = form
       this.permissionId = permissionId
@@ -135,6 +137,14 @@ export default {
         this.$refs.permissionTree.setCheckedKeys(this.checkedKeys)
       }
       this.dialogPermissionVisible = true
+      if (hackReset) {
+        this.hackReset = false
+        this.$nextTick(() => {
+          this.hackReset = true
+        })
+      } else {
+        this.hackReset = true
+      }
       this.title = '分配权限' + ' -> ' + form.name
     },
     cancel() {

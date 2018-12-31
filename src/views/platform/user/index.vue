@@ -196,6 +196,7 @@
             v-model="filterAddPermissionText"
             placeholder="输入关键字进行过滤"/>
           <el-tree
+            v-if="hackReset"
             ref="addPermissionTree"
             :default-checked-keys="addCheckedKeys"
             :load="loadChildAddPermissions"
@@ -214,6 +215,7 @@
             v-model="filterSubPermissionText"
             placeholder="输入关键字进行过滤"/>
           <el-tree
+            v-if="hackReset"
             ref="subPermissionTree"
             :default-checked-keys="subCheckedKeys"
             :load="loadChildSubPermissions"
@@ -244,7 +246,7 @@ import { listUserPage, getUser, postUser, putUser, deleteUser, resetPassword,
   listUserRoles, putUserRoles } from './user'
 import { formatDate } from '@/utils/date'
 import { listOrganizRole } from '../role/role'
-import { listOrganizAllChild, treeOrganiz, listOrganiz, getOrganiz, getOrganizAuth } from '../organization/organization'
+import { listOrganizAllChild, treeOrganiz, getOrganiz, getOrganizAuth } from '../organization/organization'
 import { listVersionChildPermissions } from '../version/version'
 import { mapGetters } from 'vuex'
 import ElRadioGroup from 'element-ui/packages/radio/src/radio-group'
@@ -285,6 +287,7 @@ export default {
       list: [],
       total: 0,
       listLoading: true,
+      hackReset: true,
       pageModule: {
         pageNumber: 1,
         pageSize: 10,
@@ -292,6 +295,7 @@ export default {
         sortName: '',
         sortOrder: ''
       },
+      versionId: -1,
       pageSizes: [5, 10, 25, 50, 100],
       defaultProps: {
         children: 'children',
@@ -570,19 +574,6 @@ export default {
         })
       }
     },
-    loadOrganizList() {
-      listOrganiz().then(response => {
-        this.organizList = response.data || []
-        this.oraganizOptions = this.organizList
-      }).catch(reason => {
-        this.$notify({
-          title: '查询机构信息失败',
-          message: reason.message,
-          type: 'error',
-          duration: 5000
-        })
-      })
-    },
     organizSelectFilter(input) {
       this.oraganizOptions = this.organizList.filter((value, index) => {
         return value.name.indexOf(input) !== -1 || value.id.indexOf(input) !== -1 || value.fullname.indexOf(input) !== -1
@@ -698,34 +689,14 @@ export default {
       if (node.level !== 0) {
         pId = node.data.id
       }
-      getOrganiz(this.form.organizId).then((response) => {
-        const topId = response.data.topId
-        getOrganizAuth(topId).then((response) => {
-          const versionId = response.data.versionId
-          listVersionChildPermissions(pId, versionId).then((response) => {
-            const childPermissions = response.data || []
-            // 记录所有被展开过的节点ID，用于保存时比较数据
-            for (let i = 0; i < childPermissions.length; i++) {
-              const id = childPermissions[i].id
-              this.addExpandKeys.push(id)
-            }
-            return resolve(childPermissions)
-          }).catch(reason => {
-            this.$notify({
-              title: '加载子节点失败',
-              message: reason.message,
-              type: 'error',
-              duration: 5000
-            })
-          })
-        }).catch(reason => {
-          this.$notify({
-            title: '加载子节点失败',
-            message: reason.message,
-            type: 'error',
-            duration: 5000
-          })
-        })
+      listVersionChildPermissions(pId, this.versionId).then((response) => {
+        const childPermissions = response.data || []
+        // 记录所有被展开过的节点ID，用于保存时比较数据
+        for (let i = 0; i < childPermissions.length; i++) {
+          const id = childPermissions[i].id
+          this.addExpandKeys.push(id)
+        }
+        return resolve(childPermissions)
       }).catch(reason => {
         this.$notify({
           title: '加载子节点失败',
@@ -740,21 +711,52 @@ export default {
       if (node.level !== 0) {
         pId = node.data.id
       }
+      listVersionChildPermissions(pId, this.versionId).then((response) => {
+        const childPermissions = response.data || []
+        // 记录所有被展开过的节点ID，用于保存时比较数据
+        for (let i = 0; i < childPermissions.length; i++) {
+          const id = childPermissions[i].id
+          this.subExpandKeys.push(id)
+        }
+        return resolve(childPermissions)
+      }).catch(reason => {
+        this.$notify({
+          title: '加载子节点失败',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
+      })
+    },
+    handleUserPermission(row) {
       getOrganiz(this.form.organizId).then((response) => {
         const topId = response.data.topId
         getOrganizAuth(topId).then((response) => {
           const versionId = response.data.versionId
-          listVersionChildPermissions(pId, versionId).then((response) => {
-            const childPermissions = response.data || []
-            // 记录所有被展开过的节点ID，用于保存时比较数据
-            for (let i = 0; i < childPermissions.length; i++) {
-              const id = childPermissions[i].id
-              this.subExpandKeys.push(id)
+          if (versionId !== this.versionId) {
+            this.hackReset = false
+            this.$nextTick(() => {
+              this.hackReset = true
+            })
+            this.versionId = versionId
+          }
+          listUserPermissions(row.id).then(response => {
+            this.addCheckedKeys = this.getCheckedKeys(1, response.data)
+            this.subCheckedKeys = this.getCheckedKeys(2, response.data)
+            this.dialogStatus = 'permission'
+            this.dialogUserPermissionVisible = true
+            this.form = row
+            if (this.$refs) {
+              if (this.$refs.addPermissionTree) {
+                this.$refs.addPermissionTree.setCheckedKeys(this.addCheckedKeys)
+              }
+              if (this.$refs.subPermissionTree) {
+                this.$refs.subPermissionTree.setCheckedKeys(this.subCheckedKeys)
+              }
             }
-            return resolve(childPermissions)
           }).catch(reason => {
             this.$notify({
-              title: '加载子节点失败',
+              title: '获取用户权限失败',
               message: reason.message,
               type: 'error',
               duration: 5000
@@ -771,30 +773,6 @@ export default {
       }).catch(reason => {
         this.$notify({
           title: '加载子节点失败',
-          message: reason.message,
-          type: 'error',
-          duration: 5000
-        })
-      })
-    },
-    handleUserPermission(row) {
-      listUserPermissions(row.id).then(response => {
-        this.addCheckedKeys = this.getCheckedKeys(1, response.data)
-        this.subCheckedKeys = this.getCheckedKeys(2, response.data)
-        this.dialogStatus = 'permission'
-        this.dialogUserPermissionVisible = true
-        this.form = row
-        if (this.$refs) {
-          if (this.$refs.addPermissionTree) {
-            this.$refs.addPermissionTree.setCheckedKeys(this.addCheckedKeys)
-          }
-          if (this.$refs.subPermissionTree) {
-            this.$refs.subPermissionTree.setCheckedKeys(this.subCheckedKeys)
-          }
-        }
-      }).catch(reason => {
-        this.$notify({
-          title: '获取用户权限失败',
           message: reason.message,
           type: 'error',
           duration: 5000
@@ -814,9 +792,9 @@ export default {
       const differencePermissions = userHavePermission.filter(function(v) { return expandPermissions.indexOf(v) === -1 })
 
       // 求并集
-      const unionPermissions = differencePermissions.concat(allCheckedPermissions.filter(function(v) { return differencePermissions.indexOf(v) === -1 })).sort()
-
-      return unionPermissions
+      return differencePermissions.concat(allCheckedPermissions.filter(function(v) {
+        return differencePermissions.indexOf(v) === -1
+      })).sort()
     },
     getUserSubPermession(userHavePermission) {
       // 得到当前已展开项目中被选中的权限
@@ -831,9 +809,9 @@ export default {
       const differencePermissions = userHavePermission.filter(function(v) { return expandPermissions.indexOf(v) === -1 })
 
       // 求并集
-      const unionPermissions = differencePermissions.concat(allCheckedPermissions.filter(function(v) { return differencePermissions.indexOf(v) === -1 })).sort()
-
-      return unionPermissions
+      return differencePermissions.concat(allCheckedPermissions.filter(function(v) {
+        return differencePermissions.indexOf(v) === -1
+      })).sort()
     },
     updateUserPermession() {
       const userAddPermissions = this.addCheckedKeys.sort() // 当前用户原拥有的加权限集合
@@ -939,7 +917,7 @@ export default {
         }
         userRoles.push(roleUser)
       }
-      putUserRoles(this.form.id, userRoles).then(response => {
+      putUserRoles(this.form.id, userRoles).then(() => {
         this.dialogUserRoleVisible = false
         this.$notify({
           title: '成功',

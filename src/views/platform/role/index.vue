@@ -250,6 +250,8 @@ export default {
       roleUsers: [],
       allUsers: [],
       filterPermissionText: '',
+      versionId: -1,
+      topId: -1,
       checkedKeys: [],
       expandKeys: [],
       defaultProps: {
@@ -437,18 +439,38 @@ export default {
       })
     },
     handleRolePermission(row) {
-      listRolePermissions(row.id)
-        .then(response => {
+      listRolePermissions(row.id).then(response1 => {
+        getOrganiz(row.organizId).then((response2) => {
+          this.topId = response2.data.topId
           this.form = row
-          this.$refs.grantPermission.initData(this, this.form, response.data, '49')
+          getOrganizAuth(this.topId).then((response3) => {
+            const versionId = response3.data.versionId
+            this.$refs.grantPermission.initData(this, this.form, response1.data, '49', versionId !== this.versionId)
+            this.versionId = versionId
+          }).catch(reason => {
+            this.$notify({
+              title: '获取版本信息失败',
+              message: reason.message,
+              type: 'error',
+              duration: 5000
+            })
+          })
         }).catch(reason => {
           this.$notify({
-            title: '获取角色权限失败',
+            title: '获取机构信息失败',
             message: reason.message,
             type: 'error',
             duration: 5000
           })
         })
+      }).catch(reason => {
+        this.$notify({
+          title: '获取角色权限失败',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
+      })
     },
     updatePermession(id, unionPermissions) {
       // 组装成后台需要的数据格式
@@ -471,18 +493,8 @@ export default {
     },
     listChildPermissions(pId) {
       return new Promise((resolve, reject) => {
-        getOrganiz(this.form.organizId).then((response) => {
-          const topId = response.data.topId
-          getOrganizAuth(topId).then((response) => {
-            const versionId = response.data.versionId
-            listVersionChildPermissions(pId, versionId).then((response) => {
-              resolve(response)
-            }).catch(reason => {
-              reject(reason)
-            })
-          }).catch(reason => {
-            reject(reason)
-          })
+        listVersionChildPermissions(pId, this.versionId).then((response) => {
+          resolve(response)
         }).catch(reason => {
           reject(reason)
         })
@@ -548,94 +560,10 @@ export default {
         })
       })
     },
-    /* updatePermession(id, value) {
-        if (this.from && this.from.builtIn === 1) {
-          this.$message({
-            message: '系统内置角色不能修改权限!'
-          })
-          return
-        }
-        // 得到当前已展开项目中被选中的权限
-        const checkedPermissions = this.$refs.permissionTree.getCheckedKeys().sort() // 当前选中的权限集合
-        const halfCheckedPermissions = this.$refs.permissionTree.getHalfCheckedKeys().sort() // 当前半选中的权限集合
-        const rolePermissions = this.checkedKeys.sort() // 当前角色已拥有的所有权限集合
-        const expandPermissions = this.expandKeys.sort() // 树中已展开的权限集合
-
-        // 求并集，到的所有实际被选中的权限 checkedPermissions + halfCheckedPermissions
-        const allCheckedPermissions = checkedPermissions.concat(halfCheckedPermissions.filter(function(v) {
-          return checkedPermissions.indexOf(v) === -1
-        })).sort()
-
-        // 求差集
-        const differencePermissions = rolePermissions.filter(function(v) {
-          return expandPermissions.indexOf(v) === -1
-        })
-
-        // 求并集
-        const unionPermissions = differencePermissions.concat(allCheckedPermissions.filter(function(v) {
-          return differencePermissions.indexOf(v) === -1
-        })).sort()
-
-        // 如果没有修改过数据则直接返回
-        if (unionPermissions.toString() === rolePermissions.toString()) {
-          this.dialogPermissionVisible = false
-          return
-        }
-
-        // 组装成后台需要的数据格式
-        const newRolePermissions = []
-        for (let i = 0; i < unionPermissions.length; i++) {
-          const permission = {
-            id: undefined,
-            roleId: id,
-            permissionId: unionPermissions[i]
-          }
-          newRolePermissions.push(permission)
-        }
-        putRolePermissions(id, newRolePermissions).then(() => {
-          this.dialogPermissionVisible = false
-          this.$notify({
-            title: '成功',
-            message: '修改角色权限成功!',
-            type: 'success',
-            duration: 2000
-          })
-        }).catch(reason => {
-          this.$notify({
-            title: '更新角色权限失败',
-            message: reason.message,
-            type: 'error',
-            duration: 5000
-          })
-        })
-      },*/
     filterNode(value, data) {
       if (!value) return true
       return data.name.indexOf(value) !== -1
     },
-    /* loadChildPermissions(node, resolve) {
-        let pId = 0
-        if (node.level !== 0) {
-          pId = node.data.id
-        }
-        listChildPermissions(pId).then(response => {
-          const childPermissions = response.data || []
-          // 记录所有被展开过的节点ID，用于保存时比较数据
-          for (let i = 0; i < childPermissions.length; i++) {
-            const id = childPermissions[i].id
-            this.expandKeys.push(id)
-            // childPermissions[i].disabled = pId === 0
-          }
-          return resolve(childPermissions)
-        }).catch(reason => {
-          this.$notify({
-            title: '加载子节点失败',
-            message: reason.message,
-            type: 'error',
-            duration: 5000
-          })
-        })
-      },*/
     handleDelete() {
       if (!this.form || !this.form.id || !this.form.name) {
         this.$message({

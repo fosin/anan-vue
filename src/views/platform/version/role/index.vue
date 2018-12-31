@@ -151,7 +151,7 @@
         </el-button>
       </div>
     </el-dialog>
-    <grantPermission v-if="hackReset" ref="grantPermission" @close="hackReset = false"/>
+    <grantPermission ref="grantPermission"/>
   </div>
 </template>
 
@@ -191,7 +191,7 @@ export default {
     return {
       versionOptions: [],
       versionList: [],
-      hackReset: false,
+      versionId: -1,
       defaultProps: {
         children: 'children',
         label: 'name',
@@ -364,13 +364,10 @@ export default {
     },
 
     handleVersionRolePermission(row) {
-      this.hackReset = false
-      this.$nextTick(() => {
-        this.hackReset = true
-      })
       listVersionRolePermissions(row.id).then(response => {
+        this.$refs.grantPermission.initData(this, row, response.data, '126', row.versionId !== this.versionId)
         this.form = row
-        this.$refs.grantPermission.initData(this, this.form, response.data, '126')
+        this.versionId = row.versionId
       }).catch(reason => {
         this.$notify({
           title: '获取版本角色权限失败',
