@@ -248,7 +248,7 @@ export default {
       let scopeOptions = this.typeScopeOptions[type]
       if (!scopeOptions) {
         scopeOptions = []
-        this.typeScopeOptions[type] = []
+        this.typeScopeOptions[type] = {}
       }
       this.scopeOptions = scopeOptions
     },
@@ -265,7 +265,8 @@ export default {
           }
           scopeOptions.push(scope)
         }
-        this.typeScopeOptions[2] = scopeOptions
+        const type = 2
+        this.typeScopeOptions[type] = scopeOptions
       }).catch(reason => {
         this.$notify({
           title: '获取所有用户失败',
@@ -288,7 +289,8 @@ export default {
           }
           scopeOptions.push(scope)
         }
-        this.typeScopeOptions[1] = scopeOptions
+        const type = 1
+        this.typeScopeOptions[type] = scopeOptions
       }).catch(reason => {
         this.$notify({
           title: '查询后代机构信息失败',
@@ -306,10 +308,13 @@ export default {
     },
     getScopeName(type, scope) {
       const scopeOptions = this.typeScopeOptions[type]
+      if (scopeOptions === undefined || scopeOptions === {}) {
+        return scope
+      }
       const scopeOption = scopeOptions.filter(value => {
         return value.name === scope
       })
-      return scopeOption.length > 0 ? scopeOption[0].value : scope
+      return scopeOption && scopeOption.length && scopeOption.length > 0 ? scopeOption[0].value : scope
     },
     getList() {
       this.listLoading = true
