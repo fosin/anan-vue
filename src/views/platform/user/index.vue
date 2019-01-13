@@ -729,7 +729,7 @@ export default {
       })
     },
     handleUserPermission(row) {
-      getOrganiz(this.form.organizId).then((response) => {
+      getOrganiz(row.organizId).then((response) => {
         const topId = response.data.topId
         getOrganizAuth(topId).then((response) => {
           const versionId = response.data.versionId
