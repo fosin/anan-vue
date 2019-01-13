@@ -8,10 +8,10 @@
       <template v-if="device!=='mobile'">
         <error-log class="errLog-container right-menu-item"/>
 
-        <el-tooltip :content="$t('navbar.screenfull')" effect="dark" placement="bottom">
+        <!--<el-tooltip :content="$t('navbar.screenfull')" effect="dark" placement="bottom">
           <screenfull class="screenfull right-menu-item"/>
         </el-tooltip>
-
+-->
         <el-tooltip :content="$t('navbar.size')" effect="dark" placement="bottom">
           <size-select class="international right-menu-item"/>
         </el-tooltip>
