@@ -209,15 +209,15 @@ export default {
       return status
     },
     getList(row) {
-      if (row && row.code) {
+      if (row && row.id) {
         this.selectedDictionary = row
       } else {
-        if (!this.selectedDictionary.code) {
+        if (!this.selectedDictionary.id) {
           return
         }
       }
       this.listLoading = true
-      listDictionaryDetailPage(this.pageModule, this.selectedDictionary.code).then(response => {
+      listDictionaryDetailPage(this.pageModule, this.selectedDictionary.id).then(response => {
         this.dictionaryDetailList = response.data.rows
         this.total = response.data.total
         this.listLoading = false
@@ -231,7 +231,7 @@ export default {
       })
     },
     handleFilter() {
-      if (!this.selectedDictionary || !this.selectedDictionary.code) {
+      if (!this.selectedDictionary || !this.selectedDictionary.id) {
         this.$message({
           message: '操作前请先选择一个字典明细项!'
         })
@@ -249,7 +249,7 @@ export default {
       this.getList()
     },
     handleAdd() {
-      if (!this.selectedDictionary || !this.selectedDictionary.code) {
+      if (!this.selectedDictionary || !this.selectedDictionary.id) {
         this.$message({
           message: '操作前请先选择一个字典明细项!'
         })
@@ -385,7 +385,7 @@ export default {
         scope: undefined,
         sort: this.DefaultDictionaryDetailNameAndSort === 1 ? sort : undefined,
         status: '0',
-        code: this.selectedDictionary.code
+        dictionaryId: this.selectedDictionary.id
       }
     },
     sortChange(column) {

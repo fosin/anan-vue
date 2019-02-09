@@ -308,7 +308,7 @@ export default {
     },
     getScopeName(type, scope) {
       const scopeOptions = this.typeScopeOptions[type]
-      if (scopeOptions === undefined || scopeOptions === {}) {
+      if (scopeOptions === undefined || scopeOptions === [] || scopeOptions === {}) {
         return scope
       }
       const scopeOption = scopeOptions.filter(value => {

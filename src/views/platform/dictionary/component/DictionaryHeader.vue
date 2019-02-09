@@ -51,7 +51,7 @@
       v-loading="listLoading"
       ref="dictionaryTable"
       :data="dictionaryList"
-      :default-sort="{prop: 'code'}"
+      :default-sort="{prop: 'id'}"
       element-loading-text="努力加载中"
       border
       fit
@@ -59,7 +59,7 @@
       style="width: 100%"
       @sort-change="sortChange"
       @row-click="rowClick">
-      <el-table-column :label="$t('cdp_sys_dictionary.code.label')" align="center" sortable prop="code"/>
+      <el-table-column :label="$t('cdp_sys_dictionary.id.label')" align="center" sortable prop="id"/>
       <el-table-column :label="$t('cdp_sys_dictionary.name.label')" align="center" sortable prop="name"/>
       <el-table-column :label="$t('cdp_sys_dictionary.type.label')" align="center" sortable prop="type">
         <template slot-scope="scope">
@@ -220,13 +220,13 @@ export default {
       this.dialogFormVisible = true
     },
     handleEdit() {
-      if (!this.form || !this.form.code || !this.form.name) {
+      if (!this.form || !this.form.id || !this.form.name) {
         this.$message({
           message: '操作前请先选择一条数据!'
         })
         return
       }
-      getDictionary(this.form.code).then(response => {
+      getDictionary(this.form.id).then(response => {
         this.form = response.data
         this.dialogFormVisible = true
         this.dialogStatus = 'update'
@@ -240,7 +240,7 @@ export default {
       })
     },
     handleDelete() {
-      if (!this.form || !this.form.code || !this.form.name) {
+      if (!this.form || !this.form.id || !this.form.name) {
         this.$message({
           message: '操作前请先选择一条数据!'
         })
@@ -255,7 +255,7 @@ export default {
           type: 'warning'
         }
       ).then(() => {
-        deleteDictionary(this.form.code).then(response => {
+        deleteDictionary(this.form.id).then(response => {
           this.dialogFormVisible = false
           this.getList()
           this.$notify({
@@ -336,7 +336,7 @@ export default {
     },
     resetForm() {
       this.form = {
-        code: undefined,
+        id: undefined,
         name: undefined,
         type: undefined,
         scope: undefined

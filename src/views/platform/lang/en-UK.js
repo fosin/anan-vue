@@ -1,9 +1,9 @@
 export default {
   cdp_sys_dictionary: {
     searchText: 'Support name, type , code search',
-    code: {
-      label: 'code',
-      placeholder: 'Dictionary code'
+    id: {
+      label: 'id',
+      placeholder: 'Dictionary id'
     },
     name: {
       label: 'name',
@@ -16,6 +16,22 @@ export default {
     scope: {
       label: 'scope',
       placeholder: 'Dictionary scope, based on dictionary category, refines classification dictionary again'
+    },
+    createBy: {
+      label: 'createBy',
+      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_sys_user.id.'
+    },
+    createTime: {
+      label: 'createTime',
+      placeholder: 'Create date, which is maintained by the background, and the front end does not need to care when changing data'
+    },
+    updateBy: {
+      label: 'updateBy',
+      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_sys_user.id.'
+    },
+    updateTime: {
+      label: 'updateTime',
+      placeholder: 'Update date date, which is maintained by the background. The front end does not need to care when changing data.'
     }
   },
   cdp_sys_dictionary_detail: {
@@ -32,9 +48,9 @@ export default {
       label: 'value',
       placeholder: 'Dictionary detail values denote literal meaning'
     },
-    code: {
-      label: 'code',
-      placeholder: 'The value is taken from the dictionary detail table CdpSysDictionary Detail Entity.code'
+    dictionaryId: {
+      label: 'dictionaryId',
+      placeholder: 'The value is taken from the dictionary detail table CdpSysDictionaryEntity.id'
     },
     sort: {
       label: 'sort',

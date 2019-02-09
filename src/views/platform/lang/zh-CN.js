@@ -1,7 +1,7 @@
 export default {
   cdp_sys_dictionary: {
     searchText: '支持名称、类别及代码查找',
-    code: {
+    id: {
       label: '字典代码',
       placeholder: '字典代码'
     },
@@ -16,6 +16,22 @@ export default {
     scope: {
       label: '字典作用域',
       placeholder: '字典作用域，以字典类别为前提，在字典类别基础上再次细化分类字典'
+    },
+    createBy: {
+      label: '创建人',
+      placeholder: '创建人：创建人：该值由后台维护，更改数据时前端不需要关心，取值于系统用户表的ID'
+    },
+    createTime: {
+      label: '创建日期',
+      placeholder: '创建日期，该值由后台维护，更改数据时前端不需要关心'
+    },
+    updateBy: {
+      label: '更新人',
+      placeholder: '创建人：该值由后台维护，更改数据时前端不需要关心，取值于系统用户表的ID'
+    },
+    updateTime: {
+      label: '更新日期',
+      placeholder: '更新日期，该值由后台维护，更改数据时前端不需要关心'
     }
   },
   cdp_sys_dictionary_detail: {
@@ -32,7 +48,7 @@ export default {
       label: '字典明细值',
       placeholder: '字典明细值表示字面意义'
     },
-    code: {
+    dictionaryId: {
       label: '字典代码',
       placeholder: '取值于字典表的字典代码'
     },
@@ -49,7 +65,7 @@ export default {
       placeholder: '标准代码，该字段通常用于对接标准字典'
     },
     scope: {
-      label: '作用域，用于字典明细项的作用域',
+      label: '作用域',
       placeholder: '作用域，用于字典明细项的作用域'
     },
     used: {

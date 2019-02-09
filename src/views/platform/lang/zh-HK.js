@@ -1,7 +1,7 @@
 export default{
   cdp_sys_dictionary: {
     searchText: '支持名稱、類別及標識查找',
-    code: {
+    id: {
       label: '字典程式碼',
       placeholder: '字典程式碼'
     },
@@ -16,6 +16,22 @@ export default{
     scope: {
       label: '字典作用域',
       placeholder: '字典作用域,以字典類別為前提,在字典類別基礎上再次細化分類字典'
+    },
+    createBy: {
+      label: '創建人',
+      placeholder: '創建人：創建人：該值由後臺維護,更改數據時前端不需要關心,取值於系統用戶錶的編號'
+    },
+    createTime: {
+      label: '創建日期',
+      placeholder: '創建日期,該值由後臺維護,更改數據時前端不需要關心'
+    },
+    updateBy: {
+      label: '更新人',
+      placeholder: '創建人：該值由後臺維護,更改數據時前端不需要關心,取值於系統用戶錶的編號'
+    },
+    updateTime: {
+      label: '更新日期',
+      placeholder: '更新日期,該值由後臺維護,更改數據時前端不需要關心'
     }
   },
   cdp_sys_dictionary_detail: {
@@ -32,7 +48,7 @@ export default{
       label: '字典明細值',
       placeholder: '字典明細值表示字面意義'
     },
-    code: {
+    dictionaryId: {
       label: '字典程式碼',
       placeholder: '取值於字典錶的字典程式碼'
     },
@@ -49,7 +65,7 @@ export default{
       placeholder: '標準程式碼,該欄位通常用於對接標準字典'
     },
     scope: {
-      label: '作用域,用於字典明細項的作用域',
+      label: '作用域',
       placeholder: '作用域,用於字典明細項的作用域'
     },
     used: {
