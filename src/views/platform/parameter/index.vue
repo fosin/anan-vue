@@ -415,7 +415,7 @@ export default {
         }
       ).then(() => {
         this.form.status = 2
-        putParameter(this.form).then(response => {
+        putParameter(this.form).then(() => {
           this.dialogFormVisible = false
           this.updateList(this.form)
           this.$notify({
@@ -432,7 +432,7 @@ export default {
             duration: 5000
           })
         })
-      }).catch(reason => {
+      }).catch(() => {
       })
     },
     handleApply() {
@@ -451,7 +451,7 @@ export default {
           type: 'warning'
         }
       ).then(() => {
-        applyParameter(this.form.id).then(response => {
+        applyParameter(this.form.id).then(() => {
           if (this.form.status === 2) {
             this.deleteList(this.form.id)
           } else {
@@ -472,7 +472,7 @@ export default {
             duration: 5000
           })
         })
-      }).catch(reason => {
+      }).catch(() => {
       })
     },
     handleApplys() {
@@ -485,7 +485,7 @@ export default {
           type: 'warning'
         }
       ).then(() => {
-        applysParameter().then(response => {
+        applysParameter().then(() => {
           for (let i = 0; i < this.parameterList.length; i++) {
             const paramter = this.parameterList[i]
             if (paramter.status === 2) {
@@ -509,14 +509,14 @@ export default {
             duration: 5000
           })
         })
-      }).catch(reason => {
+      }).catch(() => {
       })
     },
     create(formName) {
       const set = this.$refs
       set[formName].validate(valid => {
         if (valid) {
-          postParameter(this.form).then((response) => {
+          postParameter(this.form).then(() => {
             this.dialogFormVisible = false
             // this.updateList(response.data)
             this.getList()
@@ -550,7 +550,7 @@ export default {
         if (valid) {
           this.dialogFormVisible = false
           this.form.status = 1
-          putParameter(this.form).then((response) => {
+          putParameter(this.form).then(() => {
             this.dialogFormVisible = false
             this.updateList(this.form)
             // this.getList()

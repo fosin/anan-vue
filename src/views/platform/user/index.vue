@@ -912,7 +912,7 @@ export default {
       for (let i = 0; i < this.userRoles.length; i++) {
         const roleUser = {
           userId: this.form.id,
-          role: { id: this.userRoles[i] },
+          roleId: this.userRoles[i],
           organizId: this.form.organizId
         }
         userRoles.push(roleUser)

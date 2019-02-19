@@ -538,7 +538,7 @@ export default {
       for (let i = 0; i < this.roleUsers.length; i++) {
         const roleUser = {
           userId: this.roleUsers[i],
-          role: { id: this.form.id },
+          roleId: this.form.id,
           organizId: undefined
         }
         userRoles.push(roleUser)
