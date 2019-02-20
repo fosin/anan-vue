@@ -2,7 +2,7 @@
   <div class="app-container calendar-list-container">
     <div class="filter-container">
       <el-input
-        :placeholder="$t('cdp_sys_role.searchText')"
+        :placeholder="$t('cdp_role.searchText')"
         v-model="pageModule.searchText"
         style="width: 200px;"
         class="filter-item"
@@ -54,30 +54,30 @@
       style="width: 100%"
       @sort-change="sortChange"
       @row-click="rowClick">
-      <el-table-column :label="$t('cdp_sys_role.value.label')" align="center" sortable prop="value"/>
+      <el-table-column :label="$t('cdp_role.value.label')" align="center" sortable prop="value"/>
 
-      <el-table-column :label="$t('cdp_sys_role.name.label')" align="center" sortable prop="name"/>
+      <el-table-column :label="$t('cdp_role.name.label')" align="center" sortable prop="name"/>
       <el-table-column
-        :label="$t('cdp_sys_role.organizId.label')"
+        :label="$t('cdp_role.organizId.label')"
         :formatter="getOrganizName"
         prop="organizId"
         align="center"
         show-overflow-tooltip
         sortable/>
-      <!--      <el-table-column align="center" :label="$t('cdp_sys_role.tips.label')" sortable prop="tips">
+      <!--      <el-table-column align="center" :label="$t('cdp_role.tips.label')" sortable prop="tips">
             </el-table-column>-->
 
-      <el-table-column :label="$t('cdp_sys_role.createTime.label')" align="center" sortable prop="createTime">
+      <el-table-column :label="$t('cdp_role.createTime.label')" align="center" sortable prop="createTime">
         <template slot-scope="scope">
           <span>{{ scope.row.createTime | dateFormatFilter('yyyy-MM-dd HH:mm:ss') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('cdp_sys_role.updateTime.label')" align="center" sortable prop="updateTime">
+      <el-table-column :label="$t('cdp_role.updateTime.label')" align="center" sortable prop="updateTime">
         <template slot-scope="scope">
           <span>{{ scope.row.updateTime | dateFormatFilter('yyyy-MM-dd HH:mm:ss') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('cdp_sys_role.status.label')" align="center" class-name="status-col" width="80" sortable prop="status">
+      <el-table-column :label="$t('cdp_role.status.label')" align="center" class-name="status-col" width="80" sortable prop="status">
         <template slot-scope="scope">
           <el-tag>{{ scope.row.status | statusFilter }}</el-tag>
         </template>
@@ -107,16 +107,16 @@
     </div>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
-        <el-form-item :label="$t('cdp_sys_role.value.label')" prop="value">
-          <el-input v-model="form.value" :placeholder="$t('cdp_sys_role.value.placeholder')"/>
+        <el-form-item :label="$t('cdp_role.value.label')" prop="value">
+          <el-input v-model="form.value" :placeholder="$t('cdp_role.value.placeholder')"/>
         </el-form-item>
-        <el-form-item :label="$t('cdp_sys_role.name.label')" prop="name">
-          <el-input v-model="form.name" :placeholder="$t('cdp_sys_role.name.placeholder')"/>
+        <el-form-item :label="$t('cdp_role.name.label')" prop="name">
+          <el-input v-model="form.name" :placeholder="$t('cdp_role.name.placeholder')"/>
         </el-form-item>
-        <el-form-item :label="$t('cdp_sys_role.organizId.label')" prop="organizId">
+        <el-form-item :label="$t('cdp_role.organizId.label')" prop="organizId">
           <el-select
             v-model="form.organizId"
-            :placeholder="$t('cdp_sys_role.organizId.placeholder')"
+            :placeholder="$t('cdp_role.organizId.placeholder')"
             :filter-method="organizSelectFilter"
             class="filter-item"
             filterable>
@@ -131,11 +131,11 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item :label="$t('cdp_sys_role.tips.label')" prop="tips">
-          <el-input v-model="form.tips" :placeholder="$t('cdp_sys_role.tips.placeholder')"/>
+        <el-form-item :label="$t('cdp_role.tips.label')" prop="tips">
+          <el-input v-model="form.tips" :placeholder="$t('cdp_role.tips.placeholder')"/>
         </el-form-item>
-        <el-form-item :label="$t('cdp_sys_role.status.label')" prop="status">
-          <el-select v-model="form.status" :placeholder="$t('cdp_sys_role.status.placeholder')" class="filter-item">
+        <el-form-item :label="$t('cdp_role.status.label')" prop="status">
+          <el-select v-model="form.status" :placeholder="$t('cdp_role.status.placeholder')" class="filter-item">
             <el-option v-for="item in statusOptions" :key="item" :label="item | statusFilter" :value="item"/>
           </el-select>
         </el-form-item>
@@ -158,7 +158,7 @@
 
     <!--<el-dialog :title="textMap[dialogStatus] + '->' + form.name" :visible.sync="dialogPermissionVisible" width="550px">
       <el-input
-        :placeholder="$t('cdp_sys_role.name.placeholder')输入关键字进行过滤"
+        :placeholder="$t('cdp_role.name.placeholder')输入关键字进行过滤"
         v-model="filterPermissionText">
       </el-input>
       <el-tree class="filter-tree"

@@ -2,7 +2,7 @@
   <div class="app-container calendar-list-container">
     <div class="filter-container">
       <el-input
-        :placeholder="$t('cdp_sys_parameter.searchText')"
+        :placeholder="$t('cdp_parameter.searchText')"
         v-model="pageModule.searchText"
         style="width: 300px;"
         class="filter-item"
@@ -77,16 +77,16 @@
       style="width: 100%"
       @sort-change="sortChange"
       @row-click="rowClick">
-      <el-table-column :label="$t('cdp_sys_parameter.name.label')" align="center" sortable prop="name" width="200px"/>
-      <el-table-column :label="$t('cdp_sys_parameter.value.label')" align="center" sortable prop="value" width="120px"/>
-      <el-table-column :label="$t('cdp_sys_parameter.defaultValue.label')" align="center" sortable prop="defaultValue" width="130px"/>
-      <el-table-column :label="$t('cdp_sys_parameter.description.label')" align="center" sortable prop="description"/>
-      <el-table-column :label="$t('cdp_sys_parameter.type.label')" align="center" sortable prop="type" width="120px">
+      <el-table-column :label="$t('cdp_parameter.name.label')" align="center" sortable prop="name" width="200px"/>
+      <el-table-column :label="$t('cdp_parameter.value.label')" align="center" sortable prop="value" width="120px"/>
+      <el-table-column :label="$t('cdp_parameter.defaultValue.label')" align="center" sortable prop="defaultValue" width="130px"/>
+      <el-table-column :label="$t('cdp_parameter.description.label')" align="center" sortable prop="description"/>
+      <el-table-column :label="$t('cdp_parameter.type.label')" align="center" sortable prop="type" width="120px">
         <template slot-scope="scope">
           <span>{{ getTypeName(scope.row.type) }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('cdp_sys_parameter.scope.label')" align="center" sortable prop="scope" width="100px">
+      <el-table-column :label="$t('cdp_parameter.scope.label')" align="center" sortable prop="scope" width="100px">
         <template slot-scope="scope">
           <span>{{ getScopeName(scope.row.type, scope.row.scope) }}</span>
         </template>
@@ -105,20 +105,20 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
-        <el-form-item :label="$t('cdp_sys_parameter.name.label')" prop="name">
-          <el-input v-model="form.name" :placeholder="$t('cdp_sys_parameter.name.placeholder')"/>
+        <el-form-item :label="$t('cdp_parameter.name.label')" prop="name">
+          <el-input v-model="form.name" :placeholder="$t('cdp_parameter.name.placeholder')"/>
         </el-form-item>
-        <el-form-item :label="$t('cdp_sys_parameter.value.label')" prop="value">
-          <el-input v-model="form.value" :placeholder="$t('cdp_sys_parameter.value.placeholder')"/>
+        <el-form-item :label="$t('cdp_parameter.value.label')" prop="value">
+          <el-input v-model="form.value" :placeholder="$t('cdp_parameter.value.placeholder')"/>
         </el-form-item>
-        <el-form-item :label="$t('cdp_sys_parameter.defaultValue.label')" prop="defaultValue">
-          <el-input v-model="form.defaultValue" :placeholder="$t('cdp_sys_parameter.defaultValue.placeholder')"/>
+        <el-form-item :label="$t('cdp_parameter.defaultValue.label')" prop="defaultValue">
+          <el-input v-model="form.defaultValue" :placeholder="$t('cdp_parameter.defaultValue.placeholder')"/>
         </el-form-item>
-        <el-form-item :label="$t('cdp_sys_parameter.description.label')" prop="description">
-          <el-input v-model="form.description" :placeholder="$t('cdp_sys_parameter.description.placeholder')"/>
+        <el-form-item :label="$t('cdp_parameter.description.label')" prop="description">
+          <el-input v-model="form.description" :placeholder="$t('cdp_parameter.description.placeholder')"/>
         </el-form-item>
-        <el-form-item :label="$t('cdp_sys_parameter.type.label')" prop="type">
-          <el-select v-model="form.type" :placeholder="$t('cdp_sys_parameter.type.placeholder')" :disabled="dialogStatus!=='create'" class="filter-item" @change="typeChange">
+        <el-form-item :label="$t('cdp_parameter.type.label')" prop="type">
+          <el-select v-model="form.type" :placeholder="$t('cdp_parameter.type.placeholder')" :disabled="dialogStatus!=='create'" class="filter-item" @change="typeChange">
             <el-option
               v-for="item in typeOptions"
               :key="item.name"
@@ -127,8 +127,8 @@
               :disabled="item.status === 1" />
           </el-select>
         </el-form-item>
-        <el-form-item v-if="form.type ===1 || form.type === 2" :label="$t('cdp_sys_parameter.scope.label')" prop="scope">
-          <el-select v-model="form.scope" :placeholder="$t('cdp_sys_parameter.scope.placeholder')" class="filter-item">
+        <el-form-item v-if="form.type ===1 || form.type === 2" :label="$t('cdp_parameter.scope.label')" prop="scope">
+          <el-select v-model="form.scope" :placeholder="$t('cdp_parameter.scope.placeholder')" class="filter-item">
             <el-option
               v-for="item in scopeOptions"
               :key="item.name"

@@ -2,7 +2,7 @@
   <div class="app-container calendar-list-container">
     <div class="filter-container">
       <el-input
-        :placeholder="$t('cdp_sys_dictionary_detail.searchText')"
+        :placeholder="$t('cdp_dictionary_detail.searchText')"
         v-model="pageModule.searchText"
         style="width: 200px;"
         class="filter-item"
@@ -59,11 +59,11 @@
       style="width: 100%"
       @sort-change="sortChange"
       @row-click="rowClick">
-      <el-table-column :label="$t('cdp_sys_dictionary_detail.name.label')" align="center" sortable prop="name" width="120px"/>
-      <el-table-column :label="$t('cdp_sys_dictionary_detail.value.label')" align="center" sortable prop="value"/>
-      <el-table-column :label="$t('cdp_sys_dictionary_detail.scode.label')" align="center" sortable prop="scode" width="120px"/>
-      <el-table-column :label="$t('cdp_sys_dictionary_detail.sort.label')" align="center" sortable prop="sort" width="80px"/>
-      <el-table-column :label="$t('cdp_sys_dictionary_detail.status.label')" align="center" sortable prop="status" width="90px">
+      <el-table-column :label="$t('cdp_dictionary_detail.name.label')" align="center" sortable prop="name" width="120px"/>
+      <el-table-column :label="$t('cdp_dictionary_detail.value.label')" align="center" sortable prop="value"/>
+      <el-table-column :label="$t('cdp_dictionary_detail.scode.label')" align="center" sortable prop="scode" width="120px"/>
+      <el-table-column :label="$t('cdp_dictionary_detail.sort.label')" align="center" sortable prop="sort" width="80px"/>
+      <el-table-column :label="$t('cdp_dictionary_detail.status.label')" align="center" sortable prop="status" width="90px">
         <template slot-scope="scope">
           <span>{{ getStatusValue(scope.row.status) }}</span>
         </template>
@@ -84,25 +84,25 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-form-item :label="$t('cdp_sys_dictionary.name.label')">
+        <el-form-item :label="$t('cdp_dictionary.name.label')">
           <el-input v-model="selectedDictionary.name" :disabled="true"/>
         </el-form-item>
-        <el-form-item :label="$t('cdp_sys_dictionary_detail.name.label')" prop="name">
-          <el-input v-model="form.name" :placeholder="$t('cdp_sys_dictionary_detail.name.placeholder')"/>
+        <el-form-item :label="$t('cdp_dictionary_detail.name.label')" prop="name">
+          <el-input v-model="form.name" :placeholder="$t('cdp_dictionary_detail.name.placeholder')"/>
         </el-form-item>
-        <el-form-item :label="$t('cdp_sys_dictionary_detail.value.label')" prop="value">
-          <el-input v-model="form.value" :placeholder="$t('cdp_sys_dictionary_detail.value.placeholder')"/>
+        <el-form-item :label="$t('cdp_dictionary_detail.value.label')" prop="value">
+          <el-input v-model="form.value" :placeholder="$t('cdp_dictionary_detail.value.placeholder')"/>
         </el-form-item>
-        <el-form-item :label="$t('cdp_sys_dictionary_detail.sort.label')" prop="sort">
-          <el-input v-model="form.sort" :placeholder="$t('cdp_sys_dictionary_detail.sort.placeholder')"/>
+        <el-form-item :label="$t('cdp_dictionary_detail.sort.label')" prop="sort">
+          <el-input v-model="form.sort" :placeholder="$t('cdp_dictionary_detail.sort.placeholder')"/>
         </el-form-item>
-        <el-form-item :label="$t('cdp_sys_dictionary_detail.scode.label')" prop="scode">
-          <el-input v-model="form.scode" :placeholder="$t('cdp_sys_dictionary_detail.scode.placeholder')"/>
+        <el-form-item :label="$t('cdp_dictionary_detail.scode.label')" prop="scode">
+          <el-input v-model="form.scode" :placeholder="$t('cdp_dictionary_detail.scode.placeholder')"/>
         </el-form-item>
-        <el-form-item :label="$t('cdp_sys_dictionary_detail.scope.label')" prop="scope">
-          <el-input v-model="form.scope" :placeholder="$t('cdp_sys_dictionary_detail.scope.placeholder')"/>
+        <el-form-item :label="$t('cdp_dictionary_detail.scope.label')" prop="scope">
+          <el-input v-model="form.scope" :placeholder="$t('cdp_dictionary_detail.scope.placeholder')"/>
         </el-form-item>
-        <el-form-item :label="$t('cdp_sys_dictionary_detail.status.label')" prop="status">
+        <el-form-item :label="$t('cdp_dictionary_detail.status.label')" prop="status">
           <el-switch
             v-model="form.status"
             active-color="#13ce66"

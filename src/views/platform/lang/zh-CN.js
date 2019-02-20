@@ -1,5 +1,5 @@
 export default {
-  cdp_sys_dictionary: {
+  cdp_dictionary: {
     searchText: '支持名称、类别及代码查找',
     id: {
       label: '字典代码',
@@ -11,7 +11,7 @@ export default {
     },
     type: {
       label: '字典类别',
-      placeholder: '字典类别，区别字典的大分类，取值于表cdp_sys_dictionary.code = 1数据'
+      placeholder: '字典类别，区别字典的大分类，取值于表cdp_dictionary.code = 1数据'
     },
     scope: {
       label: '字典作用域',
@@ -34,7 +34,7 @@ export default {
       placeholder: '更新日期，该值由后台维护，更改数据时前端不需要关心'
     }
   },
-  cdp_sys_dictionary_detail: {
+  cdp_dictionary_detail: {
     searchText: '支持字典明细项代码、字典明细项值查找',
     id: {
       label: '字典明细ID',
@@ -89,7 +89,7 @@ export default {
       placeholder: '更新日期，该值由后台维护，更改数据时前端不需要关心'
     }
   },
-  cdp_sys_organization: {
+  cdp_organization: {
     id: {
       label: '机构ID',
       placeholder: '机构ID'
@@ -147,7 +147,7 @@ export default {
       placeholder: '创建人：该值由后台维护，更改数据时前端不需要关心，取值于系统用户表的ID'
     }
   },
-  cdp_sys_organization_auth: {
+  cdp_organization_auth: {
     id: {
       label: '机构授权ID',
       placeholder: '机构授权ID'
@@ -201,7 +201,7 @@ export default {
       placeholder: '试用天数'
     }
   },
-  cdp_sys_organization_permission: {
+  cdp_organization_permission: {
     id: {
       label: '机构权限ID',
       placeholder: '机构权限ID'
@@ -223,7 +223,7 @@ export default {
       placeholder: '创建人：该值由后台维护，更改数据时前端不需要关心，取值于系统用户表的ID'
     }
   },
-  cdp_sys_parameter: {
+  cdp_parameter: {
     searchText: '支持参数键、参数值、说明查找',
     id: {
       label: '参数ID',
@@ -282,7 +282,7 @@ export default {
       placeholder: '参数状态：0=正常状态、1=修改状态、2=删除状态'
     }
   },
-  cdp_sys_pay: {
+  cdp_pay: {
     payId: {
       label: '支付ID',
       placeholder: '支付ID'
@@ -332,7 +332,7 @@ export default {
       placeholder: '付款标志：0=未付款，1=分期，2=付全款'
     }
   },
-  cdp_sys_pay_detail: {
+  cdp_pay_detail: {
     paydetailId: {
       label: '付款明细ID',
       placeholder: '付款明细ID'
@@ -350,7 +350,7 @@ export default {
       placeholder: '付款金额'
     }
   },
-  cdp_sys_pay_invoice: {
+  cdp_pay_invoice: {
     invoceId: {
       label: '发票ID',
       placeholder: '发票ID'
@@ -372,7 +372,7 @@ export default {
       placeholder: '操作人'
     }
   },
-  cdp_sys_pay_order: {
+  cdp_pay_order: {
     orderId: {
       label: '订单ID',
       placeholder: '订单ID'
@@ -414,7 +414,7 @@ export default {
       placeholder: '作废日期'
     }
   },
-  cdp_sys_permission: {
+  cdp_permission: {
     id: {
       label: '权限ID',
       placeholder: '权限ID'
@@ -484,7 +484,7 @@ export default {
       placeholder: '创建人：该值由后台维护，更改数据时前端不需要关心，取值于系统用户表的ID'
     }
   },
-  cdp_sys_role: {
+  cdp_role: {
     searchText: '支持角色名称、标识',
     id: {
       label: '角色ID',
@@ -531,7 +531,7 @@ export default {
       placeholder: '内置标志：是否是系统内置角色，内置角色不能被用户删除和修改，0=不是 1=是'
     }
   },
-  cdp_sys_role_permission: {
+  cdp_role_permission: {
     id: {
       label: '角色权限ID',
       placeholder: '角色权限ID'
@@ -553,7 +553,7 @@ export default {
       placeholder: '创建人：该值由后台维护，更改数据时前端不需要关心，取值于系统用户表的ID'
     }
   },
-  cdp_sys_user: {
+  cdp_user: {
     searchText: '支持用户工号、名称、手机号、邮箱查找',
     baseInfo: '基本信息',
     modifyPassword: '修改密码',
@@ -634,7 +634,7 @@ export default {
       placeholder: '过期时间，账户过期后用户被锁定切不能登录系统'
     }
   },
-  cdp_sys_user_permission: {
+  cdp_user_permission: {
     id: {
       label: '用户权限ID',
       placeholder: '用户权限ID'
@@ -664,7 +664,7 @@ export default {
       placeholder: '补充方式：0=增加权限、1=删除权限'
     }
   },
-  cdp_sys_user_role: {
+  cdp_user_role: {
     id: {
       label: '用户角色ID',
       placeholder: '用户角色ID'
@@ -690,7 +690,7 @@ export default {
       placeholder: '创建人：该值由后台维护，更改数据时前端不需要关心，取值于系统用户表的ID'
     }
   },
-  cdp_sys_version: {
+  cdp_version: {
     searchText: '支持版本名称查找',
     id: {
       label: '版本ID',
@@ -753,7 +753,7 @@ export default {
       placeholder: '版本描述'
     }
   },
-  cdp_sys_version_permission: {
+  cdp_version_permission: {
     id: {
       label: '版本权限ID',
       placeholder: '版本权限ID'
@@ -775,7 +775,7 @@ export default {
       placeholder: '创建人：该值由后台维护，更改数据时前端不需要关心，取值于系统用户表的ID'
     }
   },
-  cdp_sys_version_role: {
+  cdp_version_role: {
     searchText: '支持版本角色名称、角色标识查找',
     id: {
       label: '角色ID',
@@ -818,7 +818,7 @@ export default {
       placeholder: '更新人：该值由后台维护，更改数据时前端不需要关心，取值于系统用户表的ID'
     }
   },
-  cdp_sys_version_role_permission: {
+  cdp_version_role_permission: {
     id: {
       label: '角色权限ID',
       placeholder: '角色权限ID'
