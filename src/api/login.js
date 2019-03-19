@@ -2,6 +2,8 @@ import request from '@/utils/request'
 import { encrypt } from '@/utils/aesUtil'
 import CryptoJS from 'crypto-js'
 
+const basic = 'Basic d2ViQXBwOndlYkFwcA=='
+
 export function getAccessToken(loginForm) {
   const username = loginForm.username.trim()
   const password = loginForm.password.trim()
@@ -10,7 +12,6 @@ export function getAccessToken(loginForm) {
   const scope = 'webApp'
   const randomStr = ''
   const code = ''
-
   const iv = CryptoJS.lib.WordArray.random(128 / 8).toString(CryptoJS.enc.Hex)
   const salt = CryptoJS.lib.WordArray.random(128 / 8).toString(CryptoJS.enc.Hex)
   const iterationCount = 1000
@@ -22,7 +23,7 @@ export function getAccessToken(loginForm) {
     url: '/auth/oauth/token',
     method: 'post',
     headers: {
-      'Authorization': 'Basic d2ViQXBwOiQyYSQxMCR4S2ZEY2JPYzFJYmgwVlJXUklzUTRPM1ZrOUp4YkYvMzBXZHouZTJoQk5BQVFLUjVVemlJSw=='
+      'Authorization': basic
     },
     params: { a: cipheru, b: cipherp, c: passPhrase, d: iv, e: salt, f: keySize, g: iterationCount, randomStr, code, grant_type, scope, 'remember-me': rememberMe }
   })
@@ -38,7 +39,7 @@ export function refreshAccessToken(refresh_token) {
     url: '/auth/oauth/token',
     method: 'post',
     headers: {
-      'Authorization': 'Basic d2ViQXBwOiQyYSQxMCR4S2ZEY2JPYzFJYmgwVlJXUklzUTRPM1ZrOUp4YkYvMzBXZHouZTJoQk5BQVFLUjVVemlJSw=='
+      'Authorization': basic
     },
     params: { refresh_token, grant_type, scope }
   })

@@ -79,10 +79,10 @@
 import { isvalidUsername } from '@/utils/validate'
 import LangSelect from '@/components/LangSelect'
 import SocialSign from './socialsignin'
-import Register from './register'
+// import Register from './register'
 export default {
   name: 'Login',
-  components: { LangSelect, SocialSign, Register },
+  components: { LangSelect, SocialSign },
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!isvalidUsername(value)) {

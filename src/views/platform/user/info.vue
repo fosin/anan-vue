@@ -2,7 +2,7 @@
   <div class="app-container calendar-list-container">
 
     <div class="grid-content bg-purple">
-      <el-form ref="user" :model="userInfo" :rules="rules2" label-width="100px" class="demo-ruleForm">
+      <el-form ref="user" :model="userInfo" label-width="100px" class="demo-ruleForm">
         <span>{{ $t('cdp_user.baseInfo') }}</span>
         <hr>
         <el-row>
@@ -43,6 +43,8 @@
         </el-row>
         <span>{{ $t('cdp_user.modifyPassword') }}</span>
         <hr>
+      </el-form>
+      <el-form ref="user" :model="userInfo2" :rules="rules2" label-width="100px" class="demo-ruleForm">
         <el-row>
           <el-col :span="8">
             <el-form-item :label="$t('cdp_user.oldPassword.label')" prop="password" label-width="200px">
