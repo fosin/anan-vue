@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([["chunk-547a"],{"+nGq":function(n,o,a){"use strict";a.r(o);var i={name:"China"},t=(a("Mzot"),a("KHd+")),c=Object(t.a)(i,void 0,void 0,!1,null,"6c4d90f3",null);c.options.__file="china.vue";o.default=c.exports},Mzot:function(n,o,a){"use strict";var i=a("aFyT");a.n(i).a},aFyT:function(n,o,a){}}]);
