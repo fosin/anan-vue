@@ -60,9 +60,12 @@ const webpackConfig = merge(baseWebpackConfig, {
         BASE_URL: config.build.assetsPublicPath + config.build.assetsSubDirectory,
       },
       minify: {
+        //删除注释
         removeComments: true,
+        //折叠文档树种文本节点的空白，小心不同浏览器对空白的表现差异
         collapseWhitespace: true,
-        removeAttributeQuotes: true
+        //删除可以被删除的引号
+        removeAttributeQuotes: false
         // more options:
         // https://github.com/kangax/html-minifier#options-quick-reference
       }
