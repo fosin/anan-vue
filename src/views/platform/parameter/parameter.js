@@ -47,26 +47,30 @@ export function putParameter(obj) {
 }
 
 export function fetchUserParameterValue(key, defaultValue, description, method) {
-  return fetchParameterValue(2, key, method, defaultValue, description)
+  const p = {
+    type: 2,
+    name: key,
+    defaultValue: defaultValue,
+    description: description
+  }
+  return fetchParameterValue(p, method)
 }
 
 export function fetchOrganizParameterValue(key, defaultValue, description, method) {
-  return fetchParameterValue(1, key, method, defaultValue, description)
+  const p = {
+    type: 1,
+    name: key,
+    defaultValue: defaultValue,
+    description: description
+  }
+  return fetchParameterValue(p, method)
 }
 
-export function fetchParameterValue(type, key, method, defaultValue, description) {
-  if (!type || !key) {
-    return undefined
-  }
-  if (defaultValue && defaultValue) {
-    return request({
-      url: '/platform/v1/parameter/value/' + type + '/' + key + '/' + defaultValue + '/' + description,
-      method: method || 'post'
-    })
-  }
+export function fetchParameterValue(parameter, method) {
   return request({
-    url: '/platform/v1/parameter/value/' + type + '/' + key,
-    method: method || 'post'
+    url: '/platform/v1/parameter/value',
+    method: method || 'post',
+    data: parameter
   })
 }
 
