@@ -10,7 +10,7 @@ import axios from 'axios'
 import { loadUIUrl } from '@/api/application'
 import store from '@/store'
 export default {
-  name: 'Myiframe',
+  name: 'Myiframe' || this.$route.name, // TODO 这里的模块名称不能动态生成，导致无法页面缓存，待解决
   data: function() {
     return {
       src: 'about:blank'
