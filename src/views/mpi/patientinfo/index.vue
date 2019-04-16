@@ -54,7 +54,7 @@
       </el-button-group>
     </div>
     <ListPatientinfo ref="listPatientinfo" :status="0" :data="form" @rowClick="rowClick"/>
-    <FormPatientinfo ref="formPatientinfo" :mpi-id="form.mpiId" @refreshSelect="refreshSelect"/>
+    <FormPatientinfo ref="formPatientinfo" :mpi-id="form.id" @refreshSelect="refreshSelect"/>
   </div>
 </template>
 <script>

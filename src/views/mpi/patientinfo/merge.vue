@@ -56,10 +56,10 @@ export default {
       form: {},
       searchText: '',
       multipleSelection: [],
-      mpiId: '',
-      mpiId11: '',
-      mpiId22: '',
-      mpiId33: ''
+      mpiId: undefined,
+      mpiId11: undefined,
+      mpiId22: undefined,
+      mpiId33: undefined
     }
   },
   methods: {
@@ -84,9 +84,9 @@ export default {
       // this.$refs.mergePatientinfo.refreshList()
     },
     handleSelectionChange(val) {
-      this.mpiId11 = ''
-      this.mpiId22 = ''
-      this.mpiId33 = ''
+      this.mpiId11 = undefined
+      this.mpiId22 = undefined
+      this.mpiId33 = undefined
       this.multipleSelection = val
       if (this.multipleSelection.length === 1) {
         this.mpiId11 = this.multipleSelection[0].mpiId

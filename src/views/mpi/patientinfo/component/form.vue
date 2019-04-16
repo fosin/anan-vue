@@ -75,7 +75,7 @@
                   type="date"
                   placeholder="请选择用户生日"
                   format="yyyy-MM-dd"
-                  value-format="yyyy-MM-dd"/>
+                  value-format="yyyy-MM-dd HH:mm:ss"/>
               </el-form-item>
             </el-col>
             <el-col :span="8"/>
@@ -179,7 +179,7 @@
                   type="date"
                   placeholder="请选择工作时间"
                   format="yyyy-MM-dd"
-                  value-format="yyyy-MM-dd"
+                  value-format="yyyy-MM-dd HH:mm:ss"
                   style="width:170px"/>
               </el-form-item>
             </el-col>
@@ -253,7 +253,7 @@ export default {
   },
   props: {
     mpiId: {
-      type: String,
+      type: Number,
       default: undefined
     }
   },
@@ -261,13 +261,13 @@ export default {
     return {
       workDate: {
         disabledDate(time) {
-          var dat = new Date('1900/01/01')
+          const dat = new Date('1900/01/01')
           return time.getTime() < dat.getTime()
         }
       },
       birthday: {
         disabledDate(time) {
-          var dat = new Date('1900/01/01')
+          const dat = new Date('1900/01/01')
           return time.getTime() < dat.getTime()
         }
       },

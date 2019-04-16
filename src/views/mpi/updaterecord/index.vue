@@ -6,7 +6,7 @@
     <el-table
       v-loading="listLoading"
       :data="list"
-      :default-sort = "{prop: 'modifyTime', order: 'descending'}"
+      :default-sort = "{prop: 'updateTime', order: 'descending'}"
       element-loading-text="努力加载中"
       border
       fit
@@ -33,7 +33,7 @@
           <span>{{ scope.row.type | dateFormatFilter(scope.row.type) }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="修改时间" sortable prop="modifyTime"/>
+      <el-table-column align="center" label="修改时间" sortable prop="updateTime"/>
       <el-table-column align="center" label="修改人" sortable prop="modifier"/>
     </el-table>
     <div v-show="!listLoading" class="pagination-container">
@@ -64,7 +64,7 @@ export default {
   },
   props: {
     mpiId: {
-      type: String,
+      type: Number,
       default: undefined
     }
   },
@@ -111,19 +111,21 @@ export default {
   },
   methods: {
     getList() {
-      this.listLoading = true
-      listUpdaterecordByEmpId(this.mpiId, this.pageModule).then(response => {
-        this.list = response.data.rows
-        this.total = response.data.total
-        this.listLoading = false
-      }).catch(reason => {
-        this.$notify({
-          title: '获取列表失败',
-          message: reason.message,
-          type: 'error',
-          duration: 5000
+      if (this.mpiId) {
+        this.listLoading = true
+        listUpdaterecordByEmpId(this.mpiId, this.pageModule).then(response => {
+          this.list = response.data.rows
+          this.total = response.data.total
+          this.listLoading = false
+        }).catch(reason => {
+          this.$notify({
+            title: '获取列表失败',
+            message: reason.message,
+            type: 'error',
+            duration: 5000
+          })
         })
-      })
+      }
     },
     handleSearch() {
       this.pageModule.pageNumber = 1

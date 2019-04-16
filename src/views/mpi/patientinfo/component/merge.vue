@@ -76,7 +76,7 @@ export default {
   },
   props: {
     mpiId: {
-      type: String,
+      type: Number,
       default: undefined
     },
     mpiId11: {

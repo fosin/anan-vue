@@ -119,19 +119,21 @@ export default {
   },
   methods: {
     getList() {
-      this.listLoading = true
-      listPicturePage(this.pageModule).then(response => {
-        this.list = response.data.rows
-        this.total = response.data.total
-        this.listLoading = false
-      }).catch(reason => {
-        this.$notify({
-          title: '获取列表失败',
-          message: reason.message,
-          type: 'error',
-          duration: 5000
+      if (this.mpiId) {
+        this.listLoading = true
+        listPicturePage(this.pageModule).then(response => {
+          this.list = response.data.rows
+          this.total = response.data.total
+          this.listLoading = false
+        }).catch(reason => {
+          this.$notify({
+            title: '获取列表失败',
+            message: reason.message,
+            type: 'error',
+            duration: 5000
+          })
         })
-      })
+      }
     },
     handleSearch() {
       this.pageModule.pageNumber = 1
