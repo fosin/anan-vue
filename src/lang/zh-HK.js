@@ -24,6 +24,7 @@ export default {
     MonitorOnlineuser: '線上用戶監控',
     MonitorDatabase: '資料庫連接池監控',
     MonitorCircuitbreaker: '斷路器監控',
+    MonitorDocker: 'Docker容器監控',
     UserInfo: '修改資訊',
     MpiManagerPatientinfo: '患者資訊管理',
     MpiManager: '患者主索引管理',

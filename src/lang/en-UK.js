@@ -24,6 +24,7 @@ export default {
     MonitorOnlineuser: 'OnlineUser Monitor',
     MonitorDatabase: 'Database Pool',
     MonitorCircuitbreaker: 'Circuit Breaker',
+    MonitorDocker: 'Docker Monitor',
     UserInfo: 'Modify Info',
     MpiManagerPatientinfo: 'Patient Info Manager',
     MpiManager: 'MPI Manager',
