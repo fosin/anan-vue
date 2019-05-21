@@ -1,8 +1,8 @@
-# cdp-ui-vue
+# anan-vue
 
 > 这是一个 极简的vue admin 管理后台 它只包含了 Element UI & axios & iconfont & permission control & lint，这些搭建后台必要的东西。
 
-[线上地址](https://github.com/186A8/cdp-ui-vue)
+[线上地址](https://github.com/fosin/anan-vue)
 
 ## Extra
  ## 相关项目
@@ -21,7 +21,7 @@
 ``` bash
 
 # Clone project
-git clone https://github.com/186A8/cdp-ui-vue.git
+git clone https://github.com/fosin/anan-vue.git
 
 # Install dependencies
 npm install
