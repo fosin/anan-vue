@@ -57,8 +57,8 @@ export default {
         if (this.$route.query.src.startsWith('http')) {
           this.src = this.$route.query.src + '?access_token=' + store.getters.token.access_token
         } else {
-          if (process.env.BASE_API && process.env.BASE_API !== '/') {
-            this.src = process.env.BASE_API + this.$route.query.src + '?access_token=' + store.getters.token.access_token
+          if (process.env.VUE_APP_BASE_API && process.env.VUE_APP_BASE_API !== '/') {
+            this.src = process.env.VUE_APP_BASE_API + this.$route.query.src + '?access_token=' + store.getters.token.access_token
           } else {
             this.src = this.$route.query.src + '?access_token=' + store.getters.token.access_token
           }

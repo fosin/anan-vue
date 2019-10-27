@@ -1,21 +1,3 @@
-# anan-vue
-
-> 这是一个 极简的vue admin 管理后台 它只包含了 Element UI & axios & iconfont & permission control & lint，这些搭建后台必要的东西。
-
-[线上地址](https://github.com/fosin/anan-vue)
-
-## Extra
- ## 相关项目
- [vue](https://cn.vuejs.org/)
- [electron-vue-admin](https://github.com/PanJiaChen/electron-vue-admin)
-
-写了一个系列的教程配套文章，如何从零构建后一个完整的后台项目:
- - [手摸手，带你用 vue 撸后台 系列一(基础篇)](https://juejin.im/post/59097cd7a22b9d0065fb61d2)
- - [手摸手，带你用 vue 撸后台 系列二(登录权限篇)](https://juejin.im/post/591aa14f570c35006961acac)
- - [手摸手，带你用 vue 撸后台 系列三 (实战篇)](https://juejin.im/post/593121aa0ce4630057f70d35)
- - [手摸手，带你用vue撸后台 系列四(vueAdmin 一个极简的后台基础模板,专门针对本项目的文章,算作是一篇文档)](https://juejin.im/post/595b4d776fb9a06bbe7dba56)
- - [手摸手，带你封装一个vue component](https://segmentfault.com/a/1190000009090836)
-
 ## Build Setup
 
 ``` bash
@@ -34,8 +16,8 @@ npm install --sass_binary_site=https://npm.taobao.org/mirrors/node-sass
 npm run dev
 
 # build for production with minification
-npm run build
+npm run build:prod
 
 # build for production and view the bundle analyzer report
-npm run build --report
+npm run build:prod --report
 ```

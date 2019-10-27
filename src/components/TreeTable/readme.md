@@ -65,7 +65,7 @@
 
   如果不提供，将使用默认的[evalFunc](./eval.js)
 
-  如果提供了evalFunc,那么会用提供的evalFunc去解析data，并返回treeTable渲染所需要的值。如何编写一个evalFunc，请参考[*eval.js*](https://github.com/PanJiaChen/vue-element-admin/blob/master/src/components/TreeTable/eval.js)或[*customEval.js*](https://github.com/PanJiaChen/vue-element-admin/blob/master/src/views/table/treeTable/customEval.js)
+  如果提供了evalFunc,那么会用提供的evalFunc去解析data，并返回treeTable渲染所需要的值。如何编写一个evalFunc，请参考[*eval.js*](https://github.com/fosin/anan-vue/blob/master/src/components/TreeTable/eval.js)或[*customEval.js*](https://github.com/fosin/anan-vue/blob/master/src/views/table/treeTable/customEval.js)
 
 #### evalArgs
   解析函数的参数，是一个数组
@@ -76,12 +76,12 @@
 
   如果你的解析函数参数只有`(this.data, this.expandAll)`,那么就可以不用填写evalArgs了
 
-  具体可参考[*customEval.js*](https://github.com/PanJiaChen/vue-element-admin/blob/master/src/views/table/treeTable/customEval.js)的函数参数和[customTreeTable](https://github.com/PanJiaChen/vue-element-admin/blob/master/src/views/table/treeTable/customTreeTable.vue)的`evalArgs`属性值
+  具体可参考[*customEval.js*](https://github.com/fosin/anan-vue/blob/master/src/views/table/treeTable/customEval.js)的函数参数和[customTreeTable](https://github.com/fosin/anan-vue/blob/master/src/views/table/treeTable/customTreeTable.vue)的`evalArgs`属性值
 
  ## slot
  这是一个自定义列的插槽。
 
- 默认情况下，treeTable只有一行行展示数据的功能。但是一般情况下，我们会要给行加上一个操作按钮或者根据当行数据展示不同的样式，这时我们就需要自定义列了。请参考[customTreeTable](https://github.com/PanJiaChen/vue-element-admin/blob/master/src/views/table/treeTable/customTreeTable.vue)，[实例效果](https://panjiachen.github.io/vue-element-admin/#/table/tree-table)
+ 默认情况下，treeTable只有一行行展示数据的功能。但是一般情况下，我们会要给行加上一个操作按钮或者根据当行数据展示不同的样式，这时我们就需要自定义列了。请参考[customTreeTable](https://github.com/fosin/anan-vue/blob/master/src/views/table/treeTable/customTreeTable.vue)，[实例效果](https://fosin.github.io/anan-vue/#/table/tree-table)
 
  `slot`和`columns属性`可同时存在,columns里面的数据列会在slot自定义列的左边展示
 
