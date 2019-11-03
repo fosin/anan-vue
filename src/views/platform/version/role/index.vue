@@ -2,11 +2,12 @@
   <div class="app-container calendar-list-container">
     <div class="filter-container">
       <el-input
-        :placeholder="$t('cdp_version_role.searchText')"
         v-model="pageModule.searchText"
+        :placeholder="$t('cdp_version_role.searchText')"
         style="width: 200px;"
         class="filter-item"
-        @keyup.enter.native="handleFilter"/>
+        @keyup.enter.native="handleFilter"
+      />
       <el-button-group>
         <el-button v-waves round class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
           {{ $t('table.search') }}
@@ -19,7 +20,9 @@
           style="margin-left: 5px;"
           type="primary"
           icon="el-icon-circle-plus"
-          @click="handleAdd">{{ $t('table.add') }}
+          @click="handleAdd"
+        >
+          {{ $t('table.add') }}
         </el-button>
         <el-button
           v-waves
@@ -29,7 +32,9 @@
           class="filter-item"
           style="margin-left: 5px;"
           icon="el-icon-edit"
-          @click="handleEdit()">{{ $t('table.edit') }}
+          @click="handleEdit()"
+        >
+          {{ $t('table.edit') }}
         </el-button>
         <el-button
           v-waves
@@ -39,7 +44,9 @@
           class="filter-item"
           style="margin-left: 5px;"
           icon="el-icon-delete"
-          @click="handleDelete()">{{ $t('table.delete') }}
+          @click="handleDelete()"
+        >
+          {{ $t('table.delete') }}
         </el-button>
       </el-button-group>
     </div>
@@ -54,17 +61,19 @@
       highlight-current-row
       style="width: 100%"
       @sort-change="sortChange"
-      @row-click="rowClick">
-      <el-table-column :label="$t('cdp_version_role.value.label')" align="center" sortable prop="value"/>
+      @row-click="rowClick"
+    >
+      <el-table-column :label="$t('cdp_version_role.value.label')" align="center" sortable prop="value" />
 
-      <el-table-column :label="$t('cdp_version_role.name.label')" align="center" sortable prop="name"/>
+      <el-table-column :label="$t('cdp_version_role.name.label')" align="center" sortable prop="name" />
       <el-table-column
         :label="$t('cdp_version_role.versionId.label')"
         :formatter="getVersionName"
         prop="versionId"
         align="center"
         show-overflow-tooltip
-        sortable/>
+        sortable
+      />
 
       <el-table-column :label="$t('cdp_version_role.createTime.label')" align="center" sortable prop="createTime" width="160">
         <template slot-scope="scope">
@@ -88,7 +97,6 @@
           </el-button>
         </template>
       </el-table-column>
-
     </el-table>
 
     <div v-show="!listLoading" class="pagination-container">
@@ -99,15 +107,16 @@
         :total="total"
         layout="total, sizes, prev, pager, next, jumper"
         @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"/>
+        @current-change="handleCurrentChange"
+      />
     </div>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-form-item :label="$t('cdp_version_role.value.label')" prop="value">
-          <el-input v-model="form.value" :placeholder="$t('cdp_version_role.value.placeholder')"/>
+          <el-input v-model="form.value" :placeholder="$t('cdp_version_role.value.placeholder')" />
         </el-form-item>
         <el-form-item :label="$t('cdp_version_role.name.label')" prop="name">
-          <el-input v-model="form.name" :placeholder="$t('cdp_version_role.name.placeholder')"/>
+          <el-input v-model="form.name" :placeholder="$t('cdp_version_role.name.placeholder')" />
         </el-form-item>
         <el-form-item :label="$t('cdp_version_role.versionId.label')" prop="versionId">
           <el-select
@@ -115,43 +124,49 @@
             :placeholder="$t('cdp_version_role.versionId.placeholder')"
             :filter-method="versionSelectFilter"
             class="filter-item"
-            filterable>
+            filterable
+          >
             <el-option
               v-for="item in versionOptions"
               :key="item.id"
               :label="item.name"
               :value="item.id"
-              :disabled="isDisabled[item.status]">
+              :disabled="isDisabled[item.status]"
+            >
               <span style="float: left; color: #8492a6; font-size: 13px">{{ item.id }}</span>
               <span style="float: right">{{ item.name }}</span>
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item :label="$t('cdp_version_role.tips.label')" prop="tips">
-          <el-input v-model="form.tips" :placeholder="$t('cdp_version_role.tips.placeholder')"/>
+          <el-input v-model="form.tips" :placeholder="$t('cdp_version_role.tips.placeholder')"></el-input>
         </el-form-item>
         <el-form-item :label="$t('cdp_version_role.status.label')" prop="status">
           <el-select v-model="form.status" :placeholder="$t('cdp_version_role.status.placeholder')" class="filter-item">
-            <el-option v-for="item in statusOptions" :key="item" :label="item | statusFilter" :value="item"/>
+            <el-option v-for="item in statusOptions" :key="item" :label="item | statusFilter" :value="item" />
           </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button round icon="el-icon-circle-close" @click="cancel('form')">{{ $t('table.cancel') }}</el-button>
+        <el-button round icon="el-icon-circle-close" @click="cancel('form')">
+          {{ $t('table.cancel') }}
+        </el-button>
         <el-button
           v-if="dialogStatus==='create'"
           round
           type="primary"
           icon="el-icon-circle-check"
           autofocus
-          @click="create('form')">{{ $t('table.confirm') }}
+          @click="create('form')"
+        >
+          {{ $t('table.confirm') }}
         </el-button>
         <el-button v-else round type="primary" icon="el-icon-circle-check" autofocus @click="update('form')">
           {{ $t('table.update') }}
         </el-button>
       </div>
     </el-dialog>
-    <grantPermission ref="grantPermission"/>
+    <grantPermission ref="grantPermission" />
   </div>
 </template>
 
@@ -396,9 +411,9 @@ export default {
         })
       })
     },
-    listChildPermissions(pId) {
+    listChildPermissions(pid) {
       return new Promise((resolve, reject) => {
-        listVersionChildPermissions(pId, this.form.versionId).then((response) => {
+        listVersionChildPermissions(pid, this.form.versionId).then((response) => {
           resolve(response)
         }).catch(reason => {
           reject(reason)

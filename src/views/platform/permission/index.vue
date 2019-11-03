@@ -37,7 +37,7 @@
 
             <el-row>
               <el-col :span="7">
-                <el-form-item :label="$t('cdp_permission.pId.label')" prop="pName">
+                <el-form-item :label="$t('cdp_permission.pid.label')" prop="pName">
                   <el-tag>{{ parent.name }}</el-tag>
                 </el-form-item>
               </el-col>
@@ -244,12 +244,12 @@ export default {
       return name
     },
     loadChild(node, resolve) {
-      let pId = 0
+      let pid = 0
       if (node.level !== 0) {
-        pId = node.data.id
+        pid = node.data.id
       }
-      listChildPermissions(pId).then(response => {
-        if (pId === 0) {
+      listChildPermissions(pid).then(response => {
+        if (pid === 0) {
           this.defaultExpandedKeys[0] = response.data[0].id
         }
         const permissions = response.data

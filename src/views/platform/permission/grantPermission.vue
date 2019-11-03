@@ -2,7 +2,8 @@
   <el-dialog :title="title" :visible.sync="dialogPermissionVisible" width="550px" @close="close">
     <el-input
       v-model="filterPermissionText"
-      placeholder="输入关键字进行过滤"/>
+      placeholder="输入关键字进行过滤"
+    />
     <el-tree
       v-if="hackReset"
       ref="permissionTree"
@@ -16,9 +17,11 @@
       highlight-current
       show-checkbox
       lazy
-      check-strictly/>
+      check-strictly
+    />
     <div slot="footer" class="dialog-footer">
-      <el-button round icon="el-icon-circle-close" @click="cancel()">{{ $t('table.cancel') }}
+      <el-button round icon="el-icon-circle-close" @click="cancel()">
+        {{ $t('table.cancel') }}
       </el-button>
       <el-button v-if="hasPermission(permissionId)" round type="primary" icon="el-icon-circle-check" @click="updatePermession(form.id)">
         {{ $t('table.update') }}
@@ -151,17 +154,17 @@ export default {
       this.dialogPermissionVisible = false
     },
     loadChildPermissions(node, resolve) {
-      let pId = 0
+      let pid = 0
       if (node.level !== 0) {
-        pId = node.data.id
+        pid = node.data.id
       }
-      this.parent.listChildPermissions(pId).then(response => {
+      this.parent.listChildPermissions(pid).then(response => {
         const childPermissions = response.data || []
         // 记录所有被展开过的节点ID，用于保存时比较数据
         for (let i = 0; i < childPermissions.length; i++) {
           const id = childPermissions[i].id
           this.expandKeys.push(id)
-          // childPermissions[i].disabled = pId === 0
+          // childPermissions[i].disabled = pid === 0
         }
         return resolve(childPermissions)
       }).catch(reason => {

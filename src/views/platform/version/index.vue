@@ -491,9 +491,9 @@ export default {
         })
       })
     },
-    listChildPermissions(pId) {
+    listChildPermissions(pid) {
       return new Promise((resolve, reject) => {
-        listChildPermissions(pId).then((response) => {
+        listChildPermissions(pid).then((response) => {
           resolve(response)
         }).catch(reason => {
           reject(reason)

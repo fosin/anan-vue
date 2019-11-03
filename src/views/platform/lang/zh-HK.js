@@ -94,7 +94,7 @@ export default{
       label: '機构編號',
       placeholder: '機构編號'
     },
-    pId: {
+    pid: {
       label: '父機构編碼',
       placeholder: '父機构編碼,取值於id,表示當前數據所屬的父類機构'
     },
@@ -423,7 +423,7 @@ export default{
       label: '許可權編碼',
       placeholder: '許可權編碼,不能重複不能為空'
     },
-    pId: {
+    pid: {
       label: '父權限編號',
       placeholder: '父權限編號,取值於id,表示當前數據的父類許可權'
     },

@@ -94,7 +94,7 @@ export default {
       label: '机构ID',
       placeholder: '机构ID'
     },
-    pId: {
+    pid: {
       label: '父机构编码',
       placeholder: '父机构编码，取值于id，表示当前数据所属的父类机构'
     },
@@ -423,7 +423,7 @@ export default {
       label: '权限编码',
       placeholder: '权限编码，不能重复 不能为空'
     },
-    pId: {
+    pid: {
       label: '父权限ID',
       placeholder: '父权限ID，取值于id，表示当前数据的父类权限'
     },

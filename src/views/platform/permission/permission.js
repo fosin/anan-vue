@@ -18,9 +18,9 @@ export function treeUserPermissions(userId, type) {
     method: 'get'
   })
 }
-export function listChildPermissions(pId) {
+export function listChildPermissions(pid) {
   return request({
-    url: '/platform/v1/permission/listChild/' + pId,
+    url: '/platform/v1/permission/listChild/' + pid,
     method: 'post'
   })
 }

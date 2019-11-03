@@ -14,6 +14,7 @@ import i18n from './lang' // Internationalization
 import './icons' // icon
 import './errorLog'// error log
 import './utils/permission' // permission control
+import { getRequest, postRequest, deleteRequest, putRequest } from './utils/request'
 // if (process.env.NODE_ENV === 'development') {
 //   import('./mock') // simulation data
 // }
@@ -22,6 +23,11 @@ import permission from './directive/permission/index.js' // 权限判断指令
 import dictionary from './utils/dictionary' // 字典服务
 import parameter from './utils/parameter' // 个性化参数服务
 import waves from './directive/waves/index.js' // 水波效果
+
+Vue.prototype.getRequest = getRequest
+Vue.prototype.postRequest = postRequest
+Vue.prototype.deleteRequest = deleteRequest
+Vue.prototype.putRequest = putRequest
 
 require('es6-promise').polyfill()
 Vue.use(dictionary)

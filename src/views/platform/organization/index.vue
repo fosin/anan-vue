@@ -41,7 +41,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item :label="$t('cdp_organization.pId.label')" prop="pid">
+                <el-form-item :label="$t('cdp_organization.pid.label')" prop="pid">
                   <el-tag>{{ parent.code + ' - ' + parent.name }}</el-tag>
                 </el-form-item>
               </el-col>

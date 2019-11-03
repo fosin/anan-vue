@@ -537,8 +537,8 @@ export default {
         }
       }
     },
-    loadOrganizAllChild(pId) {
-      listOrganizAllChild(pId).then(response => {
+    loadOrganizAllChild(pid) {
+      listOrganizAllChild(pid).then(response => {
         this.organizList = response.data || []
       }).catch(reason => {
         this.$notify({
@@ -685,11 +685,11 @@ export default {
       return data.name.indexOf(value) !== -1
     },
     loadChildAddPermissions(node, resolve) {
-      let pId = 0
+      let pid = 0
       if (node.level !== 0) {
-        pId = node.data.id
+        pid = node.data.id
       }
-      listVersionChildPermissions(pId, this.versionId).then((response) => {
+      listVersionChildPermissions(pid, this.versionId).then((response) => {
         const childPermissions = response.data || []
         // 记录所有被展开过的节点ID，用于保存时比较数据
         for (let i = 0; i < childPermissions.length; i++) {
@@ -707,11 +707,11 @@ export default {
       })
     },
     loadChildSubPermissions(node, resolve) {
-      let pId = 0
+      let pid = 0
       if (node.level !== 0) {
-        pId = node.data.id
+        pid = node.data.id
       }
-      listVersionChildPermissions(pId, this.versionId).then((response) => {
+      listVersionChildPermissions(pid, this.versionId).then((response) => {
         const childPermissions = response.data || []
         // 记录所有被展开过的节点ID，用于保存时比较数据
         for (let i = 0; i < childPermissions.length; i++) {

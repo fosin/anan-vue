@@ -94,8 +94,8 @@ export default {
       label: 'id',
       placeholder: 'Organization id'
     },
-    pId: {
-      label: 'pId',
+    pid: {
+      label: 'pid',
       placeholder: 'Parent encoding, with an ID value, denotes the parent to which the current data belongs.'
     },
     topId: {
@@ -423,8 +423,8 @@ export default {
       label: 'code',
       placeholder: '权限编码，不能重复 不能为空'
     },
-    pId: {
-      label: 'pId',
+    pid: {
+      label: 'pid',
       placeholder: '父权限ID，取值于id，表示当前数据的父类权限'
     },
     name: {

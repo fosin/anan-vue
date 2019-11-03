@@ -65,9 +65,9 @@ export function putVersionPermissions(id, permissions) {
 }
 
 // 根据权限ID获取系统版本子权限
-export function listVersionChildPermissions(pId, versionId) {
+export function listVersionChildPermissions(pid, versionId) {
   return request({
-    url: 'platform/v1/version/listChild/' + pId + '?versionId=' + versionId,
+    url: 'platform/v1/version/listChild/' + pid + '?versionId=' + versionId,
     method: 'post'
   })
 }

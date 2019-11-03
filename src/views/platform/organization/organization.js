@@ -6,15 +6,15 @@ export function treeOrganiz(topId) {
     method: 'post'
   })
 }
-export function listOrganizChild(pId) {
+export function listOrganizChild(pid) {
   return request({
-    url: '/platform/v1/organiz/listChild/' + pId,
+    url: '/platform/v1/organiz/listChild/' + pid,
     method: 'post'
   })
 }
-export function listOrganizAllChild(pId) {
+export function listOrganizAllChild(pid) {
   return request({
-    url: '/platform/v1/organiz/listAllChild/' + pId,
+    url: '/platform/v1/organiz/listAllChild/' + pid,
     method: 'post'
   })
 }
