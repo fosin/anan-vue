@@ -1,7 +1,7 @@
 <template>
   <div class="app-container calendar-list-container">
     <div class="filter-container">
-      <el-input :placeholder="$t('cdp_user.searchText')" v-model="pageModule.searchText" style="width: 300px;" class="filter-item" @keyup.enter.native="handleFilter"/>
+      <el-input :placeholder="$t('anan_user.searchText')" v-model="pageModule.searchText" style="width: 300px;" class="filter-item" @keyup.enter.native="handleFilter"/>
       <el-button-group>
         <el-button v-waves round class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.search') }}</el-button>
         <el-button v-waves v-permission="'12'" round class="filter-item" style="margin-left: 5px;" type="primary" icon="el-icon-circle-plus" @click="handleAdd">{{ $t('table.add') }}</el-button>
@@ -26,8 +26,8 @@
       style="width: 100%"
       @sort-change="sortChange"
       @row-click="rowClick">
-      <el-table-column :label="$t('cdp_user.usercode.label')" align="center" width="110px" sortable prop="usercode"/>
-      <el-table-column :label="$t('cdp_user.username.label')" align="center" sortable prop="username" width="140">
+      <el-table-column :label="$t('anan_user.usercode.label')" align="center" width="110px" sortable prop="usercode"/>
+      <el-table-column :label="$t('anan_user.username.label')" align="center" sortable prop="username" width="140">
         <template slot-scope="scope">
           <span>
             <svg-icon v-if="scope.row.avatar" :icon-class="scope.row.avatar" style="width: 20px; height: 20px; border-radius: 50%; margin-left: 20px; background: #fff;"/>
@@ -35,31 +35,31 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('cdp_user.sex.label')" align="center" width="80" sortable prop="sex">
+      <el-table-column :label="$t('anan_user.sex.label')" align="center" width="80" sortable prop="sex">
         <template slot-scope="scope">
           <span>{{ getSexName(scope.row.sex) }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('cdp_user.birthday.label')" align="center" sortable prop="birthday" width="100">
+      <el-table-column :label="$t('anan_user.birthday.label')" align="center" sortable prop="birthday" width="100">
         <template slot-scope="scope">
           <span>{{ scope.row.birthday | dateFormatFilter('yyyy-MM-dd') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('cdp_user.phone.label')" align="center" sortable prop="phone" width="130"/>
-      <el-table-column :label="$t('cdp_user.email.label')" align="center" sortable prop="email" width="150"/>
+      <el-table-column :label="$t('anan_user.phone.label')" align="center" sortable prop="phone" width="130"/>
+      <el-table-column :label="$t('anan_user.email.label')" align="center" sortable prop="email" width="150"/>
       <el-table-column
-        :label="$t('cdp_user.organizId.label')"
+        :label="$t('anan_user.organizId.label')"
         :formatter="getOrganizName"
         prop="organizId"
         align="center"
         show-overflow-tooltip
         sortable/>
-      <!-- <el-table-column align="center" :label="$t('cdp_user.createTime.label')" sortable prop="createTime">
+      <!-- <el-table-column align="center" :label="$t('anan_user.createTime.label')" sortable prop="createTime">
         <template slot-scope="scope">
           <span>{{scope.row.createTime | dateFormatFilter('yyyy-MM-dd HH:mm:ss')}}</span>
         </template>
       </el-table-column>-->
-      <el-table-column :label="$t('cdp_user.status.label')" align="center" class-name="status-col" width="80" sortable prop="status">
+      <el-table-column :label="$t('anan_user.status.label')" align="center" class-name="status-col" width="80" sortable prop="status">
         <template slot-scope="scope">
           <el-tag>{{ scope.row.status | statusFilter }}</el-tag>
         </template>
@@ -84,27 +84,27 @@
           <el-col :span="20">
             <el-row>
               <el-col :span="12">
-                <el-form-item :label="$t('cdp_user.usercode.label')" prop="usercode">
-                  <el-input v-model="form.usercode" :placeholder="$t('cdp_user.usercode.placeholder')"/>
+                <el-form-item :label="$t('anan_user.usercode.label')" prop="usercode">
+                  <el-input v-model="form.usercode" :placeholder="$t('anan_user.usercode.placeholder')"/>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item :label="$t('cdp_user.username.label')" prop="username">
-                  <el-input v-model="form.username" :placeholder="$t('cdp_user.username.placeholder')"/>
+                <el-form-item :label="$t('anan_user.username.label')" prop="username">
+                  <el-input v-model="form.username" :placeholder="$t('anan_user.username.placeholder')"/>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="12">
-                <el-form-item v-if="dialogStatus === 'create'" :label="$t('cdp_user.password.label')" :placeholder="$t('cdp_user.password.placeholder')" prop="password">
+                <el-form-item v-if="dialogStatus === 'create'" :label="$t('anan_user.password.label')" :placeholder="$t('anan_user.password.placeholder')" prop="password">
                   <el-input v-model="form.password"/>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item :label="$t('cdp_user.birthday.label')" prop="birthday">
+                <el-form-item :label="$t('anan_user.birthday.label')" prop="birthday">
                   <el-date-picker
                     v-model="form.birthday"
-                    :placeholder="$t('cdp_user.birthday.placeholder')"
+                    :placeholder="$t('anan_user.birthday.placeholder')"
                     :picker-options="pickerBirthday"
                     align="right"
                     type="date"
@@ -120,8 +120,8 @@
         </el-row>
         <el-row >
           <el-col :span="16">
-            <el-form-item :label="$t('cdp_user.organizId.label')" prop="organizId">
-              <el-select v-model="form.organizId" :placeholder="$t('cdp_user.organizId.placeholder')" :filter-method="organizSelectFilter" class="filter-item" filterable>
+            <el-form-item :label="$t('anan_user.organizId.label')" prop="organizId">
+              <el-select v-model="form.organizId" :placeholder="$t('anan_user.organizId.placeholder')" :filter-method="organizSelectFilter" class="filter-item" filterable>
                 <el-option v-for="item in oraganizOptions" :key="item.id" :label="item.fullname || item.name" :value="item.id" :disabled="isDisabled[item.status]">
                   <span style="float: left; color: #8492a6; font-size: 13px">{{ item.code }}</span>
                   <span style="float: right">{{ item.fullname || item.name }}</span>
@@ -130,8 +130,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item :label="$t('cdp_user.sex.label')" prop="sex">
-              <el-select v-model="form.sex" :placeholder="$t('cdp_user.sex.placeholder')" class="filter-item">
+            <el-form-item :label="$t('anan_user.sex.label')" prop="sex">
+              <el-select v-model="form.sex" :placeholder="$t('anan_user.sex.placeholder')" class="filter-item">
                 <el-option v-for="item in sexOptions" :key="item.name" :label="item.value" :value="item.name"/>
               </el-select>
             </el-form-item>
@@ -139,27 +139,27 @@
         </el-row>
         <el-row >
           <el-col :span="10">
-            <el-form-item :label="$t('cdp_user.email.label')" prop="email">
-              <el-input v-model="form.email" :placeholder="$t('cdp_user.email.placeholder')"/>
+            <el-form-item :label="$t('anan_user.email.label')" prop="email">
+              <el-input v-model="form.email" :placeholder="$t('anan_user.email.placeholder')"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item :label="$t('cdp_user.phone.label')" prop="phone">
-              <el-input v-model="form.phone" :placeholder="$t('cdp_user.phone.placeholder')"/>
+            <el-form-item :label="$t('anan_user.phone.label')" prop="phone">
+              <el-input v-model="form.phone" :placeholder="$t('anan_user.phone.placeholder')"/>
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item :label="$t('cdp_user.status.label')" prop="status">
-              <el-select v-model="form.status" :placeholder="$t('cdp_user.status.placeholder')" class="filter-item">
+            <el-form-item :label="$t('anan_user.status.label')" prop="status">
+              <el-select v-model="form.status" :placeholder="$t('anan_user.status.placeholder')" class="filter-item">
                 <el-option v-for="item in statusOptions" :key="item" :label="item | statusFilter" :value="item"/>
               </el-select>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item :label="$t('cdp_user.expireTime.label')" prop="expireTime">
+        <el-form-item :label="$t('anan_user.expireTime.label')" prop="expireTime">
           <el-date-picker
             v-model="form.expireTime"
-            :placeholder="$t('cdp_user.expireTime.placeholder')"
+            :placeholder="$t('anan_user.expireTime.placeholder')"
             align="right"
             type="date"
             format="yyyy-MM-dd HH:mm:ss"

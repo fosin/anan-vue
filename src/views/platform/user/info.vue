@@ -3,66 +3,66 @@
 
     <div class="grid-content bg-purple">
       <el-form ref="user" :model="userInfo" label-width="100px" class="demo-ruleForm">
-        <span>{{ $t('cdp_user.baseInfo') }}</span>
+        <span>{{ $t('anan_user.baseInfo') }}</span>
         <hr>
         <el-row>
           <el-col :span="6">
-            <el-form-item :label="$t('cdp_user.usercode.label')" prop="usercode">
+            <el-form-item :label="$t('anan_user.usercode.label')" prop="usercode">
               <span>{{ userInfo.usercode }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item :label="$t('cdp_user.username.label')" prop="username">
+            <el-form-item :label="$t('anan_user.username.label')" prop="username">
               <span>{{ userInfo.username }}</span>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="6">
-            <el-form-item :label="$t('cdp_user.sex.label')" prop="sex">
+            <el-form-item :label="$t('anan_user.sex.label')" prop="sex">
               <span>{{ getSexName(userInfo.sex) }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item :label="$t('cdp_user.birthday.label')" prop="birthday">
+            <el-form-item :label="$t('anan_user.birthday.label')" prop="birthday">
               <span>{{ userInfo.birthday | dateFormatFilter('yyyy-MM-dd') }}</span>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="6">
-            <el-form-item :label="$t('cdp_user.phone.label')" prop="phone">
+            <el-form-item :label="$t('anan_user.phone.label')" prop="phone">
               <span>{{ userInfo.phone }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item :label="$t('cdp_user.email.label')" prop="email">
+            <el-form-item :label="$t('anan_user.email.label')" prop="email">
               <span>{{ userInfo.email }}</span>
             </el-form-item>
           </el-col>
         </el-row>
-        <span>{{ $t('cdp_user.modifyPassword') }}</span>
+        <span>{{ $t('anan_user.modifyPassword') }}</span>
         <hr>
       </el-form>
       <el-form ref="user" :model="userInfo2" :rules="rules2" label-width="100px" class="demo-ruleForm">
         <el-row>
           <el-col :span="8">
-            <el-form-item :label="$t('cdp_user.oldPassword.label')" prop="password" label-width="200px">
-              <el-input v-model="userInfo2.password" :placeholder="$t('cdp_user.oldPassword.placeholder')" type="password" auto-complete="off"/>
+            <el-form-item :label="$t('anan_user.oldPassword.label')" prop="password" label-width="200px">
+              <el-input v-model="userInfo2.password" :placeholder="$t('anan_user.oldPassword.placeholder')" type="password" auto-complete="off"/>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item :label="$t('cdp_user.confirmPassword1.label')" prop="confirmPassword1" label-width="200px">
-              <el-input :placeholder="$t('cdp_user.confirmPassword1.placeholder')" v-model="userInfo2.confirmPassword1" type="password" auto-complete="off"/>
+            <el-form-item :label="$t('anan_user.confirmPassword1.label')" prop="confirmPassword1" label-width="200px">
+              <el-input :placeholder="$t('anan_user.confirmPassword1.placeholder')" v-model="userInfo2.confirmPassword1" type="password" auto-complete="off"/>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item :label="$t('cdp_user.confirmPassword2.label')" prop="confirmPassword2" label-width="200px">
-              <el-input v-model="userInfo2.confirmPassword2" :placeholder="$t('cdp_user.confirmPassword2.placeholder')" type="password" auto-complete="off"/>
+            <el-form-item :label="$t('anan_user.confirmPassword2.label')" prop="confirmPassword2" label-width="200px">
+              <el-input v-model="userInfo2.confirmPassword2" :placeholder="$t('anan_user.confirmPassword2.placeholder')" type="password" auto-complete="off"/>
             </el-form-item>
           </el-col>
         </el-row>

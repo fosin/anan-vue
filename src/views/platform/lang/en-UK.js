@@ -1,5 +1,5 @@
 export default {
-  cdp_dictionary: {
+  anan_dictionary: {
     searchText: 'Support name, type , code search',
     id: {
       label: 'id',
@@ -11,7 +11,7 @@ export default {
     },
     type: {
       label: 'type',
-      placeholder: 'Dictionary Category, which distinguishes the large categories of dictionaries, is based on table cdp_dictionary.code = 1 data'
+      placeholder: 'Dictionary Category, which distinguishes the large categories of dictionaries, is based on table anan_dictionary.code = 1 data'
     },
     scope: {
       label: 'scope',
@@ -19,7 +19,7 @@ export default {
     },
     createBy: {
       label: 'createBy',
-      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_user.id.'
+      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as anan_user.id.'
     },
     createTime: {
       label: 'createTime',
@@ -27,14 +27,14 @@ export default {
     },
     updateBy: {
       label: 'updateBy',
-      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_user.id.'
+      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as anan_user.id.'
     },
     updateTime: {
       label: 'updateTime',
       placeholder: 'Update date date, which is maintained by the background. The front end does not need to care when changing data.'
     }
   },
-  cdp_dictionary_detail: {
+  anan_dictionary_detail: {
     searchText: 'Support name, value search',
     id: {
       label: 'id',
@@ -58,7 +58,7 @@ export default {
     },
     status: {
       label: 'status',
-      placeholder: 'Use status: 0 = enabled, 1 = disabled, specific value in the dictionary table cdp_dictionary. code = 11'
+      placeholder: 'Use status: 0 = enabled, 1 = disabled, specific value in the dictionary table anan_dictionary. code = 11'
     },
     scode: {
       label: 'scode',
@@ -74,7 +74,7 @@ export default {
     },
     createBy: {
       label: 'createBy',
-      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_user.id.'
+      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as anan_user.id.'
     },
     createTime: {
       label: 'createTime',
@@ -82,14 +82,14 @@ export default {
     },
     updateBy: {
       label: 'updateBy',
-      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_user.id.'
+      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as anan_user.id.'
     },
     updateTime: {
       label: 'updateTime',
       placeholder: 'Update date date, which is maintained by the background. The front end does not need to care when changing data.'
     }
   },
-  cdp_organization: {
+  anan_organization: {
     id: {
       label: 'id',
       placeholder: 'Organization id'
@@ -128,7 +128,7 @@ export default {
     },
     status: {
       label: 'status',
-      placeholder: '使用状态：0=启用，1=禁用，具体取值于字典表cdp_dictionary.code=11'
+      placeholder: '使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11'
     },
     createTime: {
       label: 'createTime',
@@ -136,7 +136,7 @@ export default {
     },
     createBy: {
       label: 'createBy',
-      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_user.id.'
+      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as anan_user.id.'
     },
     updateTime: {
       label: 'updateTime',
@@ -144,10 +144,10 @@ export default {
     },
     updateBy: {
       label: 'updateBy',
-      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_user.id.'
+      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as anan_user.id.'
     }
   },
-  cdp_organization_auth: {
+  anan_organization_auth: {
     id: {
       label: 'id',
       placeholder: '机构授权ID'
@@ -174,7 +174,7 @@ export default {
     },
     createBy: {
       label: 'createBy',
-      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_user.id.'
+      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as anan_user.id.'
     },
     validity: {
       label: 'validity',
@@ -201,7 +201,7 @@ export default {
       placeholder: '试用天数'
     }
   },
-  cdp_organization_permission: {
+  anan_organization_permission: {
     id: {
       label: 'id',
       placeholder: '机构权限ID'
@@ -220,10 +220,10 @@ export default {
     },
     createBy: {
       label: 'createBy',
-      placeholder: '创建人，The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_user.id.'
+      placeholder: '创建人，The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as anan_user.id.'
     }
   },
-  cdp_parameter: {
+  anan_parameter: {
     searchText: 'Support name、value、description search',
     id: {
       label: 'id',
@@ -239,7 +239,7 @@ export default {
     },
     type: {
       label: 'type',
-      placeholder: 'Paramtertype：Specific values are taken from dictionary tables cdp_dictionary.code=10'
+      placeholder: 'Paramtertype：Specific values are taken from dictionary tables anan_dictionary.code=10'
     },
     scope: {
       label: 'scope',
@@ -259,7 +259,7 @@ export default {
     },
     createBy: {
       label: 'createBy',
-      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_user.id.'
+      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as anan_user.id.'
     },
     updateTime: {
       label: 'updateTime',
@@ -267,7 +267,7 @@ export default {
     },
     updateBy: {
       label: 'updateBy',
-      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_user.id.'
+      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as anan_user.id.'
     },
     applyTime: {
       label: 'applyTime',
@@ -275,14 +275,14 @@ export default {
     },
     applyBy: {
       label: 'applyBy',
-      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_user.id.'
+      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as anan_user.id.'
     },
     status: {
       label: 'status',
       placeholder: '参数状态：0=正常状态、1=修改状态、2=删除状态'
     }
   },
-  cdp_pay: {
+  anan_pay: {
     payId: {
       label: 'payId',
       placeholder: '支付ID'
@@ -332,7 +332,7 @@ export default {
       placeholder: '付款标志：0=未付款，1=分期，2=付全款'
     }
   },
-  cdp_pay_detail: {
+  anan_pay_detail: {
     paydetailId: {
       label: 'paydetailId',
       placeholder: '付款明细ID'
@@ -350,7 +350,7 @@ export default {
       placeholder: '付款金额'
     }
   },
-  cdp_pay_invoice: {
+  anan_pay_invoice: {
     invoceId: {
       label: 'invoceId',
       placeholder: '发票ID'
@@ -372,7 +372,7 @@ export default {
       placeholder: '操作人'
     }
   },
-  cdp_pay_order: {
+  anan_pay_order: {
     orderId: {
       label: 'orderId',
       placeholder: '订单ID'
@@ -414,7 +414,7 @@ export default {
       placeholder: '作废日期'
     }
   },
-  cdp_permission: {
+  anan_permission: {
     id: {
       label: 'id',
       placeholder: '权限ID'
@@ -437,7 +437,7 @@ export default {
     },
     type: {
       label: 'type',
-      placeholder: '权限类型：0=按钮、1=组件菜单，对应ur是前端组件l、2=链接菜单，对应url是http(s)链接地址、3=目录菜单，对应是目录菜单，具体取值于字典表cdp_dictionary.code=13，当权限类型是1：组件菜单 3：目录菜单时表示该节点不是一个叶子节点'
+      placeholder: '权限类型：0=按钮、1=组件菜单，对应ur是前端组件l、2=链接菜单，对应url是http(s)链接地址、3=目录菜单，对应是目录菜单，具体取值于字典表anan_dictionary.code=13，当权限类型是1：组件菜单 3：目录菜单时表示该节点不是一个叶子节点'
     },
     level: {
       label: 'level',
@@ -449,7 +449,7 @@ export default {
     },
     status: {
       label: 'status',
-      placeholder: '使用状态：0=启用，1=禁用，具体取值于字典表cdp_dictionary.code=11'
+      placeholder: '使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11'
     },
     appName: {
       label: 'appName',
@@ -461,7 +461,7 @@ export default {
     },
     method: {
       label: 'method',
-      placeholder: 'http请求方法：GET、POST、DELETE、OPTIONS、PUT、PATCH，具体取值于字典表cdp_dictionary.code=12'
+      placeholder: 'http请求方法：GET、POST、DELETE、OPTIONS、PUT、PATCH，具体取值于字典表anan_dictionary.code=12'
     },
     icon: {
       label: 'icon',
@@ -473,7 +473,7 @@ export default {
     },
     createBy: {
       label: 'createBy',
-      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_user.id.'
+      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as anan_user.id.'
     },
     updateTime: {
       label: 'updateTime',
@@ -481,10 +481,10 @@ export default {
     },
     updateBy: {
       label: 'updateBy',
-      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_user.id.'
+      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as anan_user.id.'
     }
   },
-  cdp_role: {
+  anan_role: {
     searchText: '支持角色名称、标识',
     id: {
       label: 'id',
@@ -508,7 +508,7 @@ export default {
     },
     status: {
       label: 'status',
-      placeholder: '使用状态：0=启用，1=禁用，具体取值于字典表cdp_dictionary.code=11'
+      placeholder: '使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11'
     },
     createTime: {
       label: 'createTime',
@@ -516,7 +516,7 @@ export default {
     },
     createBy: {
       label: 'createBy',
-      placeholder: '创建人，The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_user.id.'
+      placeholder: '创建人，The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as anan_user.id.'
     },
     updateTime: {
       label: 'updateTime',
@@ -524,14 +524,14 @@ export default {
     },
     updateBy: {
       label: 'updateBy',
-      placeholder: '更新人，The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_user.id.'
+      placeholder: '更新人，The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as anan_user.id.'
     },
     builtIn: {
       label: 'builtIn',
       placeholder: '内置标志：是否是系统内置角色，内置角色不能被用户删除和修改，0=不是 1=是'
     }
   },
-  cdp_role_permission: {
+  anan_role_permission: {
     id: {
       label: 'id',
       placeholder: '角色权限ID'
@@ -550,10 +550,10 @@ export default {
     },
     createBy: {
       label: 'createBy',
-      placeholder: '创建人，The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_user.id.'
+      placeholder: '创建人，The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as anan_user.id.'
     }
   },
-  cdp_user: {
+  anan_user: {
     searchText: 'Support usercode、username、phone、email search',
     baseInfo: 'Basic Info',
     modifyPassword: 'Modify Password',
@@ -595,7 +595,7 @@ export default {
     },
     sex: {
       label: 'sex',
-      placeholder: '使用状态：具体取值于字典表cdp_dictionary.code=15'
+      placeholder: '使用状态：具体取值于字典表anan_dictionary.code=15'
     },
     email: {
       label: 'email',
@@ -607,7 +607,7 @@ export default {
     },
     status: {
       label: 'status',
-      placeholder: '使用状态：0=启用，1=禁用，具体取值于字典表cdp_dictionary.code=11'
+      placeholder: '使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11'
     },
     avatar: {
       label: 'avatar',
@@ -619,7 +619,7 @@ export default {
     },
     createBy: {
       label: 'createBy',
-      placeholder: '创建人，The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_user.id.'
+      placeholder: '创建人，The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as anan_user.id.'
     },
     updateTime: {
       label: 'updateTime',
@@ -627,14 +627,14 @@ export default {
     },
     updateBy: {
       label: 'updateBy',
-      placeholder: '更新人，The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_user.id.'
+      placeholder: '更新人，The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as anan_user.id.'
     },
     expireTime: {
       label: 'expireTime',
       placeholder: '过期时间，账户过期后用户被锁定切不能登录系统'
     }
   },
-  cdp_user_permission: {
+  anan_user_permission: {
     id: {
       label: 'id',
       placeholder: '用户权限ID'
@@ -657,14 +657,14 @@ export default {
     },
     createBy: {
       label: 'createBy',
-      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_user.id.'
+      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as anan_user.id.'
     },
     addMode: {
       label: 'addMode',
       placeholder: '补充方式：0=增加权限、1=删除权限'
     }
   },
-  cdp_user_role: {
+  anan_user_role: {
     id: {
       label: 'id',
       placeholder: '用户角色ID'
@@ -687,10 +687,10 @@ export default {
     },
     createBy: {
       label: 'createBy',
-      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_user.id.'
+      placeholder: 'The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as anan_user.id.'
     }
   },
-  cdp_version: {
+  anan_version: {
     searchText: 'Support name search',
     id: {
       label: 'id',
@@ -753,7 +753,7 @@ export default {
       placeholder: '版本描述'
     }
   },
-  cdp_version_permission: {
+  anan_version_permission: {
     id: {
       label: 'id',
       placeholder: '版本权限ID'
@@ -772,10 +772,10 @@ export default {
     },
     createBy: {
       label: 'createBy',
-      placeholder: '创建人，The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_user.id.'
+      placeholder: '创建人，The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as anan_user.id.'
     }
   },
-  cdp_version_role: {
+  anan_version_role: {
     searchText: 'Support name、value search',
     id: {
       label: 'id',
@@ -799,7 +799,7 @@ export default {
     },
     status: {
       label: 'status',
-      placeholder: '使用状态：0=启用，1=禁用，具体取值于字典表cdp_dictionary.code=11'
+      placeholder: '使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11'
     },
     createTime: {
       label: 'createTime',
@@ -807,7 +807,7 @@ export default {
     },
     createBy: {
       label: 'createBy',
-      placeholder: '创建人，The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_user.id.'
+      placeholder: '创建人，The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as anan_user.id.'
     },
     updateTime: {
       label: 'updateTime',
@@ -815,10 +815,10 @@ export default {
     },
     updateBy: {
       label: 'updateBy',
-      placeholder: '更新人，The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_user.id.'
+      placeholder: '更新人，The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as anan_user.id.'
     }
   },
-  cdp_version_role_permission: {
+  anan_version_role_permission: {
     id: {
       label: 'id',
       placeholder: '角色权限ID'
@@ -837,7 +837,7 @@ export default {
     },
     createBy: {
       label: 'createBy',
-      placeholder: '创建人，The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as cdp_user.id.'
+      placeholder: '创建人，The value is maintained by the background, and the front end does not need to care when changing the data. The value is taken as anan_user.id.'
     }
   },
   oauth_client_details: {

@@ -37,18 +37,18 @@
 
             <el-row>
               <el-col :span="7">
-                <el-form-item :label="$t('cdp_permission.pid.label')" prop="pName">
+                <el-form-item :label="$t('anan_permission.pid.label')" prop="pName">
                   <el-tag>{{ parent.name }}</el-tag>
                 </el-form-item>
               </el-col>
               <el-col :span="5">
-                <el-form-item :label="$t('cdp_permission.level.label')" prop="level">
+                <el-form-item :label="$t('anan_permission.level.label')" prop="level">
                   <el-tag>{{ form.level }}</el-tag>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item :label="$t('cdp_permission.appName.label')" prop="appName">
-                  <el-select v-model="form.appName" :disabled="formUpdate?formUpdate:parent.level !== 0" :placeholder="$t('cdp_permission.appName.placeholder')" class="filter-item" value="">
+                <el-form-item :label="$t('anan_permission.appName.label')" prop="appName">
+                  <el-select v-model="form.appName" :disabled="formUpdate?formUpdate:parent.level !== 0" :placeholder="$t('anan_permission.appName.placeholder')" class="filter-item" value="">
                     <el-option v-for="item in appOptions" :key="item" :label="item" :value="item"/>
                   </el-select>
                 </el-form-item>
@@ -56,30 +56,30 @@
             </el-row>
             <el-row>
               <el-col :span="12">
-                <el-form-item :label="$t('cdp_permission.name.label')" prop="name">
-                  <el-input v-model="form.name" :disabled="formUpdate" :placeholder="$t('cdp_permission.name.placeholder')"/>
+                <el-form-item :label="$t('anan_permission.name.label')" prop="name">
+                  <el-input v-model="form.name" :disabled="formUpdate" :placeholder="$t('anan_permission.name.placeholder')"/>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item :label="$t('cdp_permission.code.label')" prop="code">
-                  <el-input v-model="form.code" :disabled="formUpdate" :placeholder="$t('cdp_permission.code.placeholder')"/>
+                <el-form-item :label="$t('anan_permission.code.label')" prop="code">
+                  <el-input v-model="form.code" :disabled="formUpdate" :placeholder="$t('anan_permission.code.placeholder')"/>
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-form-item :label="$t('cdp_permission.url.label')" prop="url">
-              <el-input v-model="form.url" :disabled="formUpdate" :placeholder="$t('cdp_permission.url.placeholder')"/>
+            <el-form-item :label="$t('anan_permission.url.label')" prop="url">
+              <el-input v-model="form.url" :disabled="formUpdate" :placeholder="$t('anan_permission.url.placeholder')"/>
             </el-form-item>
 
-            <el-form-item :label="$t('cdp_permission.path.label')" prop="path" >
-              <el-input v-model="form.path" :disabled="formUpdate" :placeholder="$t('cdp_permission.path.placeholder')"/>
+            <el-form-item :label="$t('anan_permission.path.label')" prop="path" >
+              <el-input v-model="form.path" :disabled="formUpdate" :placeholder="$t('anan_permission.path.placeholder')"/>
             </el-form-item>
 
             <el-row>
               <el-col :span="20">
                 <el-row>
                   <el-col :span="24">
-                    <el-form-item :label="$t('cdp_permission.method.label')" prop="methodArray">
-                      <el-select v-model="form.methodArray" :disabled="formUpdate" :placeholder="$t('cdp_permission.method.placeholder')" multiple>
+                    <el-form-item :label="$t('anan_permission.method.label')" prop="methodArray">
+                      <el-select v-model="form.methodArray" :disabled="formUpdate" :placeholder="$t('anan_permission.method.placeholder')" multiple>
                         <el-option v-for="item in methodOptions" :key="item.scode" :label="item.value" :value="item.scode" />
                       </el-select>
                     </el-form-item>
@@ -87,16 +87,16 @@
                 </el-row>
                 <el-row>
                   <el-col :span="12">
-                    <el-form-item :label="$t('cdp_permission.type.label')" prop="type">
-                      <el-select v-model="form.type" :disabled="formUpdate" :placeholder="$t('cdp_permission.type.placeholder')" class="filter-item" >
+                    <el-form-item :label="$t('anan_permission.type.label')" prop="type">
+                      <el-select v-model="form.type" :disabled="formUpdate" :placeholder="$t('anan_permission.type.placeholder')" class="filter-item" >
                         <el-option v-for="item in typeOptions" :key="item.name" :label="item.value" :value="item.name" :disabled="item.status === 1"/>
                       </el-select>
                     </el-form-item>
                   </el-col>
 
                   <el-col :span="6">
-                    <el-form-item :label="$t('cdp_permission.sort.label')" prop="sort">
-                      <el-input v-model="form.sort" :disabled="formUpdate" :placeholder="$t('cdp_permission.sort.placeholder')"/>
+                    <el-form-item :label="$t('anan_permission.sort.label')" prop="sort">
+                      <el-input v-model="form.sort" :disabled="formUpdate" :placeholder="$t('anan_permission.sort.placeholder')"/>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -105,7 +105,7 @@
                 <svg-icon :icon-class="form.icon" style="width: 80px; height: 80px; border-radius: 50%; margin-left: 20px; margin-top: 15px; background: #fff; color: #40c9c6;" @click.native="handleSelectAvatar"/>
               </el-col>
             </el-row>
-            <el-form-item :label="$t('cdp_permission.status.label')" prop="status">
+            <el-form-item :label="$t('anan_permission.status.label')" prop="status">
               <el-switch
                 :disabled="formUpdate"
                 v-model="form.status"

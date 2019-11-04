@@ -1,5 +1,5 @@
 export default{
-  cdp_dictionary: {
+  anan_dictionary: {
     searchText: '支持名稱、類別及標識查找',
     id: {
       label: '字典程式碼',
@@ -34,7 +34,7 @@ export default{
       placeholder: '更新日期,該值由後臺維護,更改數據時前端不需要關心'
     }
   },
-  cdp_dictionary_detail: {
+  anan_dictionary_detail: {
     searchText: '支持字典明細項程式碼、字典明細項值查找',
     id: {
       label: '字典明細編號',
@@ -89,7 +89,7 @@ export default{
       placeholder: '更新日期,該值由後臺維護,更改數據時前端不需要關心'
     }
   },
-  cdp_organization: {
+  anan_organization: {
     id: {
       label: '機构編號',
       placeholder: '機构編號'
@@ -147,7 +147,7 @@ export default{
       placeholder: '創建人：該值由後臺維護,更改數據時前端不需要關心,取值於系統用戶錶的編號'
     }
   },
-  cdp_organization_auth: {
+  anan_organization_auth: {
     id: {
       label: '機构授權編號',
       placeholder: '機构授權編號'
@@ -201,7 +201,7 @@ export default{
       placeholder: '試用天數'
     }
   },
-  cdp_organization_permission: {
+  anan_organization_permission: {
     id: {
       label: '機构許可權編號',
       placeholder: '機构許可權編號'
@@ -223,7 +223,7 @@ export default{
       placeholder: '創建人：該值由後臺維護,更改數據時前端不需要關心,取值於系統用戶錶的編號'
     }
   },
-  cdp_parameter: {
+  anan_parameter: {
     searchText: '支持參數鍵、參數值、說明查找',
     id: {
       label: '參數編號',
@@ -282,7 +282,7 @@ export default{
       placeholder: '參數狀態：0=正常狀態、1=修改狀態、2=删除狀態'
     }
   },
-  cdp_pay: {
+  anan_pay: {
     payId: {
       label: '支付編號',
       placeholder: '支付編號'
@@ -332,7 +332,7 @@ export default{
       placeholder: '付款標誌：0=未付款,1=分期,2=付全款'
     }
   },
-  cdp_pay_detail: {
+  anan_pay_detail: {
     paydetailId: {
       label: '付款明細編號',
       placeholder: '付款明細編號'
@@ -350,7 +350,7 @@ export default{
       placeholder: '付款金額'
     }
   },
-  cdp_pay_invoice: {
+  anan_pay_invoice: {
     invoceId: {
       label: '發票編號',
       placeholder: '發票編號'
@@ -372,7 +372,7 @@ export default{
       placeholder: '操作人'
     }
   },
-  cdp_pay_order: {
+  anan_pay_order: {
     orderId: {
       label: '訂單編號',
       placeholder: '訂單編號'
@@ -414,7 +414,7 @@ export default{
       placeholder: '作廢日期'
     }
   },
-  cdp_permission: {
+  anan_permission: {
     id: {
       label: '許可權編號',
       placeholder: '許可權編號'
@@ -484,7 +484,7 @@ export default{
       placeholder: '創建人：該值由後臺維護,更改數據時前端不需要關心,取值於系統用戶錶的編號'
     }
   },
-  cdp_role: {
+  anan_role: {
     searchText: '支持角色名稱、角色標識',
     id: {
       label: '角色編號',
@@ -531,7 +531,7 @@ export default{
       placeholder: '內寘標誌：是否是系統內寘角色,內寘角色不能被用戶删除和修改,0=不是1=是'
     }
   },
-  cdp_role_permission: {
+  anan_role_permission: {
     id: {
       label: '角色許可權編號',
       placeholder: '角色許可權編號'
@@ -553,7 +553,7 @@ export default{
       placeholder: '創建人：該值由後臺維護,更改數據時前端不需要關心,取值於系統用戶錶的編號'
     }
   },
-  cdp_user: {
+  anan_user: {
     searchText: '支持用戶工號、名稱、手機號、郵箱查找',
     baseInfo: '基本資訊',
     modifyPassword: '修改密碼',
@@ -634,7 +634,7 @@ export default{
       placeholder: '過期時間,帳戶過期後用戶被鎖定切不能登入系統'
     }
   },
-  cdp_user_permission: {
+  anan_user_permission: {
     id: {
       label: '用戶許可權編號',
       placeholder: '用戶許可權編號'
@@ -664,7 +664,7 @@ export default{
       placeholder: '補充管道：0=新增許可權、1=删除許可權'
     }
   },
-  cdp_user_role: {
+  anan_user_role: {
     id: {
       label: '用戶角色編號',
       placeholder: '用戶角色編號'
@@ -690,7 +690,7 @@ export default{
       placeholder: '創建人：該值由後臺維護,更改數據時前端不需要關心,取值於系統用戶錶的編號'
     }
   },
-  cdp_version: {
+  anan_version: {
     searchText: '支持版本名稱查找',
     id: {
       label: '版本編號',
@@ -753,7 +753,7 @@ export default{
       placeholder: '版本描述'
     }
   },
-  cdp_version_permission: {
+  anan_version_permission: {
     id: {
       label: '版本許可權編號',
       placeholder: '版本許可權編號'
@@ -775,7 +775,7 @@ export default{
       placeholder: '創建人：該值由後臺維護,更改數據時前端不需要關心,取值於系統用戶錶的編號'
     }
   },
-  cdp_version_role: {
+  anan_version_role: {
     searchText: '支持版本角色名稱、角色標識',
     id: {
       label: '角色編號',
@@ -818,7 +818,7 @@ export default{
       placeholder: '更新人：該值由後臺維護,更改數據時前端不需要關心,取值於系統用戶錶的編號'
     }
   },
-  cdp_version_role_permission: {
+  anan_version_role_permission: {
     id: {
       label: '角色許可權編號',
       placeholder: '角色許可權編號'

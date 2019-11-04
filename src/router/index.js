@@ -79,7 +79,7 @@ export function dynamicAsyncRouter(permissionTree) {
   return routers.concat(asyncRouterMap)
 }
 /**
- * 根据后台权限标识(cdp_perimission.code)创建动态路由
+ * 根据后台权限标识(anan_perimission.code)创建动态路由
  * @returns {*}
  * @param permissionTree 用户权限树
  */
@@ -207,7 +207,7 @@ function isEmpty(val) {
   return false
 }
 /**
- * 根据后台权限标识(cdp_perimission.code)在异步路由中查找是否存在，存在则返回对应路由
+ * 根据后台权限标识(anan_perimission.code)在异步路由中查找是否存在，存在则返回对应路由
  * @param permissionCode
  * @returns {*}
  */

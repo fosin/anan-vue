@@ -36,32 +36,32 @@
             </el-form-item>
             <el-row>
               <el-col :span="12">
-                <el-form-item :label="$t('cdp_organization.topId.label')" prop="topId">
+                <el-form-item :label="$t('anan_organization.topId.label')" prop="topId">
                   <el-tag>{{ getOrganizName(form.topId) }}</el-tag>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item :label="$t('cdp_organization.pid.label')" prop="pid">
+                <el-form-item :label="$t('anan_organization.pid.label')" prop="pid">
                   <el-tag>{{ parent.code + ' - ' + parent.name }}</el-tag>
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-form-item :label="$t('cdp_organization.code.label')" prop="code">
-              <el-input v-model="form.code" :disabled="formUpdate" :placeholder="$t('cdp_organization.code.placeholder')"/>
+            <el-form-item :label="$t('anan_organization.code.label')" prop="code">
+              <el-input v-model="form.code" :disabled="formUpdate" :placeholder="$t('anan_organization.code.placeholder')"/>
             </el-form-item>
-            <el-form-item :label="$t('cdp_organization.name.label')" prop="name">
-              <el-input v-model="form.name" :disabled="formUpdate" :placeholder="$t('cdp_organization.name.placeholder')"/>
+            <el-form-item :label="$t('anan_organization.name.label')" prop="name">
+              <el-input v-model="form.name" :disabled="formUpdate" :placeholder="$t('anan_organization.name.placeholder')"/>
             </el-form-item>
-            <el-form-item :label="$t('cdp_organization.fullname.label')" prop="fullname">
-              <el-input v-model="form.fullname" :disabled="formUpdate" :placeholder="$t('cdp_organization.fullname.placeholder')"/>
+            <el-form-item :label="$t('anan_organization.fullname.label')" prop="fullname">
+              <el-input v-model="form.fullname" :disabled="formUpdate" :placeholder="$t('anan_organization.fullname.placeholder')"/>
             </el-form-item>
-            <el-form-item :label="$t('cdp_organization.address.label')" prop="address">
-              <el-input v-model="form.address" :disabled="formUpdate" :placeholder="$t('cdp_organization.address.placeholder')"/>
+            <el-form-item :label="$t('anan_organization.address.label')" prop="address">
+              <el-input v-model="form.address" :disabled="formUpdate" :placeholder="$t('anan_organization.address.placeholder')"/>
             </el-form-item>
-            <el-form-item :label="$t('cdp_organization.telphone.label')" prop="telphone">
-              <el-input v-model="form.telphone" :disabled="formUpdate" :placeholder="$t('cdp_organization.telphone.placeholder')"/>
+            <el-form-item :label="$t('anan_organization.telphone.label')" prop="telphone">
+              <el-input v-model="form.telphone" :disabled="formUpdate" :placeholder="$t('anan_organization.telphone.placeholder')"/>
             </el-form-item>
-            <el-form-item :label="$t('cdp_organization.status.label')" prop="status">
+            <el-form-item :label="$t('anan_organization.status.label')" prop="status">
               <el-switch
                 :disabled="formUpdate"
                 v-model="form.status"
