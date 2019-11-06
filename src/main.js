@@ -23,6 +23,7 @@ import permission from './directive/permission/index.js' // 权限判断指令
 import dictionary from './utils/dictionary' // 字典服务
 import parameter from './utils/parameter' // 个性化参数服务
 import waves from './directive/waves/index.js' // 水波效果
+import './views/vhr/utils/filter_utils'
 
 Vue.prototype.getRequest = getRequest
 Vue.prototype.postRequest = postRequest

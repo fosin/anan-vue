@@ -32,7 +32,7 @@ export default {
   methods: {
     loadDeps() {
       var _this = this
-      this.getRequest('/salary/table/deps').then(resp => {
+      this.getRequest('/vhr/salary/table/deps').then(resp => {
         if (resp && resp.status === 200) {
           _this.deps = resp.data
         }
