@@ -2,10 +2,18 @@
   <div class="app-container calendar-list-container">
     <div class="filter-container">
       <el-button-group>
-        <el-button v-waves v-permission="'84'" round type="primary" class="filter-item" icon="el-icon-refresh" @click="handlerRefresh">{{ $t('table.refresh') }}</el-button>
-        <el-button v-waves v-permission="'8'" round type="primary" class="filter-item" icon="el-icon-circle-plus" style="margin-left: 5px;" @click="handlerAdd">{{ $t('table.add') }}</el-button>
-        <el-button v-waves v-permission="'9'" round type="success" class="filter-item" icon="el-icon-edit" style="margin-left: 5px;" @click="handlerUpdate">{{ $t('table.edit') }}</el-button>
-        <el-button v-waves v-permission="'10'" round type="danger" class="filter-item" icon="el-icon-delete" style="margin-left: 5px;" @click="handleDelete">{{ $t('table.delete') }}</el-button>
+        <el-button v-waves v-permission="'84'" round type="primary" class="filter-item" icon="el-icon-refresh" @click="handlerRefresh">
+          {{ $t('table.refresh') }}
+        </el-button>
+        <el-button v-waves v-permission="'8'" round type="primary" class="filter-item" icon="el-icon-circle-plus" style="margin-left: 5px;" @click="handlerAdd">
+          {{ $t('table.add') }}
+        </el-button>
+        <el-button v-waves v-permission="'9'" round type="success" class="filter-item" icon="el-icon-edit" style="margin-left: 5px;" @click="handlerUpdate">
+          {{ $t('table.edit') }}
+        </el-button>
+        <el-button v-waves v-permission="'10'" round type="danger" class="filter-item" icon="el-icon-delete" style="margin-left: 5px;" @click="handleDelete">
+          {{ $t('table.delete') }}
+        </el-button>
       </el-button-group>
     </div>
     <el-row>
@@ -21,18 +29,27 @@
           node-key="id"
           highlight-current
           lazy
-          @node-click="getNodeData"/>
+          @node-click="getNodeData"
+        />
       </el-col>
       <el-col :span="16" style="margin-top:15px;">
         <el-card class="box-card">
           <el-form ref="form" :label-position="labelPosition" :model="form" :rules="formRules" label-width="100px">
             <el-form-item v-if="formStatus === 'update'">
-              <el-button v-waves round icon="el-icon-circle-close" @click="onCancel">{{ $t('table.cancel') }}</el-button>
-              <el-button v-waves round type="primary" icon="el-icon-circle-check" @click="update">{{ $t('table.update') }}</el-button>
+              <el-button v-waves round icon="el-icon-circle-close" @click="onCancel">
+                {{ $t('table.cancel') }}
+              </el-button>
+              <el-button v-waves round type="primary" icon="el-icon-circle-check" @click="update">
+                {{ $t('table.update') }}
+              </el-button>
             </el-form-item>
             <el-form-item v-if="formStatus === 'create'">
-              <el-button v-waves round icon="el-icon-circle-close" @click="onCancel">{{ $t('table.cancel') }}</el-button>
-              <el-button v-waves round type="primary" icon="el-icon-circle-check" @click="create">{{ $t('table.create') }}</el-button>
+              <el-button v-waves round icon="el-icon-circle-close" @click="onCancel">
+                {{ $t('table.cancel') }}
+              </el-button>
+              <el-button v-waves round type="primary" icon="el-icon-circle-check" @click="create">
+                {{ $t('table.create') }}
+              </el-button>
             </el-form-item>
 
             <el-row>
@@ -49,7 +66,7 @@
               <el-col :span="12">
                 <el-form-item :label="$t('anan_permission.appName.label')" prop="appName">
                   <el-select v-model="form.appName" :disabled="formUpdate?formUpdate:parent.level !== 0" :placeholder="$t('anan_permission.appName.placeholder')" class="filter-item" value="">
-                    <el-option v-for="item in appOptions" :key="item" :label="item" :value="item"/>
+                    <el-option v-for="item in appOptions" :key="item" :label="item" :value="item" />
                   </el-select>
                 </el-form-item>
               </el-col>
@@ -57,21 +74,21 @@
             <el-row>
               <el-col :span="12">
                 <el-form-item :label="$t('anan_permission.name.label')" prop="name">
-                  <el-input v-model="form.name" :disabled="formUpdate" :placeholder="$t('anan_permission.name.placeholder')"/>
+                  <el-input v-model="form.name" :disabled="formUpdate" :placeholder="$t('anan_permission.name.placeholder')" />
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item :label="$t('anan_permission.code.label')" prop="code">
-                  <el-input v-model="form.code" :disabled="formUpdate" :placeholder="$t('anan_permission.code.placeholder')"/>
+                  <el-input v-model="form.code" :disabled="formUpdate" :placeholder="$t('anan_permission.code.placeholder')" />
                 </el-form-item>
               </el-col>
             </el-row>
             <el-form-item :label="$t('anan_permission.url.label')" prop="url">
-              <el-input v-model="form.url" :disabled="formUpdate" :placeholder="$t('anan_permission.url.placeholder')"/>
+              <el-input v-model="form.url" :disabled="formUpdate" :placeholder="$t('anan_permission.url.placeholder')" />
             </el-form-item>
 
-            <el-form-item :label="$t('anan_permission.path.label')" prop="path" >
-              <el-input v-model="form.path" :disabled="formUpdate" :placeholder="$t('anan_permission.path.placeholder')"/>
+            <el-form-item :label="$t('anan_permission.path.label')" prop="path">
+              <el-input v-model="form.path" :disabled="formUpdate" :placeholder="$t('anan_permission.path.placeholder')" />
             </el-form-item>
 
             <el-row>
@@ -88,37 +105,38 @@
                 <el-row>
                   <el-col :span="12">
                     <el-form-item :label="$t('anan_permission.type.label')" prop="type">
-                      <el-select v-model="form.type" :disabled="formUpdate" :placeholder="$t('anan_permission.type.placeholder')" class="filter-item" >
-                        <el-option v-for="item in typeOptions" :key="item.name" :label="item.value" :value="item.name" :disabled="item.status === 1"/>
+                      <el-select v-model="form.type" :disabled="formUpdate" :placeholder="$t('anan_permission.type.placeholder')" class="filter-item">
+                        <el-option v-for="item in typeOptions" :key="item.name" :label="item.value" :value="item.name" :disabled="item.status === 1" />
                       </el-select>
                     </el-form-item>
                   </el-col>
 
                   <el-col :span="6">
                     <el-form-item :label="$t('anan_permission.sort.label')" prop="sort">
-                      <el-input v-model="form.sort" :disabled="formUpdate" :placeholder="$t('anan_permission.sort.placeholder')"/>
+                      <el-input v-model="form.sort" :disabled="formUpdate" :placeholder="$t('anan_permission.sort.placeholder')" />
                     </el-form-item>
                   </el-col>
                 </el-row>
               </el-col>
               <el-col :span="4">
-                <svg-icon :icon-class="form.icon" style="width: 80px; height: 80px; border-radius: 50%; margin-left: 20px; margin-top: 15px; background: #fff; color: #40c9c6;" @click.native="handleSelectAvatar"/>
+                <svg-icon :icon-class="form.icon" style="width: 80px; height: 80px; border-radius: 50%; margin-left: 20px; margin-top: 15px; background: #fff; color: #40c9c6;" @click.native="handleSelectAvatar" />
               </el-col>
             </el-row>
             <el-form-item :label="$t('anan_permission.status.label')" prop="status">
               <el-switch
-                :disabled="formUpdate"
                 v-model="form.status"
+                :disabled="formUpdate"
                 active-color="#13ce66"
                 inactive-color="#ff4949"
                 active-value="0"
-                inactive-value="1"/>
+                inactive-value="1"
+              />
             </el-form-item>
           </el-form>
         </el-card>
       </el-col>
     </el-row>
-    <IconsSelect ref="iconsSelect"/>
+    <IconsSelect ref="iconsSelect" />
   </div>
 </template>
 
@@ -468,7 +486,7 @@ export default {
           break
           // 组件菜单
         case 1:
-          icon = 'menu'
+          icon = 'form'
           break
           // 直接链接菜单
         case 2:
@@ -476,7 +494,7 @@ export default {
           break
           // 目录菜单
         case 3:
-          icon = 'directory'
+          icon = 'list'
           break
           // 间接链接菜单
         case 4:
