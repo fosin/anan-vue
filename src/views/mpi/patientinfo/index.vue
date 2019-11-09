@@ -6,7 +6,8 @@
         style="width: 400px;"
         class="filter-item"
         placeholder="支持姓名、卡号、手机号码、身份证号、MPIID查找"
-        @keyup.enter.native="handleSearch"/>
+        @keyup.enter.native="handleSearch"
+      />
       <el-button-group>
         <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" round @click="handleSearch">
           {{ $t('table.search') }}
@@ -19,7 +20,9 @@
           type="primary"
           icon="el-icon-view"
           round
-          @click="handleQuery">{{ $t('table.view') }}
+          @click="handleQuery"
+        >
+          {{ $t('table.view') }}
         </el-button>
         <el-button
           v-permission="'95'"
@@ -29,7 +32,9 @@
           type="primary"
           icon="el-icon-circle-plus"
           round
-          @click="handleAdd">{{ $t('table.add') }}
+          @click="handleAdd"
+        >
+          {{ $t('table.add') }}
         </el-button>
         <el-button
           v-permission="'96'"
@@ -39,7 +44,9 @@
           style="margin-left: 5px;"
           icon="el-icon-edit"
           round
-          @click="handleEdit()">{{ $t('table.edit') }}
+          @click="handleEdit()"
+        >
+          {{ $t('table.edit') }}
         </el-button>
         <el-button
           v-permission="'97'"
@@ -49,12 +56,14 @@
           style="margin-left: 5px;"
           icon="el-icon-arrow-right"
           round
-          @click="handleLogout()">{{ $t('table.logout') }}
+          @click="handleLogout()"
+        >
+          {{ $t('table.logout') }}
         </el-button>
       </el-button-group>
     </div>
-    <ListPatientinfo ref="listPatientinfo" :status="0" :data="form" @rowClick="rowClick"/>
-    <FormPatientinfo ref="formPatientinfo" :mpi-id="form.id" @refreshSelect="refreshSelect"/>
+    <ListPatientinfo ref="listPatientinfo" :status="0" :data="form" @rowClick="rowClick" />
+    <FormPatientinfo ref="formPatientinfo" :mpi-id="form.id" @refreshSelect="refreshSelect" />
   </div>
 </template>
 <script>

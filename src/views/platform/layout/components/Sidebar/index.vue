@@ -9,7 +9,7 @@
       text-color="#ffffff"
       active-text-color="#ffffff"
     >
-      <sidebar-item v-for="route in permission_routers" :key="route.name" :item="route" :base-path="route.path"/>
+      <sidebar-item v-for="route in permission_routers" :key="route.name" :item="route" :base-path="route.path" />
     </el-menu>
   </el-scrollbar>
 </template>

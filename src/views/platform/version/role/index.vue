@@ -139,7 +139,7 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="$t('anan_version_role.tips.label')" prop="tips">
-          <el-input v-model="form.tips" :placeholder="$t('anan_version_role.tips.placeholder')"></el-input>
+          <el-input v-model="form.tips" :placeholder="$t('anan_version_role.tips.placeholder')" />
         </el-form-item>
         <el-form-item :label="$t('anan_version_role.status.label')" prop="status">
           <el-select v-model="form.status" :placeholder="$t('anan_version_role.status.placeholder')" class="filter-item">

@@ -101,6 +101,20 @@ function getRealError(from, error) {
 }
 export default service
 
+export const allRequest = (url, method, data) => {
+  if (data) {
+    return service({
+      method: method || 'post',
+      url: url,
+      data: data
+    })
+  }
+  return service({
+    method: method || 'post',
+    url: url
+  })
+}
+
 export const postRequest = (url, params) => {
   if (params) {
     return service({

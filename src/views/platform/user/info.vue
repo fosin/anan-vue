@@ -1,6 +1,5 @@
 <template>
   <div class="app-container calendar-list-container">
-
     <div class="grid-content bg-purple">
       <el-form ref="user" :model="userInfo" label-width="100px" class="demo-ruleForm">
         <span>{{ $t('anan_user.baseInfo') }}</span>
@@ -48,34 +47,35 @@
         <el-row>
           <el-col :span="8">
             <el-form-item :label="$t('anan_user.oldPassword.label')" prop="password" label-width="200px">
-              <el-input v-model="userInfo2.password" :placeholder="$t('anan_user.oldPassword.placeholder')" type="password" auto-complete="off"/>
+              <el-input v-model="userInfo2.password" :placeholder="$t('anan_user.oldPassword.placeholder')" type="password" auto-complete="off" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
             <el-form-item :label="$t('anan_user.confirmPassword1.label')" prop="confirmPassword1" label-width="200px">
-              <el-input :placeholder="$t('anan_user.confirmPassword1.placeholder')" v-model="userInfo2.confirmPassword1" type="password" auto-complete="off"/>
+              <el-input v-model="userInfo2.confirmPassword1" :placeholder="$t('anan_user.confirmPassword1.placeholder')" type="password" auto-complete="off" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
             <el-form-item :label="$t('anan_user.confirmPassword2.label')" prop="confirmPassword2" label-width="200px">
-              <el-input v-model="userInfo2.confirmPassword2" :placeholder="$t('anan_user.confirmPassword2.placeholder')" type="password" auto-complete="off"/>
+              <el-input v-model="userInfo2.confirmPassword2" :placeholder="$t('anan_user.confirmPassword2.placeholder')" type="password" auto-complete="off" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8" :push="4">
             <el-form-item>
-              <el-button v-waves round type="primary" autofocus icon="el-icon-circle-check" @click="update">{{ $t('table.confirm') }}</el-button>
+              <el-button v-waves round type="primary" autofocus icon="el-icon-circle-check" @click="update">
+                {{ $t('table.confirm') }}
+              </el-button>
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
     </div>
-
   </div>
 </template>
 

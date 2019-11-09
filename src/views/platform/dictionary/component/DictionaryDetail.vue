@@ -2,11 +2,12 @@
   <div class="app-container calendar-list-container">
     <div class="filter-container">
       <el-input
-        :placeholder="$t('anan_dictionary_detail.searchText')"
         v-model="pageModule.searchText"
+        :placeholder="$t('anan_dictionary_detail.searchText')"
         style="width: 200px;"
         class="filter-item"
-        @keyup.enter.native="handleFilter"/>
+        @keyup.enter.native="handleFilter"
+      />
       <el-button-group>
         <el-button v-waves round class="filter-item" type="primary" size="small" icon="el-icon-search" @click="handleFilter">
           {{ $t('table.search') }}
@@ -20,7 +21,9 @@
           style="margin-left: 5px;"
           type="primary"
           icon="el-icon-circle-plus"
-          @click="handleAdd">{{ $t('table.add') }}
+          @click="handleAdd"
+        >
+          {{ $t('table.add') }}
         </el-button>
         <el-button
           v-waves
@@ -31,7 +34,9 @@
           class="filter-item"
           style="margin-left: 5px;"
           icon="el-icon-edit"
-          @click="handleEdit()">{{ $t('table.edit') }}
+          @click="handleEdit()"
+        >
+          {{ $t('table.edit') }}
         </el-button>
         <el-button
           v-waves
@@ -42,14 +47,16 @@
           class="filter-item"
           style="margin-left: 5px;"
           icon="el-icon-delete"
-          @click="handleDelete()">{{ $t('table.delete') }}
+          @click="handleDelete()"
+        >
+          {{ $t('table.delete') }}
         </el-button>
       </el-button-group>
     </div>
 
     <el-table
-      v-loading="listLoading"
       ref="dictionaryDetailTable"
+      v-loading="listLoading"
       :data="dictionaryDetailList"
       :default-sort="{prop: 'name'}"
       element-loading-text="努力加载中"
@@ -58,17 +65,17 @@
       highlight-current-row
       style="width: 100%"
       @sort-change="sortChange"
-      @row-click="rowClick">
-      <el-table-column :label="$t('anan_dictionary_detail.name.label')" align="center" sortable prop="name" width="120px"/>
-      <el-table-column :label="$t('anan_dictionary_detail.value.label')" align="center" sortable prop="value"/>
-      <el-table-column :label="$t('anan_dictionary_detail.scode.label')" align="center" sortable prop="scode" width="120px"/>
-      <el-table-column :label="$t('anan_dictionary_detail.sort.label')" align="center" sortable prop="sort" width="80px"/>
+      @row-click="rowClick"
+    >
+      <el-table-column :label="$t('anan_dictionary_detail.name.label')" align="center" sortable prop="name" width="120px" />
+      <el-table-column :label="$t('anan_dictionary_detail.value.label')" align="center" sortable prop="value" />
+      <el-table-column :label="$t('anan_dictionary_detail.scode.label')" align="center" sortable prop="scode" width="120px" />
+      <el-table-column :label="$t('anan_dictionary_detail.sort.label')" align="center" sortable prop="sort" width="80px" />
       <el-table-column :label="$t('anan_dictionary_detail.status.label')" align="center" sortable prop="status" width="90px">
         <template slot-scope="scope">
           <span>{{ getStatusValue(scope.row.status) }}</span>
         </template>
       </el-table-column>
-
     </el-table>
     <div v-show="!listLoading" class="pagination-container">
       <el-pagination
@@ -79,28 +86,29 @@
         small
         layout="total, sizes, prev, pager, next, jumper"
         @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"/>
+        @current-change="handleCurrentChange"
+      />
     </div>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-form-item :label="$t('anan_dictionary.name.label')">
-          <el-input v-model="selectedDictionary.name" :disabled="true"/>
+          <el-input v-model="selectedDictionary.name" :disabled="true" />
         </el-form-item>
         <el-form-item :label="$t('anan_dictionary_detail.name.label')" prop="name">
-          <el-input v-model="form.name" :placeholder="$t('anan_dictionary_detail.name.placeholder')"/>
+          <el-input v-model="form.name" :placeholder="$t('anan_dictionary_detail.name.placeholder')" />
         </el-form-item>
         <el-form-item :label="$t('anan_dictionary_detail.value.label')" prop="value">
-          <el-input v-model="form.value" :placeholder="$t('anan_dictionary_detail.value.placeholder')"/>
+          <el-input v-model="form.value" :placeholder="$t('anan_dictionary_detail.value.placeholder')" />
         </el-form-item>
         <el-form-item :label="$t('anan_dictionary_detail.sort.label')" prop="sort">
-          <el-input v-model="form.sort" :placeholder="$t('anan_dictionary_detail.sort.placeholder')"/>
+          <el-input v-model="form.sort" :placeholder="$t('anan_dictionary_detail.sort.placeholder')" />
         </el-form-item>
         <el-form-item :label="$t('anan_dictionary_detail.scode.label')" prop="scode">
-          <el-input v-model="form.scode" :placeholder="$t('anan_dictionary_detail.scode.placeholder')"/>
+          <el-input v-model="form.scode" :placeholder="$t('anan_dictionary_detail.scode.placeholder')" />
         </el-form-item>
         <el-form-item :label="$t('anan_dictionary_detail.scope.label')" prop="scope">
-          <el-input v-model="form.scope" :placeholder="$t('anan_dictionary_detail.scope.placeholder')"/>
+          <el-input v-model="form.scope" :placeholder="$t('anan_dictionary_detail.scope.placeholder')" />
         </el-form-item>
         <el-form-item :label="$t('anan_dictionary_detail.status.label')" prop="status">
           <el-switch
@@ -108,18 +116,23 @@
             active-color="#13ce66"
             inactive-color="#ff4949"
             active-value="0"
-            inactive-value="1"/>
+            inactive-value="1"
+          />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button round icon="el-icon-circle-close" @click="cancel('form')">{{ $t('table.cancel') }}</el-button>
+        <el-button round icon="el-icon-circle-close" @click="cancel('form')">
+          {{ $t('table.cancel') }}
+        </el-button>
         <el-button
           v-if="dialogStatus==='create'"
           round
           type="primary"
           icon="el-icon-circle-check"
           autofocus
-          @click="create('form')">{{ $t('table.confirm') }}
+          @click="create('form')"
+        >
+          {{ $t('table.confirm') }}
         </el-button>
         <el-button v-else round type="primary" icon="el-icon-circle-check" autofocus @click="update('form')">
           {{ $t('table.update') }}
@@ -385,7 +398,8 @@ export default {
         scope: undefined,
         sort: this.DefaultDictionaryDetailNameAndSort === 1 ? sort : undefined,
         status: '0',
-        dictionaryId: this.selectedDictionary.id
+        dictionaryId: this.selectedDictionary.id,
+        used: 0
       }
     },
     sortChange(column) {

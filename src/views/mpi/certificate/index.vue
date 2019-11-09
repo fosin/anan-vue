@@ -2,18 +2,24 @@
   <div class="app-container calendar-list-container">
     <div class="filter-container">
       <el-button-group>
-        <el-button v-waves v-permission="'1'" round type="primary" class="filter-item" style="margin-left: 5px;" icon="el-icon-circle-plus" size="mini" @click="getList">{{ $t('table.refresh') }}</el-button>
-        <el-button v-waves v-permission="'1'" :disabled="disabled" round size="mini" class="filter-item" style="margin-left: 5px;" type="primary" icon="el-icon-circle-plus" @click="handleAdd">{{ $t('table.add') }}</el-button>
-        <el-button v-waves v-permission="'1'" :disabled="disabled" round size="mini" type="success" class="filter-item" style="margin-left: 5px;" icon="el-icon-edit" @click="handleEdit()">{{ $t('table.edit') }}
+        <el-button v-waves v-permission="'1'" round type="primary" class="filter-item" style="margin-left: 5px;" icon="el-icon-circle-plus" size="mini" @click="getList">
+          {{ $t('table.refresh') }}
         </el-button>
-        <el-button v-waves v-permission="'1'" :disabled="disabled" round size="mini" type="danger" class="filter-item" style="margin-left: 5px;" icon="el-icon-delete" @click="handleDelete()">{{ $t('table.delete') }}
+        <el-button v-waves v-permission="'1'" :disabled="disabled" round size="mini" class="filter-item" style="margin-left: 5px;" type="primary" icon="el-icon-circle-plus" @click="handleAdd">
+          {{ $t('table.add') }}
+        </el-button>
+        <el-button v-waves v-permission="'1'" :disabled="disabled" round size="mini" type="success" class="filter-item" style="margin-left: 5px;" icon="el-icon-edit" @click="handleEdit()">
+          {{ $t('table.edit') }}
+        </el-button>
+        <el-button v-waves v-permission="'1'" :disabled="disabled" round size="mini" type="danger" class="filter-item" style="margin-left: 5px;" icon="el-icon-delete" @click="handleDelete()">
+          {{ $t('table.delete') }}
         </el-button>
       </el-button-group>
     </div>
     <el-table
       v-loading="listLoading"
       :data="list"
-      :default-sort = "{prop: 'updateTime', order: 'descending'}"
+      :default-sort="{prop: 'updateTime', order: 'descending'}"
       :disabled="disabled"
       element-loading-text="努力加载中"
       border
@@ -22,37 +28,44 @@
       style="width: 100%"
       size="mini"
       @sort-change="sortChange"
-      @row-click="rowClick">
+      @row-click="rowClick"
+    >
       <el-table-column align="center" label="证件类型" sortable prop="certificateType">
         <template slot-scope="scope">
           <span>{{ getDicNameValue(certificateTypeOptions, scope.row.certificateType) }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="证件号" sortable prop="certificateNo"/>
-      <el-table-column align="center" label="修改时间" sortable prop="updateTime"/>
-      <el-table-column align="center" label="修改单位" sortable prop="modifyUnit"/>
-      <el-table-column align="center" label="修改人" sortable prop="modifier"/>
+      <el-table-column align="center" label="证件号" sortable prop="certificateNo" />
+      <el-table-column align="center" label="修改时间" sortable prop="updateTime" />
+      <el-table-column align="center" label="修改单位" sortable prop="modifyUnit" />
+      <el-table-column align="center" label="修改人" sortable prop="modifier" />
     </el-table>
 
     <div v-show="!listLoading" class="pagination-container">
-      <el-pagination :current-page.sync="pageModule.pageNumber" :page-sizes="pageSizes" :page-size="pageModule.pageSize" :total="total" layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange"/>
+      <el-pagination :current-page.sync="pageModule.pageNumber" :page-sizes="pageSizes" :page-size="pageModule.pageSize" :total="total" layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="450px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-form-item label="证件类型" prop="certificateType">
           <el-select v-model="form.certificateType" class="filter-item" placeholder="请选择地址类型">
-            <el-option v-for="item in certificateTypeOptions" :key="item.name" :label="item.value" :value="item.name"/>
+            <el-option v-for="item in certificateTypeOptions" :key="item.name" :label="item.value" :value="item.name" />
           </el-select>
         </el-form-item>
         <el-form-item label="证件号" prop="certificateNo">
-          <el-input v-model="form.certificateNo" placeholder="证件号"/>
+          <el-input v-model="form.certificateNo" placeholder="证件号" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button round icon="el-icon-circle-close" @click="cancel('form')">{{ $t('table.cancel') }}</el-button>
-        <el-button v-if="dialogStatus==='create'" round type="primary" icon="el-icon-circle-check" autofocus @click="create('form')">{{ $t('table.confirm') }}</el-button>
-        <el-button v-else round type="primary" icon="el-icon-circle-check" autofocus @click="update('form')">{{ $t('table.update') }}</el-button>
+        <el-button round icon="el-icon-circle-close" @click="cancel('form')">
+          {{ $t('table.cancel') }}
+        </el-button>
+        <el-button v-if="dialogStatus==='create'" round type="primary" icon="el-icon-circle-check" autofocus @click="create('form')">
+          {{ $t('table.confirm') }}
+        </el-button>
+        <el-button v-else round type="primary" icon="el-icon-circle-check" autofocus @click="update('form')">
+          {{ $t('table.update') }}
+        </el-button>
       </div>
     </el-dialog>
   </div>

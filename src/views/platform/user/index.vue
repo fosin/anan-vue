@@ -1,15 +1,22 @@
 <template>
   <div class="app-container calendar-list-container">
     <div class="filter-container">
-      <el-input :placeholder="$t('anan_user.searchText')" v-model="pageModule.searchText" style="width: 300px;" class="filter-item" @keyup.enter.native="handleFilter"/>
+      <el-input v-model="pageModule.searchText" :placeholder="$t('anan_user.searchText')" style="width: 300px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-button-group>
-        <el-button v-waves round class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.search') }}</el-button>
-        <el-button v-waves v-permission="'12'" round class="filter-item" style="margin-left: 5px;" type="primary" icon="el-icon-circle-plus" @click="handleAdd">{{ $t('table.add') }}</el-button>
-        <el-button v-waves v-permission="'14'" round class="filter-item" style="margin-left: 5px;" type="success" icon="el-icon-edit" @click="handleEdit">{{ $t('table.edit') }}
+        <el-button v-waves round class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+          {{ $t('table.search') }}
         </el-button>
-        <el-button v-waves v-permission="'15'" round class="filter-item" style="margin-left: 5px;" type="danger" icon="el-icon-delete" @click="handleDelete">{{ $t('table.delete') }}
+        <el-button v-waves v-permission="'12'" round class="filter-item" style="margin-left: 5px;" type="primary" icon="el-icon-circle-plus" @click="handleAdd">
+          {{ $t('table.add') }}
         </el-button>
-        <el-button v-waves v-permission="'27'" round class="filter-item" style="margin-left: 5px;" icon="el-icon-bell" type="info" @click="handleResetPass">{{ $t('table.resetPass') }}
+        <el-button v-waves v-permission="'14'" round class="filter-item" style="margin-left: 5px;" type="success" icon="el-icon-edit" @click="handleEdit">
+          {{ $t('table.edit') }}
+        </el-button>
+        <el-button v-waves v-permission="'15'" round class="filter-item" style="margin-left: 5px;" type="danger" icon="el-icon-delete" @click="handleDelete">
+          {{ $t('table.delete') }}
+        </el-button>
+        <el-button v-waves v-permission="'27'" round class="filter-item" style="margin-left: 5px;" icon="el-icon-bell" type="info" @click="handleResetPass">
+          {{ $t('table.resetPass') }}
         </el-button>
       </el-button-group>
     </div>
@@ -18,19 +25,20 @@
       v-loading="listLoading"
       :data="list"
       :row-class-name="tableRowClassName"
-      :default-sort = "{prop: 'usercode', order: 'descending'}"
+      :default-sort="{prop: 'usercode', order: 'descending'}"
       element-loading-text="努力加载中..."
       border
       fit
       highlight-current-row
       style="width: 100%"
       @sort-change="sortChange"
-      @row-click="rowClick">
-      <el-table-column :label="$t('anan_user.usercode.label')" align="center" width="110px" sortable prop="usercode"/>
+      @row-click="rowClick"
+    >
+      <el-table-column :label="$t('anan_user.usercode.label')" align="center" width="110px" sortable prop="usercode" />
       <el-table-column :label="$t('anan_user.username.label')" align="center" sortable prop="username" width="140">
         <template slot-scope="scope">
           <span>
-            <svg-icon v-if="scope.row.avatar" :icon-class="scope.row.avatar" style="width: 20px; height: 20px; border-radius: 50%; margin-left: 20px; background: #fff;"/>
+            <svg-icon v-if="scope.row.avatar" :icon-class="scope.row.avatar" style="width: 20px; height: 20px; border-radius: 50%; margin-left: 20px; background: #fff;" />
             {{ scope.row.username }}
           </span>
         </template>
@@ -45,15 +53,16 @@
           <span>{{ scope.row.birthday | dateFormatFilter('yyyy-MM-dd') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('anan_user.phone.label')" align="center" sortable prop="phone" width="130"/>
-      <el-table-column :label="$t('anan_user.email.label')" align="center" sortable prop="email" width="150"/>
+      <el-table-column :label="$t('anan_user.phone.label')" align="center" sortable prop="phone" width="130" />
+      <el-table-column :label="$t('anan_user.email.label')" align="center" sortable prop="email" width="150" />
       <el-table-column
         :label="$t('anan_user.organizId.label')"
         :formatter="getOrganizName"
         prop="organizId"
         align="center"
         show-overflow-tooltip
-        sortable/>
+        sortable
+      />
       <!-- <el-table-column align="center" :label="$t('anan_user.createTime.label')" sortable prop="createTime">
         <template slot-scope="scope">
           <span>{{scope.row.createTime | dateFormatFilter('yyyy-MM-dd HH:mm:ss')}}</span>
@@ -67,15 +76,18 @@
 
       <el-table-column :label="$t('table.permission')" align="center" width="200">
         <template slot-scope="scope">
-          <el-button round size="mini" type="primary" @click="handleUserRole(scope.row)">{{ $t('table.role') }}</el-button>
-          <el-button round size="mini" type="warning" @click="handleUserPermission(scope.row)">{{ $t('table.permission') }}</el-button>
+          <el-button round size="mini" type="primary" @click="handleUserRole(scope.row)">
+            {{ $t('table.role') }}
+          </el-button>
+          <el-button round size="mini" type="warning" @click="handleUserPermission(scope.row)">
+            {{ $t('table.permission') }}
+          </el-button>
         </template>
       </el-table-column>
-
     </el-table>
 
     <div v-show="!listLoading" class="pagination-container">
-      <el-pagination :current-page.sync="pageModule.pageNumber" :page-sizes="pageSizes" :page-size="pageModule.pageSize" :total="total" layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange"/>
+      <el-pagination :current-page.sync="pageModule.pageNumber" :page-sizes="pageSizes" :page-size="pageModule.pageSize" :total="total" layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="700px">
@@ -85,19 +97,19 @@
             <el-row>
               <el-col :span="12">
                 <el-form-item :label="$t('anan_user.usercode.label')" prop="usercode">
-                  <el-input v-model="form.usercode" :placeholder="$t('anan_user.usercode.placeholder')"/>
+                  <el-input v-model="form.usercode" :placeholder="$t('anan_user.usercode.placeholder')" />
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item :label="$t('anan_user.username.label')" prop="username">
-                  <el-input v-model="form.username" :placeholder="$t('anan_user.username.placeholder')"/>
+                  <el-input v-model="form.username" :placeholder="$t('anan_user.username.placeholder')" />
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="12">
                 <el-form-item v-if="dialogStatus === 'create'" :label="$t('anan_user.password.label')" :placeholder="$t('anan_user.password.placeholder')" prop="password">
-                  <el-input v-model="form.password"/>
+                  <el-input v-model="form.password" />
                 </el-form-item>
               </el-col>
               <el-col :span="12">
@@ -109,16 +121,17 @@
                     align="right"
                     type="date"
                     format="yyyy-MM-dd"
-                    value-format="yyyy-MM-dd HH:mm:ss"/>
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                  />
                 </el-form-item>
               </el-col>
             </el-row>
           </el-col>
           <el-col :span="4">
-            <svg-icon :icon-class="form.avatar" class="user-avatar" style="width: 80px; height: 80px; border-radius: 50%; margin-left: 20px; background: #fff;" @click.native="handleSelectAvatar"/>
+            <svg-icon :icon-class="form.avatar" class="user-avatar" style="width: 80px; height: 80px; border-radius: 50%; margin-left: 20px; background: #fff;" @click.native="handleSelectAvatar" />
           </el-col>
         </el-row>
-        <el-row >
+        <el-row>
           <el-col :span="16">
             <el-form-item :label="$t('anan_user.organizId.label')" prop="organizId">
               <el-select v-model="form.organizId" :placeholder="$t('anan_user.organizId.placeholder')" :filter-method="organizSelectFilter" class="filter-item" filterable>
@@ -132,26 +145,26 @@
           <el-col :span="8">
             <el-form-item :label="$t('anan_user.sex.label')" prop="sex">
               <el-select v-model="form.sex" :placeholder="$t('anan_user.sex.placeholder')" class="filter-item">
-                <el-option v-for="item in sexOptions" :key="item.name" :label="item.value" :value="item.name"/>
+                <el-option v-for="item in sexOptions" :key="item.name" :label="item.value" :value="item.name" />
               </el-select>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row >
+        <el-row>
           <el-col :span="10">
             <el-form-item :label="$t('anan_user.email.label')" prop="email">
-              <el-input v-model="form.email" :placeholder="$t('anan_user.email.placeholder')"/>
+              <el-input v-model="form.email" :placeholder="$t('anan_user.email.placeholder')" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item :label="$t('anan_user.phone.label')" prop="phone">
-              <el-input v-model="form.phone" :placeholder="$t('anan_user.phone.placeholder')"/>
+              <el-input v-model="form.phone" :placeholder="$t('anan_user.phone.placeholder')" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item :label="$t('anan_user.status.label')" prop="status">
               <el-select v-model="form.status" :placeholder="$t('anan_user.status.placeholder')" class="filter-item">
-                <el-option v-for="item in statusOptions" :key="item" :label="item | statusFilter" :value="item"/>
+                <el-option v-for="item in statusOptions" :key="item" :label="item | statusFilter" :value="item" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -163,30 +176,42 @@
             align="right"
             type="date"
             format="yyyy-MM-dd HH:mm:ss"
-            value-format="yyyy-MM-dd HH:mm:ss"/>
+            value-format="yyyy-MM-dd HH:mm:ss"
+          />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button round icon="el-icon-circle-close" @click="cancel('form')">{{ $t('table.cancel') }}</el-button>
-        <el-button v-if="dialogStatus==='create'" round autofocus type="primary" icon="el-icon-circle-check" @click="create('form')">{{ $t('table.confirm') }}</el-button>
-        <el-button v-else round type="primary" autofocus icon="el-icon-circle-check" @click="update('form')">{{ $t('table.update') }}</el-button>
+        <el-button round icon="el-icon-circle-close" @click="cancel('form')">
+          {{ $t('table.cancel') }}
+        </el-button>
+        <el-button v-if="dialogStatus==='create'" round autofocus type="primary" icon="el-icon-circle-check" @click="create('form')">
+          {{ $t('table.confirm') }}
+        </el-button>
+        <el-button v-else round type="primary" autofocus icon="el-icon-circle-check" @click="update('form')">
+          {{ $t('table.update') }}
+        </el-button>
       </div>
     </el-dialog>
     <el-dialog :title="textMap[dialogStatus] + ' ---> ' + form.username" :visible.sync="dialogUserRoleVisible" width="550px">
       <el-transfer
         ref="userRole"
+        v-model="userRoles"
         :filter-method="userRolefilterMethod"
-        :props = "{
+        :props="{
           key: 'id',
           label: 'name'
         }"
         :titles="['未拥有角色', '已拥有角色']"
-        v-model="userRoles"
         :data="rolesOptions"
-        filterable/>
+        filterable
+      />
       <div slot="footer" class="dialog-footer">
-        <el-button round icon="el-icon-circle-close" @click="cancel('userRole')">{{ $t('table.cancel') }}</el-button>
-        <el-button v-permission="'48'" round type="primary" icon="el-icon-circle-check" @click="updateUserRole()">{{ $t('table.update') }}</el-button>
+        <el-button round icon="el-icon-circle-close" @click="cancel('userRole')">
+          {{ $t('table.cancel') }}
+        </el-button>
+        <el-button v-permission="'48'" round type="primary" icon="el-icon-circle-check" @click="updateUserRole()">
+          {{ $t('table.update') }}
+        </el-button>
       </div>
     </el-dialog>
     <el-dialog :title="textMap[dialogStatus] + ' ---> ' + form.username" :visible.sync="dialogUserPermissionVisible">
@@ -194,7 +219,8 @@
         <el-tab-pane label="增加权限">
           <el-input
             v-model="filterAddPermissionText"
-            placeholder="输入关键字进行过滤"/>
+            placeholder="输入关键字进行过滤"
+          />
           <el-tree
             v-if="hackReset"
             ref="addPermissionTree"
@@ -208,12 +234,14 @@
             highlight-current
             show-checkbox
             lazy
-            check-strictly/>
+            check-strictly
+          />
         </el-tab-pane>
         <el-tab-pane label="减少权限">
           <el-input
             v-model="filterSubPermissionText"
-            placeholder="输入关键字进行过滤"/>
+            placeholder="输入关键字进行过滤"
+          />
           <el-tree
             v-if="hackReset"
             ref="subPermissionTree"
@@ -227,15 +255,20 @@
             highlight-current
             show-checkbox
             lazy
-            check-strictly/>
+            check-strictly
+          />
         </el-tab-pane>
       </el-tabs>
       <div slot="footer" class="dialog-footer">
-        <el-button round icon="el-icon-circle-close" @click="cancel('permissionTree')">{{ $t('table.cancel') }}</el-button>
-        <el-button v-permission="'42'" round type="primary" icon="el-icon-circle-check" @click="updateUserPermession()">{{ $t('table.update') }}</el-button>
+        <el-button round icon="el-icon-circle-close" @click="cancel('permissionTree')">
+          {{ $t('table.cancel') }}
+        </el-button>
+        <el-button v-permission="'42'" round type="primary" icon="el-icon-circle-check" @click="updateUserPermession()">
+          {{ $t('table.update') }}
+        </el-button>
       </div>
     </el-dialog>
-    <IconsSelect ref="iconsSelect"/>
+    <IconsSelect ref="iconsSelect" />
   </div>
 </template>
 

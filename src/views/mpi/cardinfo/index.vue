@@ -2,9 +2,14 @@
   <div class="app-container calendar-list-container">
     <div class="filter-container">
       <el-button-group>
-        <el-button v-waves v-permission="'1'" round type="primary" class="filter-item" style="margin-left: 5px;" icon="el-icon-circle-plus" size="mini" @click="getList">{{ $t('table.refresh') }}</el-button>
-        <el-button v-waves v-permission="'1'" :disabled="disabled" round class="filter-item" style="margin-left: 5px;" type="primary" icon="el-icon-circle-plus" size="mini" @click="handleAdd">{{ $t('table.add') }}</el-button>
-        <el-button v-waves v-permission="'1'" :disabled="disabled" round type="success" class="filter-item" style="margin-left: 5px;" icon="el-icon-edit" size="mini" @click="handleEdit()">{{ $t('table.edit') }}
+        <el-button v-waves v-permission="'1'" round type="primary" class="filter-item" style="margin-left: 5px;" icon="el-icon-circle-plus" size="mini" @click="getList">
+          {{ $t('table.refresh') }}
+        </el-button>
+        <el-button v-waves v-permission="'1'" :disabled="disabled" round class="filter-item" style="margin-left: 5px;" type="primary" icon="el-icon-circle-plus" size="mini" @click="handleAdd">
+          {{ $t('table.add') }}
+        </el-button>
+        <el-button v-waves v-permission="'1'" :disabled="disabled" round type="success" class="filter-item" style="margin-left: 5px;" icon="el-icon-edit" size="mini" @click="handleEdit()">
+          {{ $t('table.edit') }}
         </el-button>
         <el-button
           v-waves
@@ -16,7 +21,9 @@
           style="margin-left: 5px;"
           icon="el-icon-warning"
           size="mini"
-          @click="handleLoss()">{{ $t('table.loss') }}
+          @click="handleLoss()"
+        >
+          {{ $t('table.loss') }}
         </el-button>
         <el-button
           v-waves
@@ -28,14 +35,16 @@
           style="margin-left: 5px;"
           icon="el-icon-arrow-right"
           size="mini"
-          @click="handleLogout()">{{ $t('table.logout') }}
+          @click="handleLogout()"
+        >
+          {{ $t('table.logout') }}
         </el-button>
       </el-button-group>
     </div>
     <el-table
       v-loading="listLoading"
       :data="list"
-      :default-sort = "{prop: 'updateTime', order: 'ascending'}"
+      :default-sort="{prop: 'updateTime', order: 'ascending'}"
       :disabled="disabled"
       element-loading-text="努力加载中"
       border
@@ -44,40 +53,41 @@
       style="width: 100%"
       size="mini"
       @sort-change="sortChange"
-      @row-click="rowClick">
+      @row-click="rowClick"
+    >
       <el-table-column align="center" label="卡类型" sortable prop="cardType">
         <template slot-scope="scope">
           <span>{{ getDicNameValue(cardTypeOptions, scope.row.cardType) }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="卡号" sortable prop="cardNo"/>
+      <el-table-column align="center" label="卡号" sortable prop="cardNo" />
       <el-table-column align="center" label="卡状态" sortable prop="status">
         <template slot-scope="scope">
           <span>{{ getDicNameValue(statusOptions, scope.row.status) }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="有效期" sortable prop="validtime" width="140px"/>
-      <el-table-column align="center" label="修改时间" sortable prop="updateTime" width="140px"/>
-      <el-table-column align="center" label="修改机构" sortable prop="modifyUnit"/>
-      <el-table-column align="center" label="修改人" sortable prop="modifier"/>
+      <el-table-column align="center" label="有效期" sortable prop="validtime" width="140px" />
+      <el-table-column align="center" label="修改时间" sortable prop="updateTime" width="140px" />
+      <el-table-column align="center" label="修改机构" sortable prop="modifyUnit" />
+      <el-table-column align="center" label="修改人" sortable prop="modifier" />
     </el-table>
 
     <div v-show="!listLoading" class="pagination-container">
-      <el-pagination :current-page.sync="pageModule.pageNumber" :page-sizes="pageSizes" :page-size="pageModule.pageSize" :total="total" layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange"/>
+      <el-pagination :current-page.sync="pageModule.pageNumber" :page-sizes="pageSizes" :page-size="pageModule.pageSize" :total="total" layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="450px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-form-item label="卡类型" prop="cardType">
           <el-select v-model="form.cardType" class="filter-item" placeholder="请选择卡类型">
-            <el-option v-for="item in cardTypeOptions" :key="item.name" :label="item.value" :value="item.name"/>
+            <el-option v-for="item in cardTypeOptions" :key="item.name" :label="item.value" :value="item.name" />
           </el-select>
         </el-form-item>
         <el-form-item label="卡号" prop="cardNo">
-          <el-input v-model="form.cardNo" placeholder="卡号"/>
+          <el-input v-model="form.cardNo" placeholder="卡号" />
         </el-form-item>
         <el-form-item label="卡内码" prop="cardCode">
-          <el-input v-model="form.cardCode" placeholder="卡内码"/>
+          <el-input v-model="form.cardCode" placeholder="卡内码" />
         </el-form-item>
         <el-form-item label="有效期" prop="validtime">
           <el-date-picker
@@ -86,13 +96,20 @@
             type="date"
             placeholder="请选择有效期"
             format="yyyy-MM-dd HH:mm:ss"
-            value-format="yyyy-MM-dd HH:mm:ss"/>
+            value-format="yyyy-MM-dd HH:mm:ss"
+          />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button round icon="el-icon-circle-close" @click="cancel('form')">{{ $t('table.cancel') }}</el-button>
-        <el-button v-if="dialogStatus==='create'" round type="primary" icon="el-icon-circle-check" autofocus @click="create('form')">{{ $t('table.confirm') }}</el-button>
-        <el-button v-else round type="primary" icon="el-icon-circle-check" autofocus @click="update('form')">{{ $t('table.update') }}</el-button>
+        <el-button round icon="el-icon-circle-close" @click="cancel('form')">
+          {{ $t('table.cancel') }}
+        </el-button>
+        <el-button v-if="dialogStatus==='create'" round type="primary" icon="el-icon-circle-check" autofocus @click="create('form')">
+          {{ $t('table.confirm') }}
+        </el-button>
+        <el-button v-else round type="primary" icon="el-icon-circle-check" autofocus @click="update('form')">
+          {{ $t('table.update') }}
+        </el-button>
       </div>
     </el-dialog>
   </div>

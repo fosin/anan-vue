@@ -2,23 +2,27 @@
   <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="90%">
     <el-row>
       <el-col :span="8" :push="16">
-        <el-button round icon="el-icon-circle-close" @click="cancel('form')">{{ $t('table.cancel') }}</el-button>
+        <el-button round icon="el-icon-circle-close" @click="cancel('form')">
+          {{ $t('table.cancel') }}
+        </el-button>
         <el-button
           v-if="dialogStatus==='create'"
           round
           type="primary"
           icon="el-icon-circle-check"
           autofocus
-          @click="create('form')" >{{ $t('table.confirm') }}
+          @click="create('form')"
+        >
+          {{ $t('table.confirm') }}
         </el-button>
-        <el-button v-else :disabled ="dialogStatus==='view'" round type="primary" icon="el-icon-circle-check" autofocus @click="update('form')">
+        <el-button v-else :disabled="dialogStatus==='view'" round type="primary" icon="el-icon-circle-check" autofocus @click="update('form')">
           {{ $t('table.merge') }}
         </el-button>
       </el-col>
     </el-row>
-    <el-tabs v-model="activeName" tab-position="top" >
-      <el-tab-pane name="tabPanePatientinfo" label="基础信息" >
-        <el-form ref="form" :model="form" :rules="rules" label-width="80px" size="mini" >
+    <el-tabs v-model="activeName" tab-position="top">
+      <el-tab-pane name="tabPanePatientinfo" label="基础信息">
+        <el-form ref="form" :model="form" :rules="rules" label-width="80px" size="mini">
           <el-row>
             <el-col :span="6">
               <SingleEdit ref="singleEdit" :mpi-id="mpiId" :col-data="colData" :data="form" @listonForUpdateForm="listonForUpdateForm" />
@@ -33,22 +37,20 @@
               <SingleCol v-if="mpiId33" ref="singleCol4" :mpi-id="this.$props.mpiId33" :data="colData" @callMe="listenToSon" />
             </el-col>
           </el-row>
-
         </el-form>
       </el-tab-pane>
-      <el-tab-pane ref="tabCardinfo" :disabled ="dialogStatus==='create'" name="tabPaneCardinfo" label="卡管理" >
-        <Cardinfo ref="formCardinfo" :mpi-id ="mpiId" :disabled ="dialogStatus==='view'"/>
+      <el-tab-pane ref="tabCardinfo" :disabled="dialogStatus==='create'" name="tabPaneCardinfo" label="卡管理">
+        <Cardinfo ref="formCardinfo" :mpi-id="mpiId" :disabled="dialogStatus==='view'" />
       </el-tab-pane>
-      <el-tab-pane ref="tabCertificate" :disabled ="dialogStatus==='create'" name="tabPaneCertificate" label="证件管理">
-        <Certificate ref="formCertificate" :mpi-id ="mpiId" :disabled ="dialogStatus==='view'"/>
+      <el-tab-pane ref="tabCertificate" :disabled="dialogStatus==='create'" name="tabPaneCertificate" label="证件管理">
+        <Certificate ref="formCertificate" :mpi-id="mpiId" :disabled="dialogStatus==='view'" />
       </el-tab-pane>
-      <el-tab-pane ref="tabAddress" :disabled ="dialogStatus==='create'" name="tabPaneAddress" label="地址管理">
-        <Address ref="formAddress" :mpiId ="mpiId" :disabled ="dialogStatus==='view'"/>
+      <el-tab-pane ref="tabAddress" :disabled="dialogStatus==='create'" name="tabPaneAddress" label="地址管理">
+        <Address ref="formAddress" :mpi-id="mpiId" :disabled="dialogStatus==='view'" />
       </el-tab-pane>
-      <el-tab-pane ref="tabContactinfo" :disabled ="dialogStatus==='create'" name="tabPaneContactinfo" label="联系人管理">
-        <Contactinfo ref="formContactinfo" :mpi-id ="mpiId" :disabled ="dialogStatus==='view'"/>
+      <el-tab-pane ref="tabContactinfo" :disabled="dialogStatus==='create'" name="tabPaneContactinfo" label="联系人管理">
+        <Contactinfo ref="formContactinfo" :mpi-id="mpiId" :disabled="dialogStatus==='view'" />
       </el-tab-pane>
-
     </el-tabs>
   </el-dialog>
 </template>

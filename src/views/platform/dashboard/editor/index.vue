@@ -1,10 +1,11 @@
 <template>
   <div class="dashboard-editor-container">
     <div class=" clearfix">
-      <pan-thumb :image="userInfo.avatar" style="float: left"> Your roles:
+      <pan-thumb :image="userInfo.avatar" style="float: left">
+        Your roles:
         <span v-for="item in roles" :key="item" class="pan-info-roles">{{ item }}</span>
       </pan-thumb>
-      <github-corner/>
+      <github-corner />
       <div class="info-container">
         <span class="display_name">{{ userInfo.username }}</span>
         <span style="font-size:20px;padding-top:20px;display:inline-block;">editor : dashboard</span>

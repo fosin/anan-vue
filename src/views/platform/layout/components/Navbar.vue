@@ -1,33 +1,33 @@
 <template>
   <div class="navbar">
-    <hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container"/>
+    <hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container" />
 
-    <breadcrumb class="breadcrumb-container"/>
+    <breadcrumb class="breadcrumb-container" />
 
     <div class="right-menu">
       <template v-if="device!=='mobile'">
-        <error-log class="errLog-container right-menu-item"/>
+        <error-log class="errLog-container right-menu-item" />
 
         <!--<el-tooltip :content="$t('navbar.screenfull')" effect="dark" placement="bottom">
           <screenfull class="screenfull right-menu-item"/>
         </el-tooltip>
 -->
         <el-tooltip :content="$t('navbar.size')" effect="dark" placement="bottom">
-          <size-select class="international right-menu-item"/>
+          <size-select class="international right-menu-item" />
         </el-tooltip>
 
         <el-tooltip :content="$t('navbar.langSelect')" effect="dark" placement="bottom">
-          <lang-select class="international right-menu-item"/>
+          <lang-select class="international right-menu-item" />
         </el-tooltip>
         <el-tooltip :content="$t('navbar.theme')" effect="dark" placement="bottom">
-          <theme-picker class="theme-switch right-menu-item"/>
+          <theme-picker class="theme-switch right-menu-item" />
         </el-tooltip>
       </template>
       <el-dropdown class="avatar-container right-menu-item">
         <div class="avatar-wrapper">
-          <svg-icon v-if="userInfo.avatar" :icon-class="userInfo.avatar" style="width: 40px; height: 40px; border-radius: 50%; background: #fff;"/>
+          <svg-icon v-if="userInfo.avatar" :icon-class="userInfo.avatar" style="width: 40px; height: 40px; border-radius: 50%; background: #fff;" />
           <span style="float: right; text-align: center">{{ userInfo.username }}</span>
-          <i class="el-icon-caret-bottom"/>
+          <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item divided>

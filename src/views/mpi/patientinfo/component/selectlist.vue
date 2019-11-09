@@ -11,14 +11,16 @@
       style="width: 100%"
       @sort-change="sortChange"
       @row-click="rowClick"
-      @selection-change="handleSelectionChange">
+      @selection-change="handleSelectionChange"
+    >
       <el-table-column
         type="selection"
-        width="55"/>
+        width="55"
+      />
       <el-table-column align="center" label="卡号" sortable prop="cardNo" width="150" />
       <el-table-column align="center" label="身份证号" sortable prop="idcard" width="180" />
-      <el-table-column align="center" label="姓名" sortable prop="name"/>
-      <el-table-column align="center" label="姓名简码" sortable prop="pycode"/>
+      <el-table-column align="center" label="姓名" sortable prop="name" />
+      <el-table-column align="center" label="姓名简码" sortable prop="pycode" />
       <el-table-column align="center" label="性别" width="100" sortable prop="sex">
         <template slot-scope="scope">
           <span>{{ getDicNameValue(sexOptions, scope.row.sex) }}</span>
@@ -29,11 +31,11 @@
           <span>{{ scope.row.birthday | dateFormatFilter('yyyy-MM-dd') }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="住址" sortable prop="address"/>
-      <el-table-column align="center" label="邮编" sortable prop="postal"/>
-      <el-table-column align="center" label="本人电话" sortable prop="phone"/>
-      <el-table-column align="center" label="籍贯" sortable prop="nativePlace"/>
-      <el-table-column align="center" label="户口" sortable prop="household"/>
+      <el-table-column align="center" label="住址" sortable prop="address" />
+      <el-table-column align="center" label="邮编" sortable prop="postal" />
+      <el-table-column align="center" label="本人电话" sortable prop="phone" />
+      <el-table-column align="center" label="籍贯" sortable prop="nativePlace" />
+      <el-table-column align="center" label="户口" sortable prop="household" />
       <el-table-column align="center" label="国籍" sortable prop="nationality">
         <template slot-scope="scope">
           <span>{{ getDicNameValue(nationalityOptions, scope.row.nationality) }}</span>
@@ -59,7 +61,7 @@
           <span>{{ getDicNameValue(maritalOptions, scope.row.marital) }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="参加工作时间" sortable prop="workDate"/>
+      <el-table-column align="center" label="参加工作时间" sortable prop="workDate" />
       <el-table-column align="center" label="职业类别" sortable prop="workType">
         <template slot-scope="scope">
           <span>{{ getDicNameValue(workTypeOptions, scope.row.workType) }}</span>
@@ -80,7 +82,7 @@
           <span>{{ getDicNameValue(insurancetypeOptions, scope.row.insurancetype) }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="工作单位" sortable prop="workplace"/>
+      <el-table-column align="center" label="工作单位" sortable prop="workplace" />
       <!-- <el-table-column align="center" label="档案状态" sortable prop="status">
         <template slot-scope="scope">
           <span>{{getDicNameValue(statusOptions, scope.row.status)}}</span>
@@ -96,12 +98,12 @@
           <span>{{ getDicNameValue(infoFromOptions, scope.row.infoFrom) }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="版本号" sortable prop="version"/>
-      <el-table-column align="center" label="联系人身份证" sortable prop="contactIdcard"/>
-      <el-table-column align="center" label="联系人姓名" sortable prop="contactName"/>
-      <el-table-column align="center" label="联系人电话" sortable prop="contactPhone"/>
-      <el-table-column align="center" label="联系人信息" sortable prop="contactInfo"/>
-      <el-table-column align="center" label="更新数据" sortable prop="updatesign"/>
+      <el-table-column align="center" label="版本号" sortable prop="version" />
+      <el-table-column align="center" label="联系人身份证" sortable prop="contactIdcard" />
+      <el-table-column align="center" label="联系人姓名" sortable prop="contactName" />
+      <el-table-column align="center" label="联系人电话" sortable prop="contactPhone" />
+      <el-table-column align="center" label="联系人信息" sortable prop="contactInfo" />
+      <el-table-column align="center" label="更新数据" sortable prop="updatesign" />
     </el-table>
 
     <div v-show="!listLoading" class="pagination-container">
@@ -112,7 +114,8 @@
         :total="total"
         layout="total, sizes, prev, pager, next, jumper"
         @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"/>
+        @current-change="handleCurrentChange"
+      />
     </div>
   </div>
 </template>

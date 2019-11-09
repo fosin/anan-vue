@@ -1,7 +1,7 @@
 <template id="myiframe">
   <div>
-    <iframe v-if="$route.query.src" ref="iframe" :src="src" class="iframe" frameborder="0"/>
-    <iframe v-else ref="iframe" :src="src" class="iframe" frameborder="0"/>
+    <iframe v-if="$route.query.src" ref="iframe" :src="src" class="iframe" frameborder="0" />
+    <iframe v-else ref="iframe" :src="src" class="iframe" frameborder="0" />
   </div>
 </template>
 

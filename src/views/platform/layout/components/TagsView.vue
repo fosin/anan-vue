@@ -4,20 +4,29 @@
       <router-link
         v-for="tag in Array.from(visitedViews)"
         ref="tag"
+        :key="tag.path"
         :class="isActive(tag)?'active':''"
         :to="tag"
-        :key="tag.path"
         class="tags-view-item"
-        @contextmenu.prevent.native="openMenu(tag,$event)">
+        @contextmenu.prevent.native="openMenu(tag,$event)"
+      >
         {{ generateTitle(tag.title) }}
-        <span class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)"/>
+        <span class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)" />
       </router-link>
     </ScrollPane>
     <ul v-show="visible" :style="{left:left+'px',top:top+'px'}" class="contextmenu">
-      <li @click="refreshSelectedTag(selectedTag)">{{ $t('tagsView.refresh') }}</li>
-      <li @click="closeSelectedTag(selectedTag)">{{ $t('tagsView.close') }}</li>
-      <li @click="closeOthersTags">{{ $t('tagsView.closeOthers') }}</li>
-      <li @click="closeAllTags">{{ $t('tagsView.closeAll') }}</li>
+      <li @click="refreshSelectedTag(selectedTag)">
+        {{ $t('tagsView.refresh') }}
+      </li>
+      <li @click="closeSelectedTag(selectedTag)">
+        {{ $t('tagsView.close') }}
+      </li>
+      <li @click="closeOthersTags">
+        {{ $t('tagsView.closeOthers') }}
+      </li>
+      <li @click="closeAllTags">
+        {{ $t('tagsView.closeAll') }}
+      </li>
     </ul>
   </div>
 </template>

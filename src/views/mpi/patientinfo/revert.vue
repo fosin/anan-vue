@@ -6,7 +6,8 @@
         style="width: 400px;"
         class="filter-item"
         placeholder="支持姓名、卡号、手机号码、身份证号、MPIID查找"
-        @keyup.enter.native="handleSearch"/>
+        @keyup.enter.native="handleSearch"
+      />
       <el-button-group>
         <el-button v-waves round class="filter-item" type="primary" icon="el-icon-search" @click="handleSearch">
           {{ $t('table.search') }}
@@ -18,7 +19,9 @@
           style="margin-left: 5px;"
           type="primary"
           icon="el-icon-view"
-          @click="handleQuery">{{ $t('table.view') }}
+          @click="handleQuery"
+        >
+          {{ $t('table.view') }}
         </el-button>
         <el-button
           v-waves
@@ -28,12 +31,14 @@
           style="margin-left: 5px;"
           type="primary"
           icon="el-icon-circle-plus"
-          @click="handleRevert">{{ $t('table.revert') }}
+          @click="handleRevert"
+        >
+          {{ $t('table.revert') }}
         </el-button>
       </el-button-group>
     </div>
-    <ListPatientinfo ref="listPatientinfo" :status="1" :data="form" @rowClick="rowClick"/>
-    <FormPatientinfo ref="formPatientinfo" :mpi-id="form.mpiId"/>
+    <ListPatientinfo ref="listPatientinfo" :status="1" :data="form" @rowClick="rowClick" />
+    <FormPatientinfo ref="formPatientinfo" :mpi-id="form.mpiId" />
   </div>
 </template>
 <script>

@@ -14,7 +14,7 @@ import i18n from './lang' // Internationalization
 import './icons' // icon
 import './errorLog'// error log
 import './utils/permission' // permission control
-import { getRequest, postRequest, deleteRequest, putRequest } from './utils/request'
+import { getRequest, postRequest, deleteRequest, putRequest, allRequest } from './utils/request'
 // if (process.env.NODE_ENV === 'development') {
 //   import('./mock') // simulation data
 // }
@@ -29,6 +29,7 @@ Vue.prototype.getRequest = getRequest
 Vue.prototype.postRequest = postRequest
 Vue.prototype.deleteRequest = deleteRequest
 Vue.prototype.putRequest = putRequest
+Vue.prototype.allRequest = allRequest
 
 require('es6-promise').polyfill()
 Vue.use(dictionary)

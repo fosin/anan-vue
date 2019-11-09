@@ -4,8 +4,10 @@
       <el-row>
         <el-col :span="24">
           <div class="title-container">
-            <h3 class="title">{{ $t('login.title') }}</h3>
-            <LangSelect class="set-language"/>
+            <h3 class="title">
+              {{ $t('login.title') }}
+            </h3>
+            <LangSelect class="set-language" />
           </div>
         </el-col>
       </el-row>
@@ -13,14 +15,15 @@
         <el-col :span="24">
           <el-form-item prop="username">
             <span class="svg-container svg-container_login">
-              <svg-icon icon-class="user"/>
+              <svg-icon icon-class="user" />
             </span>
             <el-input
               v-model="loginForm.username"
               :placeholder="$t('login.username.placeholder')"
               name="username"
               type="text"
-              auto-complete="on"/>
+              auto-complete="on"
+            />
           </el-form-item>
         </el-col>
       </el-row>
@@ -28,17 +31,18 @@
         <el-col :span="24">
           <el-form-item prop="password">
             <span class="svg-container svg-container_login">
-              <svg-icon icon-class="password"/>
+              <svg-icon icon-class="password" />
             </span>
             <el-input
-              :type="passwordType"
               v-model="loginForm.password"
+              :type="passwordType"
               :placeholder="$t('login.password.placeholder')"
               name="password"
               auto-complete="on"
-              @keyup.enter.native="handleLogin"/>
+              @keyup.enter.native="handleLogin"
+            />
             <span class="show-pwd" @click="showPwd">
-              <svg-icon icon-class="eye"/>
+              <svg-icon icon-class="eye" />
             </span>
           </el-form-item>
         </el-col>
@@ -58,7 +62,9 @@
        </el-form-item>-->
       <el-row>
         <el-col :span="4">
-          <el-checkbox v-model="loginForm.rememberMe">{{ $t('login.rememberMe') }}</el-checkbox>
+          <el-checkbox v-model="loginForm.rememberMe">
+            {{ $t('login.rememberMe') }}
+          </el-checkbox>
         </el-col>
         <el-col :span="20">
           <el-button
@@ -66,11 +72,13 @@
             round
             type="primary"
             style="width:30%;margin-bottom:30px;float: right"
-            @click.native.prevent="handleLogin">{{ $t('login.logIn') }}
+            @click.native.prevent="handleLogin"
+          >
+            {{ $t('login.logIn') }}
           </el-button>
         </el-col>
       </el-row>
-      <SocialSign v-if="false"/>
+      <SocialSign v-if="false" />
     </el-form>
   </div>
 </template>

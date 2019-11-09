@@ -82,7 +82,7 @@ export default {
       return data.name.indexOf(value) !== -1
     },
     loadTreeData() {
-      var _this = this
+      const _this = this
       this.getRequest('/vhr/system/basic/dep/-1').then(resp => {
         _this.treeLoading = false
         if (resp && resp.status === 200) {
@@ -91,8 +91,8 @@ export default {
       })
     },
     setDataToTree(treeData, pid, respData) {
-      for (var i = 0; i < treeData.length; i++) {
-        var td = treeData[i]
+      for (let i = 0; i < treeData.length; i++) {
+        const td = treeData[i]
         if (td.id === pid) {
           treeData[i].children = treeData[i].children.concat(respData)
           return
@@ -102,7 +102,7 @@ export default {
       }
     },
     addDep() {
-      var _this = this
+      const _this = this
       this.dialogVisible = false
       this.treeLoading = true
       this.postRequest('/vhr/system/basic/dep', {
@@ -111,14 +111,14 @@ export default {
       }).then(resp => {
         _this.treeLoading = false
         if (resp && resp.status === 200) {
-          var respData = resp.data
+          const respData = resp.data
           _this.depName = ''
           _this.setDataToTree(_this.treeData, _this.pDep, respData.msg)
         }
       })
     },
     loadAllDeps() {
-      var _this = this
+      const _this = this
       this.getRequest('/vhr/system/basic/deps').then(resp => {
         if (resp && resp.status === 200) {
           _this.allDeps = resp.data
@@ -132,7 +132,7 @@ export default {
       event.stopPropagation()
     },
     deleteDep(data, event) {
-      var _this = this
+      const _this = this
       if (data.children.length > 0) {
         this.$message({
           message: '该部门下尚有其他部门，不能被删除!',
@@ -161,8 +161,8 @@ export default {
       event.stopPropagation()
     },
     deleteLocalDep(treeData, data) {
-      for (var i = 0; i < treeData.length; i++) {
-        var td = treeData[i]
+      for (let i = 0; i < treeData.length; i++) {
+        const td = treeData[i]
         if (td.id === data.id) {
           treeData.splice(i, 1)
           return

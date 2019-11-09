@@ -3,7 +3,7 @@
     <el-container>
       <el-aside width="160px">
         <div
-          v-for="(hr,index) in hrs"
+          v-for="(hr) in hrs"
           :key="hr.id"
           class="friendListDiv"
           :class="{currentChatFriend:currentFriend.id===hr.id}"
@@ -25,28 +25,30 @@
             </el-tag>
             聊天中
           </p>
-          <template v-for="msg in msgList">
+          <template v-for="message in msgList">
             <!--发送来的消息-->
             <div
-              v-if="msg.from===currentFriend.username"
+              v-if="message.from===currentFriend.username"
+              :key="message"
               style="display: flex;justify-content: flex-start;align-items: center;box-sizing: border-box;"
             >
               <img :src="currentFriend.userface" class="userfaceImg">
               <div
                 style="display: inline-flex;border-style: solid;border-width: 1px;border-color: #20a0ff;border-radius: 5px;padding: 5px 8px 5px 8px"
               >
-                {{ msg.msg }}
+                {{ message.msg }}
               </div>
             </div>
             <!--发出去的消息-->
             <div
-              v-if="msg.from!==currentFriend.username"
+              v-if="message.from!==currentFriend.username"
+              :key="message"
               style="display: flex;justify-content: flex-end;align-items: center;box-sizing: border-box;"
             >
               <div
                 style="display: inline-flex;border-style: solid;border-width: 1px;border-color: #20a0ff;border-radius: 5px;padding: 5px 8px 5px 8px;margin-right: 3px;background-color: #9eea6a"
               >
-                {{ msg.msg }}
+                {{ message.msg }}
               </div>
               <img :src="currentUser.userface" class="userfaceImg">
             </div>
@@ -104,13 +106,13 @@ export default {
   },
   methods: {
     sendMsg() {
-      var oldMsg = window.localStorage.getItem(this.$store.state.user.username + '#' + this.currentFriend.username)
+      let oldMsg = window.localStorage.getItem(this.$store.state.user.username + '#' + this.currentFriend.username)
       if (oldMsg == null) {
         oldMsg = []
         oldMsg.push({ msg: this.msg, from: this.$store.state.user.username })
         window.localStorage.setItem(this.$store.state.user.username + '#' + this.currentFriend.username, JSON.stringify(oldMsg))
       } else {
-        var oldMsgJson = JSON.parse(oldMsg)
+        const oldMsgJson = JSON.parse(oldMsg)
         oldMsgJson.push({ msg: this.msg, from: this.$store.state.user.username })
         window.localStorage.setItem(this.$store.state.user.username + '#' + this.currentFriend.username, JSON.stringify(oldMsgJson))
       }
@@ -119,7 +121,7 @@ export default {
       this.updateChatDiv()
     },
     updateChatDiv() {
-      var oldMsg = window.localStorage.getItem(this.currentUser.username + '#' + this.currentFriend.username)
+      const oldMsg = window.localStorage.getItem(this.currentUser.username + '#' + this.currentFriend.username)
       if (oldMsg == null) {
         this.$store.commit('updateMsgList', [])
       } else {
@@ -138,8 +140,8 @@ export default {
       document.getElementById('chatDiv').scrollTop = document.getElementById('chatDiv').scrollHeight
     },
     loadHrs() {
-      var _this = this
-      this.getRequest('/chat/hrs').then(resp => {
+      const _this = this
+      this.getRequest('/vhr/chat/hrs').then(resp => {
         _this.hrs = resp.data
       })
     }

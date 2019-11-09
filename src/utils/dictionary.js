@@ -1,4 +1,3 @@
-import { fetchDictionaryDetailsByCode } from '@/views/platform/dictionary/dictionary'
 import { Notification } from 'element-ui'
 export default (Vue) => {
   Vue.prototype.asyncLoadDictionaryByCode = function(code, callback) {
@@ -18,7 +17,7 @@ export default (Vue) => {
       })
       return
     }
-    fetchDictionaryDetailsByCode(code).then(response => {
+    this.postRequest('/platform/v1/dictionaryDetail/byCode/' + code).then(response => {
       callback(response.data)
     }).catch(reason => {
       Notification.error({
@@ -46,7 +45,7 @@ export default (Vue) => {
       })
       return
     }
-    fetchDictionaryDetailsByCode(code, 'get').then(response => {
+    this.getRequest('/platform/v1/dictionaryDetail/byCode/' + code).then(response => {
       callback(response.data)
     }).catch(reason => {
       Notification.error({

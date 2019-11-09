@@ -1,12 +1,14 @@
 <template>
   <div class="app-container calendar-list-container">
     <div class="filter-container">
-      <el-button v-waves v-permission="'1'" round type="primary" class="filter-item" style="margin-left: 5px;" icon="el-icon-circle-plus" size="mini" @click="getList">{{ $t('table.refresh') }}</el-button>
+      <el-button v-waves v-permission="'1'" round type="primary" class="filter-item" style="margin-left: 5px;" icon="el-icon-circle-plus" size="mini" @click="getList">
+        {{ $t('table.refresh') }}
+      </el-button>
     </div>
     <el-table
       v-loading="listLoading"
       :data="list"
-      :default-sort = "{prop: 'updateTime', order: 'descending'}"
+      :default-sort="{prop: 'updateTime', order: 'descending'}"
       element-loading-text="努力加载中"
       border
       fit
@@ -14,9 +16,10 @@
       style="width: 100%"
       size="mini"
       @sort-change="sortChange"
-      @row-click="rowClick">
-      <el-table-column align="center" label="姓名" sortable prop="name"/>
-      <el-table-column align="center" label="身份证" sortable prop="idcard"/>
+      @row-click="rowClick"
+    >
+      <el-table-column align="center" label="姓名" sortable prop="name" />
+      <el-table-column align="center" label="身份证" sortable prop="idcard" />
       <el-table-column align="center" label="出生日期" sortable prop="birthday">
         <template slot-scope="scope">
           <span>{{ scope.row.birthday | dateFormatFilter('yyyy-MM-dd') }}</span>
@@ -27,17 +30,17 @@
           <span>{{ getDicNameValue(sexOptions, scope.row.sex) }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="就诊卡号" sortable prop="cardno"/>
+      <el-table-column align="center" label="就诊卡号" sortable prop="cardno" />
       <el-table-column align="center" label="操作类型" sortable prop="type">
         <template slot-scope="scope">
           <span>{{ scope.row.type | dateFormatFilter(scope.row.type) }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="修改时间" sortable prop="updateTime"/>
-      <el-table-column align="center" label="修改人" sortable prop="modifier"/>
+      <el-table-column align="center" label="修改时间" sortable prop="updateTime" />
+      <el-table-column align="center" label="修改人" sortable prop="modifier" />
     </el-table>
     <div v-show="!listLoading" class="pagination-container">
-      <el-pagination :current-page.sync="pageModule.pageNumber" :page-sizes="pageSizes" :page-size="pageModule.pageSize" :total="total" layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange"/>
+      <el-pagination :current-page.sync="pageModule.pageNumber" :page-sizes="pageSizes" :page-size="pageModule.pageSize" :total="total" layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
   </div>
 </template>

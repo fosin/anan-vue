@@ -742,7 +742,6 @@
   </div>
 </template>
 <script>
-// import { getRequest, putRequest, postRequest } from '@/utils/request'
 export default {
   data() {
     return {
@@ -761,10 +760,7 @@ export default {
       joblevels: [],
       totalCount: -1,
       currentPage: 1,
-      degrees: [{ id: 4, name: '大专' }, { id: 5, name: '本科' }, { id: 6, name: '硕士' }, { id: 7, name: '博士' }, {
-        id: 3,
-        name: '高中'
-      }, { id: 2, name: '初中' }, { id: 1, name: '小学' }, { id: 8, name: '其他' }],
+      degrees: [],
       deps: [],
       defaultProps: {
         label: 'name',
@@ -776,6 +772,7 @@ export default {
       advanceSearchViewVisible: false,
       showOrHidePop: false,
       showOrHidePop2: false,
+      wedlocks: [],
       emp: {
         name: '',
         gender: '',
@@ -847,6 +844,24 @@ export default {
     }
   },
   mounted: function() {
+    this.asyncLoadDictionaryByCode(5, (data) => {
+      this.wedlocks = data
+    })
+    this.asyncLoadDictionaryByCode(6, (data) => {
+      this.nations = data
+    })
+    this.asyncLoadDictionaryByCode(42, (data) => {
+      this.politics = data
+    })
+    this.asyncLoadDictionaryByCode(141, (data) => {
+      this.positions = data
+    })
+    this.asyncLoadDictionaryByCode(140, (data) => {
+      this.joblevels = data
+    })
+    this.asyncLoadDictionaryByCode(47, (data) => {
+      this.degrees = data
+    })
     this.initData()
     this.loadEmps()
   },
@@ -892,8 +907,8 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        var ids = ''
-        for (var i = 0; i < this.multipleSelection.length; i++) {
+        let ids = ''
+        for (let i = 0; i < this.multipleSelection.length; i++) {
           ids += this.multipleSelection[i].id + ','
         }
         this.doDelete(ids)
@@ -951,15 +966,14 @@ export default {
       this.loadEmps()
     },
     loadEmps() {
-      var _this = this
       this.tableLoading = true
       this.getRequest('/vhr/employee/basic/emp?page=' + this.currentPage + '&size=10&keywords=' + this.keywords + '&politicId=' + this.emp.politicId + '&nationId=' + this.emp.nationId + '&posId=' + this.emp.posId + '&jobLevelId=' + this.emp.jobLevelId + '&engageForm=' + this.emp.engageForm + '&departmentId=' + this.emp.departmentId + '&beginDateScope=' + this.beginDateScope).then(resp => {
         this.tableLoading = false
         if (resp && resp.status === 200) {
-          var data = resp.data
-          _this.emps = data.emps
-          _this.totalCount = data.count
-          //            _this.emptyEmpData();
+          const data = resp.data
+          this.emps = data.emps
+          this.totalCount = data.count
+          //            this.emptyEmpData();
         }
       }).catch(reason => {
         this.$notify({
@@ -971,18 +985,17 @@ export default {
       })
     },
     addEmp(formName) {
-      var _this = this
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if (this.emp.id) {
             // 更新
             this.tableLoading = true
             this.putRequest('/vhr/employee/basic/emp', this.emp).then(resp => {
-              _this.tableLoading = false
+              this.tableLoading = false
               if (resp && resp.status === 200) {
-                _this.dialogVisible = false
-                _this.emptyEmpData()
-                _this.loadEmps()
+                this.dialogVisible = false
+                this.emptyEmpData()
+                this.loadEmps()
               }
             }).catch(reason => {
               this.$notify({
@@ -996,11 +1009,11 @@ export default {
             // 添加
             this.tableLoading = true
             this.postRequest('/vhr/employee/basic/emp', this.emp).then(resp => {
-              _this.tableLoading = false
+              this.tableLoading = false
               if (resp && resp.status === 200) {
-                _this.dialogVisible = false
-                _this.emptyEmpData()
-                _this.loadEmps()
+                this.dialogVisible = false
+                this.emptyEmpData()
+                this.loadEmps()
               }
             }).catch(reason => {
               this.$notify({
@@ -1039,16 +1052,15 @@ export default {
       this.depTextColor = '#606266'
     },
     initData() {
-      const _this = this
       this.getRequest('/vhr/employee/basic/basicdata').then(resp => {
         if (resp && resp.status === 200) {
-          var data = resp.data
-          _this.nations = data.nations
-          _this.politics = data.politics
-          _this.deps = data.deps
-          _this.positions = data.positions
-          _this.joblevels = data.joblevels
-          _this.emp.workID = data.workID
+          const data = resp.data
+          this.nations = data.nations
+          this.politics = data.politics
+          this.deps = data.deps
+          this.positions = data.positions
+          this.joblevels = data.joblevels
+          this.emp.workID = data.workID
         }
       }).catch(reason => {
         this.$notify({
@@ -1088,10 +1100,9 @@ export default {
     showAddEmpView() {
       this.dialogTitle = '添加员工'
       this.dialogVisible = true
-      const _this = this
       this.getRequest('/vhr/employee/basic/maxWorkID').then(resp => {
         if (resp && resp.status === 200) {
-          _this.emp.workID = resp.data
+          this.emp.workID = resp.data
         }
       }).catch(reason => {
         this.$notify({

@@ -100,8 +100,8 @@ export default {
   },
   computed: {
     isAdmin: function() {
-      var roles = this.$store.state.user.roles
-      var isAdmin = false
+      const roles = this.$store.state.user.roles
+      let isAdmin = false
       roles.forEach(role => {
         if (role.name === 'ROLE_admin') {
           isAdmin = true
@@ -118,18 +118,18 @@ export default {
       if (newVal === '') {
         return
       }
-      var _this = this
-      this.putRequest('/chat/markread', { flag: this.mid }).then(resp => {
+      const _this = this
+      this.putRequest('/vhr/chat/markread', { flag: this.mid }).then(resp => {
         if (resp && resp.status === 200) {
           _this.initSysMsgs()
         }
       })
     },
     initSysMsgs() {
-      var _this = this
-      this.getRequest('/chat/sysmsgs').then(resp => {
+      const _this = this
+      this.getRequest('/vhr/chat/sysmsgs').then(resp => {
         _this.sysmsgs = resp.data
-        var isDot = false
+        let isDot = false
         _this.sysmsgs.forEach(msg => {
           if (msg.state === 0) {
             isDot = true
@@ -139,8 +139,8 @@ export default {
       })
     },
     allRead() {
-      var _this = this
-      this.putRequest('/chat/markread', { flag: -1 }).then(resp => {
+      const _this = this
+      this.putRequest('/vhr/chat/markread', { flag: -1 }).then(resp => {
         if (resp && resp.status === 200) {
           _this.$store.commit('toggleNFDot', false)
           _this.initSysMsgs()
@@ -149,11 +149,11 @@ export default {
     },
     sendNFMsg() {
       this.dialogLoading = true
-      var _this = this
-      this.postRequest('/chat/nf', { message: this.message, title: this.title }).then(resp => {
+      const _this = this
+      this.postRequest('/vhr/chat/nf', { message: this.message, title: this.title }).then(resp => {
         _this.dialogLoading = false
         if (resp && resp.status === 200) {
-          var data = resp.data
+          const data = resp.data
 
           if (data.status === 'success') {
             _this.$store.state.stomp.send('/ws/nf', {}, '')

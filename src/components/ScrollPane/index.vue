@@ -1,7 +1,7 @@
 <template>
   <div ref="scrollContainer" class="scroll-container" @wheel.prevent="handleScroll">
     <div ref="scrollWrapper" :style="{left: left + 'px'}" class="scroll-wrapper">
-      <slot/>
+      <slot />
     </div>
   </div>
 </template>

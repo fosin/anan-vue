@@ -6,8 +6,10 @@
           <svg-icon icon-class="peoples" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">活跃用户数</div>
-          <count-to :start-val="0" :end-val="3232" :duration="2600" class="card-panel-num"/>
+          <div class="card-panel-text">
+            活跃用户数
+          </div>
+          <count-to :start-val="0" :end-val="3232" :duration="2600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -17,8 +19,10 @@
           <svg-icon icon-class="message" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">系统消息</div>
-          <count-to :start-val="0" :end-val="81212" :duration="3000" class="card-panel-num"/>
+          <div class="card-panel-text">
+            系统消息
+          </div>
+          <count-to :start-val="0" :end-val="81212" :duration="3000" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -28,8 +32,10 @@
           <svg-icon icon-class="money" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">软件资产总额</div>
-          <count-to :start-val="0" :end-val="928000" :duration="3200" class="card-panel-num"/>
+          <div class="card-panel-text">
+            软件资产总额
+          </div>
+          <count-to :start-val="0" :end-val="928000" :duration="3200" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -39,8 +45,10 @@
           <svg-icon icon-class="shoppingCard" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">今日服务消费次数</div>
-          <count-to :start-val="0" :end-val="13600" :duration="3600" class="card-panel-num"/>
+          <div class="card-panel-text">
+            今日服务消费次数
+          </div>
+          <count-to :start-val="0" :end-val="13600" :duration="3600" class="card-panel-num" />
         </div>
       </div>
     </el-col>

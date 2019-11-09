@@ -1,12 +1,14 @@
 <template>
   <div class="app-container calendar-list-container">
     <div class="filter-container">
-      <el-button v-waves v-permission="'1'" round type="primary" class="filter-item" style="margin-left: 5px;" icon="el-icon-circle-plus" size="mini" @click="getList">{{ $t('table.refresh') }}</el-button>
+      <el-button v-waves v-permission="'1'" round type="primary" class="filter-item" style="margin-left: 5px;" icon="el-icon-circle-plus" size="mini" @click="getList">
+        {{ $t('table.refresh') }}
+      </el-button>
     </div>
     <el-table
       v-loading="listLoading"
       :data="list"
-      :default-sort = "{prop: 'createTime', order: 'descending'}"
+      :default-sort="{prop: 'createTime', order: 'descending'}"
       element-loading-text="努力加载中"
       border
       fit
@@ -14,19 +16,20 @@
       style="width: 100%"
       size="mini"
       @sort-change="sortChange"
-      @row-click="rowClick">
-      <el-table-column align="center" label="操作内容" sortable prop="content" width="900px"/>
+      @row-click="rowClick"
+    >
+      <el-table-column align="center" label="操作内容" sortable prop="content" width="900px" />
       <el-table-column align="center" label="操作类型" sortable prop="type" width="100px">
         <template slot-scope="scope">
           <span>{{ getDicNameValue(typeOptions, scope.row.type) }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="操作日期" sortable prop="createTime" width="140px"/>
-      <el-table-column align="center" label="操作人" sortable prop="creater" width="100px"/>
+      <el-table-column align="center" label="操作日期" sortable prop="createTime" width="140px" />
+      <el-table-column align="center" label="操作人" sortable prop="creater" width="100px" />
     </el-table>
 
     <div v-show="!listLoading" class="pagination-container">
-      <el-pagination :current-page.sync="pageModule.pageNumber" :page-sizes="pageSizes" :page-size="pageModule.pageSize" :total="total" layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange"/>
+      <el-pagination :current-page.sync="pageModule.pageNumber" :page-sizes="pageSizes" :page-size="pageModule.pageSize" :total="total" layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
   </div>
 </template>

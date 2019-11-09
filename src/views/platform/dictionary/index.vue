@@ -3,7 +3,7 @@
     <!--<div class="app-container calendar-list-container">-->
     <el-row>
       <el-col :span="11">
-        <dictionaryHeader @dic-row-click="onDicHeaderRowClick"/>
+        <dictionaryHeader @dic-row-click="onDicHeaderRowClick" />
       </el-col>
       <el-col :span="13">
         <dictionaryDetail ref="dictionaryDetail" />

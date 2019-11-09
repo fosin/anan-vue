@@ -1,9 +1,7 @@
 <template>
-
   <el-tabs v-model="activeName" tab-position="top" @tab-click="tabClick">
-
     <el-form ref="form" :model="form" :rules="rules" label-width="80px" size="mini">
-      <el-row >
+      <el-row>
         <el-col :span="20">
           <el-form-item label="" prop="name">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
@@ -12,7 +10,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row >
+      <el-row>
         <el-col :span="20">
           <el-form-item label="" prop="sex">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
@@ -21,7 +19,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row >
+      <el-row>
         <el-col :span="20">
           <el-form-item label="" prop="nation">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
@@ -29,9 +27,9 @@
             </el-tooltip>
           </el-form-item>
         </el-col>
-        <el-col :span="20"/>
+        <el-col :span="20" />
       </el-row>
-      <el-row >
+      <el-row>
         <el-col :span="20">
           <el-form-item label="" prop="pycode">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
@@ -40,7 +38,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row >
+      <el-row>
         <el-col :span="20">
           <el-form-item label="" prop="cardNo">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
@@ -49,7 +47,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row >
+      <el-row>
         <el-col :span="20">
           <el-form-item label="" prop="nationality">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
@@ -58,7 +56,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row >
+      <el-row>
         <el-col :span="20">
           <el-form-item label="" prop="idcard">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
@@ -67,7 +65,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row >
+      <el-row>
         <el-col :span="20">
           <el-form-item label="" prop="birthday">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
@@ -77,7 +75,7 @@
         </el-col>
       </el-row>
 
-      <el-row >
+      <el-row>
         <el-col :span="20">
           <el-form-item label="" prop="bloodtype">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
@@ -86,7 +84,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row >
+      <el-row>
         <el-col :span="20">
           <el-form-item label="" prop="rhblood">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
@@ -95,7 +93,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row >
+      <el-row>
         <el-col :span="20">
           <el-form-item label="" prop="marital">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
@@ -104,7 +102,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row >
+      <el-row>
         <el-col :span="20">
           <el-form-item label="" prop="death">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
@@ -113,14 +111,14 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row >
+      <el-row>
         <el-col :span="20">
           <el-form-item label="" prop="workType">
             <span @click="handleItemClick('workType',form.workType)">{{ getDicNameValue(workTypeOptions, form.workType) }}</span>
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row >
+      <el-row>
         <el-col :span="20">
           <el-form-item label="" prop="education">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
@@ -129,7 +127,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row >
+      <el-row>
         <el-col :span="20">
           <el-form-item label="" prop="insurance">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
@@ -138,7 +136,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row >
+      <el-row>
         <el-col :span="20">
           <el-form-item label="" prop="insurancetype">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
@@ -147,25 +145,25 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row >
+      <el-row>
         <el-col :span="20">
-          <el-form-item label="" prop="contactIdcard" >
+          <el-form-item label="" prop="contactIdcard">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
               <span @click="handleItemClick('contactIdcard',form.contactIdcard)">{{ form.contactIdcard }}</span>
             </el-tooltip>
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row >
+      <el-row>
         <el-col :span="20">
-          <el-form-item label="" prop="contactName" >
+          <el-form-item label="" prop="contactName">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
               <span @click="handleItemClick('contactName',form.contactName)">{{ form.contactName }}</span>
             </el-tooltip>
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row >
+      <el-row>
         <el-col :span="20">
           <el-form-item label="" prop="contactPhone">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
@@ -174,16 +172,16 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row >
+      <el-row>
         <el-col :span="20">
-          <el-form-item label="" prop="contactInfo" >
+          <el-form-item label="" prop="contactInfo">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
               <span @click="handleItemClick('contactInfo',form.contactInfo)">{{ form.contactInfo===null?'':form.contactInfo }}</span>
             </el-tooltip>
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row >
+      <el-row>
         <el-col :span="20">
           <el-form-item label="" prop="native_place">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
@@ -192,16 +190,16 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row >
+      <el-row>
         <el-col :span="24">
-          <el-form-item label="" prop="workDate" >
+          <el-form-item label="" prop="workDate">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
               <span @click="handleItemClick('workDate',form.workDate)">{{ form.workDate===null?'':form.workDate }}</span>
             </el-tooltip>
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row >
+      <el-row>
         <el-col :span="20">
           <el-form-item label="" prop="workplace">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
@@ -210,7 +208,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row >
+      <el-row>
         <el-col :span="20">
           <el-form-item label="" prop="phone">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
@@ -219,7 +217,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row >
+      <el-row>
         <el-col :span="20">
           <el-form-item label="" prop="address">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
@@ -228,7 +226,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row >
+      <el-row>
         <el-col :span="20">
           <el-form-item label="" prop="postal">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
@@ -237,7 +235,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row >
+      <el-row>
         <el-col :span="20">
           <el-form-item label="" prop="household">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
@@ -247,9 +245,7 @@
         </el-col>
       </el-row>
     </el-form>
-
   </el-tabs>
-
 </template>
 <script>
 import { getPatientinfo, postPatientinfo, putPatientinfo, statusPatientinfo } from './patientinfo'

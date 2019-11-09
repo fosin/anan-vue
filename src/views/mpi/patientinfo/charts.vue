@@ -1,7 +1,7 @@
 <!--suppress ALL -->
 <template>
   <div ref="contener" style="width:100%;height:100%;background:#2468a2">
-    <div ref="myEchart" :style="{width: mapWidth, height: mapHeight}"/>
+    <div ref="myEchart" :style="{width: mapWidth, height: mapHeight}" />
   </div>
 </template>
 

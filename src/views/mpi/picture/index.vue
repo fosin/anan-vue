@@ -1,76 +1,95 @@
 <template>
   <div class="app-container calendar-list-container">
     <div class="filter-container">
-      <el-input v-model="pageModule.searchText" style="width: 200px;" class="filter-item" placeholder="支持XXX查找" @keyup.enter.native="handleSearch"/>
-      <el-button v-waves round class="filter-item" type="primary" icon="el-icon-search" @click="handleSearch">{{ $t('table.search') }}</el-button>
-      <el-button v-waves v-permission="'1'" round class="filter-item" style="margin-left: 5px;" type="primary" icon="el-icon-circle-plus" @click="handleAdd">{{ $t('table.add') }}</el-button>
-      <el-button v-waves v-permission="'1'" round type="success" class="filter-item" style="margin-left: 5px;" icon="el-icon-edit" @click="handleEdit()">{{ $t('table.edit') }}
+      <el-input v-model="pageModule.searchText" style="width: 200px;" class="filter-item" placeholder="支持XXX查找" @keyup.enter.native="handleSearch" />
+      <el-button v-waves round class="filter-item" type="primary" icon="el-icon-search" @click="handleSearch">
+        {{ $t('table.search') }}
       </el-button>
-      <el-button v-waves v-permission="'1'" round type="danger" class="filter-item" style="margin-left: 5px;" icon="el-icon-delete" @click="handleDelete()">{{ $t('table.delete') }}
+      <el-button v-waves v-permission="'1'" round class="filter-item" style="margin-left: 5px;" type="primary" icon="el-icon-circle-plus" @click="handleAdd">
+        {{ $t('table.add') }}
+      </el-button>
+      <el-button v-waves v-permission="'1'" round type="success" class="filter-item" style="margin-left: 5px;" icon="el-icon-edit" @click="handleEdit()">
+        {{ $t('table.edit') }}
+      </el-button>
+      <el-button v-waves v-permission="'1'" round type="danger" class="filter-item" style="margin-left: 5px;" icon="el-icon-delete" @click="handleDelete()">
+        {{ $t('table.delete') }}
       </el-button>
     </div>
     <el-table
       v-loading="listLoading"
       :data="list"
-      :default-sort = "{prop: 'mpiId', order: 'ascending'}"
+      :default-sort="{prop: 'mpiId', order: 'ascending'}"
       element-loading-text="努力加载中"
       border
       fit
       highlight-current-row
       style="width: 100%"
       @sort-change="sortChange"
-      @row-click="rowClick">
-      <el-table-column align="center" label="病人唯一标识" sortable prop="mpiId"/>
-      <el-table-column align="center" label="照片信息" sortable prop="photo"/>
+      @row-click="rowClick"
+    >
+      <el-table-column align="center" label="病人唯一标识" sortable prop="mpiId" />
+      <el-table-column align="center" label="照片信息" sortable prop="photo" />
       <el-table-column
         align="center"
         label="0-不需要上传
             1-需要上传"
         sortable
-        prop="uploadsign"/>
+        prop="uploadsign"
+      />
       <el-table-column
         align="center"
         label="0-不需要下传
             1-需要下传"
         sortable
-        prop="sendsign"/>
+        prop="sendsign"
+      />
     </el-table>
 
     <div v-show="!listLoading" class="pagination-container">
-      <el-pagination :current-page.sync="pageModule.pageNumber" :page-sizes="pageSizes" :page-size="pageModule.pageSize" :total="total" layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange"/>
+      <el-pagination :current-page.sync="pageModule.pageNumber" :page-sizes="pageSizes" :page-size="pageModule.pageSize" :total="total" layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-form-item label="病人唯一标识" prop="mpiId">
-          <el-input v-model="form.mpiId" placeholder="病人唯一标识"/>
+          <el-input v-model="form.mpiId" placeholder="病人唯一标识" />
         </el-form-item>
         <el-form-item label="照片信息" prop="photo">
-          <el-input v-model="form.photo" placeholder="照片信息"/>
+          <el-input v-model="form.photo" placeholder="照片信息" />
         </el-form-item>
         <el-form-item
           label="0-不需要上传
             1-需要上传"
-          prop="uploadsign">
+          prop="uploadsign"
+        >
           <el-input
             v-model="form.uploadsign"
             placeholder="0-不需要上传
-            1-需要上传"/>
+            1-需要上传"
+          />
         </el-form-item>
         <el-form-item
           label="0-不需要下传
             1-需要下传"
-          prop="sendsign">
+          prop="sendsign"
+        >
           <el-input
             v-model="form.sendsign"
             placeholder="0-不需要下传
-            1-需要下传"/>
+            1-需要下传"
+          />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button round icon="el-icon-circle-close" @click="cancel('form')">{{ $t('table.cancel') }}</el-button>
-        <el-button v-if="dialogStatus==='create'" round type="primary" icon="el-icon-circle-check" autofocus @click="create('form')">{{ $t('table.confirm') }}</el-button>
-        <el-button v-else round type="primary" icon="el-icon-circle-check" autofocus @click="update('form')">{{ $t('table.update') }}</el-button>
+        <el-button round icon="el-icon-circle-close" @click="cancel('form')">
+          {{ $t('table.cancel') }}
+        </el-button>
+        <el-button v-if="dialogStatus==='create'" round type="primary" icon="el-icon-circle-check" autofocus @click="create('form')">
+          {{ $t('table.confirm') }}
+        </el-button>
+        <el-button v-else round type="primary" icon="el-icon-circle-check" autofocus @click="update('form')">
+          {{ $t('table.update') }}
+        </el-button>
       </div>
     </el-dialog>
   </div>

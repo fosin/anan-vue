@@ -2,11 +2,12 @@
   <div class="app-container calendar-list-container">
     <div class="filter-container">
       <el-input
-        :placeholder="$t('anan_parameter.searchText')"
         v-model="pageModule.searchText"
+        :placeholder="$t('anan_parameter.searchText')"
         style="width: 300px;"
         class="filter-item"
-        @keyup.enter.native="handleFilter"/>
+        @keyup.enter.native="handleFilter"
+      />
       <el-button-group>
         <el-button v-waves round class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
           {{ $t('table.search') }}
@@ -19,7 +20,9 @@
           style="margin-left: 5px;"
           type="primary"
           icon="el-icon-circle-plus"
-          @click="handleAdd">{{ $t('table.add') }}
+          @click="handleAdd"
+        >
+          {{ $t('table.add') }}
         </el-button>
         <el-button
           v-waves
@@ -29,7 +32,9 @@
           class="filter-item"
           style="margin-left: 5px;"
           icon="el-icon-edit"
-          @click="handleEdit()">{{ $t('table.edit') }}
+          @click="handleEdit()"
+        >
+          {{ $t('table.edit') }}
         </el-button>
         <el-button
           v-waves
@@ -39,7 +44,9 @@
           class="filter-item"
           style="margin-left: 5px;"
           icon="el-icon-delete"
-          @click="handleDelete()">{{ $t('table.delete') }}
+          @click="handleDelete()"
+        >
+          {{ $t('table.delete') }}
         </el-button>
         <el-button
           v-waves
@@ -49,7 +56,9 @@
           class="filter-item"
           style="margin-left: 5px;"
           icon="el-icon-upload"
-          @click="handleApply()">{{ $t('table.apply') }}
+          @click="handleApply()"
+        >
+          {{ $t('table.apply') }}
         </el-button>
         <el-button
           v-waves
@@ -59,14 +68,16 @@
           class="filter-item"
           style="margin-left: 5px;"
           icon="el-icon-upload"
-          @click="handleApplys()">{{ $t('table.applys') }}
+          @click="handleApplys()"
+        >
+          {{ $t('table.applys') }}
         </el-button>
       </el-button-group>
     </div>
 
     <el-table
-      v-loading="listLoading"
       ref="parameterTable"
+      v-loading="listLoading"
       :data="parameterList"
       :default-sort="{prop: 'name'}"
       :row-class-name="tableRowClassName"
@@ -76,11 +87,12 @@
       highlight-current-row
       style="width: 100%"
       @sort-change="sortChange"
-      @row-click="rowClick">
-      <el-table-column :label="$t('anan_parameter.name.label')" align="center" sortable prop="name" width="200px"/>
-      <el-table-column :label="$t('anan_parameter.value.label')" align="center" sortable prop="value" width="120px"/>
-      <el-table-column :label="$t('anan_parameter.defaultValue.label')" align="center" sortable prop="defaultValue" width="130px"/>
-      <el-table-column :label="$t('anan_parameter.description.label')" align="center" sortable prop="description"/>
+      @row-click="rowClick"
+    >
+      <el-table-column :label="$t('anan_parameter.name.label')" align="center" sortable prop="name" width="200px" />
+      <el-table-column :label="$t('anan_parameter.value.label')" align="center" sortable prop="value" width="120px" />
+      <el-table-column :label="$t('anan_parameter.defaultValue.label')" align="center" sortable prop="defaultValue" width="130px" />
+      <el-table-column :label="$t('anan_parameter.description.label')" align="center" sortable prop="description" />
       <el-table-column :label="$t('anan_parameter.type.label')" align="center" sortable prop="type" width="120px">
         <template slot-scope="scope">
           <span>{{ getTypeName(scope.row.type) }}</span>
@@ -100,22 +112,23 @@
         :total="total"
         layout="total, sizes, prev, pager, next, jumper"
         @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"/>
+        @current-change="handleCurrentChange"
+      />
     </div>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-form-item :label="$t('anan_parameter.name.label')" prop="name">
-          <el-input v-model="form.name" :placeholder="$t('anan_parameter.name.placeholder')"/>
+          <el-input v-model="form.name" :placeholder="$t('anan_parameter.name.placeholder')" />
         </el-form-item>
         <el-form-item :label="$t('anan_parameter.value.label')" prop="value">
-          <el-input v-model="form.value" :placeholder="$t('anan_parameter.value.placeholder')"/>
+          <el-input v-model="form.value" :placeholder="$t('anan_parameter.value.placeholder')" />
         </el-form-item>
         <el-form-item :label="$t('anan_parameter.defaultValue.label')" prop="defaultValue">
-          <el-input v-model="form.defaultValue" :placeholder="$t('anan_parameter.defaultValue.placeholder')"/>
+          <el-input v-model="form.defaultValue" :placeholder="$t('anan_parameter.defaultValue.placeholder')" />
         </el-form-item>
         <el-form-item :label="$t('anan_parameter.description.label')" prop="description">
-          <el-input v-model="form.description" :placeholder="$t('anan_parameter.description.placeholder')"/>
+          <el-input v-model="form.description" :placeholder="$t('anan_parameter.description.placeholder')" />
         </el-form-item>
         <el-form-item :label="$t('anan_parameter.type.label')" prop="type">
           <el-select v-model="form.type" :placeholder="$t('anan_parameter.type.placeholder')" :disabled="dialogStatus!=='create'" class="filter-item" @change="typeChange">
@@ -124,7 +137,8 @@
               :key="item.name"
               :label="item.value"
               :value="item.name"
-              :disabled="item.status === 1" />
+              :disabled="item.status === 1"
+            />
           </el-select>
         </el-form-item>
         <el-form-item v-if="form.type ===1 || form.type === 2" :label="$t('anan_parameter.scope.label')" prop="scope">
@@ -133,7 +147,8 @@
               v-for="item in scopeOptions"
               :key="item.name"
               :label="item.value"
-              :value="item.name">
+              :value="item.name"
+            >
               <span style="float: left; color: #8492a6; font-size: 13px">{{ item.code }}</span>
               <span style="float: right">{{ item.value }}</span>
             </el-option>
@@ -141,17 +156,21 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button v-waves round icon="el-icon-circle-close" @click="cancel('form')">{{ $t('table.cancel') }}</el-button>
+        <el-button v-waves round icon="el-icon-circle-close" @click="cancel('form')">
+          {{ $t('table.cancel') }}
+        </el-button>
         <el-button
-          v-waves
           v-if="dialogStatus==='create'"
+          v-waves
           round
           type="primary"
           icon="el-icon-circle-check"
           autofocus
-          @click="create('form')">{{ $t('table.confirm') }}
+          @click="create('form')"
+        >
+          {{ $t('table.confirm') }}
         </el-button>
-        <el-button v-waves v-else round type="primary" icon="el-icon-circle-check" autofocus @click="update('form')">
+        <el-button v-else v-waves round type="primary" icon="el-icon-circle-check" autofocus @click="update('form')">
           {{ $t('table.update') }}
         </el-button>
       </div>

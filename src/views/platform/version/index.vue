@@ -2,11 +2,12 @@
   <div class="app-container calendar-list-container">
     <div class="filter-container">
       <el-input
-        :placeholder="$t('anan_version.searchText')"
         v-model="pageModule.searchText"
+        :placeholder="$t('anan_version.searchText')"
         style="width: 200px;"
         class="filter-item"
-        @keyup.enter.native="handleSearch"/>
+        @keyup.enter.native="handleSearch"
+      />
       <el-button-group>
         <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" round @click="handleSearch">
           {{ $t('table.search') }}
@@ -19,7 +20,9 @@
           type="primary"
           icon="el-icon-circle-plus"
           round
-          @click="handleAdd">{{ $t('table.add') }}
+          @click="handleAdd"
+        >
+          {{ $t('table.add') }}
         </el-button>
         <el-button
           v-permission="'113'"
@@ -29,7 +32,9 @@
           style="margin-left: 5px;"
           icon="el-icon-edit"
           round
-          @click="handleEdit()">{{ $t('table.edit') }}
+          @click="handleEdit()"
+        >
+          {{ $t('table.edit') }}
         </el-button>
         <el-button
           v-permission="'114'"
@@ -39,7 +44,9 @@
           style="margin-left: 5px;"
           icon="el-icon-delete"
           round
-          @click="handleDelete()">{{ $t('table.delete') }}
+          @click="handleDelete()"
+        >
+          {{ $t('table.delete') }}
         </el-button>
       </el-button-group>
     </div>
@@ -53,19 +60,20 @@
       highlight-current-row
       style="width: 100%"
       @sort-change="sortChange"
-      @row-click="rowClick">
-      <el-table-column :label="$t('anan_version.name.label')" align="center" sortable prop="name"/>
+      @row-click="rowClick"
+    >
+      <el-table-column :label="$t('anan_version.name.label')" align="center" sortable prop="name" />
       <el-table-column :label="$t('anan_version.type.label')" align="center" sortable prop="type">
         <template slot-scope="scope">
           <el-tag>{{ getDicNameValue(typeOptions,scope.row.type) }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('anan_version.price.label')" align="center" sortable prop="price"/>
-      <el-table-column :label="$t('anan_version.validity.label')" align="center" sortable prop="validity"/>
-      <el-table-column :label="$t('anan_version.tryoutDays.label')" align="center" sortable prop="tryoutDays"/>
-      <el-table-column :label="$t('anan_version.protectDays.label')" align="center" sortable prop="protectDays"/>
-      <el-table-column :label="$t('anan_version.maxOrganizs.label')" align="center" sortable prop="maxOrganizs" width="140px"/>
-      <el-table-column :label="$t('anan_version.maxUsers.label')" align="center" sortable prop="maxUsers" width="120px"/>
+      <el-table-column :label="$t('anan_version.price.label')" align="center" sortable prop="price" />
+      <el-table-column :label="$t('anan_version.validity.label')" align="center" sortable prop="validity" />
+      <el-table-column :label="$t('anan_version.tryoutDays.label')" align="center" sortable prop="tryoutDays" />
+      <el-table-column :label="$t('anan_version.protectDays.label')" align="center" sortable prop="protectDays" />
+      <el-table-column :label="$t('anan_version.maxOrganizs.label')" align="center" sortable prop="maxOrganizs" width="140px" />
+      <el-table-column :label="$t('anan_version.maxUsers.label')" align="center" sortable prop="maxUsers" width="120px" />
       <!--<el-table-column align="center" :label="$t('anan_version.beginTime.label')" sortable prop="beginTime" width="160"></el-table-column>
       <el-table-column align="center" :label="$t('anan_version.endTime.label')" sortable prop="endTime" width="160"></el-table-column>-->
       <el-table-column :label="$t('anan_version.status.label')" align="center" sortable prop="status">
@@ -76,14 +84,15 @@
 
       <el-table-column :label="$t('table.permission')" align="center" width="100">
         <template slot-scope="scope">
-          <el-button round size="mini" type="warning" @click="handlePermission(scope.row)">{{ $t('table.permission') }}</el-button>
+          <el-button round size="mini" type="warning" @click="handlePermission(scope.row)">
+            {{ $t('table.permission') }}
+          </el-button>
         </template>
       </el-table-column>
-
     </el-table>
 
     <div v-show="!listLoading" class="pagination-container">
-      <el-pagination :current-page.sync="pageModule.pageNumber" :page-sizes="pageSizes" :page-size="pageModule.pageSize" :total="total" layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange"/>
+      <el-pagination :current-page.sync="pageModule.pageNumber" :page-sizes="pageSizes" :page-size="pageModule.pageSize" :total="total" layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="700px">
@@ -91,13 +100,13 @@
         <el-row>
           <el-col :span="12">
             <el-form-item :label="$t('anan_version.name.label')" prop="name">
-              <el-input v-model="form.name" :placeholder="$t('anan_version.name.placeholder')"/>
+              <el-input v-model="form.name" :placeholder="$t('anan_version.name.placeholder')" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item :label="$t('anan_version.type.label')" prop="type">
               <el-select v-model="form.type" :placeholder="$t('anan_version.type.placeholder')" class="filter-item">
-                <el-option v-for="item in typeOptions" :key="item.name" :label="item.value" :value="item.name"/>
+                <el-option v-for="item in typeOptions" :key="item.name" :label="item.value" :value="item.name" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -105,17 +114,17 @@
         <el-row>
           <el-col :span="8">
             <el-form-item :label="$t('anan_version.price.label')" prop="price">
-              <el-input v-model.number="form.price" :placeholder="$t('anan_version.price.placeholder')"/>
+              <el-input v-model.number="form.price" :placeholder="$t('anan_version.price.placeholder')" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item :label="$t('anan_version.validity.label')" prop="validity">
-              <el-input v-model.number="form.validity" :placeholder="$t('anan_version.validity.placeholder')"/>
+              <el-input v-model.number="form.validity" :placeholder="$t('anan_version.validity.placeholder')" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item :label="$t('anan_version.protectDays.label')" prop="protectDays">
-              <el-input v-model.number="form.protectDays" :placeholder="$t('anan_version.protectDays.placeholder')"/>
+              <el-input v-model.number="form.protectDays" :placeholder="$t('anan_version.protectDays.placeholder')" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -129,7 +138,8 @@
                 type="date"
                 style="width: 100%;"
                 format="yyyy-MM-dd HH:mm:ss"
-                value-format="yyyy-MM-dd HH:mm:ss"/>
+                value-format="yyyy-MM-dd HH:mm:ss"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -141,7 +151,8 @@
                 type="date"
                 style="width: 100%;"
                 format="yyyy-MM-dd HH:mm:ss"
-                value-format="yyyy-MM-dd HH:mm:ss"/>
+                value-format="yyyy-MM-dd HH:mm:ss"
+              />
             </el-form-item>
           </el-col>
         </el-row>
@@ -153,32 +164,39 @@
                 active-color="#13ce66"
                 inactive-color="#ff4949"
                 active-value="0"
-                inactive-value="1"/>
+                inactive-value="1"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item prop="tryout">
-              <el-checkbox v-model="tryout" >{{ $t('anan_version.tryout.label') }}</el-checkbox>
+              <el-checkbox v-model="tryout">
+                {{ $t('anan_version.tryout.label') }}
+              </el-checkbox>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item v-if="tryout" :label="$t('anan_version.tryoutDays.label')" prop="tryoutDays">
-              <el-input v-model.number="form.tryoutDays" :placeholder="$t('anan_version.tryoutDays.placeholder')"/>
+              <el-input v-model.number="form.tryoutDays" :placeholder="$t('anan_version.tryoutDays.placeholder')" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-form-item :label="$t('anan_version.description.label')" prop="description">
-          <el-input v-model="form.description" :placeholder="$t('anan_version.description.placeholder')" :autosize="{ minRows: 4, maxRows: 20}" type="textarea"/>
+          <el-input v-model="form.description" :placeholder="$t('anan_version.description.placeholder')" :autosize="{ minRows: 4, maxRows: 20}" type="textarea" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button icon="el-icon-circle-close" @click="cancel('form')">{{ $t('table.cancel') }}</el-button>
+        <el-button icon="el-icon-circle-close" @click="cancel('form')">
+          {{ $t('table.cancel') }}
+        </el-button>
         <el-button
           v-if="dialogStatus==='create'"
           type="primary"
           icon="el-icon-circle-check"
           autofocus
-          @click="create('form')">{{ $t('table.confirm') }}
+          @click="create('form')"
+        >
+          {{ $t('table.confirm') }}
         </el-button>
         <el-button v-else type="primary" icon="el-icon-circle-check" autofocus @click="update('form')">
           {{ $t('table.update') }}

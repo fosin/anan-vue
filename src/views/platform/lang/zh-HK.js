@@ -1,4 +1,4 @@
-export default{
+export default {
   anan_dictionary: {
     searchText: '支持名稱、類別及標識查找',
     id: {
