@@ -152,28 +152,28 @@ export default {
         return
       }
       this.loading = true
-      var _this = this
+
       this.putRequest(this.state === 'position' ? '/vhr/system/basic/position' : '/vhr/system/basic/joblevel', { name: this.updatePosName, id: this.updatePosId, titleLevel: this.updateTitleLevel }).then(resp => {
-        _this.loading = false
+        this.loading = false
         if (resp && resp.status === 200) {
           this.dialogVisible = false
-          _this.loadTableData()
+          this.loadTableData()
         }
       })
     },
     deleteMany() {
-      var _this = this
+
       this.$confirm('删除' + this.multipleSelection.length + '条数据, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        var multipleSelection = _this.multipleSelection
+        var multipleSelection = this.multipleSelection
         var ids = ''
         multipleSelection.forEach(row => {
           ids = ids + row.id + ','
         })
-        _this.doDelete(ids)
+        this.doDelete(ids)
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -192,17 +192,17 @@ export default {
           return
         }
       }
-      var _this = this
+
       this.loading = true
       this.postRequest(this.state === 'position' ? '/vhr/system/basic/position' : '/vhr/system/basic/joblevel', {
         name: this.positionName,
         titleLevel: this.titleLevel
       }).then(resp => {
-        _this.loading = false
+        this.loading = false
         if (resp && resp.status === 200) {
-          _this.loadTableData()
-          _this.positionName = ''
-          _this.titleLevel = ''
+          this.loadTableData()
+          this.positionName = ''
+          this.titleLevel = ''
         }
       })
     },
@@ -216,13 +216,13 @@ export default {
       this.dialogVisible = true
     },
     handleDelete(index, row) {
-      var _this = this
+
       this.$confirm('删除[' + row.name + '], 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        _this.doDelete(row.id)
+        this.doDelete(row.id)
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -231,23 +231,23 @@ export default {
       })
     },
     doDelete(ids) {
-      var _this = this
-      _this.loading = true
+
+      this.loading = true
       var url = this.state === 'position' ? '/vhr/system/basic/position/' : '/vhr/system/basic/joblevel/'
       this.deleteRequest(url + ids).then(resp => {
-        _this.loading = false
+        this.loading = false
         if (resp && resp.status === 200) {
-          _this.loadTableData()
+          this.loadTableData()
         }
       })
     },
     loadTableData() {
-      var _this = this
+
       this.loading = true
       this.getRequest(this.state === 'position' ? '/vhr/system/basic/positions' : '/vhr/system/basic/joblevels').then(resp => {
-        _this.loading = false
+        this.loading = false
         if (resp && resp.status === 200) {
-          _this.posData = resp.data
+          this.posData = resp.data
         }
       })
     }

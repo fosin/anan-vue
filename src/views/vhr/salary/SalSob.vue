@@ -349,27 +349,25 @@ export default {
       })
     },
     doDelete(id) {
-      var _this = this
-      _this.tableLoading = true
+      this.tableLoading = true
       this.deleteRequest('/vhr/salary/sob/salary/' + id).then(resp => {
-        _this.tableLoading = false
+        this.tableLoading = false
         if (resp && resp.status === 200) {
-          _this.loadSalaryCfg()
+          this.loadSalaryCfg()
         }
       })
     },
     next() {
-      var _this = this
       if (this.index === 7) {
         if (this.salary.createDate && this.salary.basicSalary && this.salary.trafficSalary && this.salary.lunchSalary && this.salary.bonus && this.salary.pensionBase && this.salary.pensionPer && this.salary.medicalBase && this.salary.medicalPer && this.salary.accumulationFundBase && this.salary.accumulationFundPer) {
           if (this.salary.id) { // 更新
-            _this.tableLoading = true
+            this.tableLoading = true
             this.putRequest('/vhr/salary/sob/salary', this.salary).then(resp => {
-              _this.tableLoading = false
+              this.tableLoading = false
               if (resp && resp.status === 200) {
-                _this.dialogVisible = false
-                _this.index = 0
-                _this.loadSalaryCfg()
+                this.dialogVisible = false
+                this.index = 0
+                this.loadSalaryCfg()
               }
             })
           } else { // 添加
@@ -380,9 +378,9 @@ export default {
               this.salary.name = value
               this.postRequest('/vhr/salary/sob/salary', this.salary).then(resp => {
                 if (resp && resp.status === 200) {
-                  _this.dialogVisible = false
-                  _this.index = 0
-                  _this.loadSalaryCfg()
+                  this.dialogVisible = false
+                  this.index = 0
+                  this.loadSalaryCfg()
                 }
               })
             }).catch(() => {
@@ -397,11 +395,10 @@ export default {
     },
     loadSalaryCfg() {
       this.tableLoading = true
-      var _this = this
       this.getRequest('/vhr/salary/sob/salary').then(resp => {
-        _this.tableLoading = false
+        this.tableLoading = false
         if (resp && resp.status === 200) {
-          _this.salaries = resp.data
+          this.salaries = resp.data
         }
       })
     },

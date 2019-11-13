@@ -124,7 +124,7 @@ export default {
     },
     updateHrRoles(hrId, index) {
       this.moreBtnState = false
-      var _this = this
+
       if (this.selRolesBak.length === this.selRoles.length) {
         for (var i = 0; i < this.selRoles.length; i++) {
           for (var j = 0; j < this.selRolesBak.length; j++) {
@@ -143,22 +143,22 @@ export default {
         hrId: hrId,
         rids: this.selRoles
       }).then(resp => {
-        _this.eploading.splice(index, 1, false)
+        this.eploading.splice(index, 1, false)
         if (resp && resp.status === 200) {
           var data = resp.data
 
           if (data.status === 200) {
-            _this.refreshHr(hrId, index)
+            this.refreshHr(hrId, index)
           }
         }
       })
     },
     refreshHr(hrId, index) {
-      var _this = this
-      _this.cardLoading.splice(index, 1, true)
+
+      this.cardLoading.splice(index, 1, true)
       this.putRequest('/vhr/system/hr/id/' + hrId).then(resp => {
-        _this.cardLoading.splice(index, 1, false)
-        _this.hrs.splice(index, 1, resp.data)
+        this.cardLoading.splice(index, 1, false)
+        this.hrs.splice(index, 1, resp.data)
       })
     },
     loadSelRoles(hrRoles, index) {
@@ -171,36 +171,36 @@ export default {
       })
     },
     loadAllRoles() {
-      var _this = this
+
       this.getRequest('/vhr/system/hr/roles').then(resp => {
-        _this.fullloading = false
+        this.fullloading = false
         if (resp && resp.status === 200) {
-          _this.allRoles = resp.data
+          this.allRoles = resp.data
         }
       })
     },
     switchChange(newValue, hrId, index) {
-      var _this = this
-      _this.cardLoading.splice(index, 1, true)
+
+      this.cardLoading.splice(index, 1, true)
       this.putRequest('/vhr/system/hr/', {
         enabled: newValue,
         id: hrId
       }).then(resp => {
-        _this.cardLoading.splice(index, 1, false)
+        this.cardLoading.splice(index, 1, false)
         if (resp && resp.status === 200) {
           var data = resp.data
 
           if (data.status === 'error') {
-            _this.refreshHr(hrId, index)
+            this.refreshHr(hrId, index)
           }
         } else {
-          _this.refreshHr(hrId, index)
+          this.refreshHr(hrId, index)
         }
       })
     },
     initCards() {
       this.fullloading = true
-      var _this = this
+
       var searchWords
       if (this.keywords === '') {
         searchWords = 'all'
@@ -209,28 +209,28 @@ export default {
       }
       this.getRequest('/vhr/system/hr/' + searchWords).then(resp => {
         if (resp && resp.status === 200) {
-          _this.hrs = resp.data
+          this.hrs = resp.data
           var length = resp.data.length
-          _this.cardLoading = Array.apply(null, Array(length)).map(function(item, i) {
+          this.cardLoading = Array.apply(null, Array(length)).map(function(item, i) {
             return false
           })
-          _this.eploading = Array.apply(null, Array(length)).map(function(item, i) {
+          this.eploading = Array.apply(null, Array(length)).map(function(item, i) {
             return false
           })
         }
       })
     },
     deleteHr(hrId) {
-      var _this = this
+
       this.fullloading = true
       this.deleteRequest('/vhr/system/hr/' + hrId).then(resp => {
-        _this.fullloading = false
+        this.fullloading = false
         if (resp && resp.status === 200) {
           var data = resp.data
 
           if (data.status === 'success') {
-            _this.initCards()
-            _this.loadAllRoles()
+            this.initCards()
+            this.loadAllRoles()
           }
         }
       })

@@ -85,22 +85,21 @@ export default {
   },
   methods: {
     deleteRole(rid, rname) {
-      const _this = this
       this.$confirm('删除角色[' + rname + '], 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        _this.loading = true
-        _this.deleteRequest('/vhr/system/basic/role/' + rid).then(resp => {
+        this.loading = true
+        this.deleteRequest('/vhr/system/basic/role/' + rid).then(resp => {
           if (resp && resp.status === 200) {
-            _this.initRoles()
+            this.initRoles()
           } else {
-            _this.loading = false
+            this.loading = false
           }
         })
       }).catch(() => {
-        _this.$message({
+        this.$message({
           type: 'info',
           message: '已取消删除'
         })
@@ -109,17 +108,16 @@ export default {
     addNewRole() {
       if (isNotNullORBlank(this.newRole, this.newRoleZh)) {
         this.loading = true
-        const _this = this
         this.postRequest('/vhr/system/basic/addRole', {
           role: this.newRole,
           roleZh: this.newRoleZh
         }).then(resp => {
           if (resp && resp.status === 200) {
-            _this.initRoles()
-            _this.newRole = ''
-            _this.newRoleZh = ''
+            this.initRoles()
+            this.newRole = ''
+            this.newRoleZh = ''
           } else {
-            _this.loading = false
+            this.loading = false
           }
         })
       }
@@ -127,13 +125,12 @@ export default {
     // 有五个树，但是五个树用的同一个数据源
     updateRoleMenu(index) {
       const checkedKeys = this.$refs.tree[index].getCheckedKeys(true)
-      const _this = this
       this.putRequest('/vhr/system/basic/updateMenuRole', {
         rid: this.activeColItem,
         mids: checkedKeys
       }).then(resp => {
         if (resp && resp.status === 200) {
-          _this.activeColItem = -1
+          this.activeColItem = -1
         }
       })
     },
@@ -141,12 +138,11 @@ export default {
       if (activeName === '') {
         return
       }
-      const _this = this
       this.getRequest('/vhr/system/basic/menuTree/' + activeName).then(resp => {
         if (resp && resp.status === 200) {
           const data = resp.data
-          _this.treeData = data.menus
-          _this.checkedKeys = data.mids
+          this.treeData = data.menus
+          this.checkedKeys = data.mids
         }
       })
     },
@@ -154,12 +150,11 @@ export default {
       //        console.log(data,checked,indeterminate)
     },
     initRoles() {
-      const _this = this
       this.getRequest('/vhr/system/basic/roles').then(resp => {
-        _this.loading = false
+        this.loading = false
         if (resp && resp.status === 200) {
-          _this.roles = resp.data
-          _this.activeColItem = -1
+          this.roles = resp.data
+          this.activeColItem = -1
         }
       })
     },

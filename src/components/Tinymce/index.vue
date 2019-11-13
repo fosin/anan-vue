@@ -86,7 +86,6 @@ export default {
   },
   methods: {
     initTinymce() {
-      const _this = this
       window.tinymce.init({
         language: this.language,
         selector: `#${this.tinymceId}`,
@@ -107,10 +106,10 @@ export default {
         link_title: false,
         nonbreaking_force_tab: true, // inserting nonbreaking space &nbsp; need Nonbreaking Space Plugin
         init_instance_callback: editor => {
-          if (_this.value) {
-            editor.setContent(_this.value)
+          if (this.value) {
+            editor.setContent(this.value)
           }
-          _this.hasInit = true
+          this.hasInit = true
           editor.on('NodeChange Change KeyUp SetContent', () => {
             this.hasChange = true
             this.$emit('input', editor.getContent())
@@ -118,7 +117,7 @@ export default {
         },
         setup(editor) {
           editor.on('FullscreenStateChanged', (e) => {
-            _this.fullscreen = e.state
+            this.fullscreen = e.state
           })
         }
         // 整合七牛上传
@@ -138,7 +137,7 @@ export default {
         // },
         // images_upload_handler(blobInfo, success, failure, progress) {
         //   progress(0);
-        //   const token = _this.$store.getters.token;
+        //   const token = this.$store.getters.token;
         //   getToken(token).then(response => {
         //     const url = response.data.qiniu_url;
         //     const formData = new FormData();
@@ -173,9 +172,8 @@ export default {
       window.tinymce.get(this.tinymceId).getContent()
     },
     imageSuccessCBK(arr) {
-      const _this = this
       arr.forEach(v => {
-        window.tinymce.get(_this.tinymceId).insertContent(`<img class="wscnph" src="${v.url}" >`)
+        window.tinymce.get(this.tinymceId).insertContent(`<img class="wscnph" src="${v.url}" >`)
       })
     }
   }

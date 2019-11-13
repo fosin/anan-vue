@@ -183,21 +183,19 @@ export default {
       }
     },
     loadSalaries() {
-      var _this = this
       this.getRequest('/vhr/salary/sobcfg/salaries').then(resp => {
         if (resp && resp.status === 200) {
-          _this.salaries = resp.data
+          this.salaries = resp.data
         }
       })
     },
     updateSalaryCfg(eid) {
-      var _this = this
       if (this.osid === this.sid) {
         return
       }
       this.putRequest('/vhr/salary/sobcfg/', { eid: eid, sid: this.sid }).then(resp => {
         if (resp && resp.status === 200) {
-          _this.loadEmps()
+          this.loadEmps()
         }
       })
     },
@@ -207,13 +205,12 @@ export default {
     },
     loadEmps() {
       this.tableLoading = true
-      var _this = this
       this.getRequest('/vhr/salary/sobcfg/emp?page=' + this.currentPage + '&size=10').then(resp => {
-        _this.tableLoading = false
+        this.tableLoading = false
         if (resp && resp.status === 200) {
-          var data = resp.data
-          _this.emps = data.emps
-          _this.totalCount = data.count
+          const data = resp.data
+          this.emps = data.emps
+          this.totalCount = data.count
         }
       })
     }

@@ -140,9 +140,8 @@ export default {
       document.getElementById('chatDiv').scrollTop = document.getElementById('chatDiv').scrollHeight
     },
     loadHrs() {
-      const _this = this
       this.getRequest('/vhr/chat/hrs').then(resp => {
-        _this.hrs = resp.data
+        this.hrs = resp.data
       })
     }
   }

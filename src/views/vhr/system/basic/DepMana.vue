@@ -82,11 +82,10 @@ export default {
       return data.name.indexOf(value) !== -1
     },
     loadTreeData() {
-      const _this = this
       this.getRequest('/vhr/system/basic/dep/-1').then(resp => {
-        _this.treeLoading = false
+        this.treeLoading = false
         if (resp && resp.status === 200) {
-          _this.treeData = resp.data
+          this.treeData = resp.data
         }
       })
     },
@@ -102,26 +101,24 @@ export default {
       }
     },
     addDep() {
-      const _this = this
       this.dialogVisible = false
       this.treeLoading = true
       this.postRequest('/vhr/system/basic/dep', {
         name: this.depName,
         parentId: this.pDep
       }).then(resp => {
-        _this.treeLoading = false
+        this.treeLoading = false
         if (resp && resp.status === 200) {
           const respData = resp.data
-          _this.depName = ''
-          _this.setDataToTree(_this.treeData, _this.pDep, respData.msg)
+          this.depName = ''
+          this.setDataToTree(this.treeData, this.pDep, respData.msg)
         }
       })
     },
     loadAllDeps() {
-      const _this = this
       this.getRequest('/vhr/system/basic/deps').then(resp => {
         if (resp && resp.status === 200) {
-          _this.allDeps = resp.data
+          this.allDeps = resp.data
         }
       })
     },
@@ -132,7 +129,6 @@ export default {
       event.stopPropagation()
     },
     deleteDep(data, event) {
-      const _this = this
       if (data.children.length > 0) {
         this.$message({
           message: '该部门下尚有其他部门，不能被删除!',
@@ -144,15 +140,15 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          _this.treeLoading = true
-          _this.deleteRequest('/vhr/system/basic/dep/' + data.id).then(resp => {
-            _this.treeLoading = false
+          this.treeLoading = true
+          this.deleteRequest('/vhr/system/basic/dep/' + data.id).then(resp => {
+            this.treeLoading = false
             if (resp && resp.status === 200) {
-              _this.deleteLocalDep(_this.treeData, data)
+              this.deleteLocalDep(this.treeData, data)
             }
           })
         }).catch(() => {
-          _this.$message({
+          this.$message({
             type: 'info',
             message: '已取消删除'
           })

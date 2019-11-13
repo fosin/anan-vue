@@ -118,47 +118,43 @@ export default {
       if (newVal === '') {
         return
       }
-      const _this = this
       this.putRequest('/vhr/chat/markread', { flag: this.mid }).then(resp => {
         if (resp && resp.status === 200) {
-          _this.initSysMsgs()
+          this.initSysMsgs()
         }
       })
     },
     initSysMsgs() {
-      const _this = this
       this.getRequest('/vhr/chat/sysmsgs').then(resp => {
-        _this.sysmsgs = resp.data
+        this.sysmsgs = resp.data
         let isDot = false
-        _this.sysmsgs.forEach(msg => {
+        this.sysmsgs.forEach(msg => {
           if (msg.state === 0) {
             isDot = true
           }
         })
-        _this.$store.commit('toggleNFDot', isDot)
+        this.$store.commit('toggleNFDot', isDot)
       })
     },
     allRead() {
-      const _this = this
       this.putRequest('/vhr/chat/markread', { flag: -1 }).then(resp => {
         if (resp && resp.status === 200) {
-          _this.$store.commit('toggleNFDot', false)
-          _this.initSysMsgs()
+          this.$store.commit('toggleNFDot', false)
+          this.initSysMsgs()
         }
       })
     },
     sendNFMsg() {
       this.dialogLoading = true
-      const _this = this
       this.postRequest('/vhr/chat/nf', { message: this.message, title: this.title }).then(resp => {
-        _this.dialogLoading = false
+        this.dialogLoading = false
         if (resp && resp.status === 200) {
           const data = resp.data
 
           if (data.status === 'success') {
-            _this.$store.state.stomp.send('/ws/nf', {}, '')
-            _this.initSysMsgs()
-            _this.cancelSend()
+            this.$store.state.stomp.send('/ws/nf', {}, '')
+            this.initSysMsgs()
+            this.cancelSend()
           }
         }
       })

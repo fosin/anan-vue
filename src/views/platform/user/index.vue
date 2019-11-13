@@ -282,7 +282,6 @@ import { listOrganizRole } from '../role/role'
 import { listOrganizAllChild, treeOrganiz, getOrganiz, getOrganizAuth } from '../organization/organization'
 import { listVersionChildPermissions } from '../version/version'
 import { mapGetters } from 'vuex'
-import ElRadioGroup from 'element-ui/packages/radio/src/radio-group'
 import ElOption from 'element-ui/packages/select/src/option'
 import IconsSelect from '@/components/IconsSelect/index'
 
@@ -290,7 +289,6 @@ export default {
   name: 'SystemUser',
   components: {
     ElOption,
-    ElRadioGroup,
     IconsSelect
   },
   filters: {
