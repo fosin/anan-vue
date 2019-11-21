@@ -6,8 +6,10 @@
 
     <div class="right-menu">
       <template v-if="device!=='mobile'">
+        <el-tooltip :content="$t('navbar.search')" effect="dark" placement="bottom">
+          <search id="header-search" class="right-menu-item" />
+        </el-tooltip>
         <error-log class="errLog-container right-menu-item" />
-
         <!--<el-tooltip :content="$t('navbar.screenfull')" effect="dark" placement="bottom">
           <screenfull class="screenfull right-menu-item"/>
         </el-tooltip>
@@ -54,20 +56,19 @@ import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import ErrorLog from '@/components/ErrorLog'
-import Screenfull from '@/components/Screenfull'
 import SizeSelect from '@/components/SizeSelect'
 import LangSelect from '@/components/LangSelect'
 import ThemePicker from '@/components/ThemePicker'
-
+import Search from '@/components/HeaderSearch'
 export default {
   components: {
     Breadcrumb,
     Hamburger,
     ErrorLog,
-    Screenfull,
     SizeSelect,
     LangSelect,
-    ThemePicker
+    ThemePicker,
+    Search
   },
   computed: {
     ...mapGetters([
@@ -120,10 +121,6 @@ export default {
     &:focus{
      outline: none;
     }
-    .right-menu-item {
-      display: inline-block;
-      margin: 0 8px;
-    }
     .screenfull {
       height: 20px;
     }
@@ -131,7 +128,7 @@ export default {
       vertical-align: top;
     }
     .theme-switch {
-      vertical-align: 15px;
+      vertical-align: bottom;
     }
     .avatar-container {
       height: 50px;
@@ -150,6 +147,23 @@ export default {
           right: -20px;
           top: 25px;
           font-size: 12px;
+        }
+      }
+    }
+    .right-menu-item {
+      display: inline-block;
+      padding: 0 8px;
+      height: 100%;
+      font-size: 15px;
+      color: #5a5e66;
+      vertical-align: text-bottom;
+
+      &.hover-effect {
+        cursor: pointer;
+        transition: background .3s;
+
+        &:hover {
+          background: rgba(0, 0, 0, .025)
         }
       }
     }

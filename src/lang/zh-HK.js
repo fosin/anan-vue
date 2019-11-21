@@ -70,7 +70,8 @@ export default {
     systemSetting: '系統設置',
     theme: '換膚',
     size: '佈局大小',
-    langSelect: '選擇語言'
+    langSelect: '選擇語言',
+    search: '檢索選單'
   },
   login: {
     title: '微服務雲平臺',

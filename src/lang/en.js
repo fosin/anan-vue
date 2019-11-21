@@ -43,7 +43,8 @@ export default {
     screenfull: 'Screenfull',
     theme: 'Theme',
     size: 'Global Size',
-    langSelect: 'Lang Select'
+    langSelect: 'Lang Select',
+    search: 'Search Menu'
   },
   login: {
     title: 'Cloud Dev Platform',

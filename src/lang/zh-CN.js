@@ -70,7 +70,8 @@ export default {
     systemSetting: '系统设置',
     theme: '换肤',
     size: '布局大小',
-    langSelect: '选择语言'
+    langSelect: '选择语言',
+    search: '搜索菜单'
   },
   login: {
     title: '微服务云平台',
