@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard-editor-container">
-    <!--   <github-corner></github-corner>-->
+    <!--   <github-corner></github-corner>
     <el-row :gutter="32">
       <el-col :xs="24" :sm="24" :lg="12">
         <div class="chart-wrapper">
@@ -12,7 +12,7 @@
           <shadow-line-chart />
         </div>
       </el-col>
-    </el-row>
+    </el-row>-->
     <panel-group @handleSetLineChartData="handleSetLineChartData" />
 
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
