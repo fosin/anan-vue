@@ -139,7 +139,7 @@ export default {
         }
       }
       this.eploading.splice(index, 1, true)
-      this.putRequest('/vhr/system/hr/roles', {
+      this.putRequest('gateway/vhr/system/hr/roles', {
         hrId: hrId,
         rids: this.selRoles
       }).then(resp => {
@@ -156,7 +156,7 @@ export default {
     refreshHr(hrId, index) {
 
       this.cardLoading.splice(index, 1, true)
-      this.putRequest('/vhr/system/hr/id/' + hrId).then(resp => {
+      this.putRequest('gateway/vhr/system/hr/id/' + hrId).then(resp => {
         this.cardLoading.splice(index, 1, false)
         this.hrs.splice(index, 1, resp.data)
       })
@@ -172,7 +172,7 @@ export default {
     },
     loadAllRoles() {
 
-      this.getRequest('/vhr/system/hr/roles').then(resp => {
+      this.getRequest('gateway/vhr/system/hr/roles').then(resp => {
         this.fullloading = false
         if (resp && resp.status === 200) {
           this.allRoles = resp.data
@@ -182,7 +182,7 @@ export default {
     switchChange(newValue, hrId, index) {
 
       this.cardLoading.splice(index, 1, true)
-      this.putRequest('/vhr/system/hr/', {
+      this.putRequest('gateway/vhr/system/hr/', {
         enabled: newValue,
         id: hrId
       }).then(resp => {
@@ -207,7 +207,7 @@ export default {
       } else {
         searchWords = this.keywords
       }
-      this.getRequest('/vhr/system/hr/' + searchWords).then(resp => {
+      this.getRequest('gateway/vhr/system/hr/' + searchWords).then(resp => {
         if (resp && resp.status === 200) {
           this.hrs = resp.data
           var length = resp.data.length
@@ -223,7 +223,7 @@ export default {
     deleteHr(hrId) {
 
       this.fullloading = true
-      this.deleteRequest('/vhr/system/hr/' + hrId).then(resp => {
+      this.deleteRequest('gateway/vhr/system/hr/' + hrId).then(resp => {
         this.fullloading = false
         if (resp && resp.status === 200) {
           var data = resp.data

@@ -17,7 +17,7 @@ export default (Vue) => {
       })
       return
     }
-    this.postRequest('/platform/v1/dictionaryDetail/byCode/' + code).then(response => {
+    this.postRequest('gateway/platform/v1/dictionaryDetail/byCode/' + code).then(response => {
       callback(response.data)
     }).catch(reason => {
       Notification.error({
@@ -45,7 +45,7 @@ export default (Vue) => {
       })
       return
     }
-    this.getRequest('/platform/v1/dictionaryDetail/byCode/' + code).then(response => {
+    this.getRequest('gateway/platform/v1/dictionaryDetail/byCode/' + code).then(response => {
       callback(response.data)
     }).catch(reason => {
       Notification.error({

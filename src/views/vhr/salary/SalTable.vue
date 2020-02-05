@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     loadDeps() {
-      this.getRequest('/vhr/salary/table/deps').then(resp => {
+      this.getRequest('gateway/vhr/salary/table/deps').then(resp => {
         if (resp && resp.status === 200) {
           this.deps = resp.data
         }

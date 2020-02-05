@@ -91,7 +91,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.loading = true
-        this.deleteRequest('/vhr/system/basic/role/' + rid).then(resp => {
+        this.deleteRequest('gateway/vhr/system/basic/role/' + rid).then(resp => {
           if (resp && resp.status === 200) {
             this.initRoles()
           } else {
@@ -108,7 +108,7 @@ export default {
     addNewRole() {
       if (isNotNullORBlank(this.newRole, this.newRoleZh)) {
         this.loading = true
-        this.postRequest('/vhr/system/basic/addRole', {
+        this.postRequest('gateway/vhr/system/basic/addRole', {
           role: this.newRole,
           roleZh: this.newRoleZh
         }).then(resp => {
@@ -125,7 +125,7 @@ export default {
     // 有五个树，但是五个树用的同一个数据源
     updateRoleMenu(index) {
       const checkedKeys = this.$refs.tree[index].getCheckedKeys(true)
-      this.putRequest('/vhr/system/basic/updateMenuRole', {
+      this.putRequest('gateway/vhr/system/basic/updateMenuRole', {
         rid: this.activeColItem,
         mids: checkedKeys
       }).then(resp => {
@@ -138,7 +138,7 @@ export default {
       if (activeName === '') {
         return
       }
-      this.getRequest('/vhr/system/basic/menuTree/' + activeName).then(resp => {
+      this.getRequest('gateway/vhr/system/basic/menuTree/' + activeName).then(resp => {
         if (resp && resp.status === 200) {
           const data = resp.data
           this.treeData = data.menus
@@ -150,7 +150,7 @@ export default {
       //        console.log(data,checked,indeterminate)
     },
     initRoles() {
-      this.getRequest('/vhr/system/basic/roles').then(resp => {
+      this.getRequest('gateway/vhr/system/basic/roles').then(resp => {
         this.loading = false
         if (resp && resp.status === 200) {
           this.roles = resp.data

@@ -82,7 +82,7 @@ export default {
       return data.name.indexOf(value) !== -1
     },
     loadTreeData() {
-      this.getRequest('/vhr/system/basic/dep/-1').then(resp => {
+      this.getRequest('gateway/vhr/system/basic/dep/-1').then(resp => {
         this.treeLoading = false
         if (resp && resp.status === 200) {
           this.treeData = resp.data
@@ -103,7 +103,7 @@ export default {
     addDep() {
       this.dialogVisible = false
       this.treeLoading = true
-      this.postRequest('/vhr/system/basic/dep', {
+      this.postRequest('gateway/vhr/system/basic/dep', {
         name: this.depName,
         parentId: this.pDep
       }).then(resp => {
@@ -116,7 +116,7 @@ export default {
       })
     },
     loadAllDeps() {
-      this.getRequest('/vhr/system/basic/deps').then(resp => {
+      this.getRequest('gateway/vhr/system/basic/deps').then(resp => {
         if (resp && resp.status === 200) {
           this.allDeps = resp.data
         }
@@ -141,7 +141,7 @@ export default {
           type: 'warning'
         }).then(() => {
           this.treeLoading = true
-          this.deleteRequest('/vhr/system/basic/dep/' + data.id).then(resp => {
+          this.deleteRequest('gateway/vhr/system/basic/dep/' + data.id).then(resp => {
             this.treeLoading = false
             if (resp && resp.status === 200) {
               this.deleteLocalDep(this.treeData, data)

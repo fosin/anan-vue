@@ -881,7 +881,7 @@ export default {
       this.fileUploadBtnText = '正在导入'
     },
     exportEmps() {
-      window.open('/vhr/employee/basic/exportEmp', '_parent')
+      window.open('gateway/vhr/employee/basic/exportEmp', '_parent')
     },
     cancelSearch() {
       this.advanceSearchViewVisible = false
@@ -939,7 +939,7 @@ export default {
     },
     doDelete(ids) {
       this.tableLoading = true
-      this.deleteRequest('/vhr/employee/basic/emp/' + ids).then(resp => {
+      this.deleteRequest('gateway/vhr/employee/basic/emp/' + ids).then(resp => {
         this.tableLoading = false
         if (resp && resp.status === 200) {
           this.loadEmps()
@@ -967,7 +967,7 @@ export default {
     },
     loadEmps() {
       this.tableLoading = true
-      this.getRequest('/vhr/employee/basic/emp?page=' + this.currentPage + '&size=10&keywords=' + this.keywords + '&politicId=' + this.emp.politicId + '&nationId=' + this.emp.nationId + '&posId=' + this.emp.posId + '&jobLevelId=' + this.emp.jobLevelId + '&engageForm=' + this.emp.engageForm + '&departmentId=' + this.emp.departmentId + '&beginDateScope=' + this.beginDateScope).then(resp => {
+      this.getRequest('gateway/vhr/employee/basic/emp?page=' + this.currentPage + '&size=10&keywords=' + this.keywords + '&politicId=' + this.emp.politicId + '&nationId=' + this.emp.nationId + '&posId=' + this.emp.posId + '&jobLevelId=' + this.emp.jobLevelId + '&engageForm=' + this.emp.engageForm + '&departmentId=' + this.emp.departmentId + '&beginDateScope=' + this.beginDateScope).then(resp => {
         this.tableLoading = false
         if (resp && resp.status === 200) {
           const data = resp.data
@@ -990,7 +990,7 @@ export default {
           if (this.emp.id) {
             // 更新
             this.tableLoading = true
-            this.putRequest('/vhr/employee/basic/emp', this.emp).then(resp => {
+            this.putRequest('gateway/vhr/employee/basic/emp', this.emp).then(resp => {
               this.tableLoading = false
               if (resp && resp.status === 200) {
                 this.dialogVisible = false
@@ -1008,7 +1008,7 @@ export default {
           } else {
             // 添加
             this.tableLoading = true
-            this.postRequest('/vhr/employee/basic/emp', this.emp).then(resp => {
+            this.postRequest('gateway/vhr/employee/basic/emp', this.emp).then(resp => {
               this.tableLoading = false
               if (resp && resp.status === 200) {
                 this.dialogVisible = false
@@ -1052,7 +1052,7 @@ export default {
       this.depTextColor = '#606266'
     },
     initData() {
-      this.getRequest('/vhr/employee/basic/basicdata').then(resp => {
+      this.getRequest('gateway/vhr/employee/basic/basicdata').then(resp => {
         if (resp && resp.status === 200) {
           const data = resp.data
           this.nations = data.nations
@@ -1100,7 +1100,7 @@ export default {
     showAddEmpView() {
       this.dialogTitle = '添加员工'
       this.dialogVisible = true
-      this.getRequest('/vhr/employee/basic/maxWorkID').then(resp => {
+      this.getRequest('gateway/vhr/employee/basic/maxWorkID').then(resp => {
         if (resp && resp.status === 200) {
           this.emp.workID = resp.data
         }

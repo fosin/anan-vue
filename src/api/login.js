@@ -20,7 +20,7 @@ export function getAccessToken(loginForm) {
   const cipheru = encrypt(keySize, iterationCount, salt, iv, passPhrase, username)
   const cipherp = encrypt(keySize, iterationCount, salt, iv, passPhrase, password)
   return request({
-    url: '/auth/oauth/token',
+    url: 'gateway/auth/oauth/token',
     method: 'post',
     headers: {
       'Authorization': basic
@@ -36,7 +36,7 @@ export function refreshAccessToken(refresh_token) {
     return {}
   }
   return request({
-    url: '/auth/oauth/token',
+    url: 'gateway/auth/oauth/token',
     method: 'post',
     headers: {
       'Authorization': basic
@@ -47,14 +47,14 @@ export function refreshAccessToken(refresh_token) {
 
 export function logout() {
   return request({
-    url: '/auth/oauth/removeToken',
+    url: 'gateway/auth/oauth/removeToken',
     method: 'post'
   })
 }
 
 export function getUserInfo() {
   return request({
-    url: '/auth/oauth/principal',
+    url: 'gateway/auth/oauth/principal',
     method: 'get'
   })
 }

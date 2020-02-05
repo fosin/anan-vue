@@ -153,7 +153,7 @@ export default {
       }
       this.loading = true
 
-      this.putRequest(this.state === 'position' ? '/vhr/system/basic/position' : '/vhr/system/basic/joblevel', { name: this.updatePosName, id: this.updatePosId, titleLevel: this.updateTitleLevel }).then(resp => {
+      this.putRequest(this.state === 'position' ? 'gateway/vhr/system/basic/position' : 'gateway/vhr/system/basic/joblevel', { name: this.updatePosName, id: this.updatePosId, titleLevel: this.updateTitleLevel }).then(resp => {
         this.loading = false
         if (resp && resp.status === 200) {
           this.dialogVisible = false
@@ -194,7 +194,7 @@ export default {
       }
 
       this.loading = true
-      this.postRequest(this.state === 'position' ? '/vhr/system/basic/position' : '/vhr/system/basic/joblevel', {
+      this.postRequest(this.state === 'position' ? 'gateway/vhr/system/basic/position' : 'gateway/vhr/system/basic/joblevel', {
         name: this.positionName,
         titleLevel: this.titleLevel
       }).then(resp => {
@@ -233,7 +233,7 @@ export default {
     doDelete(ids) {
 
       this.loading = true
-      var url = this.state === 'position' ? '/vhr/system/basic/position/' : '/vhr/system/basic/joblevel/'
+      var url = this.state === 'position' ? 'gateway/vhr/system/basic/position/' : 'gateway/vhr/system/basic/joblevel/'
       this.deleteRequest(url + ids).then(resp => {
         this.loading = false
         if (resp && resp.status === 200) {
@@ -244,7 +244,7 @@ export default {
     loadTableData() {
 
       this.loading = true
-      this.getRequest(this.state === 'position' ? '/vhr/system/basic/positions' : '/vhr/system/basic/joblevels').then(resp => {
+      this.getRequest(this.state === 'position' ? 'gateway/vhr/system/basic/positions' : 'gateway/vhr/system/basic/joblevels').then(resp => {
         this.loading = false
         if (resp && resp.status === 200) {
           this.posData = resp.data

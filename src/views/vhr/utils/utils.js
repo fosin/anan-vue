@@ -14,7 +14,7 @@ export const initMenu = (router, store) => {
   if (store.state.routes.length > 0) {
     return
   }
-  this.getRequest('/vhr/config/sysmenu').then(resp => {
+  this.getRequest('gateway/vhr/config/sysmenu').then(resp => {
     if (resp && resp.status === 200) {
       var fmtRoutes = formatRoutes(resp.data)
       router.addRoutes(fmtRoutes)

@@ -183,7 +183,7 @@ export default {
       }
     },
     loadSalaries() {
-      this.getRequest('/vhr/salary/sobcfg/salaries').then(resp => {
+      this.getRequest('gateway/vhr/salary/sobcfg/salaries').then(resp => {
         if (resp && resp.status === 200) {
           this.salaries = resp.data
         }
@@ -193,7 +193,7 @@ export default {
       if (this.osid === this.sid) {
         return
       }
-      this.putRequest('/vhr/salary/sobcfg/', { eid: eid, sid: this.sid }).then(resp => {
+      this.putRequest('gateway/vhr/salary/sobcfg/', { eid: eid, sid: this.sid }).then(resp => {
         if (resp && resp.status === 200) {
           this.loadEmps()
         }
@@ -205,7 +205,7 @@ export default {
     },
     loadEmps() {
       this.tableLoading = true
-      this.getRequest('/vhr/salary/sobcfg/emp?page=' + this.currentPage + '&size=10').then(resp => {
+      this.getRequest('gateway/vhr/salary/sobcfg/emp?page=' + this.currentPage + '&size=10').then(resp => {
         this.tableLoading = false
         if (resp && resp.status === 200) {
           const data = resp.data

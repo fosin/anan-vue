@@ -118,14 +118,14 @@ export default {
       if (newVal === '') {
         return
       }
-      this.putRequest('/vhr/chat/markread', { flag: this.mid }).then(resp => {
+      this.putRequest('gateway/vhr/chat/markread', { flag: this.mid }).then(resp => {
         if (resp && resp.status === 200) {
           this.initSysMsgs()
         }
       })
     },
     initSysMsgs() {
-      this.getRequest('/vhr/chat/sysmsgs').then(resp => {
+      this.getRequest('gateway/vhr/chat/sysmsgs').then(resp => {
         this.sysmsgs = resp.data
         let isDot = false
         this.sysmsgs.forEach(msg => {
@@ -137,7 +137,7 @@ export default {
       })
     },
     allRead() {
-      this.putRequest('/vhr/chat/markread', { flag: -1 }).then(resp => {
+      this.putRequest('gateway/vhr/chat/markread', { flag: -1 }).then(resp => {
         if (resp && resp.status === 200) {
           this.$store.commit('toggleNFDot', false)
           this.initSysMsgs()
@@ -146,7 +146,7 @@ export default {
     },
     sendNFMsg() {
       this.dialogLoading = true
-      this.postRequest('/vhr/chat/nf', { message: this.message, title: this.title }).then(resp => {
+      this.postRequest('gateway/vhr/chat/nf', { message: this.message, title: this.title }).then(resp => {
         this.dialogLoading = false
         if (resp && resp.status === 200) {
           const data = resp.data

@@ -350,7 +350,7 @@ export default {
     },
     doDelete(id) {
       this.tableLoading = true
-      this.deleteRequest('/vhr/salary/sob/salary/' + id).then(resp => {
+      this.deleteRequest('gateway/vhr/salary/sob/salary/' + id).then(resp => {
         this.tableLoading = false
         if (resp && resp.status === 200) {
           this.loadSalaryCfg()
@@ -362,7 +362,7 @@ export default {
         if (this.salary.createDate && this.salary.basicSalary && this.salary.trafficSalary && this.salary.lunchSalary && this.salary.bonus && this.salary.pensionBase && this.salary.pensionPer && this.salary.medicalBase && this.salary.medicalPer && this.salary.accumulationFundBase && this.salary.accumulationFundPer) {
           if (this.salary.id) { // 更新
             this.tableLoading = true
-            this.putRequest('/vhr/salary/sob/salary', this.salary).then(resp => {
+            this.putRequest('gateway/vhr/salary/sob/salary', this.salary).then(resp => {
               this.tableLoading = false
               if (resp && resp.status === 200) {
                 this.dialogVisible = false
@@ -376,7 +376,7 @@ export default {
               cancelButtonText: '取消'
             }).then(({ value }) => {
               this.salary.name = value
-              this.postRequest('/vhr/salary/sob/salary', this.salary).then(resp => {
+              this.postRequest('gateway/vhr/salary/sob/salary', this.salary).then(resp => {
                 if (resp && resp.status === 200) {
                   this.dialogVisible = false
                   this.index = 0
@@ -395,7 +395,7 @@ export default {
     },
     loadSalaryCfg() {
       this.tableLoading = true
-      this.getRequest('/vhr/salary/sob/salary').then(resp => {
+      this.getRequest('gateway/vhr/salary/sob/salary').then(resp => {
         this.tableLoading = false
         if (resp && resp.status === 200) {
           this.salaries = resp.data

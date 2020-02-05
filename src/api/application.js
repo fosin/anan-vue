@@ -9,7 +9,7 @@ export function loadUIUrl(url, method) {
 }
 export function loadServiceNames(method) {
   return request({
-    url: '/platform/v1/application/serviceNames',
+    url: 'gateway/platform/v1/application/serviceNames',
     method: method || 'post'
   })
 }
