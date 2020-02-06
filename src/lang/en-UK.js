@@ -25,6 +25,8 @@ export default {
     MonitorDatabase: 'Database Pool',
     MonitorCircuitbreaker: 'Circuit Breaker',
     MonitorDocker: 'Docker Monitor',
+    MonitorRabbitmq: 'RabbitMQ Monitor',
+    MonitorKubernetes: 'Kubernetes Monitor',
     UserInfo: 'Modify Info',
     MpiManagerPatientinfo: 'Patient Info Manager',
     MpiManager: 'MPI Manager',
