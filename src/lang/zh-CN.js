@@ -26,7 +26,7 @@ export default {
     MonitorCircuitbreaker: '断路器监控',
     MonitorDocker: 'Docker容器监控',
     MonitorRabbitmq: 'RabbitMQ管理监控',
-    MonitorKubernetes: 'Kubernetes管理监控',
+    MonitorKubernetes: 'K8S原生仪表盘',
     UserInfo: '修改信息',
     MpiManagerPatientinfo: '患者信息管理',
     MpiManager: '患者主索引管理',
