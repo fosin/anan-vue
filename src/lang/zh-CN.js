@@ -24,7 +24,7 @@ export default {
     MonitorOnlineuser: '在线用户监控',
     MonitorDruid: 'Druid数据库连接池监控',
     MonitorCircuitbreaker: '断路器监控',
-    MonitorDocker: 'Docker容器监控',
+    MonitorGrafana: 'Grafana监控',
     MonitorRabbitmq: 'RabbitMQ管理监控',
     MonitorKubernetes: 'K8S原生仪表盘',
     UserInfo: '修改信息',

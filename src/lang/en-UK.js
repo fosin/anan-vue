@@ -24,7 +24,7 @@ export default {
     MonitorOnlineuser: 'OnlineUser Monitor',
     MonitorDruid: 'Druid',
     MonitorCircuitbreaker: 'Circuit Breaker',
-    MonitorDocker: 'Docker Monitor',
+    MonitorGrafana: 'Grafana Monitor',
     MonitorRabbitmq: 'RabbitMQ Monitor',
     MonitorKubernetes: 'Kubernetes Dashboard',
     MonitorKubeboard: 'KubeBoard',

@@ -24,7 +24,7 @@ export default {
     MonitorOnlineuser: '線上用戶監控',
     MonitorDruid: 'Druid資料庫連接池監控',
     MonitorCircuitbreaker: '斷路器監控',
-    MonitorDocker: 'Docker容器監控',
+    MonitorGrafana: 'Grafana監控',
     MonitorRabbitmq: 'RabbitMQ管理監控',
     MonitorKubernetes: 'K8S原生儀錶盤',
     MonitorKubeboard: 'KubeBoard管理监控',
