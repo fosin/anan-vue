@@ -875,9 +875,7 @@ export default {
           organizId: this.form.organizId,
           userId: this.form.id,
           addMode: 1,
-          permission: {
-            id: resultSubPermission[i]
-          }
+          permissionId: resultSubPermission[i]
         }
         newRolePermissions.push(permission)
       }
