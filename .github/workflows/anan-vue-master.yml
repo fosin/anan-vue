@@ -8,13 +8,17 @@ on:
   push:
     branches:
       - master
-    paths:
-      - ./**
+    paths-ignore:
+      - '*.md'
+      - '*.development'
+      - '*.gitignore'
   pull_request:
     branches:
       - master
-    paths:
-      - ./**
+    paths-ignore:
+      - '*.md'
+      - '*.development'
+      - '*.gitignore'
 jobs:
   build:
     runs-on: ubuntu-latest
