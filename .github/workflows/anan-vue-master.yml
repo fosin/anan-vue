@@ -6,13 +6,15 @@ env:
   MODULE_PATH: .
 on:
   push:
-    branches: [ master ]
+    branches:
+      - master
     paths:
-      - '$MODULE_PATH/**'
+      - $MODULE_PATH/**
   pull_request:
-    branches: [ master ]
+    branches:
+      - master
     paths:
-      - '$MODULE_PATH/**'
+      - $MODULE_PATH/**
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -23,6 +25,10 @@ jobs:
           ref: 'master'
       - name: Setup NodeJS
         uses: actions/setup-node@v1
+        with:
+          node-version: '11.x'
+      - name: Install Dependencies
+        run: npm install
       - name: Build with Node
         run: |
           npm run build:prod
