@@ -1,42 +1,39 @@
-name: Anan-vue Master Dockerfile CI
-env:
-  MODULE_NAME: anan-vue
-  MODULE_VERSION: 3.0.0
-  MODULE_PROFILE: prod
-  MODULE_PATH: .
+name: anan-vue Dockerfile CI
 on:
   push:
-    branches:
-      - master
-    paths-ignore:
-      - '*.md'
-      - '*.development'
-      - '*.gitignore'
-  pull_request:
-    branches:
-      - master
-    paths-ignore:
-      - '*.md'
-      - '*.development'
-      - '*.gitignore'
+    tags:
+      - '*'
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout master branche
+      - name: Set env
+        run: echo ::set-env name=MODULE_VERSION::$(echo ${GITHUB_REF:10})
+
+      - name: Checkout branche
         uses: actions/checkout@v2
         with:
-          ref: 'master'
+          # The branch, tag or SHA to checkout. When checking out the repository that
+          # triggered a workflow, this defaults to the reference or SHA for that event.
+          # Otherwise, defaults to `master`.
+          ref: ${{ env.MODULE_VERSION }}
+
       - name: Setup NodeJS
         uses: actions/setup-node@v1
         with:
           node-version: '11.x'
+
       - name: Install Dependencies
         run: npm install
+
       - name: Build with Node
         run: |
           npm run build:prod
+
       - name: Docker build and push image
+        env:
+          MODULE_PATH: .
+          MODULE_NAME: anan-vue
         run: |
           docker login --username=${{ secrets.dockerhub_user }} --password=${{ secrets.dockerhub_pass }}
           docker build $MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f $MODULE_PATH/Dockerfile
