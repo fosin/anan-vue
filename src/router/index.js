@@ -74,21 +74,21 @@ export const asyncRouterMap = [
   { path: '*', redirect: '/404', hidden: true }
 ]
 
-export function dynamicAsyncRouter(permissionTree) {
-  const routers = dynamicAddAsyncRouter(permissionTree)
+export function dynamicAsyncRouter(ananPermissionTree) {
+  const routers = dynamicAddAsyncRouter(ananPermissionTree)
   return routers.concat(asyncRouterMap)
 }
 /**
  * 根据后台权限标识(anan_perimission.code)创建动态路由
  * @returns {*}
- * @param permissionTree 用户权限树
+ * @param ananPermissionTree 用户权限树
  */
-export function dynamicAddAsyncRouter(permissionTree) {
+export function dynamicAddAsyncRouter(ananPermissionTree) {
   const aRouter = []
-  if (!permissionTree) {
+  if (!ananPermissionTree) {
     return aRouter
   }
-  permissionTree.forEach(permission => {
+  ananPermissionTree.forEach(permission => {
     const {
       code,
       type,

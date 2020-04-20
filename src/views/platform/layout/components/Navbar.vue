@@ -27,8 +27,8 @@
       </template>
       <el-dropdown class="avatar-container right-menu-item">
         <div class="avatar-wrapper">
-          <svg-icon v-if="userInfo.avatar" :icon-class="userInfo.avatar" style="width: 40px; height: 40px; border-radius: 50%; background: #fff;" />
-          <span style="float: right; text-align: center">{{ userInfo.username }}</span>
+          <svg-icon v-if="ananUserInfo.avatar" :icon-class="ananUserInfo.avatar" style="width: 40px; height: 40px; border-radius: 50%; background: #fff;" />
+          <span style="float: right; text-align: center">{{ ananUserInfo.username }}</span>
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">
@@ -40,7 +40,7 @@
               {{ $t('navbar.userSetting') }}
             </el-dropdown-item>
           </router-link>
-          <router-link to="/userInfo">
+          <router-link to="/UserInfo">
             <el-dropdown-item>
               {{ $t('navbar.userInfo') }}
             </el-dropdown-item>
@@ -73,7 +73,7 @@ export default {
   computed: {
     ...mapGetters([
       'sidebar',
-      'userInfo',
+      'ananUserInfo',
       'device'
     ])
   },

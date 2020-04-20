@@ -260,7 +260,7 @@
         </el-tab-pane>
       </el-tabs>
       <div slot="footer" class="dialog-footer">
-        <el-button round icon="el-icon-circle-close" @click="cancel('permissionTree')">
+        <el-button round icon="el-icon-circle-close" @click="cancel('ananPermissionTree')">
           {{ $t('table.cancel') }}
         </el-button>
         <el-button v-permission="'42'" round type="primary" icon="el-icon-circle-check" @click="updateUserPermession()">
@@ -471,7 +471,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['permissions', 'userInfo'])
+    ...mapGetters(['ananPermissions', 'ananUserInfo'])
   },
   watch: {
     filterAddPermissionText(val) {
@@ -483,7 +483,7 @@ export default {
   },
   mounted() {
     if (!this.organizList || this.organizList.length < 1) {
-      this.loadOrganizAllChild(this.userInfo.organizId)
+      this.loadOrganizAllChild(this.ananUserInfo.organizId)
     }
     this.asyncLoadDictionaryByCode(15, (data) => {
       this.sexOptions = data
@@ -583,7 +583,7 @@ export default {
     },
     loadOrganizTree() {
       if (!this.organizTree || this.organizTree.length < 1) {
-        getOrganiz(this.userInfo.organizId).then(response => {
+        getOrganiz(this.ananUserInfo.organizId).then(response => {
           const topId = response.data.topId
           treeOrganiz(topId).then(response => {
             this.organizTree = response.data || []

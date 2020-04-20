@@ -243,7 +243,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['userInfo'])
+    ...mapGetters(['ananUserInfo'])
   },
   mounted() {
     this.asyncLoadDictionaryByCode(10, (data) => {
@@ -259,8 +259,8 @@ export default {
         this.pageSizes[i] = parseInt(temp[i])
       }
     })
-    this.listOrganizUser(this.userInfo.organizId)
-    this.listOrganizAllChild(this.userInfo.organizId)
+    this.listOrganizUser(this.ananUserInfo.organizId)
+    this.listOrganizAllChild(this.ananUserInfo.organizId)
   },
   methods: {
     typeChange(type) {

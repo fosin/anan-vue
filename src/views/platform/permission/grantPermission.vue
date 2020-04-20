@@ -6,7 +6,7 @@
     />
     <el-tree
       v-if="hackReset"
-      ref="permissionTree"
+      ref="ananPermissionTree"
       :default-checked-keys="checkedKeys"
       :load="loadChildPermissions"
       :props="defaultProps"
@@ -54,17 +54,17 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['permissions'])
+    ...mapGetters(['ananPermissions'])
   },
   watch: {
     filterPermissionText(val) {
-      this.$refs.permissionTree.filter(val)
+      this.$refs.ananPermissionTree.filter(val)
     }
   },
   methods: {
     hasPermission(permissionId) {
       if (permissionId && typeof (permissionId) === 'string') {
-        const hasPermission = this.permissions[permissionId] || false
+        const hasPermission = this.ananPermissions[permissionId] || false
         if (!hasPermission) {
           return false
         }
@@ -79,8 +79,8 @@ export default {
     },
     updatePermession(id, value) {
       // 得到当前已展开项目中被选中的权限
-      const checkedPermissions = this.$refs.permissionTree.getCheckedKeys().sort() // 当前选中的权限集合
-      const halfCheckedPermissions = this.$refs.permissionTree.getHalfCheckedKeys().sort() // 当前半选中的权限集合
+      const checkedPermissions = this.$refs.ananPermissionTree.getCheckedKeys().sort() // 当前选中的权限集合
+      const halfCheckedPermissions = this.$refs.ananPermissionTree.getHalfCheckedKeys().sort() // 当前半选中的权限集合
       const rolePermissions = this.checkedKeys.sort() // 当前角色已拥有的所有权限集合
       const expandPermissions = this.expandKeys.sort() // 树中已展开的权限集合
 
@@ -136,8 +136,8 @@ export default {
       this.form = form
       this.permissionId = permissionId
       this.checkedKeys = this.getCheckedKeys(objectPermissions)
-      if (this.$refs && this.$refs.permissionTree) {
-        this.$refs.permissionTree.setCheckedKeys(this.checkedKeys)
+      if (this.$refs && this.$refs.ananPermissionTree) {
+        this.$refs.ananPermissionTree.setCheckedKeys(this.checkedKeys)
       }
       this.dialogPermissionVisible = true
       if (hackReset) {
@@ -184,7 +184,7 @@ export default {
       this.expandKeys = []
       this.dialogPermissionVisible = false
       // debugger
-      // this.$refs.permissionTree.remove()
+      // this.$refs.ananPermissionTree.remove()
     }
   }
 }

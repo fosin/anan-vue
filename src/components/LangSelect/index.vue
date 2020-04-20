@@ -1,7 +1,7 @@
 <template>
   <el-dropdown trigger="click" class="international" @command="handleSetLanguage">
     <div>
-      <svg-icon :icon-class="language" class-name="international-icon" />
+      <svg-icon :icon-class="ananLanguage" class-name="international-icon" />
     </div>
     <el-dropdown-menu slot="dropdown" style="width: 200px">
       <el-row>
@@ -9,7 +9,7 @@
           <svg-icon class-name="zh-CN-icon" icon-class="zh-CN" />
         </el-col>
         <el-col :span="20">
-          <el-dropdown-item :disabled="language==='zh-CN'" command="zh-CN">
+          <el-dropdown-item :disabled="ananLanguage==='zh-CN'" command="zh-CN">
             简体中文
           </el-dropdown-item>
         </el-col>
@@ -19,7 +19,7 @@
           <svg-icon class-name="zh-HK-icon" icon-class="zh-HK" />
         </el-col>
         <el-col :span="20">
-          <el-dropdown-item :disabled="language==='zh-HK'" command="zh-HK">
+          <el-dropdown-item :disabled="ananLanguage==='zh-HK'" command="zh-HK">
             繁体中文
           </el-dropdown-item>
         </el-col>
@@ -29,7 +29,7 @@
           <svg-icon class-name="en-UK-icon" icon-class="en-UK" />
         </el-col>
         <el-col :span="20">
-          <el-dropdown-item :disabled="language==='en-UK'" command="en-UK">
+          <el-dropdown-item :disabled="ananLanguage==='en-UK'" command="en-UK">
             English
           </el-dropdown-item>
         </el-col>
@@ -41,8 +41,8 @@
 <script>
 export default {
   computed: {
-    language() {
-      return this.$store.getters.language
+    ananLanguage() {
+      return this.$store.getters.ananLanguage
     }
   },
   methods: {

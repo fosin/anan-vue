@@ -20,7 +20,7 @@
       <el-col :span="8" style="margin-top:15px;">
         <el-tree
           v-if="hackReset"
-          ref="permissionTree"
+          ref="ananPermissionTree"
           :load="loadChild"
           :default-expanded-keys="defaultExpandedKeys"
           :filter-node-method="filterNode"
@@ -324,7 +324,7 @@ export default {
       })
       this.currentId = data.id
       this.showElement = true
-      const pNode = this.$refs.permissionTree.getNode(data.pid)
+      const pNode = this.$refs.ananPermissionTree.getNode(data.pid)
       if (pNode) {
         this.parent = pNode.data
       } else {
@@ -334,7 +334,7 @@ export default {
       }
     },
     handlerUpdate() {
-      const pNode = this.$refs.permissionTree.getNode(this.form.pid)
+      const pNode = this.$refs.ananPermissionTree.getNode(this.form.pid)
       if (!pNode) {
         this.$message({
           message: '根节点不能修改'
@@ -377,7 +377,7 @@ export default {
         })
         return
       }
-      const cNode = this.$refs.permissionTree.getNode(this.form.id)
+      const cNode = this.$refs.ananPermissionTree.getNode(this.form.id)
       if (cNode && cNode.childNodes && cNode.childNodes.length > 0) {
         this.$message({
           message: '该节点还存在子节点不能直接删除'
@@ -390,7 +390,7 @@ export default {
         type: 'warning'
       }).then(() => {
         deletePermission(this.currentId).then(() => {
-          this.$refs.permissionTree.remove(this.currentId)
+          this.$refs.ananPermissionTree.remove(this.currentId)
           this.resetForm()
           this.onCancel()
           this.$notify({
@@ -413,7 +413,7 @@ export default {
     update() {
       this.form.method = this.form.methodArray.join(',')
       putPermission(this.form).then(response => {
-        const cNode = this.$refs.permissionTree.getNode(this.form.id)
+        const cNode = this.$refs.ananPermissionTree.getNode(this.form.id)
         if (cNode) {
           response.data.vname = this.getVname(response.data)
           cNode.data = response.data
@@ -436,9 +436,9 @@ export default {
     create() {
       this.form.method = this.form.methodArray.join(',')
       postPermission(this.form).then(response => {
-        const pNode = this.$refs.permissionTree.getNode(this.form.pid)
+        const pNode = this.$refs.ananPermissionTree.getNode(this.form.pid)
         response.data.vname = this.getVname(response.data)
-        this.$refs.permissionTree.append(response.data, pNode)
+        this.$refs.ananPermissionTree.append(response.data, pNode)
         // TODO 以下代码启用后可以解决tree控件bug(会导致原有子节点丢失问题)
         pNode.data.children = null
         this.resetForm()
@@ -466,8 +466,8 @@ export default {
       // code = code.substr(-1) === '_' ? code : code + '_'
       let sort
       let type = 1
-      if (this.$refs && this.$refs.permissionTree) {
-        const pNode = this.$refs.permissionTree.getNode(this.parent.id || 0)
+      if (this.$refs && this.$refs.ananPermissionTree) {
+        const pNode = this.$refs.ananPermissionTree.getNode(this.parent.id || 0)
         if (pNode) {
           sort = pNode.childNodes.length + 1
           if (pNode.level === 1) {

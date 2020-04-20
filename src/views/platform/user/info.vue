@@ -1,67 +1,67 @@
 <template>
   <div class="app-container calendar-list-container">
     <div class="grid-content bg-purple">
-      <el-form ref="user" :model="userInfo" label-width="100px" class="demo-ruleForm">
+      <el-form ref="user" :model="ananUserInfo" label-width="100px" class="demo-ruleForm">
         <span>{{ $t('anan_user.baseInfo') }}</span>
         <hr>
         <el-row>
           <el-col :span="6">
             <el-form-item :label="$t('anan_user.usercode.label')" prop="usercode">
-              <span>{{ userInfo.usercode }}</span>
+              <span>{{ ananUserInfo.usercode }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item :label="$t('anan_user.username.label')" prop="username">
-              <span>{{ userInfo.username }}</span>
+              <span>{{ ananUserInfo.username }}</span>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="6">
             <el-form-item :label="$t('anan_user.sex.label')" prop="sex">
-              <span>{{ getSexName(userInfo.sex) }}</span>
+              <span>{{ getSexName(ananUserInfo.sex) }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item :label="$t('anan_user.birthday.label')" prop="birthday">
-              <span>{{ userInfo.birthday | dateFormatFilter('yyyy-MM-dd') }}</span>
+              <span>{{ ananUserInfo.birthday | dateFormatFilter('yyyy-MM-dd') }}</span>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="6">
             <el-form-item :label="$t('anan_user.phone.label')" prop="phone">
-              <span>{{ userInfo.phone }}</span>
+              <span>{{ ananUserInfo.phone }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item :label="$t('anan_user.email.label')" prop="email">
-              <span>{{ userInfo.email }}</span>
+              <span>{{ ananUserInfo.email }}</span>
             </el-form-item>
           </el-col>
         </el-row>
         <span>{{ $t('anan_user.modifyPassword') }}</span>
         <hr>
       </el-form>
-      <el-form ref="user" :model="userInfo2" :rules="rules2" label-width="100px" class="demo-ruleForm">
+      <el-form ref="user" :model="ananUserInfo2" :rules="rules2" label-width="100px" class="demo-ruleForm">
         <el-row>
           <el-col :span="8">
             <el-form-item :label="$t('anan_user.oldPassword.label')" prop="password" label-width="200px">
-              <el-input v-model="userInfo2.password" :placeholder="$t('anan_user.oldPassword.placeholder')" type="password" auto-complete="off" />
+              <el-input v-model="ananUserInfo2.password" :placeholder="$t('anan_user.oldPassword.placeholder')" type="password" auto-complete="off" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
             <el-form-item :label="$t('anan_user.confirmPassword1.label')" prop="confirmPassword1" label-width="200px">
-              <el-input v-model="userInfo2.confirmPassword1" :placeholder="$t('anan_user.confirmPassword1.placeholder')" type="password" auto-complete="off" />
+              <el-input v-model="ananUserInfo2.confirmPassword1" :placeholder="$t('anan_user.confirmPassword1.placeholder')" type="password" auto-complete="off" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
             <el-form-item :label="$t('anan_user.confirmPassword2.label')" prop="confirmPassword2" label-width="200px">
-              <el-input v-model="userInfo2.confirmPassword2" :placeholder="$t('anan_user.confirmPassword2.placeholder')" type="password" auto-complete="off" />
+              <el-input v-model="ananUserInfo2.confirmPassword2" :placeholder="$t('anan_user.confirmPassword2.placeholder')" type="password" auto-complete="off" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -103,7 +103,7 @@ export default {
         callback(new Error('请输入新密码'))
       } else if (value.length < 6 || value.length > 30) {
         callback(new Error('新密码长度需要在6位-30位之间'))
-      } else if (value === this.userInfo2.password) {
+      } else if (value === this.ananUserInfo2.password) {
         callback(new Error('新密码不能和原密码相同!'))
       } else {
         callback()
@@ -112,7 +112,7 @@ export default {
     const validateConfirmPassword2 = (rule, value, callback) => {
       if (value === '' || value === undefined || value === null) {
         callback(new Error('请再次输入新密码'))
-      } else if (value !== this.userInfo2.confirmPassword1) {
+      } else if (value !== this.ananUserInfo2.confirmPassword1) {
         callback(new Error('两次输入密码不一致!'))
       } else {
         callback()
@@ -122,7 +122,7 @@ export default {
       fileList: [],
       sexOptions: [],
       show: false,
-      userInfo2: {
+      ananUserInfo2: {
         id: undefined,
         password: undefined,
         confirmPassword1: undefined,
@@ -136,16 +136,16 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['userInfo'])
+    ...mapGetters(['ananUserInfo'])
   },
   mounted() {
     this.asyncLoadDictionaryByCode(15, (data) => {
       this.sexOptions = data
     })
-    this.userInfo2.id = this.userInfo.id
-    this.userInfo2.password = ''
-    this.userInfo2.confirmPassword1 = ''
-    this.userInfo2.confirmPassword2 = ''
+    this.ananUserInfo2.id = this.ananUserInfo.id
+    this.ananUserInfo2.password = ''
+    this.ananUserInfo2.confirmPassword1 = ''
+    this.ananUserInfo2.confirmPassword2 = ''
   },
   methods: {
     update() {
@@ -160,7 +160,7 @@ export default {
               type: 'warning'
             }
           ).then(() => {
-            changePassword(this.userInfo2).then(response => {
+            changePassword(this.ananUserInfo2).then(response => {
               this.$notify({
                 title: '修改信息成功',
                 message: '',

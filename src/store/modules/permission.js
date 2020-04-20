@@ -3,30 +3,30 @@ import { getWebStore, setWebStore, removeWebStore } from '@/utils/webStorage'
 
 function clearData(commit) {
   commit('SET_ROUTERS', [])
-  removeWebStore('addRouters')
-  removeWebStore('routers')
+  removeWebStore('ananAddRouters')
+  removeWebStore('ananRouters')
 }
 
 const permission = {
   state: {
     routers: getWebStore({
-      name: 'routers'
+      name: 'ananRouters'
     }) || constantRouterMap,
-    addRouters: getWebStore({
-      name: 'addRouters'
+    ananAddRouters: getWebStore({
+      name: 'ananAddRouters'
     }) || []
   },
   mutations: {
     SET_ROUTERS: (state, routers) => {
-      state.addRouters = routers
+      state.ananAddRouters = routers
       setWebStore({
-        name: 'addRouters',
+        name: 'ananAddRouters',
         content: routers
       })
-      state.routers = constantRouterMap.concat(routers)
+      state.ananRouters = constantRouterMap.concat(routers)
       setWebStore({
-        name: 'routers',
-        content: state.routers
+        name: 'ananRouters',
+        content: state.ananRouters
       })
     }
   },
@@ -45,9 +45,9 @@ const permission = {
         resolve()
       })
     },
-    GenerateRoutes({ commit }, permissionTree) {
+    GenerateRoutes({ commit }, ananPermissionTree) {
       return new Promise(resolve => {
-        const routes = dynamicAsyncRouter(permissionTree.children)
+        const routes = dynamicAsyncRouter(ananPermissionTree.children)
         commit('SET_ROUTERS', routes)
         resolve()
       })

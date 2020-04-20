@@ -3,9 +3,9 @@ import store from '@/store'
 export default {
   inserted(el, binding, vnode) {
     const { value } = binding
-    const permissions = store.getters && store.getters.permissions
+    const ananPermissions = store.getters && store.getters.ananPermissions
     if (value && typeof (value) === 'string') {
-      const hasPermission = permissions[value] || false
+      const hasPermission = ananPermissions[value] || false
       if (!hasPermission) {
         el.parentNode && el.parentNode.removeChild(el)
       }

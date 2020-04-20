@@ -55,12 +55,12 @@ export default {
       if (this.$route.query.src) {
         // debugger
         if (this.$route.query.src.startsWith('http')) {
-          this.src = this.$route.query.src + '?access_token=' + store.getters.token.access_token
+          this.src = this.$route.query.src + '?access_token=' + store.getters.ananToken.access_token
         } else {
           if (process.env.VUE_APP_BASE_API && process.env.VUE_APP_BASE_API !== '/') {
-            this.src = process.env.VUE_APP_BASE_API + this.$route.query.src + '?access_token=' + store.getters.token.access_token
+            this.src = process.env.VUE_APP_BASE_API + this.$route.query.src + '?access_token=' + store.getters.ananToken.access_token
           } else {
-            this.src = this.$route.query.src + '?access_token=' + store.getters.token.access_token
+            this.src = this.$route.query.src + '?access_token=' + store.getters.ananToken.access_token
           }
         }
       }
@@ -92,7 +92,7 @@ export default {
               })
             })
           } else {
-            this.src = url + '?access_token=' + store.getters.token.access_token
+            this.src = url + '?access_token=' + store.getters.ananToken.access_token
           }
         }).catch(reason => {
           this.$notify({

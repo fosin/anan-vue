@@ -56,8 +56,8 @@ export default {
     }
   },
   computed: {
-    language() {
-      return this.languageTypeList[this.$store.getters.language]
+    ananLanguage() {
+      return this.languageTypeList[this.$store.getters.ananLanguage]
     }
   },
   watch: {
@@ -67,7 +67,7 @@ export default {
           window.tinymce.get(this.tinymceId).setContent(val || ''))
       }
     },
-    language() {
+    ananLanguage() {
       this.destroyTinymce()
       this.$nextTick(() => this.initTinymce())
     }
@@ -87,7 +87,7 @@ export default {
   methods: {
     initTinymce() {
       window.tinymce.init({
-        language: this.language,
+        ananLanguage: this.ananLanguage,
         selector: `#${this.tinymceId}`,
         height: this.height,
         body_class: 'panel-body ',

@@ -277,11 +277,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['permissions', 'userInfo'])
+    ...mapGetters(['ananPermissions', 'ananUserInfo'])
   },
   watch: {
     filterPermissionText(val) {
-      this.$refs.permissionTree.filter(val)
+      this.$refs.ananPermissionTree.filter(val)
     }
   },
   mounted() {

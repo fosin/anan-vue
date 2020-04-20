@@ -176,7 +176,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['userInfo'])
+    ...mapGetters(['ananUserInfo'])
   },
   mounted() {
     this.resetForm()
@@ -184,7 +184,7 @@ export default {
   methods: {
     loadChild(node, resolve) {
       if (node.level === 0) {
-        const organizId = this.userInfo.organizId
+        const organizId = this.ananUserInfo.organizId
         if (organizId === 0) {
           listOrganizChild(organizId).then(response => {
             this.defaultExpandedKeys[0] = response.data[0].id

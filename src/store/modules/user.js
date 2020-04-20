@@ -3,74 +3,74 @@ import { getWebStore, setWebStore, removeWebStore } from '@/utils/webStorage'
 
 const user = {
   state: {
-    userInfo: getWebStore({
-      name: 'userInfo'
+    ananUserInfo: getWebStore({
+      name: 'ananUserInfo'
     }) || {},
-    permissions: getWebStore({
-      name: 'permissions'
+    ananPermissions: getWebStore({
+      name: 'ananPermissions'
     }) || {},
-    permissionTree: getWebStore({
-      name: 'permissionTree'
+    ananPermissionTree: getWebStore({
+      name: 'ananPermissionTree'
     }) || {},
-    token: getWebStore({
-      name: 'token'
+    ananToken: getWebStore({
+      name: 'ananToken'
     }) || {},
-    current_organiz: getWebStore({
-      name: 'current_organiz'
+    ananCurrentOrganiz: getWebStore({
+      name: 'ananCurrentOrganiz'
     }) || {},
-    current_role: getWebStore({
-      name: 'current_role'
+    ananCurrentRole: getWebStore({
+      name: 'ananCurrentRole'
     }) || 0
   },
 
   mutations: {
     SET_TOKEN: (state, token) => {
-      state.token = token
+      state.ananToken = token
       setWebStore({
-        name: 'token',
-        content: state.token
+        name: 'ananToken',
+        content: state.ananToken
       })
     },
-    SET_USER: (state, userInfo) => {
-      if (!userInfo.avatar) {
-        userInfo.avatar = ''
+    SET_USER: (state, ananUserInfo) => {
+      if (!ananUserInfo.avatar) {
+        ananUserInfo.avatar = ''
       }
-      state.userInfo = userInfo
+      state.ananUserInfo = ananUserInfo
       setWebStore({
-        name: 'userInfo',
-        content: state.userInfo
+        name: 'ananUserInfo',
+        content: state.ananUserInfo
       })
     },
-    SET_PERMISSIONS: (state, permissions) => {
+    SET_PERMISSIONS: (state, ananPermissions) => {
       const list = {}
-      for (let i = 0; i < permissions.length; i++) {
-        list[permissions[i].authority] = true
+      for (let i = 0; i < ananPermissions.length; i++) {
+        list[ananPermissions[i].authority] = true
       }
-      state.permissions = list
+      state.ananPermissions = list
       setWebStore({
-        name: 'permissions',
-        content: state.permissions
+        name: 'ananPermissions',
+        content: state.ananPermissions
       })
     },
-    SET_PERMISSIONTREE: (state, permissionTree) => {
-      state.permissionTree = permissionTree
+    SET_PERMISSION_TREE: (state, ananPermissionTree) => {
+      state.ananPermissionTree = ananPermissionTree
       setWebStore({
-        name: 'permissionTree',
-        content: state.permissionTree
+        name: 'ananPermissionTree',
+        content: state.ananPermissionTree
       })
     },
-    SET_CURRENT_ORGANIZ: (state, current_organiz) => {
-      state.current_organiz = current_organiz
+    SET_CURRENT_ORGANIZ: (state, ananCurrentOrganiz) => {
+      state.ananCurrentOrganiz = ananCurrentOrganiz
       setWebStore({
-        name: 'current_organiz',
-        content: state.current_organiz
+        name: 'ananCurrentOrganiz',
+        content: state.ananCurrentOrganiz
       })
     },
-    SET_CURRENT_ROLE: (state, current_role) => {
-      state.current_role = current_role
+    SET_CURRENT_ROLE: (state, ananCurrentRole) => {
+      state.ananCurrentRole = ananCurrentRole
       setWebStore({
-        name: 'current_role',
-        content: state.current_role
+        name: 'ananCurrentRole',
+        content: state.ananCurrentRole
       })
     }
   },
@@ -79,7 +79,7 @@ const user = {
     // 用户名登录
     LoginByUsername({ commit, state, dispatch }, loginForm) {
       return new Promise((resolve, reject) => {
-        const access_token = state.token.access_token
+        const access_token = state.ananToken.access_token
         if (access_token) {
           // 根据服务器返回的失效时间定时刷新access_token
           setTimeout(function() {
@@ -87,7 +87,7 @@ const user = {
             }).catch((error) => {
               reject(error)
             })
-          }, ((state.token.expires_in || 7200) - 120) * 1000)
+          }, ((state.ananToken.expires_in || 7200) - 120) * 1000)
           resolve()
         } else {
           getAccessToken(loginForm).then(response => {
@@ -109,15 +109,15 @@ const user = {
     // 刷新toeken
     RefreshAccessToken({ commit, state }) {
       return new Promise((resolve, reject) => {
-        const refresh_token = state.token.refresh_token
+        const refresh_token = state.ananToken.refresh_token
         if (refresh_token) {
-          const access_token = state.token.access_token
-          state.token.access_token = ''
+          const access_token = state.ananToken.access_token
+          state.ananToken.access_token = ''
           refreshAccessToken(refresh_token).then(response => {
             commit('SET_TOKEN', response.data)
             resolve()
           }).catch(error => {
-            state.token.access_token = access_token
+            state.ananToken.access_token = access_token
             reject(error)
           })
         }
@@ -145,9 +145,9 @@ const user = {
             commit('SET_PERMISSIONS', {})
           }
           if (data.permissionTree) { // 验证返回的权限树
-            commit('SET_PERMISSIONTREE', data.permissionTree)
+            commit('SET_PERMISSION_TREE', data.permissionTree)
           } else {
-            commit('SET_PERMISSIONTREE', {})
+            commit('SET_PERMISSION_TREE', {})
           }
           resolve(response)
         }).catch(error => {
@@ -207,15 +207,15 @@ const user = {
 function clearLoginData(commit) {
   commit('SET_TOKEN', {})
   commit('SET_PERMISSIONS', {})
-  commit('SET_PERMISSIONTREE', {})
+  commit('SET_PERMISSION_TREE', {})
   commit('SET_USER', {})
   commit('SET_CURRENT_ROLE', 0)
   commit('SET_CURRENT_ORGANIZ', {})
-  removeWebStore('token')
-  removeWebStore('permissions')
-  removeWebStore('permissionTree')
-  removeWebStore('userInfo')
-  removeWebStore('current_role')
-  removeWebStore('current_organiz')
+  removeWebStore('ananToken')
+  removeWebStore('ananPermissions')
+  removeWebStore('ananPermissionTree')
+  removeWebStore('ananUserInfo')
+  removeWebStore('ananCurrentRole')
+  removeWebStore('ananCurrentOrganiz')
 }
 export default user

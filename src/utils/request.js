@@ -24,9 +24,9 @@ let reLogin = false
 // request interceptor
 service.interceptors.request.use(config => {
   NProgress.start() // start progress bar
-  if (store.getters.token.access_token && store.getters.userInfo) {
+  if (store.getters.ananToken.access_token && store.getters.ananUserInfo) {
     // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
-    config.headers['Authorization'] = WordCap(store.getters.token.token_type) + ' ' + store.getters.token.access_token
+    config.headers['Authorization'] = WordCap(store.getters.ananToken.token_type) + ' ' + store.getters.ananToken.access_token
   }
   return config
 }, error => {

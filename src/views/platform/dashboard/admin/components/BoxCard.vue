@@ -52,7 +52,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'userInfo',
+      'ananUserInfo',
       'roles'
     ])
   }

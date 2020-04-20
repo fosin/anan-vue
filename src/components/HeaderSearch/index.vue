@@ -36,17 +36,17 @@ export default {
   },
   computed: {
     routes() {
-      return this.$store.getters.permission_routers
+      return this.$store.getters.ananRouters
     },
-    language() {
-      return this.$store.getters.language
+    ananLanguage() {
+      return this.$store.getters.ananLanguage
     }
   },
   watch: {
     routes() {
       this.searchPool = this.generateRoutes(this.routes)
     },
-    language() {
+    ananLanguage() {
       this.searchPool = this.generateRoutes(this.routes)
     },
     searchPool(list) {

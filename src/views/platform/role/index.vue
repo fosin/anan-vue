@@ -185,12 +185,12 @@
                check-strictly
                :load="loadChildPermissions"
                :props="defaultProps"
-               ref="permissionTree"
+               ref="ananPermissionTree"
                :filter-node-method="filterNode"
                :default-expanded-keys="[1]">
       </el-tree>
       <div slot="footer" class="dialog-footer">
-        <el-button round @click="cancel('permissionTree')" icon="el-icon-circle-close">{{$t('table.cancel')}}
+        <el-button round @click="cancel('ananPermissionTree')" icon="el-icon-circle-close">{{$t('table.cancel')}}
         </el-button>
         <el-button round v-waves type="primary" v-permission="'49'" @click="updatePermession(form.id, form.value)" icon="el-icon-circle-check">
           {{$t('table.update')}}
@@ -346,16 +346,16 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['permissions', 'userInfo'])
+    ...mapGetters(['ananPermissions', 'ananUserInfo'])
   },
   watch: {
     filterPermissionText(val) {
-      this.$refs.permissionTree.filter(val)
+      this.$refs.ananPermissionTree.filter(val)
     }
   },
   mounted() {
     if (!this.organizList || this.organizList.length < 1) {
-      this.loadOrganizAllChild(this.userInfo.organizId)
+      this.loadOrganizAllChild(this.ananUserInfo.organizId)
     }
     this.asyncOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数', (data) => {
       this.pageModule.pageSize = parseInt(data)
@@ -374,7 +374,7 @@ export default {
     },
     getList() {
       this.listLoading = true
-      listRolePageByOrganizId(this.pageModule, this.userInfo.organizId).then(response => {
+      listRolePageByOrganizId(this.pageModule, this.ananUserInfo.organizId).then(response => {
         this.roleList = response.data.rows
         this.total = response.data.total
         this.listLoading = false
