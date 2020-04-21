@@ -170,33 +170,6 @@
         </el-button>
       </div>
     </el-dialog>
-
-    <!--<el-dialog :title="textMap[dialogStatus] + '->' + form.name" :visible.sync="dialogPermissionVisible" width="550px">
-      <el-input
-        :placeholder="$t('anan_role.name.placeholder')输入关键字进行过滤"
-        v-model="filterPermissionText">
-      </el-input>
-      <el-tree class="filter-tree"
-               :default-checked-keys="checkedKeys"
-               node-key="id"
-               highlight-current
-               show-checkbox
-               lazy
-               check-strictly
-               :load="loadChildPermissions"
-               :props="defaultProps"
-               ref="ananPermissionTree"
-               :filter-node-method="filterNode"
-               :default-expanded-keys="[1]">
-      </el-tree>
-      <div slot="footer" class="dialog-footer">
-        <el-button round @click="cancel('ananPermissionTree')" icon="el-icon-circle-close">{{$t('table.cancel')}}
-        </el-button>
-        <el-button round v-waves type="primary" v-permission="'49'" @click="updatePermession(form.id, form.value)" icon="el-icon-circle-check">
-          {{$t('table.update')}}
-        </el-button>
-      </div>
-    </el-dialog>-->
     <el-dialog
       :title="textMap[dialogStatus] + ' ---> ' + form.name"
       :visible.sync="dialogRoleUserVisible"
@@ -218,7 +191,7 @@
         <el-button v-waves round icon="el-icon-circle-close" @click="cancel('roleUser')">
           {{ $t('table.cancel') }}
         </el-button>
-        <el-button v-waves v-permission="'43'" round type="primary" icon="el-icon-circle-check" @click="updateRoleUser()">
+        <el-button v-waves v-permission="'49'" round type="primary" icon="el-icon-circle-check" @click="updateRoleUser()">
           {{ $t('table.update') }}
         </el-button>
       </div>
@@ -269,7 +242,6 @@ export default {
       organizList: [],
       roleUsers: [],
       allUsers: [],
-      filterPermissionText: '',
       versionId: -1,
       topId: -1,
       checkedKeys: [],
@@ -347,11 +319,6 @@ export default {
   },
   computed: {
     ...mapGetters(['ananPermissions', 'ananUserInfo'])
-  },
-  watch: {
-    filterPermissionText(val) {
-      this.$refs.ananPermissionTree.filter(val)
-    }
   },
   mounted() {
     if (!this.organizList || this.organizList.length < 1) {
@@ -465,7 +432,7 @@ export default {
           this.form = row
           getOrganizAuth(this.topId).then((response3) => {
             const versionId = response3.data.versionId
-            this.$refs.grantPermission.initData(this, this.form, response1.data, '49', versionId !== this.versionId)
+            this.$refs.grantPermission.initData(this, this.form, response1.data, '43', versionId !== this.versionId)
             this.versionId = versionId
           }).catch(reason => {
             this.$notify({

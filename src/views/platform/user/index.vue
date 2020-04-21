@@ -260,7 +260,7 @@
         </el-tab-pane>
       </el-tabs>
       <div slot="footer" class="dialog-footer">
-        <el-button round icon="el-icon-circle-close" @click="cancel('ananPermissionTree')">
+        <el-button round icon="el-icon-circle-close" @click="cancel('permissionTree')">
           {{ $t('table.cancel') }}
         </el-button>
         <el-button v-permission="'42'" round type="primary" icon="el-icon-circle-check" @click="updateUserPermession()">

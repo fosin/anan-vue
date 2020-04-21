@@ -279,11 +279,6 @@ export default {
   computed: {
     ...mapGetters(['ananPermissions', 'ananUserInfo'])
   },
-  watch: {
-    filterPermissionText(val) {
-      this.$refs.ananPermissionTree.filter(val)
-    }
-  },
   mounted() {
     this.loadVersionAll()
     this.asyncOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数', (data) => {
