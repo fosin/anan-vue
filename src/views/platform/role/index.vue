@@ -62,7 +62,7 @@
       @sort-change="sortChange"
       @row-click="rowClick"
     >
-      <el-table-column :label="$t('anan_role.value.label')" align="center" sortable prop="value" />
+      <el-table-column :label="$t('anan_role.value.label')" align="center" prop="value" sortable/>
 
       <el-table-column :label="$t('anan_role.name.label')" align="center" sortable prop="name" />
       <el-table-column

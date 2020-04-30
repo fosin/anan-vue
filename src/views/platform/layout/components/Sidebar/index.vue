@@ -5,7 +5,7 @@
       :collapse="isCollapse"
       mode="vertical"
       show-timeout="200"
-      background-color="#0078d7"
+      background-color="#00b4ef"
       text-color="#ffffff"
       active-text-color="#ffffff"
     >

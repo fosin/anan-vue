@@ -174,7 +174,7 @@ export default {
         margin-left: 15px;
       }
       &.active {
-        background-color: $activeBackgroundColor;
+        background-color: $backgroundColor;
         color: #fff;
         border-color: $activeBackgroundColor;
         &::before {

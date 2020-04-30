@@ -2,7 +2,7 @@ export function formatDate(date, fmt) {
   if (!date || date === '') {
     return date
   }
-  if (typeof (date) === 'string') {
+  if (typeof (date) === 'string' || typeof (date) === 'number') {
     date = new Date(date)
   }
   if (!(date instanceof Date)) {
