@@ -1,6 +1,7 @@
 # 介绍
-该项目是anan-cloud项目（https://github.com/fosin/anan-cloud）的Web前端项目，基于Vue-element-admin改造而来，使用vue-cli@3.0构建项目。
+该项目是anan-cloud项目的Web前端项目，基于Vue-element-admin改造而来，使用vue-cli@3.0构建项目。
 主要技术选型：Vue2.x、vuex、vue-i18n、axios、ElementUI2.x等。
+anan-cloud项目地址：https://github.com/fosin/anan-cloud
 
 ## 构建环境
 ### 开发环境
