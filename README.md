@@ -1,12 +1,17 @@
 # 介绍
 该项目是anan-cloud项目的Web前端项目，基于Vue-element-admin改造而来，使用vue-cli@3.0构建项目。
-主要技术选型：Vue2.x、vuex、vue-i18n、axios、ElementUI2.x等
+主要技术选型：Vue2.x、vuex、vue-i18n、axios、ElementUI2.x等。
+
+## 构建环境
+### 开发环境
+设置.env.development中的VUE_APP_BASE_API为开发环境后台API地址。
+
+### 生产环境
+设置.env.production中的VUE_APP_BASE_API为后台API地址。
+如果部署在nginx或者使用docker部署，则一般不需要修改。
 
 ## 构建命令
 ``` bash
-# 使用Git克隆项目代码
-git clone https://github.com/fosin/anan-vue.git
-
 # 安装依赖包
 npm install
 
