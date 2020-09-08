@@ -52,10 +52,16 @@ export function logout() {
   })
 }
 
-export function getUserInfo() {
+export function getUserInfo(method) {
   return request({
-    url: 'gateway/auth/oauth/principal',
-    method: 'get'
+    url: 'gateway/auth/oauth/userinfo/jwt',
+    method: method || 'post'
   })
 }
 
+export function getUserPermissionTree(userId, method) {
+  return request({
+    url: 'gateway/auth/v1/permission/user/tree/' + userId,
+    method: method || 'post'
+  })
+}

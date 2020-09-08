@@ -1,6 +1,6 @@
 {
   "name": "anan-vue",
-  "version": "3.0.1",
+  "version": "3.1.0",
   "license": "MIT",
   "description": "A vue admin project with Element UI & axios & iconfont & permission control & lint",
   "author": "fosin <28860823@qq.com>",

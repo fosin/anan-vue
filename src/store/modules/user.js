@@ -1,4 +1,4 @@
-import { getAccessToken, refreshAccessToken, logout, getUserInfo } from '@/api/login'
+import { getAccessToken, refreshAccessToken, logout, getUserInfo, getUserPermissionTree } from '@/api/login'
 import { getWebStore, setWebStore, removeWebStore } from '@/utils/webStorage'
 
 const user = {
@@ -44,7 +44,7 @@ const user = {
     SET_PERMISSIONS: (state, ananPermissions) => {
       const list = {}
       for (let i = 0; i < ananPermissions.length; i++) {
-        list[ananPermissions[i].authority] = true
+        list[ananPermissions[i]] = true
       }
       state.ananPermissions = list
       setWebStore({
@@ -127,10 +127,10 @@ const user = {
     GetUserInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
         getUserInfo().then(response => {
-          if (!response.data || !response.data) {
+          if (!response.data) {
             reject('error')
           }
-          const data = response.data.principal
+          const data = response.data.claims
           if (!data.enabled || !data.accountNonExpired || !data.accountNonLocked || !data.credentialsNonExpired) { // 验证返回的user是否有效用户
             reject('getInfo: user is disabled!')
           }
@@ -144,12 +144,20 @@ const user = {
           } else {
             commit('SET_PERMISSIONS', {})
           }
-          if (data.permissionTree) { // 验证返回的权限树
-            commit('SET_PERMISSION_TREE', data.permissionTree)
-          } else {
-            commit('SET_PERMISSION_TREE', {})
-          }
-          resolve(response)
+          getUserPermissionTree(data.user.id).then(response1 => {
+            if (!response1.data) {
+              reject('error')
+            }
+            response.ananPermissionTree = response1.data
+            if (data) { // 验证返回的权限树
+              commit('SET_PERMISSION_TREE', response.ananPermissionTree)
+            } else {
+              commit('SET_PERMISSION_TREE', {})
+            }
+            resolve(response)
+          }).catch(error => {
+            reject(error)
+          })
         }).catch(error => {
           reject(error)
         })
@@ -218,4 +226,5 @@ function clearLoginData(commit) {
   removeWebStore('ananCurrentRole')
   removeWebStore('ananCurrentOrganiz')
 }
+
 export default user
