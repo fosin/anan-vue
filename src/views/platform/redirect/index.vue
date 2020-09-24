@@ -3,6 +3,7 @@ export default {
   beforeCreate() {
     const path = this.$route.params.path
     this.$router.replace('/' + path)
+    return
   },
   render: function(h) {
     return h() // avoid warning message

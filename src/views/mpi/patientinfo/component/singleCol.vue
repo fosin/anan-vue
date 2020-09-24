@@ -250,21 +250,9 @@
 <script>
 import { getPatientinfo, postPatientinfo, putPatientinfo, statusPatientinfo } from './patientinfo'
 
-import Address from '../../address'
-import Cardinfo from '../../cardinfo'
-import Certificate from '../../certificate'
-import Contactinfo from '../../contactinfo'
-import Operationlog from '../../operationlog'
-
 export default {
   name: 'Mpi11patientinfoForm',
-
   components: {
-    Address,
-    Cardinfo,
-    Certificate,
-    Contactinfo,
-    Operationlog
   },
   props: {
     mpiId: {

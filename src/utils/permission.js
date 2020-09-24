@@ -3,6 +3,7 @@ import router from '../router'
 import { Notification } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'// progress bar style
+import getPageTitle from '@/utils/get-page-title'
 
 NProgress.configure({ showSpinner: false })// NProgress Configuration
 
@@ -10,6 +11,9 @@ const whiteList = ['/login', '/authredirect']// no redirect whitelist
 
 router.beforeEach((to, from, next) => {
   NProgress.start() // start progress bar
+  // set page title
+  document.title = getPageTitle(to.meta.title)
+
   if (store.getters.ananToken.access_token) { // determine if there has token
     /* has token*/
     if (to.path === '/login') {

@@ -34,7 +34,7 @@
       </el-col>
       <el-col :span="16" style="margin-top:15px;">
         <el-card class="box-card">
-          <el-form ref="form" :label-position="labelPosition" :model="form" :rules="formRules" label-width="100px">
+          <el-form ref="grantForm" :label-position="labelPosition" :model="form" :rules="formRules" label-width="100px">
             <el-form-item v-if="formStatus === 'update'">
               <el-button v-waves round icon="el-icon-circle-close" @click="onCancel">
                 {{ $t('table.cancel') }}

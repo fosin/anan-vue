@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import ScrollPane from '@/components/ScrollPane'
+import ScrollPane from './ScrollPane'
 import { generateTitle } from '@/utils/i18n'
 
 export default {
@@ -193,7 +193,7 @@ export default {
   .contextmenu {
     margin: 0;
     background: #fff;
-    z-index: 100;
+    z-index: 3000;
     position: absolute;
     list-style-type: none;
     padding: 5px 0;

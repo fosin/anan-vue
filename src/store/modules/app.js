@@ -1,4 +1,5 @@
 import Cookies from 'js-cookie'
+import { getLanguage } from '@/lang'
 
 const app = {
   state: {
@@ -7,7 +8,7 @@ const app = {
       withoutAnimation: false
     },
     device: 'desktop',
-    ananLanguage: Cookies.get('ananLanguage') || 'zh-CN',
+    ananLanguage: getLanguage(),
     size: Cookies.get('ananSize') || 'medium'
   },
   mutations: {

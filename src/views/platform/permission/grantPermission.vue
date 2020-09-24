@@ -77,7 +77,7 @@ export default {
       if (!value) return true
       return data.name.indexOf(value) !== -1
     },
-    updatePermession(id, value) {
+    updatePermession(id) {
       // 得到当前已展开项目中被选中的权限
       const checkedPermissions = this.$refs.permissionTree.getCheckedKeys().sort() // 当前选中的权限集合
       const halfCheckedPermissions = this.$refs.permissionTree.getHalfCheckedKeys().sort() // 当前半选中的权限集合

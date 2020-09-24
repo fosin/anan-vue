@@ -51,7 +51,8 @@ export default {
       fullscreen: false,
       languageTypeList: {
         'en': 'en',
-        'zh': 'zh_CN'
+        'zh': 'zh_CN',
+        'ja': 'ja'
       }
     }
   },

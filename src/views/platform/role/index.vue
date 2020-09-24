@@ -62,36 +62,35 @@
       @sort-change="sortChange"
       @row-click="rowClick"
     >
-      <el-table-column :label="$t('anan_role.value.label')" align="center" prop="value" sortable/>
+      <el-table-column :label="$t('anan_role.value.label')" prop="value" sortable />
 
-      <el-table-column :label="$t('anan_role.name.label')" align="center" sortable prop="name" />
+      <el-table-column :label="$t('anan_role.name.label')" sortable prop="name" />
       <el-table-column
         :label="$t('anan_role.organizId.label')"
         :formatter="getOrganizName"
         prop="organizId"
-        align="center"
         show-overflow-tooltip
         sortable
       />
-      <!--      <el-table-column align="center" :label="$t('anan_role.tips.label')" sortable prop="tips">
+      <!--      <el-table-column  :label="$t('anan_role.tips.label')" sortable prop="tips">
             </el-table-column>-->
 
-      <el-table-column :label="$t('anan_role.createTime.label')" align="center" sortable prop="createTime">
+      <el-table-column :label="$t('anan_role.createTime.label')" sortable prop="createTime">
         <template slot-scope="scope">
           <span>{{ scope.row.createTime | dateFormatFilter('yyyy-MM-dd HH:mm:ss') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('anan_role.updateTime.label')" align="center" sortable prop="updateTime">
+      <el-table-column :label="$t('anan_role.updateTime.label')" sortable prop="updateTime">
         <template slot-scope="scope">
           <span>{{ scope.row.updateTime | dateFormatFilter('yyyy-MM-dd HH:mm:ss') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('anan_role.status.label')" align="center" class-name="status-col" width="80" sortable prop="status">
+      <el-table-column :label="$t('anan_role.status.label')" class-name="status-col" width="80" sortable prop="status">
         <template slot-scope="scope">
           <el-tag>{{ scope.row.status | statusFilter }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.permission')" align="center" width="200">
+      <el-table-column :label="$t('table.permission')" width="200">
         <template slot-scope="scope">
           <el-button round size="mini" type="primary" @click="handleRoleUser(scope.row)">
             {{ $t('table.user') }}
@@ -368,11 +367,11 @@ export default {
       })
     },
     organizSelectFilter(input) {
-      this.oraganizOptions = this.organizList.filter((value, index) => {
+      this.oraganizOptions = this.organizList.filter((value) => {
         return value.name.indexOf(input) !== -1 || value.id.indexOf(input) !== -1 || value.fullname.indexOf(input) !== -1
       })
     },
-    getOrganizName: function(row, column) {
+    getOrganizName: function(row) {
       const organiz = this.organizList.filter((value) => {
         return value.id === row.organizId
       })
@@ -520,7 +519,7 @@ export default {
         })
       })
     },
-    updateRoleUser(id, value) {
+    updateRoleUser() {
       const userRoles = []
       for (let i = 0; i < this.roleUsers.length; i++) {
         const roleUser = {
@@ -530,7 +529,7 @@ export default {
         }
         userRoles.push(roleUser)
       }
-      putRoleUsers(this.form.id, userRoles).then(response => {
+      putRoleUsers(this.form.id, userRoles).then(() => {
         this.dialogRoleUserVisible = false
         this.$notify({
           title: '成功',
@@ -573,7 +572,7 @@ export default {
           type: 'warning'
         }
       ).then(() => {
-        deleteRole(this.form.id).then(response => {
+        deleteRole(this.form.id).then(() => {
           this.dialogFormVisible = false
           this.getList()
           this.$notify({
@@ -590,7 +589,6 @@ export default {
             duration: 5000
           })
         })
-      }).catch(reason => {
       })
     },
     create(formName) {
@@ -672,14 +670,10 @@ export default {
         this.getList()
       }
     },
-    rowClick(row, event, column) {
+    rowClick(row) {
       this.form = row
     }
   }
 }
 </script>
-<style scoped>
-  .el-select {
-    width: 100%;
-  }
-</style>
+

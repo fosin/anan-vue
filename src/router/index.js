@@ -26,8 +26,11 @@ import Page404 from '@/views/platform/errorPage/404'
   title: 'title'              //设置该路由在侧边栏和面包屑中展示的名字
   icon: 'svg-name'            //设置该路由的图标
   noCache: true               //如果设置为true ,则不会被 <keep-alive> 缓存(默认 false)
+  affix: true                  if set true, the tag will affix in the tags-view
+  breadcrumb: false            if set false, the item will hidden in breadcrumb(default is true)
+  activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
 }
-**/
+ **/
 export const constantRouterMap = [
   {
     path: '/redirect',
@@ -78,6 +81,7 @@ export function dynamicAsyncRouter(ananPermissionTree) {
   const routers = dynamicAddAsyncRouter(ananPermissionTree)
   return routers.concat(asyncRouterMap)
 }
+
 /**
  * 根据后台权限标识(anan_perimission.code)创建动态路由
  * @returns {*}
@@ -111,12 +115,15 @@ export function dynamicAddAsyncRouter(ananPermissionTree) {
           singelRouter = {
             name: code,
             path: code,
-            component: () => import(`@/${nUrl}.vue`).catch(error => {
-              Notification.error({
-                title: '获取组件失败',
-                message: error.message
-              })
-            }),
+            component: (resolve) => {
+              require(['@/' + nUrl + '.vue'], resolve)
+            },
+            // component: () => import(`@/${nUrl}.vue`).catch(error => {
+            //   Notification.error({
+            //     title: '获取组件失败',
+            //     message: error.message
+            //   })
+            // }),
             meta: {
               title: code,
               icon: icon
@@ -206,6 +213,7 @@ function isEmpty(val) {
   }
   return false
 }
+
 /**
  * 根据后台权限标识(anan_perimission.code)在异步路由中查找是否存在，存在则返回对应路由
  * @param permissionCode

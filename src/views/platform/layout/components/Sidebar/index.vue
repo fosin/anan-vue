@@ -1,7 +1,7 @@
 <template>
   <el-scrollbar wrap-class="scrollbar-wrapper">
     <el-menu
-      :default-active="$route.path"
+      :default-active="activeMenu"
       :collapse="isCollapse"
       mode="vertical"
       show-timeout="200"
@@ -25,6 +25,15 @@ export default {
       'ananRouters',
       'sidebar'
     ]),
+    activeMenu() {
+      const route = this.$route
+      const { meta, path } = route
+      // if set path, the sidebar will highlight the path you set
+      if (meta.activeMenu) {
+        return meta.activeMenu
+      }
+      return path
+    },
     isCollapse() {
       return !this.sidebar.opened
     }

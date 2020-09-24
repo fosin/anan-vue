@@ -34,37 +34,32 @@
         <el-table-column
           type="selection"
           width="55"
-          align="left"
         />
         <el-table-column
           prop="id"
           label="编号"
           width="80"
-          align="left"
         />
         <el-table-column
           prop="name"
           :label="state==='position'?'职位名称':'职称名称'"
           width="180"
-          align="left"
         />
         <el-table-column
           v-if="state==='jobtitle'"
           prop="titleLevel"
           label="职称级别"
           width="180"
-          align="left"
         />
         <el-table-column
           width="180"
           label="创建时间"
-          align="left"
         >
           <template slot-scope="scope">
             {{ scope.row.createDate | formatDate }}
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="left">
+        <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -125,7 +120,12 @@
 </template>
 <script>
 export default {
-  props: ['state'],
+  props: {
+    state: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
       positionName: '',
@@ -162,7 +162,6 @@ export default {
       })
     },
     deleteMany() {
-
       this.$confirm('删除' + this.multipleSelection.length + '条数据, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -216,7 +215,6 @@ export default {
       this.dialogVisible = true
     },
     handleDelete(index, row) {
-
       this.$confirm('删除[' + row.name + '], 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -231,7 +229,6 @@ export default {
       })
     },
     doDelete(ids) {
-
       this.loading = true
       var url = this.state === 'position' ? 'gateway/vhr/system/basic/position/' : 'gateway/vhr/system/basic/joblevel/'
       this.deleteRequest(url + ids).then(resp => {
@@ -242,7 +239,6 @@ export default {
       })
     },
     loadTableData() {
-
       this.loading = true
       this.getRequest(this.state === 'position' ? 'gateway/vhr/system/basic/positions' : 'gateway/vhr/system/basic/joblevels').then(resp => {
         this.loading = false

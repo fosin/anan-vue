@@ -13,21 +13,22 @@
         <item v-if="item.meta" :icon="item.meta.icon" :title="generateTitle(item.meta.title)" />
       </template>
 
-      <template v-for="child in item.children" v-if="!child.hidden">
-        <sidebar-item
-          v-if="child.children&&child.children.length>0"
-          :key="child.path"
-          :is-nest="true"
-          :item="child"
-          :base-path="resolvePath(child.path)"
-          class="nest-menu"
-        />
-
-        <a v-else :key="child.name" :href="child.path" target="_blank" @click="clickLink(child,$event)">
-          <el-menu-item :index="resolvePath(child.path)">
-            <item v-if="child.meta" :icon="child.meta.icon" :title="generateTitle(child.meta.title)" />
-          </el-menu-item>
-        </a>
+      <template v-for="child in item.children">
+        <template v-if="!child.hidden">
+          <sidebar-item
+            v-if="child.children&&child.children.length>0"
+            :key="child.path"
+            :is-nest="true"
+            :item="child"
+            :base-path="resolvePath(child.path)"
+            class="nest-menu"
+          />
+          <a v-else :key="child.name" :href="child.path" target="_blank" @click="clickLink(child,$event)">
+            <el-menu-item :index="resolvePath(child.path)">
+              <item v-if="child.meta" :icon="child.meta.icon" :title="generateTitle(child.meta.title)" />
+            </el-menu-item>
+          </a>
+        </template>
       </template>
     </el-submenu>
   </div>
@@ -37,7 +38,7 @@
 import { generateTitle } from '@/utils/i18n'
 import router from '@/router/index'
 import path from 'path'
-import { validateURL } from '@/utils/validate'
+import { validateURL, isExternal } from '@/utils/validate'
 import Item from './Item'
 export default {
   name: 'SidebarItem',
@@ -88,6 +89,12 @@ export default {
       return false
     },
     resolvePath(routePath) {
+      if (isExternal(routePath)) {
+        return routePath
+      }
+      if (isExternal(this.basePath)) {
+        return this.basePath
+      }
       return path.resolve(this.basePath, routePath)
     },
     isExternalLink(routePath) {

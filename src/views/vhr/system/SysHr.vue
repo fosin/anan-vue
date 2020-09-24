@@ -154,7 +154,6 @@ export default {
       })
     },
     refreshHr(hrId, index) {
-
       this.cardLoading.splice(index, 1, true)
       this.putRequest('gateway/vhr/system/hr/id/' + hrId).then(resp => {
         this.cardLoading.splice(index, 1, false)
@@ -171,7 +170,6 @@ export default {
       })
     },
     loadAllRoles() {
-
       this.getRequest('gateway/vhr/system/hr/roles').then(resp => {
         this.fullloading = false
         if (resp && resp.status === 200) {
@@ -180,7 +178,6 @@ export default {
       })
     },
     switchChange(newValue, hrId, index) {
-
       this.cardLoading.splice(index, 1, true)
       this.putRequest('gateway/vhr/system/hr/', {
         enabled: newValue,
@@ -221,7 +218,6 @@ export default {
       })
     },
     deleteHr(hrId) {
-
       this.fullloading = true
       this.deleteRequest('gateway/vhr/system/hr/' + hrId).then(resp => {
         this.fullloading = false

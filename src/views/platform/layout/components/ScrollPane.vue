@@ -29,7 +29,7 @@ export default {
       } else {
         if ($containerWidth - padding < $wrapperWidth) {
           if (this.left < -($wrapperWidth - $containerWidth + padding)) {
-            this.left = this.left
+            // this.left = this.left
           } else {
             this.left = Math.max(this.left + eventDelta, $containerWidth - $wrapperWidth - padding)
           }
@@ -49,7 +49,7 @@ export default {
         this.left = -$targetLeft + padding
       } else if ($targetLeft + padding > -this.left && $targetLeft + $targetWidth < -this.left + $containerWidth - padding) {
         // tag in the current view
-          // eslint-disable-line
+        // eslint-disable-line
       } else {
         // tag in the right
         this.left = -($targetLeft - ($containerWidth - $targetWidth) + padding)
@@ -60,13 +60,13 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  .scroll-container {
-    white-space: nowrap;
-    position: relative;
-    overflow: hidden;
-    width: 100%;
-    .scroll-wrapper {
-      position: absolute;
-    }
+.scroll-container {
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  .scroll-wrapper {
+    position: absolute;
   }
+}
 </style>

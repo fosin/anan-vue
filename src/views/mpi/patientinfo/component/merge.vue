@@ -63,7 +63,6 @@ import Address from '../../address'
 import Cardinfo from '../../cardinfo'
 import Certificate from '../../certificate'
 import Contactinfo from '../../contactinfo'
-import Operationlog from '../../operationlog'
 export default {
   name: 'MpiPatientinfoMerge1',
 
@@ -73,8 +72,7 @@ export default {
     Address,
     Cardinfo,
     Certificate,
-    Contactinfo,
-    Operationlog
+    Contactinfo
   },
   props: {
     mpiId: {

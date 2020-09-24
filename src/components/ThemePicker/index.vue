@@ -15,10 +15,21 @@ export default {
   data() {
     return {
       chalk: '', // content of theme-chalk css
-      theme: ORIGINAL_THEME
+      theme: ''
+    }
+  },
+  computed: {
+    defaultTheme() {
+      return this.$store.state.settings.theme
     }
   },
   watch: {
+    defaultTheme: {
+      handler: function(val) {
+        this.theme = val
+      },
+      immediate: true
+    },
     theme(val, oldVal) {
       if (typeof val !== 'string') return
       const themeCluster = this.getThemeCluster(val.replace('#', ''))
