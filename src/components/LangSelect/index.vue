@@ -39,7 +39,7 @@
           <svg-icon class-name="ja-icon" icon-class="ja" />
         </el-col>
         <el-col :span="20">
-          <el-dropdown-item :disabled="language==='ja'" command="ja">
+          <el-dropdown-item :disabled="ananLanguage==='ja'" command="ja">
             日本語
           </el-dropdown-item>
         </el-col>

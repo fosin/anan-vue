@@ -23,7 +23,7 @@
           <span>{{ item.name }}</span>
           <el-button
             type="text"
-            style="color: #f6061b;margin: 0px;float: right; padding: 3px 0;width: 15px;height:15px"
+            style="color: #f6061b;margin: 0;float: right; padding: 3px 0;width: 15px;height:15px"
             icon="el-icon-delete"
             @click="deleteHr(item.id)"
           />
@@ -83,7 +83,7 @@
                   slot="reference"
                   type="text"
                   icon="el-icon-more"
-                  style="color: #09c0f6;padding-top: 0px"
+                  style="color: #09c0f6;padding-top: 0"
                   :disabled="moreBtnState"
                   @click="loadSelRoles(item.roles,index)"
                 />
@@ -126,8 +126,8 @@ export default {
       this.moreBtnState = false
 
       if (this.selRolesBak.length === this.selRoles.length) {
-        for (var i = 0; i < this.selRoles.length; i++) {
-          for (var j = 0; j < this.selRolesBak.length; j++) {
+        for (let i = 0; i < this.selRoles.length; i++) {
+          for (let j = 0; j < this.selRolesBak.length; j++) {
             if (this.selRoles[i] === this.selRolesBak[j]) {
               this.selRolesBak.splice(j, 1)
               break
@@ -145,7 +145,7 @@ export default {
       }).then(resp => {
         this.eploading.splice(index, 1, false)
         if (resp && resp.status === 200) {
-          var data = resp.data
+          const data = resp.data
 
           if (data.status === 200) {
             this.refreshHr(hrId, index)
@@ -185,7 +185,7 @@ export default {
       }).then(resp => {
         this.cardLoading.splice(index, 1, false)
         if (resp && resp.status === 200) {
-          var data = resp.data
+          const data = resp.data
 
           if (data.status === 'error') {
             this.refreshHr(hrId, index)
@@ -198,7 +198,7 @@ export default {
     initCards() {
       this.fullloading = true
 
-      var searchWords
+      let searchWords
       if (this.keywords === '') {
         searchWords = 'all'
       } else {
@@ -207,7 +207,7 @@ export default {
       this.getRequest('gateway/vhr/system/hr/' + searchWords).then(resp => {
         if (resp && resp.status === 200) {
           this.hrs = resp.data
-          var length = resp.data.length
+          const length = resp.data.length
           this.cardLoading = Array.apply(null, Array(length)).map(function(item, i) {
             return false
           })
@@ -222,7 +222,7 @@ export default {
       this.deleteRequest('gateway/vhr/system/hr/' + hrId).then(resp => {
         this.fullloading = false
         if (resp && resp.status === 200) {
-          var data = resp.data
+          const data = resp.data
 
           if (data.status === 'success') {
             this.initCards()
