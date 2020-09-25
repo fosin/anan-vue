@@ -24,7 +24,9 @@ jobs:
           node-version: '11.x'
 
       - name: Install Dependencies
-        run: npm install
+        run: |
+          npm install @vue/cli
+          npm install
 
       - name: Build with Node
         run: |
