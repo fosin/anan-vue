@@ -240,7 +240,7 @@ export default {
       user-select: none;
     }
     .svg-container {
-      padding: 0px 0px 0px 10px;
+      padding: 0 0 0 10px;
       color: $backgroundColor;
       vertical-align: middle;
       width: 20px;
@@ -255,7 +255,7 @@ export default {
       .title {
         font-size: 26px;
         color: $backgroundColor;
-        margin: 0px auto 40px auto;
+        margin: 0 auto 40px auto;
         text-align: center;
         font-weight: bold;
       }
@@ -263,7 +263,7 @@ export default {
         color: $backgroundColor;
         position: absolute;
         top: 5px;
-        right: 0px;
+        right: 0;
       }
     }
   }

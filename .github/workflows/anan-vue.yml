@@ -26,6 +26,7 @@ jobs:
       - name: Install Dependencies
         run: |
           npm install @vue/cli
+          npm install babel-plugin-dynamic-import-node -S -D
           npm install
 
       - name: Build with Node
