@@ -115,15 +115,12 @@ export function dynamicAddAsyncRouter(ananPermissionTree) {
           singelRouter = {
             name: code,
             path: code,
-            component: (resolve) => {
-              require(['@/' + nUrl + '.vue'], resolve)
-            },
-            // component: () => import(`@/${nUrl}.vue`).catch(error => {
-            //   Notification.error({
-            //     title: '获取组件失败',
-            //     message: error.message
-            //   })
-            // }),
+            component: resolve => require(['@/' + nUrl + '.vue'], resolve).catch(error => {
+              Notification.error({
+                title: '获取组件失败',
+                message: error.message
+              })
+            }),
             meta: {
               title: code,
               icon: icon
@@ -136,7 +133,7 @@ export function dynamicAddAsyncRouter(ananPermissionTree) {
           singelRouter = {
             name: code,
             path: code,
-            component: () => import('@/views/platform/layout/Iframe').catch(error => {
+            component: resolve => require(['@/views/platform/layout/Iframe.vue'], resolve).catch(error => {
               Notification.error({
                 title: '获取组件失败',
                 message: error.message
@@ -156,7 +153,7 @@ export function dynamicAddAsyncRouter(ananPermissionTree) {
           singelRouter = {
             name: code,
             path: code,
-            component: () => import('@/views/platform/layout/Iframe').catch(error => {
+            component: resolve => require(['@/views/platform/layout/Iframe.vue'], resolve).catch(error => {
               Notification.error({
                 title: '获取组件失败',
                 message: error.message
@@ -175,7 +172,7 @@ export function dynamicAddAsyncRouter(ananPermissionTree) {
           singelRouter = {
             name: code,
             path: '/' + code,
-            component: () => import('@/views/platform/layout/Layout').catch(error => {
+            component: resolve => require(['@/views/platform/layout/Layout.vue'], resolve).catch(error => {
               Notification.error({
                 title: '获取组件失败',
                 message: error.message
