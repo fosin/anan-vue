@@ -287,10 +287,26 @@ export default {
       })
     },
     getVname(permission) {
-      if (!this.typeOptions || this.typeOptions.length < 1) {
-        return permission.name + '-' + permission.id
+      let vname = ''
+      // 如果是目录菜单，则附加服务名称
+      if (permission.type === 3) {
+        this.validServices.forEach((value, index) => {
+          if (value.id === permission.serviceId) {
+            vname = '[' + value.name + ']-'
+          }
+        })
       }
-      return permission.name + '    -    ' + this.typeOptions[permission.type].value + '-' + permission.id
+      // 附加权限名称
+      vname = vname + '(' + permission.name + ')-'
+      // 附加类型名称
+      if (this.typeOptions && this.typeOptions.length > 0) {
+        vname = vname + '{' + this.typeOptions[permission.type].value + '}'
+      }
+      // 附加权限唯一ID
+      if (permission.type === 0) {
+        vname = vname + '-' + permission.id
+      }
+      return vname
     },
     filterNode(value, data) {
       if (!value) return true
