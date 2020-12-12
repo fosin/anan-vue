@@ -272,6 +272,7 @@ export default {
       this.$nextTick(() => {
         this.hackReset = true
       })
+      this.resetForm()
     },
     handlerUpdate() {
       const pNode = this.$refs.organizTree.getNode(this.form.pid)
@@ -287,12 +288,6 @@ export default {
       }
     },
     handlerAdd() {
-      if (!this.form.id) {
-        this.$message({
-          message: '请选择一个父节点再新增子节点'
-        })
-        return
-      }
       if (this.form.type === 0) {
         this.$message({
           message: '按钮下不能再新增子节点'
@@ -407,8 +402,8 @@ export default {
         fullname: this.parent.fullname,
         id: undefined,
         splitId: undefined,
-        pid: this.parent.id,
-        topId: this.form.topId,
+        pid: this.parent.id || 0,
+        topId: this.parent.id ? this.form.topId : 0,
         status: '0',
         level: (this.parent && this.parent.level ? this.parent.level : 0) + 1
       }

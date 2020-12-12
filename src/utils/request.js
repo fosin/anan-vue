@@ -134,9 +134,67 @@ export const uploadFileRequest = (url, params) => {
     method: 'post',
     url: url,
     data: params,
+    timeout: 120000,
     headers: {
       'Content-Type': 'multipart/form-data'
     }
+  })
+}
+
+/**
+ * 上传
+ * @param url
+ * @param data
+ */
+export function upload(url, file) {
+  const formData = new FormData()
+  formData.append('file', file)
+
+  return new Promise((resolve, reject) => {
+    service({
+      url: url,
+      method: 'post',
+      data: formData,
+      timeout: 120000
+    }).then(response => {
+      console.log(response)
+      resolve(response.data)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+/**
+ * 下载
+ * @param url
+ * @param data
+ */
+export function download(url, data) {
+  return new Promise((resolve, reject) => {
+    service({
+      url: url,
+      method: 'get',
+      data: data,
+      timeout: 120000,
+      responseType: 'blob'
+    }).then(res => {
+      // 文件下载
+      const blob = new Blob([res], {
+        type: 'application/vnd.ms-excel'
+      })
+
+      // 获得文件名称
+      const fileName = '导出的数据.xlsx'
+      let link = document.createElement('a')
+      link.href = URL.createObjectURL(blob)
+      link.setAttribute('download', fileName)
+      link.click()
+      link = null
+      MessageBox.success('导出成功!')
+    }).catch(err => {
+      reject(err)
+    })
   })
 }
 

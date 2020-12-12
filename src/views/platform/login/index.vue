@@ -47,19 +47,6 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <!-- <el-form-item  prop="roles">
-         <span class="svg-container">
-           <svg-icon icon-class="peoples" />
-         </span>
-         <el-select name="roles" v-model="loginForm.selectedRole" autoComplete="on" :placeholder="$t('login.role.placeholder')"  value="">
-           <el-option
-             v-for="role in userRoles"
-             :key="role.id"
-             :label="role.name"
-             :value="role.id">
-           </el-option>
-         </el-select>
-       </el-form-item>-->
       <el-row>
         <el-col :span="4">
           <el-checkbox v-model="loginForm.rememberMe">

@@ -64,9 +64,9 @@
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item :label="$t('anan_permission.appName.label')" prop="appName">
-                  <el-select v-model="form.appName" :disabled="formUpdate?formUpdate:parent.level !== 0" :placeholder="$t('anan_permission.appName.placeholder')" class="filter-item" value="">
-                    <el-option v-for="item in appOptions" :key="item" :label="item" :value="item" />
+                <el-form-item :label="$t('anan_permission.serviceId.label')" prop="serviceId">
+                  <el-select v-model="form.serviceId" :disabled="formUpdate?formUpdate:parent.level !== 0" :placeholder="$t('anan_permission.serviceId.placeholder')" class="filter-item" value="">
+                    <el-option v-for="item in validServices" :key="item.id" :label="item.name" :value="item.id" />
                   </el-select>
                 </el-form-item>
               </el-col>
@@ -142,7 +142,7 @@
 
 <script>
 import { listChildPermissions, getPermission, postPermission, deletePermission, putPermission } from './permission'
-import { loadServiceNames } from '@/api/application'
+import { getServiceByStatus } from '@/views/platform/service/service'
 import IconsSelect from '@/components/IconsSelect/index'
 
 export default {
@@ -156,14 +156,14 @@ export default {
       list: null,
       total: null,
       formUpdate: true,
-      appNameUpdate: true,
+      serviceIdUpdate: true,
       hackReset: true,
       formAdd: true,
       formStatus: '',
       showElement: false,
       typeOptions: [],
       methodOptions: [],
-      appOptions: [],
+      validServices: [],
       listQuery: {
         name: undefined
       },
@@ -225,11 +225,11 @@ export default {
     this.asyncLoadDictionaryByCode(12, (data) => {
       this.methodOptions = data
     })
-    loadServiceNames().then(response => {
-      this.appOptions = response.data
+    getServiceByStatus().then(response => {
+      this.validServices = response.data
     }).catch(reason => {
       this.$notify({
-        title: '加载应用服务列表失败',
+        title: '加载服务列表失败',
         message: reason.message,
         type: 'error',
         duration: 5000
@@ -518,7 +518,7 @@ export default {
         level: this.parent.level + 1,
         method: undefined,
         methodArray: [],
-        appName: this.parent.appName
+        serviceId: this.parent.serviceId
       }
     }
   }

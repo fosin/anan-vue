@@ -15,7 +15,7 @@ import i18n from './lang' // Internationalization
 import './icons' // icon
 import './errorLog'// error log
 import './utils/permission' // permission control
-import { getRequest, postRequest, deleteRequest, putRequest, allRequest } from './utils/request'
+
 // if (process.env.NODE_ENV === 'development') {
 //   import('./mock') // simulation data
 // }
@@ -25,6 +25,7 @@ import dictionary from './utils/dictionary' // 字典服务
 import parameter from './utils/parameter' // 个性化参数服务
 import waves from './directive/waves/index.js' // 水波效果
 import './views/vhr/utils/filter_utils'
+import { getRequest, postRequest, deleteRequest, putRequest, allRequest } from './utils/request'
 
 Vue.prototype.getRequest = getRequest
 Vue.prototype.postRequest = postRequest

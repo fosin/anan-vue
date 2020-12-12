@@ -36,12 +36,29 @@ module.exports = {
       warnings: false,
       errors: true
     }/*,
-    before: require('./mock/mock-server.js')*/
+     before: require('./mock/mock-server.js')
+    // 以上的ip和端口是我们本机的;下面为需要跨域的
+
+    // 配置跨域
+    proxy: {
+      '/': {
+        // 这里后台的地址模拟的;应该填写你们真实的后台接口
+        target: 'http://localhost',
+        ws: true,
+        // 允许跨域
+        changOrigin: true,
+        pathRewrite: {
+          // 请求的时候使用这个api就可以
+          '^/': '/'
+        }
+      }
+    }*/
   },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that
     // it can be accessed in index.html to inject the correct title.
     name: name,
+    devtool: 'souce-map',
     resolve: {
       alias: {
         '@': resolve('src')
