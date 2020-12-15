@@ -23,7 +23,7 @@
 <script>
 
 import { getInternationls } from '@/views/platform/international/international'
-import { getInternationlCharsets } from '@/views/platform/international/charset/charset'
+import { getInternationlCharsets } from '@/views/platform/international/charset'
 
 export default {
   data() {
