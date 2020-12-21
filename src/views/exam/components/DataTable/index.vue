@@ -143,7 +143,7 @@ export default {
       this.listLoading = true
       this.listQuery.t = new Date().getTime()
       fetchList(this.options.listUrl, this.listQuery).then(response => {
-        this.dataList = response.data
+        this.dataList = response.data.data
         this.listLoading = false
       })
     },

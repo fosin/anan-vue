@@ -5,7 +5,7 @@
 
       <div class="qu-content">
 
-        <p>【{{ quData.quType | quTypeFilter }}】{{ quData.content }}</p>
+        <p>【{{ getDicDetailValue(quTypes, quData.quType) }}】{{ quData.content }}</p>
         <div v-if="quData.quType === 1 || quData.quType===3 ">
           <el-radio-group v-model="answerValues[0]" readonly>
             <el-radio v-for="an in quData.answerList" :key="an.id" :label="an.id" readonly>{{ an.abc }}.{{ an.content }}</el-radio>
@@ -69,13 +69,22 @@ export default {
       },
       answerValues: [],
       rightValues: [],
-      rightTags: []
-
+      rightTags: [],
+      quTypes: []
     }
   },
   created() {
     this.examId = this.$route.params.examId
-
+    this.$store.dispatch('LoadDictionaryById', 142).then(res => {
+      this.quTypes = res.details
+    }).catch((error) => {
+      this.$notify({
+        title: '加载字典试卷状态失败',
+        message: error.message,
+        type: 'error',
+        duration: 5000
+      })
+    })
     this.fetchNextQu()
   },
   methods: {

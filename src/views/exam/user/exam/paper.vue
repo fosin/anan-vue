@@ -22,7 +22,8 @@
         </el-col>
 
         <el-col :span="12">
-          考试状态：{{ item.state | paperStateFilter }}
+          考试状态：{{ getDicDetailValue(paperStates, item.state) }}
+
         </el-col>
 
       </el-row>
@@ -53,7 +54,8 @@ export default {
   data() {
     return {
       value1: null,
-      paperList: []
+      paperList: [],
+      paperStates: []
     }
   },
 
@@ -77,6 +79,16 @@ export default {
   },
 
   created() {
+    this.$store.dispatch('LoadDictionaryById', 143).then(res => {
+      this.paperStates = res.details
+    }).catch((error) => {
+      this.$notify({
+        title: '加载字典试卷状态失败',
+        message: error.message,
+        type: 'error',
+        duration: 5000
+      })
+    })
     this.fetchPaperList()
   },
   methods: {

@@ -1,7 +1,5 @@
 <template>
-
   <div>
-
     <data-table
       ref="pagingTable"
       :options="options"
@@ -9,10 +7,8 @@
       @multi-actions="handleMultiAction"
     >
       <template slot="filter-content">
-
         <el-row>
           <el-col :span="24">
-
             <el-select v-model="listQuery.params.quType" class="filter-item" clearable>
               <el-option
                 v-for="item in quTypes"
@@ -21,33 +17,26 @@
                 :value="item.value"
               />
             </el-select>
-
             <repo-select v-model="listQuery.params.repoIds" :multi="true" />
-
             <el-input v-model="listQuery.params.content" placeholder="题目内容" style="width: 200px;" class="filter-item" />
-
             <el-button-group class="filter-item" style="float:  right">
               <el-button size="mini" icon="el-icon-upload2" @click="showImport">导入</el-button>
               <el-button size="mini" icon="el-icon-download" @click="exportExcel">导出</el-button>
             </el-button-group>
-
           </el-col>
         </el-row>
-
       </template>
 
       <template slot="data-columns">
-
         <el-table-column
           label="题目类型"
           align="center"
           width="100px"
         >
           <template slot-scope="scope">
-            {{ scope.row.quType | quTypeFilter() }}
+            {{ getDicDetailValue(quTypes, scope.row.quType) }}
           </template>
         </el-table-column>
-
         <el-table-column
           label="题目内容"
           show-overflow-tooltip
@@ -58,36 +47,27 @@
             </router-link>
           </template>
         </el-table-column>
-
         <el-table-column
           label="创建时间"
           align="center"
           prop="createTime"
           width="180px"
         />
-
       </template>
-
     </data-table>
-
     <el-dialog
       :title="dialogTitle"
       :visible.sync="dialogVisible"
       width="30%"
     >
-
       <el-form label-position="left" label-width="100px">
-
         <el-form-item label="操作题库" prop="repoIds">
           <repo-select v-model="dialogRepos" :multi="true" />
         </el-form-item>
-
         <el-row>
           <el-button type="primary" @click="handlerRepoAction">保存</el-button>
         </el-row>
-
       </el-form>
-
     </el-dialog>
 
     <el-dialog
@@ -95,17 +75,13 @@
       :visible.sync="importVisible"
       width="30%"
     >
-
       <el-row>
         <el-button type="primary" @click="chooseFile">上传导入</el-button>
         <el-button type="warning" @click="downloadTemplate">下载导入模板</el-button>
         <input ref="upFile" class="file" name="file" type="file" style="display: none" @change="doImport">
       </el-row>
-
     </el-dialog>
-
   </div>
-
 </template>
 
 <script>
@@ -189,6 +165,18 @@ export default {
         addRoute: 'AddQu'
       }
     }
+  },
+  created() {
+    this.$store.dispatch('LoadDictionaryById', 142).then(res => {
+      this.quTypes = res.details
+    }).catch((error) => {
+      this.$notify({
+        title: '加载字典试卷状态失败',
+        message: error.message,
+        type: 'error',
+        duration: 5000
+      })
+    })
   },
   methods: {
 

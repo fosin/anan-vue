@@ -61,7 +61,7 @@
         >
 
           <template slot-scope="scope">
-            {{ scope.row.state | stateFilter }}
+            {{ getDicDetailValue(onStates, scope.row.state) }}
           </template>
         </el-table-column>
 
@@ -123,7 +123,6 @@ export default {
   name: 'SysUserList',
   components: { DepartTreeSelect, DataTable, MeetRole },
   filters: {
-
     // 订单状态
     userState(value) {
       const map = {
@@ -135,8 +134,8 @@ export default {
   },
   data() {
     return {
-
       treeData: [],
+      onStates: [],
       defaultProps: {
         value: 'id',
         label: 'deptName',
@@ -150,7 +149,6 @@ export default {
         params: {
         }
       },
-
       formData: {
         avatar: ''
       },
@@ -180,6 +178,16 @@ export default {
   },
 
   created() {
+    this.$store.dispatch('LoadDictionaryById', 11).then(res => {
+      this.onStates = res.details
+    }).catch((error) => {
+      this.$notify({
+        title: '加载字典试卷状态失败',
+        message: error.message,
+        type: 'error',
+        duration: 5000
+      })
+    })
     fetchTree({}).then(response => {
       this.treeData = response.data
     })

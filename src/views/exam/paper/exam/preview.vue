@@ -18,7 +18,7 @@
           <div><strong>试卷总分：</strong>{{ detailData.totalScore }}分</div>
           <div><strong>及格分数：</strong>{{ detailData.qualifyScore }}分</div>
           <div><strong>考试描述：</strong>{{ detailData.content }}</div>
-          <div><strong>开放类型：</strong> {{ detailData.openType | examOpenType }}</div>
+          <div><strong>开放类型：</strong> {{ examOpenType(detailData.openType) }}</div>
 
         </el-card>
 
@@ -54,6 +54,16 @@ export default {
         examId: '',
         password: ''
       },
+      openTypes: [
+        {
+          value: 1,
+          label: '完全开放'
+        },
+        {
+          value: 2,
+          label: '定向考试'
+        }
+      ],
       rules: {
         password: [
           { required: true, message: '考试密码不能为空！' }
@@ -68,7 +78,13 @@ export default {
   },
 
   methods: {
-
+    examOpenType(v) {
+      this.openTypes.forEach((value) => {
+        if (value.value === v) {
+          return value.label
+        }
+      })
+    },
     fetchData() {
       fetchDetail(this.postForm.examId).then(response => {
         this.detailData = response.data

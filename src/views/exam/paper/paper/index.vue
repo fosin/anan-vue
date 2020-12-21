@@ -15,9 +15,9 @@
         <el-select v-model="listQuery.params.state" placeholder="考试状态" class="filter-item" clearable>
           <el-option
             v-for="item in paperStates"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            :key="item.name"
+            :label="item.value"
+            :value="item.name"
           />
         </el-select>
 
@@ -117,7 +117,7 @@
         >
 
           <template slot-scope="scope">
-            {{ scope.row.state | paperStateFilter }}
+            {{ getDicDetailValue(paperStates, scope.row.state) }}
           </template>
 
         </el-table-column>
@@ -201,7 +201,16 @@ export default {
     if (typeof examId !== 'undefined') {
       this.listQuery.params.examId = examId
     }
-
+    this.$store.dispatch('LoadDictionaryById', 143).then(res => {
+      this.paperStates = res.details
+    }).catch((error) => {
+      this.$notify({
+        title: '加载字典试卷状态失败',
+        message: error.message,
+        type: 'error',
+        duration: 5000
+      })
+    })
     fetchTree({}).then(response => {
       this.treeData = response.data
     })

@@ -402,7 +402,6 @@ export default {
       }
     },
     rowClick(row, event, column) {
-      debugger
       this.form = row
       this.$emit('dic-row-click', row, event, column)
     }
