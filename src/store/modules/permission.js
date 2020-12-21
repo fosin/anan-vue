@@ -9,7 +9,7 @@ function clearData(commit) {
 
 const permission = {
   state: {
-    routers: getWebStore({
+    ananRouters: getWebStore({
       name: 'ananRouters'
     }) || constantRouterMap,
     ananAddRouters: getWebStore({
