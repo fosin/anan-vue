@@ -1,12 +1,8 @@
 <template>
   <div class="app-container">
-
     <el-form ref="postForm" :model="postForm" :rules="rules" label-position="left" label-width="150px">
-
       <el-card>
-
         <el-form-item label="题目类型 " prop="quType">
-
           <el-select v-model="postForm.quType" :disabled="quTypeDisabled" class="filter-item" @change="handleTypeChange">
             <el-option
               v-for="item in quTypes"
@@ -15,11 +11,8 @@
               :value="item.value"
             />
           </el-select>
-
         </el-form-item>
-
         <el-form-item label="难度等级 " prop="level">
-
           <el-select v-model="postForm.level" class="filter-item">
             <el-option
               v-for="item in levels"
@@ -28,7 +21,6 @@
               :value="item.value"
             />
           </el-select>
-
         </el-form-item>
 
         <el-form-item label="归属题库" prop="repoIds">
@@ -116,18 +108,15 @@ import { fetchDetail, saveData } from '@/views/exam/qu/qu/qu'
 import RepoSelect from '@/views/exam/components/RepoSelect'
 
 export default {
-  name: 'QuDetail',
+  name: 'ExamManagementQuUpdate',
   components: { RepoSelect },
   data() {
     return {
-
       quTypeDisabled: false,
-
       levels: [
         { value: 1, label: '普通' },
         { value: 2, label: '较难' }
       ],
-
       quTypes: [{
         value: 1,
         label: '单选题'
@@ -140,7 +129,6 @@ export default {
         label: '判断题'
       }
       ],
-
       postForm: {
         repoIds: [],
         tagList: [],
@@ -150,15 +138,12 @@ export default {
         content: [
           { required: true, message: '题目内容不能为空！' }
         ],
-
         quType: [
           { required: true, message: '题目类型不能为空！' }
         ],
-
         level: [
           { required: true, message: '必须选择难度等级！' }
         ],
-
         repoIds: [
           { required: true, message: '至少要选择一个题库！' }
         ]
@@ -173,14 +158,12 @@ export default {
     }
   },
   methods: {
-
     handleTypeChange(v) {
       this.postForm.answerList = []
       if (v === 3) {
         this.postForm.answerList.push({ isRight: true, content: '正确', analysis: '' })
         this.postForm.answerList.push({ isRight: false, content: '错误', analysis: '' })
       }
-
       if (v === 1 || v === 2) {
         this.postForm.answerList.push({ isRight: false, content: '', analysis: '' })
         this.postForm.answerList.push({ isRight: false, content: '', analysis: '' })
@@ -188,16 +171,13 @@ export default {
         this.postForm.answerList.push({ isRight: false, content: '', analysis: '' })
       }
     },
-
     // 添加子项
     handleAdd() {
       this.postForm.answerList.push({ isRight: false, content: '', analysis: '' })
     },
-
     removeItem(index) {
       this.postForm.answerList.splice(index, 1)
     },
-
     fetchData(id) {
       fetchDetail(id).then(response => {
         this.postForm = response.data
@@ -211,7 +191,6 @@ export default {
           rightCount += 1
         }
       })
-
       if (this.postForm.quType === 1) {
         if (rightCount !== 1) {
           this.$message({
@@ -222,7 +201,6 @@ export default {
           return
         }
       }
-
       if (this.postForm.quType === 2) {
         if (rightCount < 2) {
           this.$message({
@@ -240,16 +218,13 @@ export default {
             message: '判断题只能有一个正确项！',
             type: 'warning'
           })
-
           return
         }
       }
-
       this.$refs.postForm.validate((valid) => {
         if (!valid) {
           return
         }
-
         saveData(this.postForm).then(response => {
           this.postForm = response.data
           this.$notify({
@@ -258,15 +233,13 @@ export default {
             type: 'success',
             duration: 2000
           })
-
-          this.$router.push({ name: 'ListQu' })
+          this.$router.push({ name: 'ExamManagementQu' })
         })
       })
     },
     onCancel() {
-      this.$router.push({ name: 'ListQu' })
+      this.$router.push({ name: 'ExamManagementQu' })
     }
-
   }
 }
 </script>

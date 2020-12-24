@@ -19,7 +19,7 @@
 
         <template slot-scope="data">
 
-          <router-link :to="{ name: 'UpdateRepo', params:{id: data.row.id}}">
+          <router-link :to="{ name: 'ExamManagementRepoUpdate', params:{id: data.row.id}}">
             {{ data.row.title }}
           </router-link>
 
@@ -61,11 +61,10 @@
 import DataTable from '@/views/exam/components/DataTable'
 
 export default {
-  name: 'QuList',
+  name: 'ExamManagementRepo',
   components: { DataTable },
   data() {
     return {
-
       listQuery: {
         current: 1,
         size: 10,
@@ -73,12 +72,9 @@ export default {
           title: ''
         }
       },
-
       options: {
-
         // 可批量操作
         multi: true,
-
         // 批量操作列表
         multiActions: [
           {
@@ -93,7 +89,7 @@ export default {
         // 启用禁用
         stateUrl: '/qu/repo/state',
         // 添加数据路由
-        addRoute: 'AddRepo'
+        addRoute: 'ExamManagementRepoAdd'
       }
     }
   },

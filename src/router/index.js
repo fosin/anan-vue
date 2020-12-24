@@ -99,8 +99,10 @@ export function dynamicAddAsyncRouter(ananPermissionTree) {
       status,
       icon,
       url,
-      children
+      children,
+      routePath
     } = permission
+    const rroute = routePath || code
     // 未开启的权限则也不显示
     if (status !== 0) {
       return
@@ -114,7 +116,7 @@ export function dynamicAddAsyncRouter(ananPermissionTree) {
         case 1:
           singelRouter = {
             name: code,
-            path: code,
+            path: rroute,
             component: resolve => require(['@/' + nUrl + '.vue'], resolve).catch(error => {
               Notification.error({
                 title: '获取组件失败',
@@ -128,11 +130,31 @@ export function dynamicAddAsyncRouter(ananPermissionTree) {
             children: isEmpty(children) ? [] : dynamicAddAsyncRouter(children)
           }
           break
+        // 子组件
+        case 6:
+          singelRouter = {
+            name: code,
+            path: rroute,
+            component: resolve => require(['@/' + nUrl + '.vue'], resolve).catch(error => {
+              Notification.error({
+                title: '获取组件失败',
+                message: error.message
+              })
+            }),
+            meta: {
+              title: code,
+              icon: icon,
+              noCache: true
+            },
+            hidden: true,
+            children: isEmpty(children) ? [] : dynamicAddAsyncRouter(children)
+          }
+          break
         // 直接链接菜单
         case 2:
           singelRouter = {
             name: code,
-            path: code,
+            path: rroute,
             component: resolve => require(['@/views/platform/layout/Iframe.vue'], resolve).catch(error => {
               Notification.error({
                 title: '获取组件失败',
@@ -152,7 +174,7 @@ export function dynamicAddAsyncRouter(ananPermissionTree) {
         case 4:
           singelRouter = {
             name: code,
-            path: code,
+            path: rroute,
             component: resolve => require(['@/views/platform/layout/Iframe.vue'], resolve).catch(error => {
               Notification.error({
                 title: '获取组件失败',

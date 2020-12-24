@@ -56,7 +56,7 @@ import { fetchDetail } from '@/views/exam/qu/qu/qu'
 import { nextQu } from '@/views/exam/user/book/book'
 
 export default {
-  name: 'BookTrain',
+  name: 'ExamOnlineResultsTraining',
   data() {
     return {
 
@@ -127,7 +127,7 @@ export default {
       })
     },
     onCancel() {
-      this.$router.push({ name: 'ListTran' })
+      this.$router.push({ name: 'ExamOnlineDoResult' })
     },
 
     handNext() {

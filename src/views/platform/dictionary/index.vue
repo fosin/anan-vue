@@ -22,11 +22,6 @@ export default {
     DictionaryHeader,
     DictionaryDetail
   },
-  filters: {},
-  data() {
-    return {
-    }
-  },
   methods: {
     onDicHeaderRowClick(row) {
       this.$refs.dictionaryDetail.getList(row)

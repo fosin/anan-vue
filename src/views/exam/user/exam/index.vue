@@ -81,7 +81,7 @@ import DataTable from '@/views/exam/components/DataTable'
 import MyPaperList from './paper'
 
 export default {
-  name: 'ExamUserList',
+  name: 'ExamManagementExamUsers',
   components: { MyPaperList, DataTable },
   data() {
     return {
@@ -121,7 +121,7 @@ export default {
     },
 
     handlerExamBook(examId) {
-      this.$router.push({ name: 'BookList', params: { examId: examId }})
+      this.$router.push({ name: 'ExamOnlineResultsRecords', params: { examId: examId }})
     }
   }
 }

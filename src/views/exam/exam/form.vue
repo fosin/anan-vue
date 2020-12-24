@@ -219,7 +219,7 @@ import { fetchTree } from '@/views/exam/sys/depart/depart'
 import RepoSelect from '@/views/exam/components/RepoSelect'
 
 export default {
-  name: 'ExamDetail',
+  name: 'ExamManagementExamUpdate',
   components: { RepoSelect },
   data() {
     return {
@@ -485,7 +485,7 @@ export default {
           duration: 2000
         })
 
-        this.$router.push({ name: 'ListExam' })
+        this.$router.push({ name: 'ExamManagementExam' })
       })
     },
 

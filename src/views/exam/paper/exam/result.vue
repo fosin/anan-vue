@@ -102,7 +102,7 @@
 import { paperResult } from '@/views/exam/paper/exam/exam'
 
 export default {
-  name: 'AuctionGoodsDetail',
+  name: 'ExamOnlineDoResult',
   data() {
     return {
       // 试卷ID

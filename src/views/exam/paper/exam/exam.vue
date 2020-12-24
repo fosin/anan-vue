@@ -93,7 +93,7 @@ import { paperDetail, quDetail, handExam, fillAnswer } from './exam'
 import { Loading } from 'element-ui'
 
 export default {
-  name: 'ExamProcess',
+  name: 'ExamOnlineDoExam',
 
   data() {
     return {
@@ -233,7 +233,7 @@ export default {
           type: 'success'
         })
 
-        this.$router.push({ name: 'ShowExam', params: { id: this.paperId }})
+        this.$router.push({ name: 'ExamOnlineDoResult', params: { id: this.paperId }})
       })
     },
 

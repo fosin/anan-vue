@@ -17,15 +17,10 @@ import International from './international.vue'
 import Charset from './charset.vue'
 
 export default {
-  name: 'InternationalAndCharset',
+  name: 'DevelopmentInternational',
   components: {
     International,
     Charset
-  },
-  filters: {},
-  data() {
-    return {
-    }
   },
   methods: {
     onDicHeaderRowClick(row) {

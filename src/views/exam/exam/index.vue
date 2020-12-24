@@ -90,7 +90,7 @@
 import DataTable from '@/views/exam/components/DataTable'
 
 export default {
-  name: 'ExamList',
+  name: 'ExamManagementExam',
   components: { DataTable },
   data() {
     return {
@@ -126,7 +126,7 @@ export default {
         deleteUrl: 'gateway/exam/api/exam/exam/delete',
         // 删除请求URL
         stateUrl: '/exam/exam/state',
-        addRoute: 'AddExam'
+        addRoute: 'ExamManagementExamForm'
       }
     }
   },
@@ -154,10 +154,10 @@ export default {
   },
   methods: {
     handleExamDetail(examId) {
-      this.$router.push({ name: 'ListExamUser', params: { examId: examId }})
+      this.$router.push({ name: 'ExamManagementExamUsers', params: { examId: examId }})
     },
     handleUpdateExam(examId) {
-      this.$router.push({ name: 'UpdateExam', params: { id: examId }})
+      this.$router.push({ name: 'ExamManagementExamUpdate', params: { id: examId }})
     }
   }
 }

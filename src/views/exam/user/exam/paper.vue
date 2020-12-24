@@ -46,11 +46,10 @@ export default {
       default: ''
     },
     userId: {
-      type: String,
-      default: ''
+      type: Number,
+      default: -1
     }
   },
-
   data() {
     return {
       value1: null,
@@ -60,7 +59,6 @@ export default {
   },
 
   watch: {
-
     // 检测查询变化
     examId: {
       handler() {
@@ -68,7 +66,6 @@ export default {
       },
       deep: true
     },
-
     // 检测查询变化
     userId: {
       handler() {
@@ -77,7 +74,6 @@ export default {
       deep: true
     }
   },
-
   created() {
     this.$store.dispatch('LoadDictionaryById', 143).then(res => {
       this.paperStates = res.details
@@ -92,7 +88,6 @@ export default {
     this.fetchPaperList()
   },
   methods: {
-
     fetchPaperList() {
       listPaper(this.userId, this.examId).then(response => {
         this.paperList = response.data.records

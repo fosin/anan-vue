@@ -79,7 +79,7 @@
 import DataTable from '@/views/exam/components/DataTable'
 
 export default {
-  name: 'OnlineList',
+  name: 'ExamOnlineDo',
   components: { DataTable },
   data() {
     return {
@@ -113,7 +113,7 @@ export default {
   methods: {
     // 开始考试
     handlePre(examId) {
-      this.$router.push({ name: 'PreExam', params: { examId: examId }})
+      this.$router.push({ name: 'ExamOnlineDoPrepare', params: { examId: examId }})
     }
   }
 }

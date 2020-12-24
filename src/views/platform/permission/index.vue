@@ -86,11 +86,18 @@
             <el-form-item :label="$t('anan_permission.url.label')" prop="url">
               <el-input v-model="form.url" :disabled="formUpdate" :placeholder="$t('anan_permission.url.placeholder')" />
             </el-form-item>
-
-            <el-form-item :label="$t('anan_permission.path.label')" prop="path">
-              <el-input v-model="form.path" :disabled="formUpdate" :placeholder="$t('anan_permission.path.placeholder')" />
-            </el-form-item>
-
+            <el-row>
+              <el-col :span="12">
+                <el-form-item :label="$t('anan_permission.path.label')" prop="path">
+                  <el-input v-model="form.path" :disabled="formUpdate" :placeholder="$t('anan_permission.path.placeholder')" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item :label="$t('anan_permission.routePath.label')" prop="routePath">
+                  <el-input v-model="form.routePath" :disabled="formUpdate" :placeholder="$t('anan_permission.routePath.placeholder')" />
+                </el-form-item>
+              </el-col>
+            </el-row>
             <el-row>
               <el-col :span="20">
                 <el-row>
@@ -186,6 +193,9 @@ export default {
         ],
         path: [
           { pattern: /^[A-Za-z0-9/?*. \\-]+$/, message: '匹配路径只支持大小写字母 数字 / . * - ?' }
+        ],
+        routePath: [
+          { pattern: /^[A-Za-z0-9/:?*. \\-]+$/, message: '匹配路径只支持大小写字母 数字 : / . * - ?' }
         ],
         name: [
           {

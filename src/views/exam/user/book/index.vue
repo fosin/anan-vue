@@ -52,7 +52,7 @@
 import DataTable from '@/views/exam/components/DataTable'
 
 export default {
-  name: 'QuList',
+  name: 'ExamOnlineResultsRecords',
   components: { DataTable },
   data() {
     return {
@@ -95,7 +95,7 @@ export default {
   methods: {
 
     startTrain() {
-      this.$router.push({ name: 'BookTraining', params: { examId: this.listQuery.params.examId }})
+      this.$router.push({ name: 'ExamOnlineResultsTraining', params: { examId: this.listQuery.params.examId }})
     }
 
   }

@@ -42,7 +42,7 @@
           show-overflow-tooltip
         >
           <template slot-scope="scope">
-            <router-link :to="{ name: 'UpdateQu', params:{ id: scope.row.id}}">
+            <router-link :to="{ name: 'ExamManagementQuUpdate', params:{ id: scope.row.id}}">
               {{ scope.row.content }}
             </router-link>
           </template>
@@ -91,18 +91,16 @@ import { batchAction } from '@/views/exam/qu/repo/repo'
 import { exportExcel, importExcel, importTemplate } from '@/views/exam/qu/qu/qu'
 
 export default {
-  name: 'QuList',
+  name: 'ExamManagementQu',
   components: { RepoSelect, DataTable },
   data() {
     return {
-
       dialogTitle: '加入题库',
       dialogVisible: false,
       importVisible: false,
       dialogRepos: [],
       dialogQuIds: [],
       dialogFlag: false,
-
       listQuery: {
         current: 1,
         size: 10,
@@ -112,7 +110,6 @@ export default {
           repoIds: []
         }
       },
-
       quTypes: [
         {
           value: 1,
@@ -127,12 +124,9 @@ export default {
           label: '判断题'
         }
       ],
-
       options: {
-
         // 可批量操作
         multi: true,
-
         // 批量操作列表
         multiActions: [
           {
@@ -162,7 +156,7 @@ export default {
         // 启用禁用
         stateUrl: 'gateway/exam/api/qu/qu//state',
         // 添加数据路由
-        addRoute: 'AddQu'
+        addRoute: 'ExamManagementQuAdd'
       }
     }
   },
@@ -179,13 +173,11 @@ export default {
     })
   },
   methods: {
-
     handleMultiAction(obj) {
       if (obj.opt === 'add-repo') {
         this.dialogTitle = '加入题库'
         this.dialogFlag = false
       }
-
       if (obj.opt === 'remove-repo') {
         this.dialogTitle = '从题库移除'
         this.dialogFlag = true
@@ -194,7 +186,6 @@ export default {
       this.dialogVisible = true
       this.dialogQuIds = obj.ids
     },
-
     handlerRepoAction() {
       const postForm = { repoIds: this.dialogRepos, quIds: this.dialogQuIds, remove: this.dialogFlag }
 
@@ -210,25 +201,20 @@ export default {
         this.$refs.pagingTable.getList()
       })
     },
-
     exportExcel() {
       // 导出当前查询的数据
       exportExcel(this.listQuery.params)
     },
-
     downloadTemplate() {
       importTemplate()
     },
-
     showImport() {
       this.importVisible = true
     },
-
     // 只是为了美化一下导入按钮
     chooseFile: function() {
       this.$refs.upFile.dispatchEvent(new MouseEvent('click'))
     },
-
     doImport(e) {
       const file = e.target.files[0]
       importExcel(file).then(res => {

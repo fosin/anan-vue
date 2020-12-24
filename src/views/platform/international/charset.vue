@@ -94,47 +94,58 @@
       />
     </div>
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="90%" :close-on-click-modal="false">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
-        <el-form-item label="国际化语言" prop="internationalId">
-          <el-select v-model="form.internationalId" placeholder="国际化语言" class="filter-item" value="" disabled>
-            <el-option v-for="item in allInternationals" :key="item.id" :label="item.name" :value="item.id" />
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="$t('anan_permission.serviceId.label')" prop="serviceId">
-          <el-select v-model="form.serviceId" :placeholder="$t('anan_permission.serviceId.placeholder')" class="filter-item" value="">
-            <el-option v-for="item in allServices" :key="item.id" :label="item.name" :value="item.id" />
-          </el-select>
-        </el-form-item>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="国际化语言" prop="internationalId">
+              <el-select v-model="form.internationalId" placeholder="国际化语言" class="filter-item" value="" disabled>
+                <el-option v-for="item in allInternationals" :key="item.id" :label="item.name" :value="item.id" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item :label="$t('anan_permission.serviceId.label')" prop="serviceId">
+              <el-select v-model="form.serviceId" :placeholder="$t('anan_permission.serviceId.placeholder')" class="filter-item" value="">
+                <el-option v-for="item in allServices" :key="item.id" :label="item.name" :value="item.id" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item label="状态" prop="status">
+              <el-switch
+                v-model="form.status"
+                active-color="#13ce66"
+                inactive-color="#ff4949"
+                active-text="启用"
+                inactive-text="禁用"
+                :active-value="0"
+                :inactive-value="1"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <div align="right">
+              <el-button icon="el-icon-circle-close" @click="cancel('form')">{{ $t('table.cancel') }}</el-button>
+              <el-button
+                v-if="dialogStatus==='create'"
+                type="primary"
+                icon="el-icon-circle-check"
+                autofocus
+                @click="create('form')"
+              >{{ $t('table.confirm') }}
+              </el-button>
+              <el-button v-else type="primary" icon="el-icon-circle-check" autofocus @click="update('form')">
+                {{ $t('table.update') }}
+              </el-button>
+            </div>
+          </el-col>
+        </el-row>
         <el-form-item label="字符集：" prop="charsets">
           <json-editor v-model="form.charset" />
         </el-form-item>
-        <el-form-item label="状态" prop="status">
-          <el-switch
-            v-model="form.status"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-            active-text="启用"
-            inactive-text="禁用"
-            :active-value="0"
-            :inactive-value="1"
-          />
-        </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button icon="el-icon-circle-close" @click="cancel('form')">{{ $t('table.cancel') }}</el-button>
-        <el-button
-          v-if="dialogStatus==='create'"
-          type="primary"
-          icon="el-icon-circle-check"
-          autofocus
-          @click="create('form')"
-        >{{ $t('table.confirm') }}
-        </el-button>
-        <el-button v-else type="primary" icon="el-icon-circle-check" autofocus @click="update('form')">
-          {{ $t('table.update') }}
-        </el-button>
-      </div>
+      <div slot="footer" class="dialog-footer" />
     </el-dialog>
   </div>
 </template>
@@ -283,6 +294,12 @@ export default {
     },
     handleAdd() {
       this.resetForm()
+      if (!this.form.internationalId) {
+        this.$message({
+          message: '操作前请先选择一种语言!'
+        })
+        return
+      }
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
     },
