@@ -130,7 +130,7 @@ export default {
      */
     handleAdd() {
       if (this.options.addRoute) {
-        this.$router.push({ name: this.options.addRoute, params: {}})
+        this.$store.dispatch('closeAndPushToView', { name: this.options.addRoute, params: {}})
         return
       }
       console.log('未设置添加数据跳转路由！')
@@ -143,7 +143,7 @@ export default {
       this.listLoading = true
       this.listQuery.t = new Date().getTime()
       fetchList(this.options.listUrl, this.listQuery).then(response => {
-        this.dataList = response.data.data
+        this.dataList = response.data
         this.listLoading = false
       })
     },

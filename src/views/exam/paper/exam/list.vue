@@ -113,7 +113,7 @@ export default {
   methods: {
     // 开始考试
     handlePre(examId) {
-      this.$router.push({ name: 'ExamOnlineDoPrepare', params: { examId: examId }})
+      this.$store.dispatch('closeAndPushToView', { name: 'ExamOnlineDoPrepare', params: { examId: examId }})
     }
   }
 }

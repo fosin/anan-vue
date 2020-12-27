@@ -136,7 +136,6 @@ export default {
       this.selectedTag = tag
       this.left = e.clientX
       this.top = e.clientY
-
       // this.visible = true
       // this.selectedTag = tag
       // const offsetLeft = this.$el.getBoundingClientRect().left // container margin left

@@ -1,51 +1,40 @@
 <template>
-
   <data-table
     ref="pagingTable"
     :options="options"
     :list-query="listQuery"
   >
     <template slot="filter-content">
-
       <el-input v-model="listQuery.params.title" placeholder="搜索题目内容" style="width: 200px;" class="filter-item" />
-
       <el-button class="filter-item" style="float: right" type="primary" icon="el-icon-magic-stick" @click="startTrain">
         错题训练
       </el-button>
-
     </template>
-
     <template slot="data-columns">
-
       <el-table-column
         label="题目内容"
         show-overflow-tooltip
       >
         <template slot-scope="scope">
-          <router-link :to="{ name: 'ViewQu', params:{ id: scope.row.quId}}">
+          <router-link :to="{ name: 'ExamOnlineViewQu', params:{ id: scope.row.quId}}">
             {{ scope.row.title }}
           </router-link>
         </template>
       </el-table-column>
-
       <el-table-column
         label="错误次数"
         prop="wrongCount"
         align="center"
         width="100px"
       />
-
       <el-table-column
         label="更新时间"
         align="center"
         prop="updateTime"
         width="180px"
       />
-
     </template>
-
   </data-table>
-
 </template>
 
 <script>
@@ -93,9 +82,8 @@ export default {
     }
   },
   methods: {
-
     startTrain() {
-      this.$router.push({ name: 'ExamOnlineResultsTraining', params: { examId: this.listQuery.params.examId }})
+      this.$store.dispatch('closeAndPushToView', { name: 'ExamOnlineResultsTraining', params: { examId: this.listQuery.params.examId }})
     }
 
   }

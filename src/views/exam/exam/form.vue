@@ -485,7 +485,7 @@ export default {
           duration: 2000
         })
 
-        this.$router.push({ name: 'ExamManagementExam' })
+        this.$store.dispatch('closeAndPushToView', { name: 'ExamManagementExam' })
       })
     },
 

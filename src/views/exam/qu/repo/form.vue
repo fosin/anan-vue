@@ -65,12 +65,12 @@ export default {
             type: 'success',
             duration: 2000
           })
-          this.$router.push({ name: 'ExamManagementRepo' })
+          this.$store.dispatch('closeAndPushToView', { name: 'ExamManagementRepo' })
         })
       })
     },
     onCancel() {
-      this.$router.push({ name: 'ExamManagementRepo' })
+      this.$store.dispatch('closeAndPushToView', { name: 'ExamManagementRepo' })
     }
   }
 }

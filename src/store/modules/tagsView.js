@@ -1,3 +1,5 @@
+import router from '@/router'
+
 const tagsView = {
   state: {
     visitedViews: [],
@@ -18,7 +20,6 @@ const tagsView = {
         state.cachedViews.push(view.name)
       }
     },
-
     DEL_VISITED_VIEW: (state, view) => {
       for (const [i, v] of state.visitedViews.entries()) {
         if (v.path === view.path) {
@@ -83,7 +84,6 @@ const tagsView = {
     addCachedView({ commit }, view) {
       commit('ADD_CACHED_VIEW', view)
     },
-
     delView({ dispatch, state }, view) {
       return new Promise(resolve => {
         dispatch('delVisitedView', view)
@@ -92,6 +92,25 @@ const tagsView = {
           visitedViews: [...state.visitedViews],
           cachedViews: [...state.cachedViews]
         })
+      })
+    },
+    closeAndPushToView({ dispatch, state, commit }, location) {
+      return new Promise(resolve => {
+        const visitedViews = state.visitedViews
+        const latestView = visitedViews.slice(-1)[0]
+        router.push(location)
+        dispatch('addView', router.currentRoute)
+        if (latestView) {
+          dispatch('delView', latestView)
+        }
+        resolve(router.currentRoute)
+      })
+    },
+    pushToView({ dispatch, state, commit }, location) {
+      return new Promise(resolve => {
+        router.push(location)
+        dispatch('addView', router.currentRoute)
+        resolve(router.currentRoute)
       })
     },
     delVisitedView({ commit, state }, view) {
@@ -152,7 +171,6 @@ const tagsView = {
         resolve([...state.cachedViews])
       })
     },
-
     updateVisitedView({ commit }, view) {
       commit('UPDATE_VISITED_VIEW', view)
     }

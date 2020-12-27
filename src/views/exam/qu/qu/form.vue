@@ -233,12 +233,12 @@ export default {
             type: 'success',
             duration: 2000
           })
-          this.$router.push({ name: 'ExamManagementQu' })
+          this.$store.dispatch('closeAndPushToView', { name: 'ExamManagementQu' })
         })
       })
     },
     onCancel() {
-      this.$router.push({ name: 'ExamManagementQu' })
+      this.$store.dispatch('closeAndPushToView', { name: 'ExamManagementQu' })
     }
   }
 }

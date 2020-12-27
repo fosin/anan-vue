@@ -1,34 +1,26 @@
 <template>
   <div class="app-container">
-
     <el-card style="margin-top: 20px">
-
       <div class="qu-content">
-
         <p>【{{ quData.quType===1?'单选题':'多选题' }}】{{ quData.content }}</p>
         <div v-if="quData.quType === 1">
           <el-radio-group v-model="radioValues" readonly>
             <el-radio v-for="an in quData.answerList" :key="an.id" :label="an.id" readonly>{{ an.content }}</el-radio>
           </el-radio-group>
         </div>
-
         <!-- 多选题 -->
         <div v-if="quData.quType === 2">
           <el-checkbox-group v-model="multiValues" readonly>
             <el-checkbox v-for="an in quData.answerList" :key="an.id" :label="an.id">{{ an.content }}</el-checkbox>
           </el-checkbox-group>
         </div>
-
       </div>
-
     </el-card>
-
     <el-card class="qu-analysis" style="margin-top: 20px">
       整题解析：
       <p>{{ quData.analysis }}</p>
       <p v-if="!quData.analysis">暂无解析内容！</p>
     </el-card>
-
     <el-card class="qu-analysis" style="margin-top: 20px; margin-bottom: 30px">
       选项解析：
       <div v-for="an in quData.answerList" :key="an.id" class="qu-analysis-line">
@@ -36,11 +28,8 @@
         <p v-if="an.analysis" style="color: #1890ff;">{{ an.analysis }}</p>
       </div>
       <p v-if="analysisCount === 0">暂无选项解析</p>
-
     </el-card>
-
     <el-button type="info" @click="onCancel">返回</el-button>
-
   </div>
 </template>
 
@@ -48,18 +37,14 @@
 import { fetchDetail } from '@/views/exam/qu/qu/qu'
 
 export default {
-  name: 'QuView',
+  name: 'ExamOnlineViewQu',
   data() {
     return {
-
       quData: {
-
       },
-
       radioValues: '',
       multiValues: [],
       analysisCount: 0
-
     }
   },
   created() {
@@ -69,17 +54,14 @@ export default {
     }
   },
   methods: {
-
     fetchData(id) {
       fetchDetail(id).then(response => {
         this.quData = response.data
-
         this.quData.answerList.forEach((an) => {
           // 解析数量
           if (an.analysis) {
             this.analysisCount += 1
           }
-
           // 用户选定的
           if (an.isRight) {
             if (this.quData.quType === 1) {
@@ -92,9 +74,8 @@ export default {
       })
     },
     onCancel() {
-      this.$router.push({ name: 'ExamOnlineDoResult' })
+      this.$store.dispatch('closeAndPushToView', { name: 'ExamOnlineResults' })
     }
-
   }
 }
 </script>

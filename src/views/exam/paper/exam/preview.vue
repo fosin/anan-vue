@@ -13,7 +13,7 @@
           <div><strong>试卷总分：</strong>{{ detailData.totalScore }}分</div>
           <div><strong>及格分数：</strong>{{ detailData.qualifyScore }}分</div>
           <div><strong>考试描述：</strong>{{ detailData.content }}</div>
-          <div><strong>开放类型：</strong> {{ examOpenType(detailData.openType) }}</div>
+          <div><strong>开放类型：</strong> {{ getDicDetailValue(openTypes, detailData.openType) }}</div>
         </el-card>
       </el-col>
       <el-col :span="24">
@@ -42,16 +42,7 @@ export default {
         examId: '',
         password: ''
       },
-      openTypes: [
-        {
-          value: 1,
-          label: '完全开放'
-        },
-        {
-          value: 2,
-          label: '定向考试'
-        }
-      ],
+      openTypes: [],
       rules: {
         password: [
           { required: true, message: '考试密码不能为空！' }
@@ -59,20 +50,21 @@ export default {
       }
     }
   },
-
   created() {
     this.postForm.examId = this.$route.params.examId
     this.fetchData()
-  },
-
-  methods: {
-    examOpenType(v) {
-      this.openTypes.forEach((value) => {
-        if (value.value === v) {
-          return value.label
-        }
+    this.$store.dispatch('LoadDictionaryById', 144).then(res => {
+      this.openTypes = res.details
+    }).catch((error) => {
+      this.$notify({
+        title: '加载字典开放类型失败',
+        message: error.message,
+        type: 'error',
+        duration: 5000
       })
-    },
+    })
+  },
+  methods: {
     fetchData() {
       fetchDetail(this.postForm.examId).then(response => {
         this.detailData = response.data
@@ -86,25 +78,22 @@ export default {
         background: 'rgba(0, 0, 0, 0.7)'
       })
       createPaper(this.postForm).then(response => {
-        // const data = response.data
-        // if (data && data.code === 0) {
-        if (response.code === 0) {
-          this.$message({
-            message: '试卷创建成功，即将进入考试！',
-            type: 'success'
-          })
-          setTimeout(function() {
-            loading.close()
-            that.dialogVisible = false
-            that.$router.push({ name: 'ExamOnlineDoExam', params: { id: response.data.id }})
-          }, 1000)
-        }
+        const data = response.data
+        this.$message({
+          message: '试卷创建成功，即将进入考试！',
+          type: 'success'
+        })
+        setTimeout(function() {
+          loading.close()
+          that.dialogVisible = false
+          that.$store.dispatch('closeAndPushToView', { name: 'ExamOnlineDoExam', params: { id: data.id }})
+        }, 1000)
       }).catch(() => {
         loading.close()
       })
     },
     handleBack() {
-      this.$router.push({ name: 'ExamOnlineDo' })
+      this.$store.dispatch('closeAndPushToView', { name: 'ExamOnlineDo' })
     }
   }
 }

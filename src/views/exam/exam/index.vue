@@ -154,10 +154,10 @@ export default {
   },
   methods: {
     handleExamDetail(examId) {
-      this.$router.push({ name: 'ExamManagementExamUsers', params: { examId: examId }})
+      this.$store.dispatch('closeAndPushToView', { name: 'ExamManagementExamUsers', params: { examId: examId }})
     },
     handleUpdateExam(examId) {
-      this.$router.push({ name: 'ExamManagementExamUpdate', params: { id: examId }})
+      this.$store.dispatch('closeAndPushToView', { name: 'ExamManagementExamUpdate', params: { id: examId }})
     }
   }
 }

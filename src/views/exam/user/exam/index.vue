@@ -121,7 +121,7 @@ export default {
     },
 
     handlerExamBook(examId) {
-      this.$router.push({ name: 'ExamOnlineResultsRecords', params: { examId: examId }})
+      this.$store.dispatch('closeAndPushToView', { name: 'ExamOnlineResultsRecords', params: { examId: examId }})
     }
   }
 }

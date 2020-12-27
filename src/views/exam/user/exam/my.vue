@@ -101,7 +101,7 @@ export default {
       this.dialogVisible = true
     },
     handlerExamBook(examId) {
-      this.$router.push({ name: 'ExamOnlineResultsRecords', params: { examId: examId }})
+      this.$store.dispatch('pushToView', { name: 'ExamOnlineResultsRecords', params: { examId: examId }})
     }
   }
 }

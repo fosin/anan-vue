@@ -39,8 +39,7 @@
         <p v-if="an.analysis" style="color: #555;">{{ an.content }}：</p>
         <p v-if="an.analysis" style="color: #1890ff;">{{ an.analysis }}</p>
       </div>
-      <p v-if="analysisCount === 0">暂无选项解析</p>
-
+      <!--      <p v-if="analysisCount === 0">暂无选项解析</p>-->
     </el-card>
 
     <div style="padding-top: 30px">
@@ -127,7 +126,7 @@ export default {
       })
     },
     onCancel() {
-      this.$router.push({ name: 'ExamOnlineDoResult' })
+      this.$store.dispatch('closeAndPushToView', { name: 'ExamOnlineResults' })
     },
 
     handNext() {
