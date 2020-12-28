@@ -12,9 +12,9 @@
             <el-select v-model="listQuery.params.quType" class="filter-item" clearable>
               <el-option
                 v-for="item in quTypes"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
+                :key="item.name"
+                :label="item.value"
+                :value="item.name"
               />
             </el-select>
             <repo-select v-model="listQuery.params.repoIds" :multi="true" />
@@ -110,20 +110,7 @@ export default {
           repoIds: []
         }
       },
-      quTypes: [
-        {
-          value: 1,
-          label: '单选题'
-        },
-        {
-          value: 2,
-          label: '多选题'
-        },
-        {
-          value: 3,
-          label: '判断题'
-        }
-      ],
+      quTypes: [],
       options: {
         // 可批量操作
         multi: true,

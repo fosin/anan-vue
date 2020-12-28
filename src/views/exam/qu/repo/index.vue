@@ -6,55 +6,41 @@
     :list-query="listQuery"
   >
     <template slot="filter-content">
-
       <el-input v-model="listQuery.params.title" placeholder="搜索题库名称" style="width: 200px;" class="filter-item" />
-
     </template>
 
     <template slot="data-columns">
-
       <el-table-column
         label="题库名称"
       >
-
         <template slot-scope="data">
-
           <router-link :to="{ name: 'ExamManagementRepoUpdate', params:{id: data.row.id}}">
             {{ data.row.title }}
           </router-link>
-
         </template>
-
       </el-table-column>
-
       <el-table-column
         label="单选题数量"
         prop="radioCount"
         align="center"
       />
-
       <el-table-column
         label="多选题数量"
         prop="multiCount"
         align="center"
       />
-
       <el-table-column
         label="判断题数量"
         prop="judgeCount"
         align="center"
       />
-
       <el-table-column
         label="创建时间"
         align="center"
         prop="createTime"
       />
-
     </template>
-
   </data-table>
-
 </template>
 
 <script>

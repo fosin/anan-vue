@@ -6,9 +6,9 @@
           <el-select v-model="postForm.quType" :disabled="quTypeDisabled" class="filter-item" @change="handleTypeChange">
             <el-option
               v-for="item in quTypes"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              :key="item.name"
+              :label="item.value"
+              :value="item.name"
             />
           </el-select>
         </el-form-item>
@@ -16,35 +16,26 @@
           <el-select v-model="postForm.level" class="filter-item">
             <el-option
               v-for="item in levels"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              :key="item.name"
+              :label="item.value"
+              :value="item.name"
             />
           </el-select>
         </el-form-item>
-
         <el-form-item label="归属题库" prop="repoIds">
-
           <repo-select v-model="postForm.repoIds" :multi="true" />
-
         </el-form-item>
-
         <el-form-item label="题目内容" prop="content">
           <el-input v-model="postForm.content" type="textarea" />
         </el-form-item>
-
         <el-form-item label="整题解析" prop="oriPrice">
           <el-input v-model="postForm.analysis" type="textarea" :precision="1" :max="999999" />
         </el-form-item>
-
       </el-card>
-
       <div v-if="postForm.quType!==4" class="filter-container" style="margin-top: 25px">
-
         <el-button class="filter-item" type="primary" icon="el-icon-plus" size="small" plain @click="handleAdd">
           添加
         </el-button>
-
         <el-table
           :data="postForm.answerList"
           :border="true"
@@ -56,13 +47,9 @@
             align="center"
           >
             <template slot-scope="scope">
-
               <el-checkbox v-model="scope.row.isRight">答案</el-checkbox>
-
             </template>
-
           </el-table-column>
-
           <el-table-column
             label="答案内容"
           >
@@ -70,7 +57,6 @@
               <el-input v-model="scope.row.content" type="textarea" />
             </template>
           </el-table-column>
-
           <el-table-column
             label="答案解析"
           >
@@ -78,7 +64,6 @@
               <el-input v-model="scope.row.analysis" type="textarea" />
             </template>
           </el-table-column>
-
           <el-table-column
             label="操作"
             align="center"
@@ -88,18 +73,13 @@
               <el-button type="danger" icon="el-icon-delete" circle @click="removeItem(scope.$index)" />
             </template>
           </el-table-column>
-
         </el-table>
-
       </div>
-
       <div style="margin-top: 20px">
         <el-button type="primary" @click="submitForm">保存</el-button>
         <el-button type="info" @click="onCancel">返回</el-button>
       </div>
-
     </el-form>
-
   </div>
 </template>
 
@@ -113,22 +93,8 @@ export default {
   data() {
     return {
       quTypeDisabled: false,
-      levels: [
-        { value: 1, label: '普通' },
-        { value: 2, label: '较难' }
-      ],
-      quTypes: [{
-        value: 1,
-        label: '单选题'
-      }, {
-        value: 2,
-        label: '多选题'
-      },
-      {
-        value: 3,
-        label: '判断题'
-      }
-      ],
+      levels: [],
+      quTypes: [],
       postForm: {
         repoIds: [],
         tagList: [],
@@ -152,6 +118,26 @@ export default {
   },
   created() {
     const id = this.$route.params.id
+    this.$store.dispatch('LoadDictionaryById', 146).then(res => {
+      this.levels = res.details
+    }).catch((error) => {
+      this.$notify({
+        title: '加载字典数据失败',
+        message: error.message,
+        type: 'error',
+        duration: 5000
+      })
+    })
+    this.$store.dispatch('LoadDictionaryById', 142).then(res => {
+      this.quTypes = res.details
+    }).catch((error) => {
+      this.$notify({
+        title: '加载字典数据失败',
+        message: error.message,
+        type: 'error',
+        duration: 5000
+      })
+    })
     if (typeof id !== 'undefined') {
       this.quTypeDisabled = true
       this.fetchData(id)
@@ -211,7 +197,6 @@ export default {
           return
         }
       }
-
       if (this.postForm.quType === 3) {
         if (rightCount !== 1) {
           this.$message({
