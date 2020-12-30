@@ -14,21 +14,17 @@
     </div>
 
     <el-card v-if="step === 1" style="margin-top: 20px">
-
       <div style="float: right; font-weight: bold; color: #ff0000">试卷总分：{{ postForm.totalScore }}分</div>
-
       <div>
-
         <div style="margin-bottom: 20px">
           <el-select v-model="postForm.level" class="filter-item" placeholder="选择难度等级" clearable="">
             <el-option
               v-for="item in levels"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              :key="item.name"
+              :label="item.value"
+              :value="item.name"
             />
           </el-select>
-
         </div>
 
         <el-button class="filter-item" size="small" type="primary" icon="el-icon-plus" @click="handleAdd">
@@ -69,18 +65,14 @@
               <el-input-number v-model="scope.row.radioScore" :controls="false" style="width: 100%" />
             </template>
           </el-table-column>
-
           <el-table-column
             label="多选数量"
             align="center"
           >
-
             <template slot-scope="scope">
               <el-input-number v-model="scope.row.multiCount" :controls="false" style="width: 100%" />
             </template>
-
           </el-table-column>
-
           <el-table-column
             label="多选分数"
             align="center"
@@ -89,18 +81,14 @@
               <el-input-number v-model="scope.row.multiScore" :controls="false" style="width: 100%" />
             </template>
           </el-table-column>
-
           <el-table-column
             label="判断题数量"
             align="center"
           >
-
             <template slot-scope="scope">
               <el-input-number v-model="scope.row.judgeCount" :controls="false" style="width: 100%" />
             </template>
-
           </el-table-column>
-
           <el-table-column
             label="判断题分数"
             align="center"
@@ -109,7 +97,6 @@
               <el-input-number v-model="scope.row.judgeScore" :controls="false" style="width: 100%" />
             </template>
           </el-table-column>
-
           <el-table-column
             label="删除"
             align="center"
@@ -119,13 +106,9 @@
               <el-button type="danger" icon="el-icon-delete" circle @click="removeItem(scope.$index)" />
             </template>
           </el-table-column>
-
         </el-table>
-
       </div>
-
     </el-card>
-
     <el-card v-if="step === 2" style="margin-top: 20px;">
 
       <el-radio-group v-model="postForm.openType" style="margin-bottom: 20px">
@@ -144,34 +127,30 @@
           v-model="filterText"
           placeholder="输入关键字进行过滤"
         />
-
         <el-tree
-
           ref="tree"
           v-loading="treeLoading"
-          empty-text=" "
-          :data="treeData"
-          default-expand-all
-          show-checkbox
-          node-key="id"
-          :default-checked-keys="postForm.departIds"
-          :props="defaultProps"
+          :load="loadChild"
+          :default-expanded-keys="defaultExpandedKeys"
           :filter-node-method="filterNode"
+          :props="defaultProps"
+          class="filter-tree"
+          node-key="id"
+          highlight-current
+          lazy
+          show-checkbox
+          check-strictly
+          :default-checked-keys="postForm.departIds"
           @check-change="handleCheckChange"
         />
-
       </div>
-
     </el-card>
 
     <el-card v-if="step === 3" style="margin-top: 20px">
-
       <el-form ref="postForm" :model="postForm" :rules="rules" label-position="left" label-width="120px">
-
         <el-form-item label="考试名称" prop="title">
           <el-input v-model="postForm.title" />
         </el-form-item>
-
         <el-form-item label="考试描述" prop="content">
           <el-input v-model="postForm.content" type="textarea" />
         </el-form-item>
@@ -215,25 +194,23 @@
 
 <script>
 import { fetchDetail, saveData } from '@/views/exam/exam/exam'
-import { fetchTree } from '@/views/exam/sys/depart/depart'
 import RepoSelect from '@/views/exam/components/RepoSelect'
+import { getOrganiz, listOrganizChild } from '@/views/platform/organization/organization'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'ExamManagementExamUpdate',
   components: { RepoSelect },
   data() {
     return {
-
       step: 1,
-      treeData: [],
+      defaultExpandedKeys: [1],
       defaultProps: {
-        label: 'deptName'
+        children: 'children',
+        label: 'name',
+        isLeaf: 'leaf'
       },
-      levels: [
-        { value: 0, label: '不限' },
-        { value: 1, label: '普通' },
-        { value: 2, label: '较难' }
-      ],
+      levels: [],
       filterText: '',
       treeLoading: false,
       dateValues: [],
@@ -299,53 +276,95 @@ export default {
       }
     }
   },
-
+  computed: {
+    ...mapGetters(['ananUserInfo'])
+  },
   watch: {
-
     filterText(val) {
       this.$refs.tree.filter(val)
     },
-
     dateValues: {
-
       handler() {
         this.postForm.startTime = this.dateValues[0]
         this.postForm.endTime = this.dateValues[1]
       }
     },
-
     // 题库变换
     repoList: {
       handler() {
         const that = this
-
         that.postForm.totalScore = 0
-
         this.repoList.forEach(function(item) {
           that.postForm.totalScore += item.radioCount * item.radioScore
           that.postForm.totalScore += item.multiCount * item.multiScore
           that.postForm.totalScore += item.judgeCount * item.judgeScore
         })
-
         // 赋值
         this.postForm.repoList = this.repoList
       },
       deep: true
     }
-
   },
   created() {
     const id = this.$route.params.id
+    this.$store.dispatch('LoadDictionaryById', 146).then(res => {
+      this.levels = res.details
+    }).catch((error) => {
+      this.$notify({
+        title: '加载字典数据失败',
+        message: error.message,
+        type: 'error',
+        duration: 5000
+      })
+    })
     if (typeof id !== 'undefined') {
       this.fetchData(id)
     }
-
-    fetchTree({}).then(response => {
-      this.treeData = response.data
-    })
   },
   methods: {
-
+    loadChild(node, resolve) {
+      if (node.level === 0) {
+        const organizId = this.ananUserInfo.organizId
+        if (organizId === 0) {
+          listOrganizChild(organizId).then(response => {
+            this.defaultExpandedKeys[0] = response.data[0].id
+            return resolve(response.data || [])
+          }).catch(reason => {
+            this.$notify({
+              title: '加载子节点失败',
+              message: reason.message,
+              type: 'error',
+              duration: 5000
+            })
+          })
+        } else {
+          getOrganiz(organizId).then((response2) => {
+            const organizs = []
+            organizs.push(response2.data)
+            this.defaultExpandedKeys[0] = organizId
+            return resolve(organizs || [])
+          }).catch(reason => {
+            this.$notify({
+              title: '加载子节点失败',
+              message: reason.message,
+              type: 'error',
+              duration: 5000
+            })
+          })
+        }
+      } else {
+        listOrganizChild(node.data.id).then(response => {
+          return resolve(response.data || [])
+        }).catch(reason => {
+          this.$notify({
+            title: '加载子节点失败',
+            message: reason.message,
+            type: 'error',
+            duration: 5000
+          })
+        })
+      }
+    },
     nextStep() {
       if (this.step < 3) {
         this.step += 1
@@ -491,7 +510,7 @@ export default {
 
     filterNode(value, data) {
       if (!value) return true
-      return data.deptName.indexOf(value) !== -1
+      return data.label.indexOf(value) !== -1
     }
 
   }

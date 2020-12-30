@@ -32,8 +32,8 @@ export default {
   props: {
     multi: Boolean,
     value: {
-      type: Array,
-      default: () => ([])
+      type: String,
+      default: ''
     },
     default: {
       type: String,
