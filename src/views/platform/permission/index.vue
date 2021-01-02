@@ -324,7 +324,12 @@ export default {
       vname = vname + '(' + permission.name + ')-'
       // 附加类型名称
       if (this.typeOptions && this.typeOptions.length > 0) {
-        vname = vname + '{' + this.typeOptions[permission.type].value + '}'
+        for (let i = 0; i < this.typeOptions.length; i++) {
+          const typeOption = this.typeOptions[i]
+          if (typeOption.name === permission.type) {
+            vname = vname + '{' + typeOption.value + '}'
+          }
+        }
       }
       // 附加权限唯一ID
       if (permission.type === 0) {
