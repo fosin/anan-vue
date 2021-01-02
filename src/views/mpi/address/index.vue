@@ -32,7 +32,7 @@
     >
       <el-table-column align="center" label="地址类型" sortable prop="addressType">
         <template slot-scope="scope">
-          <span>{{ getDicNameValue(addressTypeOptions, scope.row.addressType) }}</span>
+          <span>{{ getDicDetailValue(addressTypeOptions, scope.row.addressType) }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="地址" sortable prop="address" width="150px" />
@@ -136,14 +136,14 @@ export default {
     }
   },
   mounted() {
-    this.asyncLoadDictionaryByCode(134, (data) => {
-      this.addressTypeOptions = data
+    this.loadDictionaryById(134).then(res => {
+      this.addressTypeOptions = res.details
     })
-    this.asyncOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数', (data) => {
-      this.pageModule.pageSize = parseInt(data)
+    this.loadOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数').then(res => {
+      this.pageModule.pageSize = parseInt(res)
     })
-    this.asyncOrganizParameterValue('DefaultPageSizes', '5,10,25,50,100', '表格默认每页记录数可选择项', (data) => {
-      const temp = data.split(',')
+    this.loadOrganizParameterValue('DefaultPageSizes', '5,10,25,50,100', '表格默认每页记录数可选择项').then(res => {
+      const temp = res.split(',')
       this.pageSizes = []
       for (let i = 0; i < temp.length; i++) {
         this.pageSizes[i] = parseInt(temp[i])

@@ -119,6 +119,14 @@
             inactive-value="1"
           />
         </el-form-item>
+        <el-form-item :label="$t('anan_dictionary_detail.description.label')" prop="description">
+          <el-input
+            v-model="form.description"
+            type="textarea"
+            :rows="3"
+            placeholder="请输入内容"
+          />
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button round icon="el-icon-circle-close" @click="cancel('form')">
@@ -194,21 +202,21 @@ export default {
     }
   },
   mounted() {
-    this.asyncLoadDictionaryByCode(11, (data) => {
-      this.statusOptions = data
+    this.loadDictionaryById(11).then(res => {
+      this.statusOptions = res.details
     })
-    this.asyncOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数', (data) => {
-      this.pageModule.pageSize = parseInt(data)
+    this.loadOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数').then(res => {
+      this.pageModule.pageSize = parseInt(res)
     })
-    this.asyncOrganizParameterValue('DefaultPageSizes', '5,10,25,50,100', '表格默认每页记录数可选择项', (data) => {
-      const temp = data.split(',')
+    this.loadOrganizParameterValue('DefaultPageSizes', '5,10,25,50,100', '表格默认每页记录数可选择项').then(res => {
+      const temp = res.split(',')
       this.pageSizes = []
       for (let i = 0; i < temp.length; i++) {
         this.pageSizes[i] = parseInt(temp[i])
       }
     })
-    this.asyncOrganizParameterValue('DefaultDictionaryDetailNameAndSort', '1', '新增字典明细时是否按当前数据总量自动生成字典key和字典Sort，0=不自动 1=自动，默认为自动', (data) => {
-      this.DefaultDictionaryDetailNameAndSort = data
+    this.loadOrganizParameterValue('DefaultDictionaryDetailNameAndSort', '1', '新增字典明细时是否按当前数据总量自动生成字典key和字典Sort，0=不自动 1=自动，默认为自动').then(res => {
+      this.DefaultDictionaryDetailNameAndSort = res
     })
   },
   methods: {

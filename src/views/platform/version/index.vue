@@ -65,7 +65,7 @@
       <el-table-column :label="$t('anan_version.name.label')" align="center" sortable prop="name" />
       <el-table-column :label="$t('anan_version.type.label')" align="center" sortable prop="type">
         <template slot-scope="scope">
-          <el-tag>{{ getDicNameValue(typeOptions,scope.row.type) }}</el-tag>
+          <el-tag>{{ getDicDetailValue(typeOptions,scope.row.type) }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column :label="$t('anan_version.price.label')" align="center" sortable prop="price" />
@@ -78,7 +78,7 @@
       <el-table-column align="center" :label="$t('anan_version.endTime.label')" sortable prop="endTime" width="160"></el-table-column>-->
       <el-table-column :label="$t('anan_version.status.label')" align="center" sortable prop="status">
         <template slot-scope="scope">
-          <el-tag>{{ getDicNameValue(statusOptions,scope.row.status) }}</el-tag>
+          <el-tag>{{ getDicDetailValue(statusOptions,scope.row.status) }}</el-tag>
         </template>
       </el-table-column>
 
@@ -347,11 +347,11 @@ export default {
     }
   },
   mounted() {
-    this.asyncOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数', (data) => {
-      this.pageModule.pageSize = parseInt(data)
+    this.loadOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数').then(res => {
+      this.pageModule.pageSize = parseInt(res)
     })
-    this.asyncOrganizParameterValue('DefaultPageSizes', '5,10,25,50,100', '表格默认每页记录数可选择项', (data) => {
-      const temp = data.split(',')
+    this.loadOrganizParameterValue('DefaultPageSizes', '5,10,25,50,100', '表格默认每页记录数可选择项').then(res => {
+      const temp = res.split(',')
       this.pageSizes = []
       for (let i = 0; i < temp.length; i++) {
         this.pageSizes[i] = parseInt(temp[i])

@@ -46,34 +46,6 @@ export function putParameter(obj) {
   })
 }
 
-export function fetchUserParameterValue(key, defaultValue, description, method) {
-  const p = {
-    type: 2,
-    name: key,
-    defaultValue: defaultValue,
-    description: description
-  }
-  return fetchParameterValue(p, method)
-}
-
-export function fetchOrganizParameterValue(key, defaultValue, description, method) {
-  const p = {
-    type: 1,
-    name: key,
-    defaultValue: defaultValue,
-    description: description
-  }
-  return fetchParameterValue(p, method)
-}
-
-export function fetchParameterValue(parameter, method) {
-  return request({
-    url: 'gateway/platform/v1/parameter/value',
-    method: method || 'post',
-    data: parameter
-  })
-}
-
 export function applyParameter(id) {
   return request({
     url: 'gateway/platform/v1/parameter/apply/' + id,

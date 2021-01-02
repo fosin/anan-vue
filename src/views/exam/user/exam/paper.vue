@@ -75,7 +75,7 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch('LoadDictionaryById', 143).then(res => {
+    this.loadDictionaryById(143).then(res => {
       this.paperStates = res.details
     }).catch((error) => {
       this.$notify({

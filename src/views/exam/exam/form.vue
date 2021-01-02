@@ -1,18 +1,14 @@
 <template>
   <div class="app-container">
-
     <el-steps :active="step" simple>
-
       <el-step title="组卷配置" icon="el-icon-set-up" />
       <el-step title="考试权限" icon="el-icon-unlock" />
       <el-step title="补充配置" icon="el-icon-s-tools" />
     </el-steps>
-
     <div style="margin-top: 20px;width:100%; height: 40px;">
       <el-button v-if="step > 1" @click="prevStep">上一步</el-button>
       <el-button type="primary" style="float:right;" @click="nextStep">{{ step===3?'提交保存':'下一步' }}</el-button>
     </div>
-
     <el-card v-if="step === 1" style="margin-top: 20px">
       <div style="float: right; font-weight: bold; color: #ff0000">试卷总分：{{ postForm.totalScore }}分</div>
       <div>
@@ -23,14 +19,13 @@
               :key="item.name"
               :label="item.value"
               :value="item.name"
+              :disabled="item.status === 1"
             />
           </el-select>
         </div>
-
         <el-button class="filter-item" size="small" type="primary" icon="el-icon-plus" @click="handleAdd">
           添加题库
         </el-button>
-
         <el-table
           :data="repoList"
           :border="false"
@@ -44,19 +39,15 @@
             <template slot-scope="scope">
               <repo-select v-model="scope.row.repoId" :multi="false" />
             </template>
-
           </el-table-column>
           <el-table-column
             label="单选数量"
             align="center"
           >
-
             <template slot-scope="scope">
               <el-input-number v-model="scope.row.radioCount" :controls="false" style="width: 100%" />
             </template>
-
           </el-table-column>
-
           <el-table-column
             label="单选分数"
             align="center"
@@ -110,18 +101,15 @@
       </div>
     </el-card>
     <el-card v-if="step === 2" style="margin-top: 20px;">
-
       <el-radio-group v-model="postForm.openType" style="margin-bottom: 20px">
         <el-radio :label="1" border>完全公开</el-radio>
         <el-radio :label="2" border>部门开放</el-radio>
       </el-radio-group>
-
       <el-alert
         v-if="postForm.openType===1"
         title="开放的，任何人都可以进行考试！"
         type="warning"
       />
-
       <div v-if="postForm.openType===2">
         <el-input
           v-model="filterText"
@@ -145,7 +133,6 @@
         />
       </div>
     </el-card>
-
     <el-card v-if="step === 3" style="margin-top: 20px">
       <el-form ref="postForm" :model="postForm" :rules="rules" label-position="left" label-width="120px">
         <el-form-item label="考试名称" prop="title">
@@ -154,25 +141,19 @@
         <el-form-item label="考试描述" prop="content">
           <el-input v-model="postForm.content" type="textarea" />
         </el-form-item>
-
         <el-form-item label="总分数" prop="totalScore">
           <el-input-number :value="postForm.totalScore" disabled />
         </el-form-item>
-
         <el-form-item label="及格分" prop="qualifyScore">
           <el-input-number v-model="postForm.qualifyScore" :max="postForm.totalScore" />
         </el-form-item>
-
         <el-form-item label="考试时长(分钟)" prop="totalTime">
           <el-input-number v-model="postForm.totalTime" />
         </el-form-item>
-
         <el-form-item label="是否限时">
           <el-checkbox v-model="postForm.timeLimit" />
         </el-form-item>
-
         <el-form-item v-if="postForm.timeLimit" label="考试时间" prop="totalTime">
-
           <el-date-picker
             v-model="dateValues"
             format="yyyy-MM-dd"
@@ -182,13 +163,9 @@
             start-placeholder="开始时间"
             end-placeholder="结束时间"
           />
-
         </el-form-item>
-
       </el-form>
-
     </el-card>
-
   </div>
 </template>
 
@@ -217,17 +194,13 @@ export default {
       quDialogShow: false,
       quDialogType: 1,
       excludes: [],
-
       scoreDialog: false,
       scoreBatch: 0,
-
       // 题库
       repoList: [],
-
       // 题目列表
       quList: [[], [], [], []],
       quEnable: [false, false, false, false],
-
       postForm: {
         // 总分数
         totalScore: 0,
@@ -240,30 +213,26 @@ export default {
         // 开放类型
         openType: 1,
         // 考试班级列表
-        departIds: []
-
+        departIds: [],
+        // 难度
+        level: 0
       },
       rules: {
         title: [
           { required: true, message: '考试名称不能为空！' }
         ],
-
         content: [
           { required: true, message: '考试名称不能为空！' }
         ],
-
         open: [
           { required: true, message: '考试权限不能为空！' }
         ],
-
         totalScore: [
           { required: true, message: '考试分数不能为空！' }
         ],
-
         qualifyScore: [
           { required: true, message: '及格分不能为空！' }
         ],
-
         totalTime: [
           { required: true, message: '考试时间不能为空！' }
         ],
@@ -307,7 +276,7 @@ export default {
   },
   created() {
     const id = this.$route.params.id
-    this.$store.dispatch('LoadDictionaryById', 146).then(res => {
+    this.loadDictionaryById(146).then(res => {
       this.levels = res.details
     }).catch((error) => {
       this.$notify({
@@ -485,7 +454,7 @@ export default {
             that.quEnable[index] = true
           })
         }
-
+        debugger
         if (this.postForm.joinType === 1) {
           that.repoList = that.postForm.repoList
         }

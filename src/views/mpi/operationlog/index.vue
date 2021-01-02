@@ -21,7 +21,7 @@
       <el-table-column align="center" label="操作内容" sortable prop="content" width="900px" />
       <el-table-column align="center" label="操作类型" sortable prop="type" width="100px">
         <template slot-scope="scope">
-          <span>{{ getDicNameValue(typeOptions, scope.row.type) }}</span>
+          <span>{{ getDicDetailValue(typeOptions, scope.row.type) }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="操作日期" sortable prop="createTime" width="140px" />

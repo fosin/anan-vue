@@ -163,14 +163,14 @@ export default {
         multiActions: [
           {
             value: 'enable',
-            label: '启用'
+            label: this.$t('table.enable')
           }, {
             value: 'disable',
-            label: '禁用'
+            label: this.$t('table.disable')
           },
           {
             value: 'delete',
-            label: '删除'
+            label: this.$t('table.delete')
           }
         ]
       }
@@ -178,7 +178,7 @@ export default {
   },
 
   created() {
-    this.$store.dispatch('LoadDictionaryById', 11).then(res => {
+    this.loadDictionaryById(11).then(res => {
       this.onStates = res.details
     }).catch((error) => {
       this.$notify({

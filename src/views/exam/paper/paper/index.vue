@@ -14,6 +14,7 @@
             :key="item.name"
             :label="item.value"
             :value="item.name"
+            :disabled="item.status === 1"
           />
         </el-select>
       </template>
@@ -166,7 +167,7 @@ export default {
     if (typeof examId !== 'undefined') {
       this.listQuery.params.examId = examId
     }
-    this.$store.dispatch('LoadDictionaryById', 143).then(res => {
+    this.loadDictionaryById(143).then(res => {
       this.paperStates = res.details
     }).catch((error) => {
       this.$notify({

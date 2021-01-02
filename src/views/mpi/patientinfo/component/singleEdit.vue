@@ -373,44 +373,44 @@ export default {
     }
   },
   mounted() {
-    /* this.asyncLoadDictionaryByCode(11, (data) => {
-        this.statusOptions = data
+    /* this.loadDictionaryById(11).then(res => {
+        this.statusOptions = res.details
       })*/
-    this.asyncLoadDictionaryByCode(15, (data) => {
-      this.sexOptions = data
+    this.loadDictionaryById(15).then(res => {
+      this.sexOptions = res.details
     })
-    this.asyncLoadDictionaryByCode(6, (data) => {
-      this.nationOptions = data
+    this.loadDictionaryById(6).then(res => {
+      this.nationOptions = res.details
     })
-    this.asyncLoadDictionaryByCode(2, (data) => {
-      this.nationalityOptions = data
+    this.loadDictionaryById(2).then(res => {
+      this.nationalityOptions = res.details
     })
-    this.asyncLoadDictionaryByCode(21, (data) => {
-      this.bloodtypeOptions = data
+    this.loadDictionaryById(21).then(res => {
+      this.bloodtypeOptions = res.details
     })
-    this.asyncLoadDictionaryByCode(131, (data) => {
-      this.rhbloodOptions = data
+    this.loadDictionaryById(131).then(res => {
+      this.rhbloodOptions = res.details
     })
-    this.asyncLoadDictionaryByCode(5, (data) => {
-      this.maritalOptions = data
+    this.loadDictionaryById(5).then(res => {
+      this.maritalOptions = res.details
     })
-    this.asyncLoadDictionaryByCode(43, (data) => {
-      this.educationOptions = data
+    this.loadDictionaryById(43).then(res => {
+      this.educationOptions = res.details
     })
-    this.asyncLoadDictionaryByCode(129, (data) => {
-      this.insuranceOptions = data
+    this.loadDictionaryById(129).then(res => {
+      this.insuranceOptions = res.details
     })
-    this.asyncLoadDictionaryByCode(130, (data) => {
-      this.insurancetypeOptions = data
+    this.loadDictionaryById(130).then(res => {
+      this.insurancetypeOptions = res.details
     })
-    this.asyncLoadDictionaryByCode(103, (data) => {
-      this.workTypeOptions = data
+    this.loadDictionaryById(103).then(res => {
+      this.workTypeOptions = res.details
     })
-    this.asyncLoadDictionaryByCode(128, (data) => {
-      this.deathOptions = data
+    this.loadDictionaryById(128).then(res => {
+      this.deathOptions = res.details
     })
-    this.asyncLoadDictionaryByCode(132, (data) => {
-      this.infoFromOptions = data
+    this.loadDictionaryById(132).then(res => {
+      this.infoFromOptions = res.details
     })
     this.getPatientinfoFirst()
   },

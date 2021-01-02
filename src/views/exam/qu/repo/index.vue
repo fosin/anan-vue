@@ -65,7 +65,7 @@ export default {
         multiActions: [
           {
             value: 'delete',
-            label: '删除'
+            label: this.$t('table.delete')
           }
         ],
         // 列表请求URL

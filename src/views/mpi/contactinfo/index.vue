@@ -32,7 +32,7 @@
     >
       <el-table-column align="center" label="联系类型" sortable prop="contactType">
         <template slot-scope="scope">
-          <span>{{ getDicNameValue(contactTypeOptions, scope.row.contactType) }}</span>
+          <span>{{ getDicDetailValue(contactTypeOptions, scope.row.contactType) }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="联系号码" sortable prop="contactPhone" />
@@ -126,14 +126,14 @@ export default {
     }
   },
   mounted() {
-    this.asyncLoadDictionaryByCode(138, (data) => {
-      this.contactTypeOptions = data
+    this.loadDictionaryById(138).then(res => {
+      this.contactTypeOptions = res.details
     })
-    this.asyncOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数', (data) => {
-      this.pageModule.pageSize = parseInt(data)
+    this.loadOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数').then(res => {
+      this.pageModule.pageSize = parseInt(res)
     })
-    this.asyncOrganizParameterValue('DefaultPageSizes', '5,10,25,50,100', '表格默认每页记录数可选择项', (data) => {
-      const temp = data.split(',')
+    this.loadOrganizParameterValue('DefaultPageSizes', '5,10,25,50,100', '表格默认每页记录数可选择项').then(res => {
+      const temp = res.split(',')
       this.pageSizes = []
       for (let i = 0; i < temp.length; i++) {
         this.pageSizes[i] = parseInt(temp[i])

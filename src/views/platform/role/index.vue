@@ -323,11 +323,11 @@ export default {
     if (!this.organizList || this.organizList.length < 1) {
       this.loadOrganizAllChild(this.ananUserInfo.organizId)
     }
-    this.asyncOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数', (data) => {
-      this.pageModule.pageSize = parseInt(data)
+    this.loadOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数').then(res => {
+      this.pageModule.pageSize = parseInt(res)
     })
-    this.asyncOrganizParameterValue('DefaultPageSizes', '5,10,25,50,100', '表格默认每页记录数可选择项', (data) => {
-      const temp = data.split(',')
+    this.loadOrganizParameterValue('DefaultPageSizes', '5,10,25,50,100', '表格默认每页记录数可选择项').then(res => {
+      const temp = res.split(',')
       this.pageSizes = []
       for (let i = 0; i < temp.length; i++) {
         this.pageSizes[i] = parseInt(temp[i])

@@ -11,7 +11,7 @@ const dictionary = {
   },
   actions: {
     // 获取字典数据
-    LoadDictionaryById({ commit, state, dispatch }, dicId) {
+    getDictionaryById({ commit, state, dispatch }, dicId) {
       return new Promise((resolve, reject) => {
         const dics = state.dictionaryData
         if (dics[dicId]) {
@@ -45,13 +45,23 @@ const dictionary = {
 export default dictionary
 
 import Vue from 'vue'
+import vuex from '@/store'
+Vue.prototype.loadDictionaryById = function(dicId) {
+  return new Promise((resolve, reject) => {
+    vuex.dispatch('getDictionaryById', dicId).then(res => {
+      resolve(res)
+    }).catch((error) => {
+      reject(error)
+    })
+  })
+}
 Vue.prototype.getDicDetailValue = function(dicDetails, dicName) {
-  if (!dicDetails || dicDetails.length < 1) {
-    return dicName
-  }
-  for (const dicDetail of dicDetails) {
-    if (dicDetail.name === dicName) {
-      return dicDetail.value
+  if (dicName && dicDetails && dicDetails.length > 0) {
+    for (const dicDetail of dicDetails) {
+      if (dicDetail.name === dicName) {
+        return dicDetail.value
+      }
     }
   }
+  return dicName
 }

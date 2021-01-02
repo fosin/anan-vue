@@ -15,6 +15,7 @@
                 :key="item.name"
                 :label="item.value"
                 :value="item.name"
+                :disabled="item.status === 1"
               />
             </el-select>
             <repo-select v-model="listQuery.params.repoIds" :multi="true" />
@@ -118,14 +119,14 @@ export default {
         multiActions: [
           {
             value: 'delete',
-            label: '删除'
+            label: this.$t('table.delete')
           }, {
             value: 'enable',
-            label: '启用'
+            label: this.$t('table.enable')
           },
           {
             value: 'disable',
-            label: '禁用'
+            label: this.$t('table.disable')
           },
           {
             value: 'add-repo',
@@ -148,7 +149,7 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch('LoadDictionaryById', 142).then(res => {
+    this.loadDictionaryById(142).then(res => {
       this.quTypes = res.details
     }).catch((error) => {
       this.$notify({

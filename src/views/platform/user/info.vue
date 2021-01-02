@@ -139,8 +139,8 @@ export default {
     ...mapGetters(['ananUserInfo'])
   },
   mounted() {
-    this.asyncLoadDictionaryByCode(15, (data) => {
-      this.sexOptions = data
+    this.loadDictionaryById(15).then(res => {
+      this.sexOptions = res.details
     })
     this.ananUserInfo2.id = this.ananUserInfo.id
     this.ananUserInfo2.password = ''

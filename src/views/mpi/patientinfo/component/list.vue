@@ -18,7 +18,7 @@
       <el-table-column label="姓名简码" sortable prop="pycode" />
       <el-table-column label="性别" width="100" sortable prop="sex">
         <template slot-scope="scope">
-          <span>{{ getDicNameValue(sexOptions, scope.row.sex) }}</span>
+          <span>{{ getDicDetailValue(sexOptions, scope.row.sex) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="出生日期" sortable prop="birthday" width="100">
@@ -33,64 +33,64 @@
       <el-table-column label="户口" sortable prop="household" />
       <el-table-column label="国籍" sortable prop="nationality">
         <template slot-scope="scope">
-          <span>{{ getDicNameValue(nationalityOptions, scope.row.nationality) }}</span>
+          <span>{{ getDicDetailValue(nationalityOptions, scope.row.nationality) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="民族" sortable prop="nation">
         <template slot-scope="scope">
-          <span>{{ getDicNameValue(nationOptions, scope.row.nation) }}</span>
+          <span>{{ getDicDetailValue(nationOptions, scope.row.nation) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="血型" sortable prop="bloodtype">
         <template slot-scope="scope">
-          <span>{{ getDicNameValue(bloodtypeOptions, scope.row.bloodtype) }}</span>
+          <span>{{ getDicDetailValue(bloodtypeOptions, scope.row.bloodtype) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="RH血型" sortable prop="rhblood">
         <template slot-scope="scope">
-          <span>{{ getDicNameValue(rhbloodOptions, scope.row.rhblood) }}</span>
+          <span>{{ getDicDetailValue(rhbloodOptions, scope.row.rhblood) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="婚姻" sortable prop="marital">
         <template slot-scope="scope">
-          <span>{{ getDicNameValue(maritalOptions, scope.row.marital) }}</span>
+          <span>{{ getDicDetailValue(maritalOptions, scope.row.marital) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="参加工作时间" sortable prop="workDate" width="140px" />
       <el-table-column label="职业类别" sortable prop="workType">
         <template slot-scope="scope">
-          <span>{{ getDicNameValue(workTypeOptions, scope.row.workType) }}</span>
+          <span>{{ getDicDetailValue(workTypeOptions, scope.row.workType) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="文化程度" sortable prop="education">
         <template slot-scope="scope">
-          <span>{{ getDicNameValue(nationalityOptions, scope.row.nationality) }}</span>
+          <span>{{ getDicDetailValue(nationalityOptions, scope.row.nationality) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="参保类型" sortable prop="insurance">
         <template slot-scope="scope">
-          <span>{{ getDicNameValue(insuranceOptions, scope.row.insurance) }}</span>
+          <span>{{ getDicDetailValue(insuranceOptions, scope.row.insurance) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="保险类型" sortable prop="insurancetype">
         <template slot-scope="scope">
-          <span>{{ getDicNameValue(insurancetypeOptions, scope.row.insurancetype) }}</span>
+          <span>{{ getDicDetailValue(insurancetypeOptions, scope.row.insurancetype) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="工作单位" sortable prop="workplace" />
       <!-- <el-table-column label="档案状态" sortable prop="status">
         <template slot-scope="scope">
-          <span>{{getDicNameValue(statusOptions, scope.row.status)}}</span>
+          <span>{{getDicDetailValue(statusOptions, scope.row.status)}}</span>
         </template>
       </el-table-column>-->
       <el-table-column label="是否死亡" sortable prop="death">
         <template slot-scope="scope">
-          <span>{{ getDicNameValue(deathOptions, scope.row.death) }}</span>
+          <span>{{ getDicDetailValue(deathOptions, scope.row.death) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="信息来源" sortable prop="infoFrom">
         <template slot-scope="scope">
-          <span>{{ getDicNameValue(infoFromOptions, scope.row.infoFrom) }}</span>
+          <span>{{ getDicDetailValue(infoFromOptions, scope.row.infoFrom) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="版本号" sortable prop="version" />
@@ -160,51 +160,51 @@ export default {
     }
   },
   mounted() {
-    /* this.asyncLoadDictionaryByCode(11, (data) => {
-        this.statusOptions = data
+    /* this.loadDictionaryById(11).then(res => {
+        this.statusOptions = res.details
       })*/
-    this.asyncLoadDictionaryByCode(15, (data) => {
-      this.sexOptions = data
+    this.loadDictionaryById(15).then(res => {
+      this.sexOptions = res.details
     })
-    this.asyncLoadDictionaryByCode(6, (data) => {
-      this.nationOptions = data
+    this.loadDictionaryById(6).then(res => {
+      this.nationOptions = res.details
     })
-    this.asyncLoadDictionaryByCode(2, (data) => {
-      this.nationalityOptions = data
+    this.loadDictionaryById(2).then(res => {
+      this.nationalityOptions = res.details
     })
-    this.asyncLoadDictionaryByCode(21, (data) => {
-      this.bloodtypeOptions = data
+    this.loadDictionaryById(21).then(res => {
+      this.bloodtypeOptions = res.details
     })
-    this.asyncLoadDictionaryByCode(131, (data) => {
-      this.rhbloodOptions = data
+    this.loadDictionaryById(131).then(res => {
+      this.rhbloodOptions = res.details
     })
-    this.asyncLoadDictionaryByCode(5, (data) => {
-      this.maritalOptions = data
+    this.loadDictionaryById(5).then(res => {
+      this.maritalOptions = res.details
     })
-    this.asyncLoadDictionaryByCode(43, (data) => {
-      this.educationOptions = data
+    this.loadDictionaryById(43).then(res => {
+      this.educationOptions = res.details
     })
-    this.asyncLoadDictionaryByCode(129, (data) => {
-      this.insuranceOptions = data
+    this.loadDictionaryById(129).then(res => {
+      this.insuranceOptions = res.details
     })
-    this.asyncLoadDictionaryByCode(130, (data) => {
-      this.insurancetypeOptions = data
+    this.loadDictionaryById(130).then(res => {
+      this.insurancetypeOptions = res.details
     })
-    this.asyncLoadDictionaryByCode(103, (data) => {
-      this.workTypeOptions = data
+    this.loadDictionaryById(103).then(res => {
+      this.workTypeOptions = res.details
     })
-    this.asyncLoadDictionaryByCode(128, (data) => {
-      this.deathOptions = data
+    this.loadDictionaryById(128).then(res => {
+      this.deathOptions = res.details
     })
-    this.asyncLoadDictionaryByCode(132, (data) => {
-      this.infoFromOptions = data
+    this.loadDictionaryById(132).then(res => {
+      this.infoFromOptions = res.details
     })
 
-    this.asyncOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数', (data) => {
-      this.pageModule.pageSize = parseInt(data)
+    this.loadOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数').then(res => {
+      this.pageModule.pageSize = parseInt(res)
     })
-    this.asyncOrganizParameterValue('DefaultPageSizes', '5,10,25,50,100', '表格默认每页记录数可选择项', (data) => {
-      const temp = data.split(',')
+    this.loadOrganizParameterValue('DefaultPageSizes', '5,10,25,50,100', '表格默认每页记录数可选择项').then(res => {
+      const temp = res.split(',')
       this.pageSizes = []
       for (let i = 0; i < temp.length; i++) {
         this.pageSizes[i] = parseInt(temp[i])

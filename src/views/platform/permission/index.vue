@@ -104,7 +104,7 @@
                   <el-col :span="24">
                     <el-form-item :label="$t('anan_permission.method.label')" prop="methodArray">
                       <el-select v-model="form.methodArray" :disabled="formUpdate" :placeholder="$t('anan_permission.method.placeholder')" multiple>
-                        <el-option v-for="item in methodOptions" :key="item.scode" :label="item.value" :value="item.scode" />
+                        <el-option v-for="item in methodOptions" :key="item.scode" :label="item.value" :value="item.scode" :disabled="item.status === 1" />
                       </el-select>
                     </el-form-item>
                   </el-col>
@@ -229,11 +229,25 @@ export default {
     }
   },
   mounted() {
-    this.asyncLoadDictionaryByCode(13, (data) => {
-      this.typeOptions = data
+    this.loadDictionaryById(13).then(res => {
+      this.typeOptions = res.details
+    }).catch((error) => {
+      this.$notify({
+        title: '加载字典数据失败',
+        message: error.message,
+        type: 'error',
+        duration: 5000
+      })
     })
-    this.asyncLoadDictionaryByCode(12, (data) => {
-      this.methodOptions = data
+    this.loadDictionaryById(12).then(res => {
+      this.methodOptions = res.details
+    }).catch((error) => {
+      this.$notify({
+        title: '加载字典数据失败',
+        message: error.message,
+        type: 'error',
+        duration: 5000
+      })
     })
     getServiceByStatus().then(response => {
       this.validServices = response.data

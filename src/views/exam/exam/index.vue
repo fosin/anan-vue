@@ -11,6 +11,7 @@
           :key="item.name"
           :label="item.value"
           :value="item.name"
+          :disabled="item.status === 1"
         />
       </el-select>
       <el-date-picker
@@ -110,14 +111,14 @@ export default {
         multiActions: [
           {
             value: 'delete',
-            label: '删除'
+            label: this.$t('table.delete')
           }, {
             value: 'enable',
-            label: '启用'
+            label: this.$t('table.enable')
           },
           {
             value: 'disable',
-            label: '禁用'
+            label: this.$t('table.disable')
           }
         ],
         // 列表请求URL
@@ -131,7 +132,7 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch('LoadDictionaryById', 144).then(res => {
+    this.loadDictionaryById(144).then(res => {
       this.openTypes = res.details
     }).catch((error) => {
       this.$notify({
@@ -141,7 +142,7 @@ export default {
         duration: 5000
       })
     })
-    this.$store.dispatch('LoadDictionaryById', 145).then(res => {
+    this.loadDictionaryById(145).then(res => {
       this.examStates = res.details
     }).catch((error) => {
       this.$notify({

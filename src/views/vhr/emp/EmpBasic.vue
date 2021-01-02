@@ -844,23 +844,23 @@ export default {
     }
   },
   mounted: function() {
-    this.asyncLoadDictionaryByCode(5, (data) => {
-      this.wedlocks = data
+    this.loadDictionaryById(5).then(res => {
+      this.wedlocks = res.details
     })
-    this.asyncLoadDictionaryByCode(6, (data) => {
-      this.nations = data
+    this.loadDictionaryById(6).then(res => {
+      this.nations = res.details
     })
-    this.asyncLoadDictionaryByCode(42, (data) => {
-      this.politics = data
+    this.loadDictionaryById(42).then(res => {
+      this.politics = res.details
     })
-    this.asyncLoadDictionaryByCode(141, (data) => {
-      this.positions = data
+    this.loadDictionaryById(141).then(res => {
+      this.positions = res.details
     })
-    this.asyncLoadDictionaryByCode(140, (data) => {
-      this.joblevels = data
+    this.loadDictionaryById(140).then(res => {
+      this.joblevels = res.details
     })
-    this.asyncLoadDictionaryByCode(47, (data) => {
-      this.degrees = data
+    this.loadDictionaryById(47).then(res => {
+      this.degrees = res.details
     })
     this.initData()
     this.loadEmps()

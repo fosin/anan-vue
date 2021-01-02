@@ -57,13 +57,13 @@
     >
       <el-table-column align="center" label="卡类型" sortable prop="cardType">
         <template slot-scope="scope">
-          <span>{{ getDicNameValue(cardTypeOptions, scope.row.cardType) }}</span>
+          <span>{{ getDicDetailValue(cardTypeOptions, scope.row.cardType) }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="卡号" sortable prop="cardNo" />
       <el-table-column align="center" label="卡状态" sortable prop="status">
         <template slot-scope="scope">
-          <span>{{ getDicNameValue(statusOptions, scope.row.status) }}</span>
+          <span>{{ getDicDetailValue(statusOptions, scope.row.status) }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="有效期" sortable prop="validtime" width="140px" />
@@ -178,17 +178,17 @@ export default {
     }
   },
   mounted() {
-    this.asyncLoadDictionaryByCode(135, (data) => {
-      this.cardTypeOptions = data
+    this.loadDictionaryById(135).then(res => {
+      this.cardTypeOptions = res.details
     })
-    this.asyncLoadDictionaryByCode(136, (data) => {
-      this.statusOptions = data
+    this.loadDictionaryById(136).then(res => {
+      this.statusOptions = res.details
     })
-    this.asyncOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数', (data) => {
-      this.pageModule.pageSize = parseInt(data)
+    this.loadOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数').then(res => {
+      this.pageModule.pageSize = parseInt(res)
     })
-    this.asyncOrganizParameterValue('DefaultPageSizes', '5,10,25,50,100', '表格默认每页记录数可选择项', (data) => {
-      const temp = data.split(',')
+    this.loadOrganizParameterValue('DefaultPageSizes', '5,10,25,50,100', '表格默认每页记录数可选择项').then(res => {
+      const temp = res.split(',')
       this.pageSizes = []
       for (let i = 0; i < temp.length; i++) {
         this.pageSizes[i] = parseInt(temp[i])

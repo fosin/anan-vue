@@ -74,7 +74,7 @@ export default {
   },
   created() {
     this.examId = this.$route.params.examId
-    this.$store.dispatch('LoadDictionaryById', 142).then(res => {
+    this.loadDictionaryById(142).then(res => {
       this.quTypes = res.details
     }).catch((error) => {
       this.$notify({

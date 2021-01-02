@@ -21,8 +21,6 @@ import './utils/permission' // permission control
 // }
 import * as filters from './filters' // global filters
 import permission from './directive/permission/index.js' // 权限判断指令
-import dictionary from './utils/dictionary' // 字典服务
-import parameter from './utils/parameter' // 个性化参数服务
 import waves from './directive/waves/index.js' // 水波效果
 import './views/vhr/utils/filter_utils'
 import { getRequest, postRequest, deleteRequest, putRequest, allRequest } from './utils/request'
@@ -34,8 +32,6 @@ Vue.prototype.putRequest = putRequest
 Vue.prototype.allRequest = allRequest
 
 require('es6-promise').polyfill()
-Vue.use(dictionary)
-Vue.use(parameter)
 Vue.use(permission)
 Vue.use(waves)
 

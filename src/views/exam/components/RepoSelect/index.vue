@@ -1,5 +1,4 @@
 <template>
-
   <el-select
     v-model="currentValue"
     filterable
@@ -20,9 +19,7 @@
       :value="item.id"
     />
   </el-select>
-
 </template>
-
 <script>
 
 import { fetchList } from '@/views/exam/qu/repo/repo'
@@ -30,10 +27,13 @@ import { fetchList } from '@/views/exam/qu/repo/repo'
 export default {
   name: 'RepoSelect',
   props: {
-    multi: Boolean,
+    multi: {
+      type: Boolean,
+      default: false
+    },
     value: {
-      type: String,
-      default: ''
+      type: Array,
+      default: () => ([])
     },
     default: {
       type: String,

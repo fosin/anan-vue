@@ -9,6 +9,7 @@
               :key="item.name"
               :label="item.value"
               :value="item.name"
+              :disabled="item.status === 1"
             />
           </el-select>
         </el-form-item>
@@ -19,6 +20,7 @@
               :key="item.name"
               :label="item.value"
               :value="item.name"
+              :disabled="item.status === 1"
             />
           </el-select>
         </el-form-item>
@@ -118,8 +120,16 @@ export default {
   },
   created() {
     const id = this.$route.params.id
-    this.$store.dispatch('LoadDictionaryById', 146).then(res => {
-      this.levels = res.details
+    this.loadDictionaryById(146).then(res => {
+      const levels = res.details
+      // 删除不限
+      for (const [i, v] of levels) {
+        if (v.name === 0) {
+          levels.splice(i, 1)
+          break
+        }
+      }
+      this.levels = levels
     }).catch((error) => {
       this.$notify({
         title: '加载字典数据失败',
@@ -128,7 +138,7 @@ export default {
         duration: 5000
       })
     })
-    this.$store.dispatch('LoadDictionaryById', 142).then(res => {
+    this.loadDictionaryById(142).then(res => {
       this.quTypes = res.details
     }).catch((error) => {
       this.$notify({

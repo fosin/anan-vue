@@ -1,29 +1,25 @@
 <template>
   <div class="app-container">
-
     <div class="filter-container">
-
       <slot name="filter-content" />
-
       <el-row>
-        <el-col>
-          <el-button v-if="options.addRoute" type="primary" icon="el-icon-plus" @click="handleAdd">添加</el-button>
+        <el-col :span="2">
+          <el-button v-if="options.addRoute" type="primary" icon="el-icon-plus" @click="handleAdd">{{ $t('table.add') }}</el-button>
         </el-col>
+        <el-col :span="2">
+          <div v-show="multiShow && options.multiActions" class="filter-container">
+            <el-select v-model="multiNow" :placeholder="selectedLabel" class="filter-item" style="width: 130px" @change="handleOption">
+              <el-option
+                v-for="item in options.multiActions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </div>
+        </el-col>
+        <el-col :span="20" />
       </el-row>
-
-    </div>
-
-    <div v-show="multiShow && options.multiActions" class="filter-container">
-
-      <el-select v-model="multiNow" :placeholder="selectedLabel" class="filter-item" style="width: 130px" @change="handleOption">
-        <el-option
-          v-for="item in options.multiActions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
-      </el-select>
-
     </div>
 
     <el-table

@@ -11,6 +11,7 @@
           :key="item.name"
           :label="item.value"
           :value="item.name"
+          :disabled="item.status === 1"
         />
       </el-select>
       <el-input v-model="listQuery.params.title" placeholder="搜索考试名称" style="width: 200px;" class="filter-item" />
@@ -99,7 +100,7 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch('LoadDictionaryById', 144).then(res => {
+    this.loadDictionaryById(144).then(res => {
       this.openTypes = res.details
     }).catch((error) => {
       this.$notify({

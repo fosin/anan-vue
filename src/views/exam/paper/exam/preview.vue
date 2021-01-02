@@ -53,7 +53,7 @@ export default {
   created() {
     this.postForm.examId = this.$route.params.examId
     this.fetchData()
-    this.$store.dispatch('LoadDictionaryById', 144).then(res => {
+    this.loadDictionaryById(144).then(res => {
       this.openTypes = res.details
     }).catch((error) => {
       this.$notify({
