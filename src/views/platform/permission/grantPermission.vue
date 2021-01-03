@@ -32,6 +32,9 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { getServiceByStatus } from '@/views/platform/service/service'
+import { getPermissionVname } from '@/views/platform/permission/permission'
+
 export default {
   name: 'GrantPermission',
   data() {
@@ -41,12 +44,14 @@ export default {
       title: '分配权限',
       expandKeys: [],
       checkedKeys: [],
+      typeOptions: [],
+      validServices: [],
       dialogPermissionVisible: false,
       hackReset: false,
       permissionId: '-1',
       defaultProps: {
         children: 'children',
-        label: 'name',
+        label: 'vname',
         isLeaf: 'leaf',
         disabled: 'disabled'
       },
@@ -60,6 +65,14 @@ export default {
     filterPermissionText(val) {
       this.$refs.permissionTree.filter(val)
     }
+  },
+  created() {
+    this.loadDictionaryById(13).then(res => {
+      this.typeOptions = res.details
+    })
+    getServiceByStatus().then(res => {
+      this.validServices = res.data
+    })
   },
   methods: {
     hasPermission(permissionId) {
@@ -162,9 +175,11 @@ export default {
         const childPermissions = response.data || []
         // 记录所有被展开过的节点ID，用于保存时比较数据
         for (let i = 0; i < childPermissions.length; i++) {
-          const id = childPermissions[i].id
-          this.expandKeys.push(id)
+          const permission = childPermissions[i]
+          this.expandKeys.push(permission.id)
           // childPermissions[i].disabled = pid === 0
+          permission.vname = getPermissionVname(this.validServices, this.typeOptions, permission)
+          childPermissions[i] = permission
         }
         return resolve(childPermissions)
       }).catch(reason => {

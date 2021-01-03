@@ -53,3 +53,30 @@ export function putPermission(obj) {
     data: obj
   })
 }
+
+export function getPermissionVname(validServices, typeOptions, permission) {
+  let vname = ''
+  // 如果是目录菜单，则附加服务名称
+  if (permission.type === 3 || permission.level === 1) {
+    validServices.forEach((value, index) => {
+      if (value.id === permission.serviceId) {
+        vname = '[' + value.name + ']-'
+      }
+    })
+  }
+  // 附加权限名称
+  vname = vname + '(' + permission.name + ')-'
+  // 附加类型名称
+  if (typeOptions && typeOptions.length > 0) {
+    typeOptions.forEach((typeOption, index) => {
+      if (typeOption.name === permission.type) {
+        vname = vname + '{' + typeOption.value + '}'
+      }
+    })
+  }
+  // 附加权限唯一ID
+  if (permission.type === 5) {
+    vname = vname + '-' + permission.id
+  }
+  return vname
+}

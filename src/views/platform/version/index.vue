@@ -214,7 +214,6 @@ import { formatDate } from '@/utils/date'
 import grantPermission from '../permission/grantPermission'
 export default {
   name: 'DevelopmentVersion',
-
   components: {
     grantPermission
   },
@@ -237,8 +236,8 @@ export default {
         sortOrder: ''
       },
       pageSizes: [],
-      typeOptions: [{ 'name': 0, 'value': '收费版' }, { 'name': 1, 'value': '免费版' }, { 'name': 2, 'value': '开发版' }],
-      statusOptions: [{ 'name': 0, 'value': '启用' }, { 'name': 1, 'value': '禁用' }],
+      typeOptions: [],
+      statusOptions: [],
       form: {},
       rules: {
         name: [
@@ -347,6 +346,26 @@ export default {
     }
   },
   mounted() {
+    this.loadDictionaryById(147).then(res => {
+      this.typeOptions = res.details
+    }).catch((error) => {
+      this.$notify({
+        title: '加载字典数据失败',
+        message: error.message,
+        type: 'error',
+        duration: 5000
+      })
+    })
+    this.loadDictionaryById(11).then(res => {
+      this.statusOptions = res.details
+    }).catch((error) => {
+      this.$notify({
+        title: '加载字典数据失败',
+        message: error.message,
+        type: 'error',
+        duration: 5000
+      })
+    })
     this.loadOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数').then(res => {
       this.pageModule.pageSize = parseInt(res)
     })

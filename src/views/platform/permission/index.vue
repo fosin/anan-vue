@@ -148,7 +148,13 @@
 </template>
 
 <script>
-import { listChildPermissions, getPermission, postPermission, deletePermission, putPermission } from './permission'
+import {
+  listChildPermissions,
+  getPermission,
+  postPermission,
+  deletePermission,
+  putPermission, getPermissionVname
+} from './permission'
 import { getServiceByStatus } from '@/views/platform/service/service'
 import IconsSelect from '@/components/IconsSelect/index'
 
@@ -297,7 +303,7 @@ export default {
         const permissions = response.data
         if (permissions && permissions.length > 0) {
           for (let i = 0; i < permissions.length; i++) {
-            permissions[i].vname = this.getVname(permissions[i])
+            permissions[i].vname = getPermissionVname(this.validServices, this.typeOptions, permissions[i])
           }
         }
         return resolve(response.data || [])
@@ -309,33 +315,6 @@ export default {
           duration: 5000
         })
       })
-    },
-    getVname(permission) {
-      let vname = ''
-      // 如果是目录菜单，则附加服务名称
-      if (permission.type === 3) {
-        this.validServices.forEach((value, index) => {
-          if (value.id === permission.serviceId) {
-            vname = '[' + value.name + ']-'
-          }
-        })
-      }
-      // 附加权限名称
-      vname = vname + '(' + permission.name + ')-'
-      // 附加类型名称
-      if (this.typeOptions && this.typeOptions.length > 0) {
-        for (let i = 0; i < this.typeOptions.length; i++) {
-          const typeOption = this.typeOptions[i]
-          if (typeOption.name === permission.type) {
-            vname = vname + '{' + typeOption.value + '}'
-          }
-        }
-      }
-      // 附加权限唯一ID
-      if (permission.type === 0) {
-        vname = vname + '-' + permission.id
-      }
-      return vname
     },
     filterNode(value, data) {
       if (!value) return true
@@ -460,7 +439,7 @@ export default {
       putPermission(this.form).then(response => {
         const cNode = this.$refs.permissionTree.getNode(this.form.id)
         if (cNode) {
-          response.data.vname = this.getVname(response.data)
+          response.data.vname = getPermissionVname(this.validServices, this.typeOptions, response.data)
           cNode.data = response.data
         }
         this.$notify({
@@ -482,7 +461,7 @@ export default {
       this.form.method = this.form.methodArray.join(',')
       postPermission(this.form).then(response => {
         const pNode = this.$refs.permissionTree.getNode(this.form.pid)
-        response.data.vname = this.getVname(response.data)
+        response.data.vname = getPermissionVname(this.validServices, this.typeOptions, response.data)
         this.$refs.permissionTree.append(response.data, pNode)
         // TODO 以下代码启用后可以解决tree控件bug(会导致原有子节点丢失问题)
         pNode.data.children = null
