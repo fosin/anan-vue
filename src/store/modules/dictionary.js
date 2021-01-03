@@ -56,7 +56,7 @@ Vue.prototype.loadDictionaryById = function(dicId) {
   })
 }
 Vue.prototype.getDicDetailValue = function(dicDetails, dicName) {
-  if (dicName && dicDetails && dicDetails.length > 0) {
+  if (dicDetails && dicDetails.length > 0) {
     for (const dicDetail of dicDetails) {
       if (dicDetail.name === dicName) {
         return dicDetail.value
