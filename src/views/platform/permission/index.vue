@@ -237,23 +237,9 @@ export default {
   mounted() {
     this.loadDictionaryById(13).then(res => {
       this.typeOptions = res.details
-    }).catch((error) => {
-      this.$notify({
-        title: '加载字典数据失败',
-        message: error.message,
-        type: 'error',
-        duration: 5000
-      })
     })
     this.loadDictionaryById(12).then(res => {
       this.methodOptions = res.details
-    }).catch((error) => {
-      this.$notify({
-        title: '加载字典数据失败',
-        message: error.message,
-        type: 'error',
-        duration: 5000
-      })
     })
     getServiceByStatus().then(response => {
       this.validServices = response.data

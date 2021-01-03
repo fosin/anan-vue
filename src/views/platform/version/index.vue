@@ -358,13 +358,6 @@ export default {
     })
     this.loadDictionaryById(11).then(res => {
       this.statusOptions = res.details
-    }).catch((error) => {
-      this.$notify({
-        title: '加载字典数据失败',
-        message: error.message,
-        type: 'error',
-        duration: 5000
-      })
     })
     this.loadOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数').then(res => {
       this.pageModule.pageSize = parseInt(res)

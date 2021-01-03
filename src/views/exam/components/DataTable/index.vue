@@ -73,7 +73,6 @@ export default {
         }
       }
     },
-
     // 列表查询参数
     listQuery: {
       type: Object,
@@ -107,7 +106,6 @@ export default {
     }
   },
   watch: {
-
     // 检测查询变化
     listQuery: {
       handler() {
@@ -120,7 +118,6 @@ export default {
     this.getList()
   },
   methods: {
-
     /**
      * 添加数据跳转
      */
@@ -131,7 +128,6 @@ export default {
       }
       console.log('未设置添加数据跳转路由！')
     },
-
     /**
      * 查询数据列表
      */
@@ -143,7 +139,6 @@ export default {
         this.listLoading = false
       })
     },
-
     /**
      * 搜索
      */
@@ -151,33 +146,27 @@ export default {
       // 重新搜索
       this.getList()
     },
-
     /**
      * 批量操作回调
      */
     handleOption(v) {
       this.multiNow = ''
-
       // 内部消化的操作
       if (v === 'delete') {
         this.handleDelete()
         return
       }
-
       if (v === 'enable') {
         this.handleState(0)
         return
       }
-
       if (v === 'disable') {
         this.handleState(1)
         return
       }
-
       // 向外回调的操作
       this.$emit('multi-actions', { opt: v, ids: this.selectedIds })
     },
-
     /**
      * 修改状态，启用禁用
      */
@@ -195,7 +184,6 @@ export default {
         }
       })
     },
-
     /**
      * 删除数据
      */
@@ -207,7 +195,6 @@ export default {
         })
         return
       }
-
       // 删除
       this.$confirm('确实要删除吗?', '提示', {
         confirmButtonText: '确定',
@@ -223,7 +210,6 @@ export default {
         })
       })
     },
-
     /**
      * 列表多选操作
      * @param val
@@ -233,7 +219,6 @@ export default {
       val.forEach(row => {
         ids.push(row.id)
       })
-
       this.selectedObjs = val
       this.selectedIds = ids
       this.multiShow = ids.length > 0
@@ -247,11 +232,9 @@ export default {
 </script>
 
 <style>
-
   .filter-container .filter-item{
     margin-left: 5px;
   }
-
   .filter-container .filter-item:first-child{
     margin-left: 0px;
   }

@@ -102,13 +102,6 @@ export default {
   created() {
     this.loadDictionaryById(144).then(res => {
       this.openTypes = res.details
-    }).catch((error) => {
-      this.$notify({
-        title: '加载字典开放类型失败',
-        message: error.message,
-        type: 'error',
-        duration: 5000
-      })
     })
   },
   methods: {

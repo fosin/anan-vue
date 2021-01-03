@@ -32,10 +32,19 @@
         <el-table-column
           label="题目类型"
           align="center"
-          width="100px"
+          width="90px"
         >
           <template slot-scope="scope">
             {{ getDicDetailValue(quTypes, scope.row.quType) }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="题目难度"
+          align="center"
+          width="90px"
+        >
+          <template slot-scope="scope">
+            {{ getDicDetailValue(levels, scope.row.level) }}
           </template>
         </el-table-column>
         <el-table-column
@@ -112,6 +121,7 @@ export default {
         }
       },
       quTypes: [],
+      levels: [],
       options: {
         // 可批量操作
         multi: true,
@@ -151,13 +161,9 @@ export default {
   created() {
     this.loadDictionaryById(142).then(res => {
       this.quTypes = res.details
-    }).catch((error) => {
-      this.$notify({
-        title: '加载字典试卷状态失败',
-        message: error.message,
-        type: 'error',
-        duration: 5000
-      })
+    })
+    this.loadDictionaryById(146).then(res => {
+      this.levels = res.details
     })
   },
   methods: {

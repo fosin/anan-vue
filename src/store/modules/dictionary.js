@@ -1,4 +1,5 @@
 import { postRequest } from '@/utils/request'
+import { Notification } from 'element-ui'
 
 const dictionary = {
   state: {
@@ -51,6 +52,12 @@ Vue.prototype.loadDictionaryById = function(dicId) {
     vuex.dispatch('getDictionaryById', dicId).then(res => {
       resolve(res)
     }).catch((error) => {
+      Notification.error({
+        title: '加载字典失败，字典ID：' + dicId,
+        message: error.message,
+        type: 'error',
+        duration: 5000
+      })
       reject(error)
     })
   })

@@ -2,7 +2,9 @@ import axios from 'axios'
 import { MessageBox } from 'element-ui'
 import store from '../store'
 import NProgress from 'nprogress' // progress bar
-import 'nprogress/nprogress.css'// progress bar style
+import 'nprogress/nprogress.css'
+
+// progress bar style
 
 NProgress.configure({ showSpinner: false })// NProgress Configuration
 // 全局设置方式
@@ -37,14 +39,6 @@ service.interceptors.request.use(config => {
 // respone interceptor
 service.interceptors.response.use(response => {
   NProgress.done()
-  // const data = response.data
-  // const status = response.status
-  // switch (status) {
-  //   case 200:
-  //   case 201:
-  //   case 202:
-  //   case 203:
-  // }
   return response
 }, error => {
   NProgress.done()
@@ -180,6 +174,7 @@ export function download(url, data) {
       responseType: 'blob'
     }).then(res => {
       // 文件下载
+      debugger
       const blob = new Blob([res], {
         type: 'application/vnd.ms-excel'
       })

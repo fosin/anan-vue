@@ -58,7 +58,6 @@ export default {
   name: 'ExamOnlineResultsTraining',
   data() {
     return {
-
       examId: '',
       quId: '',
       tags: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N'],
@@ -76,13 +75,6 @@ export default {
     this.examId = this.$route.params.examId
     this.loadDictionaryById(142).then(res => {
       this.quTypes = res.details
-    }).catch((error) => {
-      this.$notify({
-        title: '加载字典试卷状态失败',
-        message: error.message,
-        type: 'error',
-        duration: 5000
-      })
     })
     this.fetchNextQu()
   },

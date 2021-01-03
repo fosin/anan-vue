@@ -47,18 +47,13 @@ export default parameter
 
 import Vue from 'vue'
 import vuex from '@/store'
+import { Notification } from 'element-ui'
 
 Vue.prototype.loadOrganizParameterValue = function(name, defaultValue, description) {
   return Vue.prototype.loadAllParameterValue(1, name, defaultValue, description)
 }
 Vue.prototype.loadUserParameterValue = function(name, defaultValue, description) {
-  return new Promise((resolve, reject) => {
-    Vue.prototype.loadAllParameterValue(2, name, defaultValue, description).then(res => {
-      resolve(res)
-    }).catch((error) => {
-      reject(error)
-    })
-  })
+  return Vue.prototype.loadAllParameterValue(2, name, defaultValue, description)
 }
 Vue.prototype.loadAllParameterValue = function(type, name, defaultValue, description) {
   return new Promise((resolve, reject) => {
@@ -71,6 +66,12 @@ Vue.prototype.loadAllParameterValue = function(type, name, defaultValue, descrip
     vuex.dispatch('loadParameterValue', p).then(res => {
       resolve(res)
     }).catch((error) => {
+      Notification.error({
+        title: '加载参数失败，入参信息：' + p.toString(),
+        message: error.message,
+        type: 'error',
+        duration: 5000
+      })
       reject(error)
     })
   })

@@ -45,7 +45,6 @@ export default {
   components: { DataTable },
   data() {
     return {
-
       listQuery: {
         current: 1,
         size: 10,
@@ -54,12 +53,9 @@ export default {
           examId: ''
         }
       },
-
       options: {
-
         // 可批量操作
         multi: true,
-
         // 批量操作列表
         multiActions: [
           {
@@ -78,7 +74,7 @@ export default {
     const id = this.$route.params.examId
     if (typeof id !== 'undefined') {
       this.listQuery.params.examId = id
-      this.fetchData(id)
+      // this.fetchData(id)
     }
   },
   methods: {

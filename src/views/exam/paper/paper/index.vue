@@ -169,13 +169,6 @@ export default {
     }
     this.loadDictionaryById(143).then(res => {
       this.paperStates = res.details
-    }).catch((error) => {
-      this.$notify({
-        title: '加载字典试卷状态失败',
-        message: error.message,
-        type: 'error',
-        duration: 5000
-      })
     })
     fetchTree({}).then(response => {
       this.treeData = response.data

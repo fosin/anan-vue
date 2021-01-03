@@ -278,13 +278,6 @@ export default {
     const id = this.$route.params.id
     this.loadDictionaryById(146).then(res => {
       this.levels = res.details
-    }).catch((error) => {
-      this.$notify({
-        title: '加载字典数据失败',
-        message: error.message,
-        type: 'error',
-        duration: 5000
-      })
     })
     if (typeof id !== 'undefined') {
       this.fetchData(id)
@@ -454,7 +447,6 @@ export default {
             that.quEnable[index] = true
           })
         }
-        debugger
         if (this.postForm.joinType === 1) {
           that.repoList = that.postForm.repoList
         }
