@@ -63,6 +63,5 @@ export function findAllByInternationalIdAndServiceId(internationalId, serviceId,
 
 // 根据语言ID查找所有字符集清单,不传参数默认使用post查询所有的数据
 export function getInternationlCharsets(id) {
-  const url = process.env.VUE_APP_BASE_API + '/gateway/platform/v1/international/charset/internationalId/' + id
-  return getRequest(url)
+  return getRequest('gateway/platform/v1/international/charset/internationalId/' + id)
 }

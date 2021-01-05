@@ -46,18 +46,15 @@ export function getInternationalByStatus(status, method) {
 // 根据状态码查找所有语言清单,不传参数默认使用post查询status=0的数据
 export function getInternationls(status) {
   if (!status) status = 0
-  const url = process.env.VUE_APP_BASE_API + '/gateway/platform/v1/international/status/' + status
-  return getRequest(url)
+  return getRequest('gateway/platform/v1/international/status/' + status)
 }
 
 // 根据国际化语言编码查找国际化语言
 export function getInternationlByCode(code) {
-  const url = process.env.VUE_APP_BASE_API + '/gateway/platform/v1/international/code/' + code
-  return getRequest(url)
+  return getRequest('gateway/platform/v1/international/code/' + code)
 }
 
 // 查找默认语言
 export function findByDefaultFlag() {
-  const url = process.env.VUE_APP_BASE_API + '/gateway/platform/v1/international/default'
-  return getRequest(url)
+  return getRequest('gateway/platform/v1/international/default')
 }
