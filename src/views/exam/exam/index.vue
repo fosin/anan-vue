@@ -32,6 +32,16 @@
     </template>
     <template slot="data-columns">
       <el-table-column
+        label="操作"
+        align="center"
+        width="220px"
+      >
+        <template slot-scope="scope">
+          <el-button type="primary" size="mini" icon="el-icon-edit" @click="handleUpdateExam(scope.row.id)">修改</el-button>
+          <el-button type="warning" size="mini" icon="el-icon-user" @click="handleExamDetail(scope.row.id)">考试详情</el-button>
+        </template>
+      </el-table-column>
+      <el-table-column
         label="考试名称"
         prop="title"
       />
@@ -45,7 +55,6 @@
       </el-table-column>
       <el-table-column
         label="考试时间"
-        width="220px"
         align="center"
       >
         <template slot-scope="scope">
@@ -66,21 +75,68 @@
         align="center"
       />
       <el-table-column
+        label="考试次数"
+        prop="allowTimes"
+        align="center"
+      >
+        <template slot-scope="scope">
+          <span v-if="scope.row.allowTimes > 0">
+            {{ scope.row.allowTimes }}
+          </span>
+          <span v-else>不限</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="错题训练"
+        prop="wrongTrain"
+        align="center"
+      >
+        <template slot-scope="scope">
+          <el-checkbox v-model=" scope.row.wrongTrain" disabled />
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="查看对错"
+        prop="showResult"
+        align="center"
+      >
+        <template slot-scope="scope">
+          <el-checkbox v-model=" scope.row.showResult" disabled />
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="查看答案"
+        prop="showAnswer"
+        align="center"
+      >
+        <template slot-scope="scope">
+          <el-checkbox v-model=" scope.row.showAnswer" disabled />
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="摄像头"
+        prop="showCamera"
+        align="center"
+      >
+        <template slot-scope="scope">
+          <el-checkbox v-model=" scope.row.showCamera" disabled />
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="允许复制"
+        prop="paperCopy"
+        align="center"
+      >
+        <template slot-scope="scope">
+          <el-checkbox v-model=" scope.row.paperCopy" disabled />
+        </template>
+      </el-table-column>
+      <el-table-column
         label="状态"
         align="center"
       >
         <template slot-scope="scope">
           {{ getDicDetailValue(examStates, scope.row.state) }}
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="操作"
-        align="center"
-        width="220px"
-      >
-        <template slot-scope="scope">
-          <el-button type="primary" size="mini" icon="el-icon-edit" @click="handleUpdateExam(scope.row.id)">修改</el-button>
-          <el-button type="warning" size="mini" icon="el-icon-user" @click="handleExamDetail(scope.row.id)">考试详情</el-button>
         </template>
       </el-table-column>
     </template>

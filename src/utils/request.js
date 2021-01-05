@@ -77,7 +77,9 @@ function WordCap(s) {
 function getRealError(from, error) {
   switch (from) {
     case 1:
-      error.message = error.response.data
+      if (error.response && error.response.data) {
+        error.message = error.response.data
+      }
       break
     case 2:
       error.message = '(' + error.data.code + ')' + error.data.msg

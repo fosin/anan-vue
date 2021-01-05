@@ -141,29 +141,80 @@
         <el-form-item label="考试描述" prop="content">
           <el-input v-model="postForm.content" type="textarea" />
         </el-form-item>
-        <el-form-item label="总分数" prop="totalScore">
-          <el-input-number :value="postForm.totalScore" disabled />
-        </el-form-item>
-        <el-form-item label="及格分" prop="qualifyScore">
-          <el-input-number v-model="postForm.qualifyScore" :max="postForm.totalScore" />
-        </el-form-item>
-        <el-form-item label="考试时长(分钟)" prop="totalTime">
-          <el-input-number v-model="postForm.totalTime" />
-        </el-form-item>
-        <el-form-item label="是否限时">
-          <el-checkbox v-model="postForm.timeLimit" />
-        </el-form-item>
-        <el-form-item v-if="postForm.timeLimit" label="考试时间" prop="totalTime">
-          <el-date-picker
-            v-model="dateValues"
-            format="yyyy-MM-dd"
-            value-format="yyyy-MM-dd"
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始时间"
-            end-placeholder="结束时间"
-          />
-        </el-form-item>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="总分数" prop="totalScore">
+              <el-input-number :value="postForm.totalScore" disabled />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="及格分" prop="qualifyScore">
+              <el-input-number v-model="postForm.qualifyScore" :max="postForm.totalScore" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="考试时长(分钟)" prop="totalTime">
+              <el-input-number v-model="postForm.totalTime" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="4">
+            <el-form-item label="查看对错">
+              <el-checkbox v-model="postForm.showResult" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item label="查看答案">
+              <el-checkbox v-model="postForm.showAnswer" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item label="是否限时">
+              <el-checkbox v-model="postForm.timeLimit" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item v-if="postForm.timeLimit" label="考试时间" prop="totalTime">
+              <el-date-picker
+                v-model="dateValues"
+                format="yyyy-MM-dd"
+                value-format="yyyy-MM-dd"
+                type="daterange"
+                range-separator="至"
+                start-placeholder="开始时间"
+                end-placeholder="结束时间"
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="4">
+            <el-form-item label="开启摄像头">
+              <el-checkbox v-model="postForm.showCamera" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item label="允许错题训练">
+              <el-checkbox v-model="postForm.wrongTrain" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item label="允许复制试卷">
+              <el-checkbox v-model="postForm.paperCopy" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="允许切屏次数" prop="ssCount">
+              <el-input-number v-model="postForm.ssCount" :min="-1" :max="99" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="允许考试次数" prop="allowTimes">
+              <el-input-number v-model="postForm.allowTimes" :min="0" :max="99" />
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
     </el-card>
   </div>
@@ -215,7 +266,21 @@ export default {
         // 考试班级列表
         departIds: [],
         // 难度
-        level: 0
+        level: 0,
+        // 查看考试结果
+        showResult: false,
+        // 查看考试结果
+        ssCount: -1,
+        // 查看考试结果
+        allowTimes: 3,
+        // 查看考试结果
+        paperCopy: true,
+        // 查看考试结果
+        wrongTrain: true,
+        // 查看考试结果
+        showCamera: false,
+        // 查看答案
+        showAnswer: false
       },
       rules: {
         title: [

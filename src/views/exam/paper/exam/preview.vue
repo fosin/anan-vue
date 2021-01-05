@@ -4,8 +4,29 @@
       <el-col :span="24" style="margin-bottom: 20px">
         <el-alert
           title="点击`开始考试`后将自动进入考试，请诚信考试！"
-          type="error"
-          style="margin-bottom: 10px"
+          type="info"
+          effect="dark"
+          :closable="false"
+          show-icon
+          style="margin-bottom: 10px;font-size: 24px;font-weight: bold;"
+        />
+        <el-alert
+          v-if="detailData.showCamera"
+          title="警告：本次考试会自动开启摄像头，请勿人为遮挡摄像头，否则会被判定考试无效!"
+          type="warning"
+          effect="dark"
+          :closable="false"
+          show-icon
+          style="margin-bottom: 10px;font-size: 24px;font-weight: bold;"
+        />
+        <el-alert
+          v-if="detailData.paperCopy"
+          title="警告：未经允许不得擅自复制考题，更不允许向外泄题!"
+          type="warning"
+          effect="dark"
+          :closable="false"
+          show-icon
+          style="margin-bottom: 10px;font-size: 24px;font-weight: bold;"
         />
         <el-card class="pre-exam">
           <div><strong>考试名称：</strong>{{ detailData.title }}</div>
@@ -14,10 +35,11 @@
           <div><strong>及格分数：</strong>{{ detailData.qualifyScore }}分</div>
           <div><strong>考试描述：</strong>{{ detailData.content }}</div>
           <div><strong>开放类型：</strong> {{ getDicDetailValue(openTypes, detailData.openType) }}</div>
+          <div v-if="detailData.allowTimes > 0"><strong>当前次数/总考试次数：</strong>{{ userExam.tryCount }}/{{ detailData.allowTimes }}</div>
         </el-card>
       </el-col>
       <el-col :span="24">
-        <el-button type="primary" icon="el-icon-caret-right" @click="handleCreate">
+        <el-button v-if="(detailData.allowTimes > 0 && detailData.allowTimes > userExam.tryCount) || detailData.allowTimes < 1" type="primary" icon="el-icon-caret-right" @click="handleCreate">
           开始考试
         </el-button>
         <el-button @click="handleBack">
@@ -38,6 +60,7 @@ export default {
   data() {
     return {
       detailData: {},
+      userExam: {},
       postForm: {
         examId: '',
         password: ''
@@ -61,6 +84,11 @@ export default {
     fetchData() {
       fetchDetail(this.postForm.examId).then(response => {
         this.detailData = response.data
+        if (this.detailData.allowTimes > 0) {
+          this.postRequest('gateway/exam/api/user/exam/detail/' + this.postForm.examId).then(response => {
+            this.userExam = response.data
+          })
+        }
       })
     },
     handleCreate() {

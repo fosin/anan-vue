@@ -62,6 +62,18 @@
         align="center"
       />
       <el-table-column
+        label="考试次数"
+        prop="allowTimes"
+        align="center"
+      >
+        <template slot-scope="scope">
+          <span v-if="scope.row.allowTimes > 0">
+            {{ scope.row.allowTimes }}
+          </span>
+          <span v-else>不限</span>
+        </template>
+      </el-table-column>
+      <el-table-column
         label="操作"
         align="center"
       >

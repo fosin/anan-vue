@@ -41,12 +41,16 @@
           <p v-if="quData.content">{{ quData.sort + 1 }}.{{ quData.content }}</p>
           <div v-if="quData.quType === 1 || quData.quType===3">
             <el-radio-group v-model="radioValue">
-              <el-radio v-for="item in quData.answerList" :key="item.id" :label="item.id">{{ item.abc }}.{{ item.content }} <div v-if="item.image" style="clear: both" /></el-radio>
+              <el-radio v-for="item in quData.answerList" :key="item.id" :label="item.id" @change="handNext()">
+                {{ item.abc }}.         {{ item.content }}<div v-if="item.image" style="clear: both" />
+              </el-radio>
             </el-radio-group>
           </div>
           <div v-if="quData.quType === 2">
             <el-checkbox-group v-model="multiValue">
-              <el-checkbox v-for="item in quData.answerList" :key="item.id" :label="item.id">{{ item.abc }}.{{ item.content }} <div v-if="item.image" style="clear: both" /></el-checkbox>
+              <el-checkbox v-for="item in quData.answerList" :key="item.id" :label="item.id">
+                {{ item.abc }}.         {{ item.content }} <div v-if="item.image" style="clear: both" />
+              </el-checkbox>
             </el-checkbox-group>
           </div>
         </el-card>
@@ -192,7 +196,8 @@ export default {
           message: '试卷提交成功，即将进入试卷详情！',
           type: 'success'
         })
-        this.$store.dispatch('closeAndPushToView', { name: 'ExamOnlineDoResult', params: { id: this.paperId }})
+        this.$router.push({ name: 'ExamOnlineDoResult', params: { id: this.paperId }})
+        // this.$store.dispatch('closeAndPushToView', { name: 'ExamOnlineDoResult', params: { id: this.paperId }})
       })
     },
     // 交卷操作

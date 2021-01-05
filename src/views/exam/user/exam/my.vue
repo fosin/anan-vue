@@ -69,10 +69,8 @@ export default {
   components: { MyPaperList, DataTable },
   data() {
     return {
-
       dialogVisible: false,
       examId: '',
-
       listQuery: {
         current: 1,
         size: 10,
@@ -80,7 +78,6 @@ export default {
           title: ''
         }
       },
-
       options: {
         // 可批量操作
         multi: false,
