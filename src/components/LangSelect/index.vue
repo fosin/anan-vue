@@ -22,8 +22,7 @@
 
 <script>
 
-import { getInternationls } from '@/views/platform/international/international'
-import { getInternationlCharsets } from '@/views/platform/international/charset'
+import { getInternationlsByStatus } from '@/views/platform/international/international'
 
 export default {
   data() {
@@ -37,7 +36,7 @@ export default {
     }
   },
   created() {
-    getInternationls(0).then(response => {
+    getInternationlsByStatus(0).then(response => {
       this.validInternationals = response.data
       const lang = this.getLanguageByCode(this.ananLanguage)
       this.handleSetLanguage(lang, false)
@@ -53,14 +52,7 @@ export default {
   methods: {
     handleSetLanguage(lang, notify = true) {
       if (lang) {
-        const code = lang.code
-        getInternationlCharsets(lang.id).then(response => {
-          const charsetsData = response.data
-          for (let i = 0; i < charsetsData.length; i++) {
-            this.$i18n.mergeLocaleMessage(code, JSON.parse(charsetsData[i].charset))
-          }
-          this.$i18n.locale = code
-          this.$store.dispatch('setLanguage', code)
+        this.$store.dispatch('setLanguage', lang).then(response => {
           if (notify) {
             this.$message({
               message: this.$t('lang.switchSuccess'),
@@ -83,18 +75,6 @@ export default {
           duration: 5000
         })
       }
-    },
-    getLanguageCharset(id) {
-      getInternationlCharsets(id).then(response => {
-        return response.data
-      }).catch(reason => {
-        this.$notify({
-          title: '获取国际化语言自定义字符集失败',
-          message: reason.message,
-          type: 'error',
-          duration: 5000
-        })
-      })
     },
     getLanguageByCode(code) {
       for (const international of this.validInternationals) {

@@ -34,7 +34,7 @@ export function putInternational(obj) {
 }
 
 // 根据状态码查找所有语言清单,不传参数默认使用post查询status=0的数据
-export function getInternationalByStatus(status, method) {
+export function getInternationlsByStatus(status, method) {
   if (!status) status = 0
   const url = 'gateway/platform/v1/international/status/' + status
   if (method === 'get') {
@@ -43,18 +43,12 @@ export function getInternationalByStatus(status, method) {
   return postRequest(url)
 }
 
-// 根据状态码查找所有语言清单,不传参数默认使用post查询status=0的数据
-export function getInternationls(status) {
-  if (!status) status = 0
-  return getRequest('gateway/platform/v1/international/status/' + status)
-}
-
 // 根据国际化语言编码查找国际化语言
 export function getInternationlByCode(code) {
-  return getRequest('gateway/platform/v1/international/code/' + code)
+  return postRequest('gateway/platform/v1/international/code/' + code)
 }
 
 // 查找默认语言
 export function findByDefaultFlag() {
-  return getRequest('gateway/platform/v1/international/default')
+  return postRequest('gateway/platform/v1/international/default')
 }

@@ -17,10 +17,9 @@
         <el-tooltip :content="$t('navbar.size')" effect="dark" placement="bottom">
           <size-select class="international right-menu-item" />
         </el-tooltip>
-
-        <!--        <el-tooltip :content="$t('navbar.langSelect')" effect="dark" placement="bottom">
+        <el-tooltip :content="$t('navbar.langSelect')" effect="dark" placement="bottom">
           <lang-select class="international right-menu-item" />
-        </el-tooltip>-->
+        </el-tooltip>
         <el-tooltip :content="$t('navbar.theme')" effect="dark" placement="bottom">
           <theme-picker class="theme-switch right-menu-item" />
         </el-tooltip>
@@ -59,6 +58,8 @@ import ErrorLog from '@/components/ErrorLog'
 import SizeSelect from '@/components/SizeSelect'
 import ThemePicker from '@/components/ThemePicker'
 import Search from '@/components/HeaderSearch'
+import LangSelect from '@/components/LangSelect'
+
 export default {
   components: {
     Breadcrumb,
@@ -66,6 +67,7 @@ export default {
     ErrorLog,
     SizeSelect,
     ThemePicker,
+    LangSelect,
     Search
   },
   computed: {
