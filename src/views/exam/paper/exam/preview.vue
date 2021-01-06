@@ -35,11 +35,11 @@
           <div><strong>及格分数：</strong>{{ detailData.qualifyScore }}分</div>
           <div><strong>考试描述：</strong>{{ detailData.content }}</div>
           <div><strong>开放类型：</strong> {{ getDicDetailValue(openTypes, detailData.openType) }}</div>
-          <div v-if="detailData.allowTimes > 0"><strong>当前次数/总考试次数：</strong>{{ userExam.tryCount }}/{{ detailData.allowTimes }}</div>
+          <div v-if="detailData.allowTimes > 0"><strong>当前次数/总考试次数：</strong>{{ tryCount }}/{{ detailData.allowTimes }}</div>
         </el-card>
       </el-col>
       <el-col :span="24">
-        <el-button v-if="(detailData.allowTimes > 0 && detailData.allowTimes > userExam.tryCount) || detailData.allowTimes < 1" type="primary" icon="el-icon-caret-right" @click="handleCreate">
+        <el-button v-if="((detailData.allowTimes > 0 && detailData.allowTimes >= tryCount) || detailData.allowTimes < 1)" type="primary" icon="el-icon-caret-right" @click="handleCreate">
           开始考试
         </el-button>
         <el-button @click="handleBack">
@@ -61,6 +61,7 @@ export default {
     return {
       detailData: {},
       userExam: {},
+      tryCount: 1,
       postForm: {
         examId: '',
         password: ''
@@ -86,7 +87,14 @@ export default {
         this.detailData = response.data
         if (this.detailData.allowTimes > 0) {
           this.postRequest('gateway/exam/api/user/exam/detail/' + this.postForm.examId).then(response => {
-            this.userExam = response.data
+            if (response.data) {
+              this.userExam = response.data
+              if (this.userExam.tryCount) {
+                this.tryCount = this.userExam.tryCount + 1
+              } else {
+                this.tryCount = 1
+              }
+            }
           })
         }
       })
