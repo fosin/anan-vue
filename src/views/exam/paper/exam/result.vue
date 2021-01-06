@@ -21,16 +21,16 @@
             <el-radio v-for="an in item.answerList" :key="an.id" :label="an.id">{{ an.abc }}.{{ an.content }}</el-radio>
           </el-radio-group>
           <el-row :gutter="24">
-            <el-col v-if="item.showAnswer" :span="12" style="color: #24da70">
+            <el-col v-if="paperData.showAnswer" :span="12" style="color: #24da70">
               正确答案：{{ radioRights[item.id] }}
             </el-col>
             <el-col v-if="!item.answered" :span="12" style="text-align: right; color: #ff0000;">
               答题结果：未答
             </el-col>
-            <el-col v-if="item.showResult && item.answered && !item.isRight" :span="12" style="text-align: right; color: #ff0000;">
+            <el-col v-if="paperData.showResult && item.answered && !item.isRight" :span="12" style="text-align: right; color: #ff0000;">
               答题结果：{{ myRadio[item.id] }}
             </el-col>
-            <el-col v-if="item.showResult && item.answered && item.isRight" :span="12" style="text-align: right; color: #24da70;">
+            <el-col v-if="paperData.showResult && item.answered && item.isRight" :span="12" style="text-align: right; color: #24da70;">
               答题结果：{{ myRadio[item.id] }}
             </el-col>
           </el-row>
@@ -47,16 +47,16 @@
             <el-checkbox v-for="an in item.answerList" :key="an.id" :label="an.id">{{ an.abc }}.{{ an.content }}</el-checkbox>
           </el-checkbox-group>
           <el-row :gutter="24">
-            <el-col v-if="item.showAnswer" :span="12" style="color: #24da70">
+            <el-col v-if="paperData.showAnswer" :span="12" style="color: #24da70">
               正确答案：{{ multiRights[item.id].join(',') }}
             </el-col>
             <el-col v-if="!item.answered" :span="12" style="text-align: right; color: #ff0000;">
               答题结果：未答
             </el-col>
-            <el-col v-if="item.showResult && item.answered && !item.isRight" :span="12" style="text-align: right; color: #ff0000;">
+            <el-col v-if="paperData.showResult && item.answered && !item.isRight" :span="12" style="text-align: right; color: #ff0000;">
               答题结果：{{ myMulti[item.id].join(',') }}
             </el-col>
-            <el-col v-if="item.showResult && item.answered && item.isRight" :span="12" style="text-align: right; color: #24da70;">
+            <el-col v-if="paperData.showResult && item.answered && item.isRight" :span="12" style="text-align: right; color: #24da70;">
               答题结果：{{ myMulti[item.id].join(',') }}
             </el-col>
           </el-row>

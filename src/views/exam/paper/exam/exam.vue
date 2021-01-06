@@ -114,9 +114,9 @@ export default {
       this.paperId = id
       this.fetchData(id)
     }
-    document.querySelector('#ExamOnlineDoExam').oncontextmenu = () => {
-
-    }
+    // document.querySelector('#ExamOnlineDoExam').oncontextmenu = () => {
+    //
+    // }
   },
   methods: {
     // 倒计时
