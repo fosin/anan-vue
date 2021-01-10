@@ -49,7 +49,7 @@ const permission = {
       return new Promise(resolve => {
         const routes = dynamicAsyncRouter(ananPermissionTree.children)
         commit('SET_ROUTERS', routes)
-        resolve()
+        resolve(routes)
       })
     }
   }

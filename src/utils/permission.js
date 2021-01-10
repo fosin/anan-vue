@@ -1,6 +1,5 @@
 import store from '../store'
 import router from '../router'
-import { Notification } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'// progress bar style
 import getPageTitle from '@/utils/get-page-title'
@@ -9,7 +8,7 @@ NProgress.configure({ showSpinner: false })// NProgress Configuration
 
 const whiteList = ['/login', '/authredirect']// no redirect whitelist
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async(to, from, next) => {
   NProgress.start() // start progress bar
   // set page title
   document.title = getPageTitle(to.meta.title)
@@ -18,32 +17,17 @@ router.beforeEach((to, from, next) => {
     /* has token*/
     if (to.path === '/login') {
       next({ path: '/' })
-      NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
     } else {
       const userId = store.getters.ananUserInfo.id
-      if (userId === undefined || userId < 1) { // 判断当前用户是否已拉取完user_info信息
-        store.dispatch('GetUserInfo').then(res => { // 拉取user_info
-          store.dispatch('GenerateRoutes', store.getters.ananPermissionTree).then(() => { // 根据permissions权限生成可访问的路由表
-            // const addrouters = filterPermission(store.getters.ananAddRouters)
-            router.addRoutes(store.getters.ananAddRouters) // 动态添加可访问路由表
-            // debugger
-            next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
-          }).catch((reason) => {
-            Notification.error(reason.message)
-            store.dispatch('FedLogOut').then(() => {
-              next({ path: '/' })
-            }).catch((reason) => {
-              Notification.error(reason.message)
-            })
-          })
-        }).catch((reason) => {
-          Notification.error(reason.message)
-          store.dispatch('FedLogOut').then(() => {
-            next({ path: '/' })
-          }).catch((reason) => {
-            Notification.error(reason.message)
-          })
-        })
+      if (!userId) { // 判断当前用户是否已拉取完user_info信息
+        await store.dispatch('GetUserInfo') // 拉取user_info
+      }
+      const ananAddRouters = store.getters.ananAddRouters
+      if (!ananAddRouters || ananAddRouters.length < 1 || !ananAddRouters[0].component) { // 判断当前用户是否已拉取完user_info信息
+        // 根据permissions权限生成可访问的路由表
+        const addRouters = await store.dispatch('GenerateRoutes', store.getters.ananPermissionTree)
+        router.addRoutes(addRouters) // 动态添加可访问路由表
+        next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
       } else {
         // 没有动态改变权限的需求可直接next() 删除下方权限判断 ↓
         if (hasPermission(store.getters.ananPermissions, to.meta.permisson)) {
@@ -79,40 +63,3 @@ function hasPermission(permissions, metaPermisson) {
   if (!metaPermisson) return true
   return permissions[metaPermisson] || false
 }
-
-// function filterPermission(routers) {
-//   const aRouter = []
-//   if (!routers) {
-//     return aRouter
-//   }
-//   routers.forEach(router => {
-//     router.children = filterPermission(router.children)
-//     if (router.meta && router.meta.type && router.meta.type !== 2) {
-//       aRouter.push(router)
-//     }
-//   })
-//   return aRouter
-// }
-/**
- * @param {Array} value
- * @returns {Boolean}
- * @example see @/views/permission/directive.vue
- */
-/* function checkPermission(value) {
-  if (value && value instanceof Array && value.length > 0) {
-    const roles = store.getters && store.getters.roles
-    const permissionRoles = value
-
-    const hasPermission = roles.some(role => {
-      return permissionRoles.includes(role)
-    })
-
-    if (!hasPermission) {
-      return false
-    }
-    return true
-  } else {
-    console.error(`need roles! Like v-permission="['admin','editor']"`)
-    return false
-  }
-}*/
