@@ -4,13 +4,13 @@
       <div class="qu-content">
         <p>【{{ quData.quType===1?'单选题':'多选题' }}】{{ quData.content }}</p>
         <div v-if="quData.quType === 1">
-          <el-radio-group v-model="radioValues" readonly>
-            <el-radio v-for="an in quData.answerList" :key="an.id" :label="an.id" readonly>{{ an.content }}</el-radio>
+          <el-radio-group v-model="radioValues">
+            <el-radio v-for="an in quData.answerList" :key="an.id" :label="an.id">{{ an.content }}</el-radio>
           </el-radio-group>
         </div>
         <!-- 多选题 -->
         <div v-if="quData.quType === 2">
-          <el-checkbox-group v-model="multiValues" readonly>
+          <el-checkbox-group v-model="multiValues">
             <el-checkbox v-for="an in quData.answerList" :key="an.id" :label="an.id">{{ an.content }}</el-checkbox>
           </el-checkbox-group>
         </div>
@@ -29,7 +29,7 @@
       </div>
       <p v-if="analysisCount === 0">暂无选项解析</p>
     </el-card>
-    <el-button type="info" @click="onCancel">返回</el-button>
+    <!--    <el-button type="info" @click="onCancel">返回</el-button>-->
   </div>
 </template>
 
@@ -63,18 +63,18 @@ export default {
             this.analysisCount += 1
           }
           // 用户选定的
-          if (an.isRight) {
-            if (this.quData.quType === 1) {
-              this.radioValues = an.id
-            } else {
-              this.multiValues.push(an.id)
-            }
-          }
+          // if (an.isRight) {
+          //   if (this.quData.quType === 1) {
+          //     this.radioValues = an.id
+          //   } else {
+          //     this.multiValues.push(an.id)
+          //   }
+          // }
         })
       })
     },
     onCancel() {
-      this.$store.dispatch('closeAndPushToView', { name: 'ExamOnlineResults' })
+      this.$store.dispatch('closeAndPushToView', { name: 'ExamOnlineResultsRecords' })
     }
   }
 }

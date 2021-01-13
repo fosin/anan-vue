@@ -19,9 +19,9 @@
           </el-checkbox-group>
         </div>
 
-        <div v-if="analysisShow" style="margin-top: 20px; color: #1890ff; font-weight: bold">
+        <!--        <div v-if="analysisShow" style="margin-top: 20px; color: #1890ff; font-weight: bold">
           正确答案：{{ rightTags.join(' ') }}
-        </div>
+        </div>-->
 
       </div>
 
@@ -118,7 +118,7 @@ export default {
       })
     },
     onCancel() {
-      this.$store.dispatch('closeAndPushToView', { name: 'ExamOnlineResults' })
+      this.$store.dispatch('closeAndPushToView', { name: 'ExamOnlineResultsRecords' })
     },
 
     handNext() {

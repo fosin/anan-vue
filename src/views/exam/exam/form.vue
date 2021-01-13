@@ -195,22 +195,22 @@
             </el-form-item>
           </el-col>
           <el-col :span="4">
-            <el-form-item label="允许错题训练">
+            <el-form-item label="错题训练">
               <el-checkbox v-model="postForm.wrongTrain" />
             </el-form-item>
           </el-col>
           <el-col :span="4">
-            <el-form-item label="允许复制试卷">
+            <el-form-item label="复制试卷">
               <el-checkbox v-model="postForm.paperCopy" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="允许切屏次数" prop="ssCount">
+            <el-form-item label="切屏次数" prop="ssCount">
               <el-input-number v-model="postForm.ssCount" :min="-1" :max="99" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="允许考试次数" prop="allowTimes">
+            <el-form-item label="考试次数" prop="allowTimes">
               <el-input-number v-model="postForm.allowTimes" :min="0" :max="99" />
             </el-form-item>
           </el-col>

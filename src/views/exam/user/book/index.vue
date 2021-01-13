@@ -6,7 +6,7 @@
   >
     <template slot="filter-content">
       <el-input v-model="listQuery.params.title" placeholder="搜索题目内容" style="width: 200px;" class="filter-item" />
-      <el-button class="filter-item" style="float: right" type="primary" icon="el-icon-magic-stick" @click="startTrain">
+      <el-button v-if="examData.wrongTrain" class="filter-item" style="float: right" type="primary" icon="el-icon-magic-stick" @click="startTrain">
         错题训练
       </el-button>
     </template>
@@ -39,6 +39,7 @@
 
 <script>
 import DataTable from '@/views/exam/components/DataTable'
+import { fetchDetail } from '@/views/exam/exam/exam'
 
 export default {
   name: 'ExamOnlineResultsRecords',
@@ -53,6 +54,7 @@ export default {
           examId: ''
         }
       },
+      examData: {},
       options: {
         // 可批量操作
         multi: true,
@@ -74,14 +76,18 @@ export default {
     const id = this.$route.params.examId
     if (typeof id !== 'undefined') {
       this.listQuery.params.examId = id
-      // this.fetchData(id)
+      this.fetchExamData(id)
     }
   },
   methods: {
     startTrain() {
       this.$store.dispatch('closeAndPushToView', { name: 'ExamOnlineResultsTraining', params: { examId: this.listQuery.params.examId }})
+    },
+    fetchExamData(id) {
+      fetchDetail(id).then(response => {
+        this.examData = response.data
+      })
     }
-
   }
 }
 </script>

@@ -58,9 +58,9 @@
           </template>
         </el-table-column>
         <el-table-column
-          label="创建时间"
+          label="更新时间"
           align="center"
-          prop="createTime"
+          prop="updateTime"
           width="180px"
         />
       </template>
@@ -152,7 +152,7 @@ export default {
         // 删除请求URL
         deleteUrl: 'gateway/exam/api/qu/qu/delete',
         // 启用禁用
-        stateUrl: 'gateway/exam/api/qu/qu//state',
+        stateUrl: 'gateway/exam/api/qu/qu/state',
         // 添加数据路由
         addRoute: 'ExamManagementQuAdd'
       }
