@@ -39,27 +39,35 @@ service.interceptors.request.use(config => {
 // respone interceptor
 service.interceptors.response.use(response => {
   NProgress.done()
-  return response
+  // 如果返回的状态码为200，说明接口请求成功，可以正常拿到数据
+  // 否则的话抛出错误
+  return Promise.resolve(response)
 }, error => {
   NProgress.done()
+  debugger
+  // 我们可以在这里对异常状态作统一处理
   // 尝试刷新access_toekn续用登录状态
-  if (!reLogin && error.response && error.response.status && error.response.status === 401) {
+  if (!reLogin && (!error.response || error.response.status === 401)) {
     reLogin = true
-    store.dispatch('RefreshAccessToken').then(() => {
-      reLogin = false
-    }).catch(() => {
-      MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
-        confirmButtonText: '重新登录',
-        cancelButtonText: '取消',
-        type: 'error'
-      }).then(() => {
+    MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
+      confirmButtonText: '重新登录',
+      cancelButtonText: '取消',
+      type: 'error'
+    }).then(() => {
+      store.dispatch('RefreshAccessToken').then(() => {
+        reLogin = false
+        return Promise.resolve()
+      }).catch(() => {
         store.dispatch('FedLogOut').then(() => {
           location.reload() // 为了重新实例化vue-router对象 避免bug
         })
         reLogin = false
-      }).catch(() => {
-        reLogin = false
       })
+    }).catch(() => {
+      store.dispatch('FedLogOut').then(() => {
+        location.reload() // 为了重新实例化vue-router对象 避免bug
+      })
+      reLogin = false
     })
   }
   return Promise.reject(getRealError(1, error))
@@ -111,16 +119,38 @@ export const allRequest = (url, method, data) => {
   })
 }
 
-export const postRequest = (url, params) => {
-  if (params) {
+export const postRequest = (url, data) => {
+  if (data) {
     return service({
       method: 'post',
       url: url,
-      data: params
+      data: data
     })
   }
   return service({
     method: 'post',
+    url: url
+  })
+}
+
+export const putRequest = (url, data) => {
+  return service({
+    method: 'put',
+    url: url,
+    data: data
+  })
+}
+
+export const deleteRequest = (url) => {
+  return service({
+    method: 'delete',
+    url: url
+  })
+}
+
+export const getRequest = (url) => {
+  return service({
+    method: 'get',
     url: url
   })
 }
@@ -192,27 +222,5 @@ export function download(url, data) {
     }).catch(err => {
       reject(err)
     })
-  })
-}
-
-export const putRequest = (url, params) => {
-  return service({
-    method: 'put',
-    url: url,
-    data: params
-  })
-}
-
-export const deleteRequest = (url) => {
-  return service({
-    method: 'delete',
-    url: url
-  })
-}
-
-export const getRequest = (url) => {
-  return service({
-    method: 'get',
-    url: url
   })
 }
