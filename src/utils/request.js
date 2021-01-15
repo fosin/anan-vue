@@ -44,7 +44,6 @@ service.interceptors.response.use(response => {
   return Promise.resolve(response)
 }, error => {
   NProgress.done()
-  debugger
   // 我们可以在这里对异常状态作统一处理
   // 尝试刷新access_toekn续用登录状态
   if (!reLogin && (!error.response || error.response.status === 401)) {
