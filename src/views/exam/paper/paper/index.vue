@@ -117,7 +117,7 @@
 import DataTable from '@/views/exam/components/DataTable'
 import DepartTreeSelect from '@/views/exam/components/DepartTreeSelect'
 import { fetchTree } from '../../sys/depart/depart'
-import { listCaptures } from './paper'
+// import { listCaptures } from './paper'
 import ExamSelect from '@/views/exam/components/ExamSelect'
 
 export default {
@@ -175,12 +175,11 @@ export default {
     })
   },
   methods: {
-
     handleCapture(paperId) {
       this.dialogVisible = true
-      listCaptures(paperId).then(res => {
-        this.captureList = res.data
-      })
+      // listCaptures(paperId).then(res => {
+      //   this.captureList = res.data
+      // })
     }
   }
 }
