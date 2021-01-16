@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { MessageBox } from 'element-ui'
+import { MessageBox, Notification } from 'element-ui'
 import store from '../store'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'
@@ -104,66 +104,66 @@ function getRealError(from, error) {
 }
 export default service
 
-export const allRequest = (url, method, data) => {
-  if (data) {
-    return service({
-      method: method || 'post',
+export const allRequest = ({ url = '',
+  baseURL = process.env.VUE_APP_BASE_API,
+  withCredentials = true,
+  data = {},
+  params = {},
+  method = 'post',
+  header = {},
+  responseType = '',
+  timeout = 30000
+}, notify = true) => {
+  return new Promise((resolve, reject) => {
+    service({
+      method: method,
       url: url,
-      data: data
+      data: data,
+      header: header,
+      timeout: timeout,
+      baseURL: baseURL,
+      withCredentials: withCredentials,
+      params: params,
+      responseType: responseType
+    }).then(value => {
+      resolve(value)
+    }).catch(reason => {
+      if (notify) {
+        Notification.error({
+          title: '请求数据失败',
+          message: process.env.NODE_ENV === 'development' ? url + ':' + reason.message : reason.message,
+          type: 'error',
+          duration: 5000
+        })
+      }
+      reject(reason)
     })
-  }
-  return service({
-    method: method || 'post',
-    url: url
   })
 }
 
-export const postRequest = (url, data) => {
-  if (data) {
-    return service({
-      method: 'post',
-      url: url,
-      data: data
-    })
-  }
-  return service({
-    method: 'post',
-    url: url
-  })
+export const postRequest = (url, data, notify = true) => {
+  return allRequest({ url: url, data: data, method: 'post' }, notify)
 }
 
-export const putRequest = (url, data) => {
-  return service({
-    method: 'put',
-    url: url,
-    data: data
-  })
+export const putRequest = (url, data, notify = true) => {
+  return allRequest({ url: url, data: data, method: 'put' }, notify)
 }
 
-export const deleteRequest = (url) => {
-  return service({
-    method: 'delete',
-    url: url
-  })
+export const deleteRequest = (url, notify = true) => {
+  return allRequest({ url: url, data: null, method: 'delete' }, notify)
 }
 
-export const getRequest = (url) => {
-  return service({
-    method: 'get',
-    url: url
-  })
+export const getRequest = (url, notify = true) => {
+  return allRequest({ url: url, data: null, method: 'get' }, notify)
 }
 
-export const uploadFileRequest = (url, params) => {
-  return service({
-    method: 'post',
-    url: url,
+export const uploadFileRequest = (url, params, notify) => {
+  return allRequest({ url: url,
     data: params,
+    methods: 'post',
     timeout: 120000,
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    }
-  })
+    headers: { 'Content-Type': 'multipart/form-data' }
+  }, notify)
 }
 
 /**

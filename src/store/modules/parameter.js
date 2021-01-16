@@ -27,7 +27,7 @@ const parameter = {
           resolve(pValue)
           return
         }
-        postRequest('gateway/platform/v1/parameter/value', paras).then(response => {
+        postRequest('gateway/platform/v1/parameter/value', paras, false).then(response => {
           if (!response.data) {
             reject('error')
           }
