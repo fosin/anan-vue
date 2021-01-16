@@ -100,13 +100,41 @@ export default {
       this.fetchData(id)
     }
   },
+  beforeDestroy() {
+    if (!this.paperData.paperCopy) {
+      // 恢复鼠标右键菜单
+      document.oncontextmenu = new Function('event.returnValue=true')
+      // 恢复选择
+      document.onselectstart = new Function('event.returnValue=true')
+      // 恢复 Ctrl+S
+      document.onkeydown = function() {
+        if (event.ctrlKey === true && event.keyCode === 83) {
+          return true
+        }
+      }
+    }
+  },
   methods: {
-
     fetchData(id) {
       const params = { id: id }
       paperResult(params).then(response => {
         // 试卷内容
         this.paperData = response.data
+        // 禁止复制试卷内容
+        if (!this.paperData.paperCopy) {
+          // 禁止鼠标右键菜单
+          document.oncontextmenu = new Function('event.returnValue=false')
+          // 禁用选择
+          document.onselectstart = new Function('event.returnValue=false')
+          // 监听键盘按下事件
+          document.onkeydown = function() {
+            // 判断 Ctrl+S
+            if (event.ctrlKey === true && event.keyCode === 83) {
+              return false
+              // event.preventDefault()
+            }
+          }
+        }
         // 填充该题目的答案
         this.paperData.quList.forEach((item) => {
           let radioValue = ''

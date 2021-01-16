@@ -114,9 +114,30 @@ export default {
       this.paperId = id
       this.fetchData(id)
     }
-    // document.querySelector('#ExamOnlineDoExam').oncontextmenu = () => {
-    //
-    // }
+    // 禁止鼠标右键菜单
+    document.oncontextmenu = new Function('event.returnValue=false')
+    // 禁用选择
+    document.onselectstart = new Function('event.returnValue=false')
+    // 监听键盘按下事件
+    document.onkeydown = function() {
+      // 判断 Ctrl+S
+      if (event.ctrlKey === true && event.keyCode === 83) {
+        return false
+        // event.preventDefault()
+      }
+    }
+  },
+  beforeDestroy() {
+    // 恢复鼠标右键菜单
+    document.oncontextmenu = new Function('event.returnValue=true')
+    // 恢复选择
+    document.onselectstart = new Function('event.returnValue=true')
+    // 恢复 Ctrl+S
+    document.onkeydown = function() {
+      if (event.ctrlKey === true && event.keyCode === 83) {
+        return true
+      }
+    }
   },
   methods: {
     // 倒计时
