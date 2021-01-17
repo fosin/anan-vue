@@ -12,7 +12,7 @@
         />
         <el-alert
           v-if="detailData.showCamera"
-          title="警告：本次考试会自动开启摄像头，请勿人为遮挡摄像头，否则会被判定考试无效!"
+          title="警告：本次考试会自动开启摄像头，考试过程中出现非本人或本人离场，可能会被判定考试无效!"
           type="warning"
           effect="dark"
           :closable="false"
@@ -20,7 +20,16 @@
           style="margin-bottom: 10px;font-size: 24px;font-weight: bold;"
         />
         <el-alert
-          v-if="detailData.paperCopy"
+          v-if="detailData.ssCount > 0"
+          :title="ssCountAlert"
+          type="warning"
+          effect="dark"
+          :closable="false"
+          show-icon
+          style="margin-bottom: 10px;font-size: 24px;font-weight: bold;"
+        />
+        <el-alert
+          v-if="!detailData.paperCopy"
           title="警告：未经允许不得擅自复制考题，更不允许向外泄题!"
           type="warning"
           effect="dark"
@@ -35,11 +44,17 @@
           <div><strong>及格分数：</strong>{{ detailData.qualifyScore }}分</div>
           <div><strong>考试描述：</strong>{{ detailData.content }}</div>
           <div><strong>开放类型：</strong> {{ getDicDetailValue(openTypes, detailData.openType) }}</div>
-          <div v-if="detailData.allowTimes > 0"><strong>当前次数/总考试次数：</strong>{{ tryCount }}/{{ detailData.allowTimes }}</div>
+          <div v-if="detailData.allowTimes > 0"><strong>当前次数/总考试次数：</strong>{{ tryCount }}/{{ detailData.allowTimes }}
+          </div>
         </el-card>
       </el-col>
       <el-col :span="24">
-        <el-button v-if="((detailData.allowTimes > 0 && detailData.allowTimes >= tryCount) || detailData.allowTimes < 1)" type="primary" icon="el-icon-caret-right" @click="handleCreate">
+        <el-button
+          v-if="((detailData.allowTimes > 0 && detailData.allowTimes >= tryCount) || detailData.allowTimes < 1)"
+          type="primary"
+          icon="el-icon-caret-right"
+          @click="handleCreate"
+        >
           开始考试
         </el-button>
         <el-button @click="handleBack">
@@ -62,6 +77,7 @@ export default {
       detailData: {},
       userExam: {},
       tryCount: 1,
+      ssCountAlert: '警告：本次考试切屏超过次后，系统将自动交卷！',
       postForm: {
         examId: '',
         password: ''
@@ -85,6 +101,7 @@ export default {
     fetchData() {
       fetchDetail(this.postForm.examId).then(response => {
         this.detailData = response.data
+        this.ssCountAlert = '警告：本次考试切屏超过' + this.detailData.ssCount + '次后，系统将自动交卷！'
         if (this.detailData.allowTimes > 0) {
           this.postRequest('gateway/exam/api/user/exam/detail/' + this.postForm.examId).then(response => {
             if (response.data) {
@@ -115,7 +132,7 @@ export default {
         setTimeout(function() {
           loading.close()
           that.dialogVisible = false
-          that.$store.dispatch('closeAndPushToView', { name: 'ExamOnlineDoExam', params: { id: data.id }})
+          that.$router.push({ name: 'ExamOnlineDoExam', params: { id: data.id }})
         }, 1000)
       }).catch(() => {
         loading.close()
@@ -130,11 +147,11 @@ export default {
 
 <style scoped>
 
-  .pre-exam div {
+.pre-exam div {
 
-    line-height: 42px;
-    color: #555555;
-  }
+  line-height: 42px;
+  color: #555555;
+}
 
 </style>
 

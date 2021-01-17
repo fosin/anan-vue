@@ -4,7 +4,13 @@
       <el-col :span="24">
         <el-card style="margin-bottom: 10px">
           距离考试结束还有：<span style="color: #ff0000;">{{ min }}分钟{{ sec }}秒</span>
-          <el-button style="float: right; margin-top: -10px" type="primary" icon="el-icon-plus" :loading="loading" @click="handHandExam()">
+          <el-button
+            style="float: right; margin-top: -10px"
+            type="primary"
+            icon="el-icon-plus"
+            :loading="loading"
+            @click="handHandExam()"
+          >
             {{ handleText }}
           </el-button>
         </el-card>
@@ -19,19 +25,37 @@
           <div v-if="paperData.radioList!==undefined && paperData.radioList.length > 0">
             <p class="card-title">单选题</p>
             <el-row :gutter="24" class="card-line">
-              <el-tag v-for="item in paperData.radioList" :key="item.id" :type="cardItemClass(item.answered, item.quId)" @click="handSave(item)"> {{ item.sort+1 }}</el-tag>
+              <el-tag
+                v-for="item in paperData.radioList"
+                :key="item.id"
+                :type="cardItemClass(item.answered, item.quId)"
+                @click="handSave(item)"
+              > {{ item.sort + 1 }}
+              </el-tag>
             </el-row>
           </div>
           <div v-if="paperData.multiList!==undefined && paperData.multiList.length > 0">
             <p class="card-title">多选题</p>
             <el-row :gutter="24" class="card-line">
-              <el-tag v-for="item in paperData.multiList" :key="item.id" :type="cardItemClass(item.answered, item.quId)" @click="handSave(item)">{{ item.sort+1 }}</el-tag>
+              <el-tag
+                v-for="item in paperData.multiList"
+                :key="item.id"
+                :type="cardItemClass(item.answered, item.quId)"
+                @click="handSave(item)"
+              >{{ item.sort + 1 }}
+              </el-tag>
             </el-row>
           </div>
           <div v-if="paperData.judgeList!==undefined && paperData.judgeList.length > 0">
             <p class="card-title">判断题</p>
             <el-row :gutter="24" class="card-line">
-              <el-tag v-for="item in paperData.judgeList" :key="item.id" :type="cardItemClass(item.answered, item.quId)" @click="handSave(item)">{{ item.sort+1 }}</el-tag>
+              <el-tag
+                v-for="item in paperData.judgeList"
+                :key="item.id"
+                :type="cardItemClass(item.answered, item.quId)"
+                @click="handSave(item)"
+              >{{ item.sort + 1 }}
+              </el-tag>
             </el-row>
           </div>
         </el-card>
@@ -42,14 +66,16 @@
           <div v-if="quData.quType === 1 || quData.quType===3">
             <el-radio-group v-model="radioValue">
               <el-radio v-for="item in quData.answerList" :key="item.id" :label="item.id" @change="handNext()">
-                {{ item.abc }}.         {{ item.content }}<div v-if="item.image" style="clear: both" />
+                {{ item.abc }}. {{ item.content }}
+                <div v-if="item.image" style="clear: both" />
               </el-radio>
             </el-radio-group>
           </div>
           <div v-if="quData.quType === 2">
             <el-checkbox-group v-model="multiValue">
               <el-checkbox v-for="item in quData.answerList" :key="item.id" :label="item.id">
-                {{ item.abc }}.         {{ item.content }} <div v-if="item.image" style="clear: both" />
+                {{ item.abc }}. {{ item.content }}
+                <div v-if="item.image" style="clear: both" />
               </el-checkbox>
             </el-checkbox-group>
           </div>
@@ -123,7 +149,6 @@ export default {
       // 判断 Ctrl+S
       if (event.ctrlKey === true && event.keyCode === 83) {
         return false
-        // event.preventDefault()
       }
     }
   },
@@ -136,6 +161,10 @@ export default {
     document.onkeydown = function() {
       if (event.ctrlKey === true && event.keyCode === 83) {
         return true
+      }
+    }
+    if (this.paperData.ssCount > 0) {
+      window.onblur = () => {
       }
     }
   },
@@ -221,7 +250,6 @@ export default {
           type: 'success'
         })
         this.$router.push({ name: 'ExamOnlineDoResult', params: { id: this.paperId }})
-        // this.$store.dispatch('closeAndPushToView', { name: 'ExamOnlineDoResult', params: { id: this.paperId }})
       })
     },
     // 交卷操作
@@ -305,7 +333,6 @@ export default {
         loading.close()
       })
     },
-
     // 试卷详情
     fetchData(id) {
       const params = { id: id }
@@ -334,6 +361,29 @@ export default {
         this.fetchQuData(this.cardItem)
         // 倒计时
         this.countdown()
+        if (this.paperData.ssCount > 0) {
+          window.onblur = () => {
+            this.postRequest('gateway/exam/api/paper/paper/issCount/' + this.paperId).then(res => {
+              const value = res.data
+              if (value <= this.paperData.ssCount) {
+                this.$notify({
+                  title: '切屏警告',
+                  message: '已切屏' + value + '次，一共只能切屏' + this.paperData.ssCount + '次',
+                  type: 'warning',
+                  duration: 0
+                })
+              } else {
+                this.$notify({
+                  title: '切屏警告',
+                  message: '切屏' + value + '次超过总次数：' + this.paperData.ssCount + ', 系统自动交卷!',
+                  type: 'warning',
+                  duration: 0
+                })
+                this.$router.push({ name: 'ExamOnlineDoResult', params: { id: this.paperId }})
+              }
+            })
+          }
+        }
       })
     }
   }
@@ -341,55 +391,66 @@ export default {
 </script>
 
 <style scoped>
-  .qu-content div{
-    line-height: 30px;
-  }
-  .el-checkbox-group label,.el-radio-group label{
-    width: 100%;
-  }
-  .card-title{
-    background: #eee;
-    line-height: 35px;
-    text-align: center;
-    font-size: 14px;
-  }
-  .card-line{
-    padding-left: 10px
-  }
-  .card-line span {
-    cursor: pointer;
-    margin: 2px;
-  }
-  /deep/
-  .el-radio, .el-checkbox{
-    padding: 9px 20px 9px 10px;
-    border-radius: 4px;
-    border: 1px solid #dcdfe6;
-    margin-bottom: 10px;
-  }
-  .is-checked{
-    border: #409eff 1px solid;
-  }
-  .el-radio img, .el-checkbox img{
-    max-width: 200px;
-    max-height: 200px;
-    border: #dcdfe6 1px dotted;
-  }
-  /deep/
-  .el-checkbox__inner {
-    display: none;
-  }
-  /deep/
-  .el-radio__inner{
-    display: none;
-  }
-  /deep/
-  .el-checkbox__label{
-    line-height: 30px;
-  }
-  /deep/
-  .el-radio__label{
-    line-height: 30px;
-  }
+.qu-content div {
+  line-height: 30px;
+}
+
+.el-checkbox-group label, .el-radio-group label {
+  width: 100%;
+}
+
+.card-title {
+  background: #eee;
+  line-height: 35px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.card-line {
+  padding-left: 10px
+}
+
+.card-line span {
+  cursor: pointer;
+  margin: 2px;
+}
+
+/deep/
+.el-radio, .el-checkbox {
+  padding: 9px 20px 9px 10px;
+  border-radius: 4px;
+  border: 1px solid #dcdfe6;
+  margin-bottom: 10px;
+}
+
+.is-checked {
+  border: #409eff 1px solid;
+}
+
+.el-radio img, .el-checkbox img {
+  max-width: 200px;
+  max-height: 200px;
+  border: #dcdfe6 1px dotted;
+}
+
+/deep/
+.el-checkbox__inner {
+  display: none;
+}
+
+/deep/
+.el-radio__inner {
+  display: none;
+}
+
+/deep/
+.el-checkbox__label {
+  line-height: 30px;
+}
+
+/deep/
+.el-radio__label {
+  line-height: 30px;
+}
 </style>
 
