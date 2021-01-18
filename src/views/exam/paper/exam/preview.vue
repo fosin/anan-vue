@@ -103,7 +103,7 @@ export default {
         this.detailData = response.data
         this.ssCountAlert = '警告：本次考试切屏超过' + this.detailData.ssCount + '次后，系统将自动交卷！'
         if (this.detailData.allowTimes > 0) {
-          this.postRequest('gateway/exam/api/user/exam/detail/' + this.postForm.examId).then(response => {
+          this.postRequest('gateway/exam/api/user/exam/detail/' + this.postForm.examId, null, false).then(response => {
             if (response.data) {
               this.userExam = response.data
               if (this.userExam.tryCount) {
@@ -112,6 +112,8 @@ export default {
                 this.tryCount = 1
               }
             }
+          }).catch(reason => {
+            this.tryCount = 1
           })
         }
       })
