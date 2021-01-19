@@ -59,6 +59,7 @@
 <script>
 import DataTable from '@/views/exam/components/DataTable'
 import MyPaperList from './paper'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'ExamManagementExamUsers',
@@ -68,12 +69,17 @@ export default {
       dialogVisible: false,
       examId: '',
       userId: '',
+      // organizUsers: [],
       listQuery: {
         current: 1,
         size: 10,
         params: {
           examId: '',
           realName: ''
+        },
+        search: {
+          column: '',
+          placeholder: ''
         }
       },
       options: {
@@ -84,19 +90,34 @@ export default {
       }
     }
   },
-
+  computed: {
+    ...mapGetters([
+      'ananUserInfo'
+    ])
+  },
   created() {
     this.listQuery.params.examId = this.$route.params.examId
+    // this.postRequest('gateway/platform/v1/user/childList/organizId/' + this.ananUserInfo.organizId).then(res => {
+    //   this.organizUsers = res.data
+    // })
   },
   methods: {
-
+    // getUserName(userId) {
+    //   if (this.organizUsers) {
+    //     for (let i = 0; i < this.organizUsers.length; i++) {
+    //       const user = this.organizUsers[i]
+    //       if (user.id === userId) {
+    //         return user.username
+    //       }
+    //     }
+    //   }
+    // },
     // 开始考试
     handleExamDetail(examId, userId) {
       this.examId = examId
       this.userId = userId
       this.dialogVisible = true
     },
-
     handlerExamBook(examId) {
       this.$store.dispatch('closeAndPushToView', { name: 'ExamOnlineResultsRecords', params: { examId: examId }})
     }

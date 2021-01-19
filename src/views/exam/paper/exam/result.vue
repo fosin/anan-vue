@@ -4,7 +4,7 @@
     <p class="text-center" style="color: #666">{{ paperData.createTime }}</p>
     <el-row :gutter="24" style="margin-top: 50px">
       <el-col :span="8" class="text-center">
-        考生姓名：{{ ananUserInfo.username }}
+        考生姓名：{{ userInfo.username }}
       </el-col>
       <el-col :span="8" class="text-center">
         考试用时：{{ paperData.userTime }}分钟
@@ -15,7 +15,7 @@
     </el-row>
     <el-card style="margin-top: 20px">
       <div v-for="item in paperData.quList" :key="item.id" class="qu-content">
-        <p>{{ item.sort + 1 }}.{{ item.content }}（得分：{{ item.actualScore }}）</p>
+        <p>{{ item.sort + 1 }}.{{ item.content }}（分值：{{ item.actualScore }}）</p>
         <div v-if="item.quType === 1 || item.quType===3">
           <el-radio-group v-model="radioValues[item.id]">
             <el-radio v-for="an in item.answerList" :key="an.id" :label="an.id">{{ an.abc }}.{{ an.content }}</el-radio>
@@ -69,7 +69,7 @@
 <script>
 
 import { paperResult } from '@/views/exam/paper/exam/exam'
-import { mapGetters } from 'vuex'
+import { getUser } from '@/views/platform/user/user'
 
 export default {
   name: 'ExamOnlineDoResult',
@@ -80,6 +80,7 @@ export default {
       paperData: {
         quList: []
       },
+      userInfo: {},
       radioValues: {},
       multiValues: {},
       radioRights: {},
@@ -87,11 +88,6 @@ export default {
       myRadio: {},
       myMulti: {}
     }
-  },
-  computed: {
-    ...mapGetters([
-      'ananUserInfo'
-    ])
   },
   created() {
     const id = this.$route.params.id
@@ -120,6 +116,9 @@ export default {
       paperResult(params).then(response => {
         // 试卷内容
         this.paperData = response.data
+        getUser(this.paperData.userId).then(res => {
+          this.userInfo = res.data
+        })
         // 禁止复制试卷内容
         if (!this.paperData.paperCopy) {
           // 禁止鼠标右键菜单
