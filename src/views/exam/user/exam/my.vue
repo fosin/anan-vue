@@ -6,9 +6,6 @@
       :options="options"
       :list-query="listQuery"
     >
-      <template slot="filter-content">
-        <el-input v-model="listQuery.params.title" placeholder="搜索考试名称" style="width: 200px;" class="filter-item" />
-      </template>
       <template slot="data-columns">
         <el-table-column
           label="考试名称"
@@ -76,6 +73,11 @@ export default {
         size: 10,
         params: {
           title: ''
+        },
+        search: {
+          column: 'title',
+          input: '',
+          placeholder: '搜索考试名称'
         }
       },
       options: {

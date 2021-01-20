@@ -19,7 +19,6 @@
               />
             </el-select>
             <repo-select v-model="listQuery.params.repoIds" :multi="true" />
-            <el-input v-model="listQuery.params.content" placeholder="题目内容" style="width: 200px;" class="filter-item" />
             <el-button-group class="filter-item" style="float:  right">
               <el-button size="mini" icon="el-icon-upload2" @click="showImport">导入</el-button>
               <el-button size="mini" icon="el-icon-download" @click="exportExcel">导出</el-button>
@@ -118,6 +117,11 @@ export default {
           content: '',
           quType: '',
           repoIds: []
+        },
+        search: {
+          column: 'content',
+          input: '',
+          placeholder: '搜索题目名称'
         }
       },
       quTypes: [],

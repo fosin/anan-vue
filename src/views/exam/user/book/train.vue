@@ -1,38 +1,29 @@
 <template>
   <div class="app-container">
-
     <el-card style="margin-top: 20px">
-
       <div class="qu-content">
-
         <p>【{{ getDicDetailValue(quTypes, quData.quType) }}】{{ quData.content }}</p>
         <div v-if="quData.quType === 1 || quData.quType===3 ">
           <el-radio-group v-model="answerValues[0]" readonly>
             <el-radio v-for="an in quData.answerList" :key="an.id" :label="an.id" readonly>{{ an.abc }}.{{ an.content }}</el-radio>
           </el-radio-group>
         </div>
-
         <!-- 多选题 -->
         <div v-if="quData.quType === 2">
           <el-checkbox-group v-model="answerValues" readonly>
             <el-checkbox v-for="an in quData.answerList" :key="an.id" :label="an.id">{{ an.abc }}.{{ an.content }}</el-checkbox>
           </el-checkbox-group>
         </div>
-
         <!--        <div v-if="analysisShow" style="margin-top: 20px; color: #1890ff; font-weight: bold">
           正确答案：{{ rightTags.join(' ') }}
         </div>-->
-
       </div>
-
     </el-card>
-
     <el-card v-if="analysisShow" class="qu-analysis" style="margin-top: 20px">
       整题解析：
       <p>{{ quData.analysis }}</p>
       <p v-if="!quData.analysis">暂无解析内容！</p>
     </el-card>
-
     <el-card v-if="analysisShow" class="qu-analysis" style="margin-top: 20px;">
       选项解析：
       <div v-for="an in quData.answerList" :key="an.id" class="qu-analysis-line">
@@ -41,12 +32,10 @@
       </div>
       <!--      <p v-if="analysisCount === 0">暂无选项解析</p>-->
     </el-card>
-
     <div style="padding-top: 30px">
       <el-button type="primary" @click="handNext">继续下一题</el-button>
       <el-button type="info" @click="onCancel">返回</el-button>
     </div>
-
   </div>
 </template>
 

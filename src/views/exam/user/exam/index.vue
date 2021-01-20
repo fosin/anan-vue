@@ -5,9 +5,6 @@
       :options="options"
       :list-query="listQuery"
     >
-      <template slot="filter-content">
-        <el-input v-model="listQuery.params.realName" placeholder="搜索人员" style="width: 200px;" class="filter-item" />
-      </template>
       <template slot="data-columns">
         <el-table-column
           label="人员"
@@ -59,7 +56,6 @@
 <script>
 import DataTable from '@/views/exam/components/DataTable'
 import MyPaperList from './paper'
-import { mapGetters } from 'vuex'
 
 export default {
   name: 'ExamManagementExamUsers',
@@ -69,7 +65,6 @@ export default {
       dialogVisible: false,
       examId: '',
       userId: '',
-      // organizUsers: [],
       listQuery: {
         current: 1,
         size: 10,
@@ -78,8 +73,9 @@ export default {
           realName: ''
         },
         search: {
-          column: '',
-          placeholder: ''
+          column: 'realName',
+          input: '',
+          placeholder: '根据用户姓名查找'
         }
       },
       options: {
@@ -89,11 +85,6 @@ export default {
         listUrl: 'gateway/exam/api/user/exam/paging'
       }
     }
-  },
-  computed: {
-    ...mapGetters([
-      'ananUserInfo'
-    ])
   },
   created() {
     this.listQuery.params.examId = this.$route.params.examId

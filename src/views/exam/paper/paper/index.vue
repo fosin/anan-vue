@@ -148,6 +148,11 @@ export default {
         size: 10,
         params: {
           examId: ''
+        },
+        search: {
+          column: '',
+          input: '',
+          placeholder: ''
         }
       },
 

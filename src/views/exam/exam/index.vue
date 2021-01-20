@@ -28,7 +28,6 @@
         type="date"
         placeholder="考试结束时间"
       />
-      <el-input v-model="listQuery.params.title" placeholder="搜索考试名称" style="width: 200px;" class="filter-item" />
     </template>
     <template slot="data-columns">
       <el-table-column
@@ -158,6 +157,11 @@ export default {
         size: 10,
         params: {
           title: ''
+        },
+        search: {
+          column: 'title',
+          input: '',
+          placeholder: '搜索考试名称'
         }
       },
       options: {

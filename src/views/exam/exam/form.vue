@@ -206,7 +206,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="切屏次数" prop="ssCount">
-              <el-input-number v-model="postForm.ssCount" :min="-1" :max="99" />
+              <el-input-number v-model="postForm.ssCount" :min="0" :max="99" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -270,7 +270,7 @@ export default {
         // 查看考试结果
         showResult: false,
         // 查看考试结果
-        ssCount: -1,
+        ssCount: 0,
         // 查看考试结果
         allowTimes: 3,
         // 查看考试结果

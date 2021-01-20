@@ -3,12 +3,15 @@
     <div class="filter-container">
       <slot name="filter-content" />
       <el-row>
-        <el-col :span="2">
-          <el-button v-if="options.addRoute" type="primary" icon="el-icon-plus" @click="handleAdd">{{ $t('table.add') }}</el-button>
-        </el-col>
-        <el-col :span="2">
+        <el-col :span="3">
           <div v-show="multiShow && options.multiActions" class="filter-container">
-            <el-select v-model="multiNow" :placeholder="selectedLabel" class="filter-item" style="width: 130px" @change="handleOption">
+            <el-select
+              v-model="multiNow"
+              :placeholder="selectedLabel"
+              class="filter-item"
+              style="width: 130px"
+              @change="handleOption"
+            >
               <el-option
                 v-for="item in options.multiActions"
                 :key="item.value"
@@ -18,7 +21,33 @@
             </el-select>
           </div>
         </el-col>
-        <el-col :span="20" />
+        <el-col :span="21">
+          <div>
+            <el-button-group style="vertical-align: top;">
+              <el-button
+                v-if="options.addRoute"
+                v-waves
+                round
+                style="margin-left: 5px;"
+                type="primary"
+                icon="el-icon-plus"
+                @click="handleAdd"
+              >{{ $t('table.add') }}
+              </el-button>
+              <el-button v-waves round type="primary" icon="el-icon-search" @click="getList">
+                {{ $t('table.refresh') }}
+              </el-button>
+            </el-button-group>
+            <el-input
+              v-if="listQuery.search.column"
+              v-model="listQuery.search.input"
+              :placeholder="listQuery.search.placeholder"
+              style="width: 200px;"
+              class="filter-item"
+              @keyup.enter.native="getList"
+            />
+          </div>
+        </el-col>
       </el-row>
     </div>
 
@@ -31,19 +60,21 @@
       :header-cell-style="{'background':'#f2f3f4', 'color':'#555', 'font-weight':'bold', 'line-height':'32px'}"
       @selection-change="handleSelection"
     >
-
       <el-table-column
         v-if="options.multi"
         align="center"
         type="selection"
         width="55"
       />
-
       <slot name="data-columns" />
-
     </el-table>
-
-    <pagination v-show="dataList.total>0" :total="dataList.total" :page.sync="listQuery.current" :limit.sync="listQuery.size" @pagination="getList" />
+    <pagination
+      v-show="dataList.total>0"
+      :total="dataList.total"
+      :page.sync="listQuery.current"
+      :limit.sync="listQuery.size"
+      @pagination="getList"
+    />
   </div>
 </template>
 
@@ -81,7 +112,12 @@ export default {
           current: 1,
           size: 10,
           params: {},
-          t: 0
+          t: 0,
+          search: {
+            column: '',
+            input: '',
+            placeholder: ''
+          }
         }
       }
     }
@@ -105,15 +141,6 @@ export default {
       multiNow: ''
     }
   },
-  watch: {
-    // 检测查询变化
-    listQuery: {
-      handler() {
-        this.getList()
-      },
-      deep: true
-    }
-  },
   created() {
     this.getList()
   },
@@ -134,6 +161,9 @@ export default {
     getList() {
       this.listLoading = true
       this.listQuery.t = new Date().getTime()
+      if (this.listQuery.search && this.listQuery.search.column) {
+        this.listQuery.params[this.listQuery.search.column] = this.listQuery.search.input
+      }
       fetchList(this.options.listUrl, this.listQuery).then(response => {
         this.dataList = response.data
         this.listLoading = false
@@ -253,10 +283,11 @@ export default {
 </script>
 
 <style>
-  .filter-container .filter-item{
-    margin-left: 5px;
-  }
-  .filter-container .filter-item:first-child{
-    margin-left: 0px;
-  }
+.filter-container .filter-item {
+  margin-left: 5px;
+}
+
+.filter-container .filter-item:first-child {
+  margin-left: 0px;
+}
 </style>

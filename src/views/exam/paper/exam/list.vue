@@ -14,7 +14,6 @@
           :disabled="item.status === 1"
         />
       </el-select>
-      <el-input v-model="listQuery.params.title" placeholder="搜索考试名称" style="width: 200px;" class="filter-item" />
     </template>
     <template slot="data-columns">
 
@@ -101,6 +100,11 @@ export default {
         current: 1,
         size: 10,
         params: {
+        },
+        search: {
+          column: 'title',
+          input: '',
+          placeholder: '搜索考试名称'
         }
       },
       options: {
