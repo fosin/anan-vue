@@ -150,7 +150,7 @@ export default {
      */
     handleAdd() {
       if (this.options.addRoute) {
-        this.$store.dispatch('closeAndPushToView', { name: this.options.addRoute, params: {}})
+        this.$router.push({ name: this.options.addRoute, params: {}})
         return
       }
       console.log('未设置添加数据跳转路由！')
