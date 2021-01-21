@@ -39,6 +39,10 @@ export default {
     userId: {
       type: Number,
       default: -1
+    },
+    showAll: {
+      type: String,
+      default: '0'
     }
   },
   data() {
@@ -78,7 +82,7 @@ export default {
       })
     },
     handleExamResult(id) {
-      this.$router.push({ name: 'ExamOnlineDoResult', params: { id: id }})
+      this.$router.push({ name: 'ExamOnlineDoResult', params: { id: id + ',' + this.showAll }})
     }
   }
 }

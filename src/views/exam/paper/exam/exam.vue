@@ -379,7 +379,7 @@ export default {
                   type: 'warning',
                   duration: 0
                 })
-                this.$router.push({ name: 'ExamOnlineDoResult', params: { id: this.paperId }})
+                this.$router.push({ name: 'ExamOnlineDoResult', params: { id: this.paperId + ',0' }})
               }
             })
           }
