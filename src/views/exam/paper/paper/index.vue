@@ -25,7 +25,7 @@
           prop="title"
         >
           <template slot-scope="scope">
-            <router-link :to="{ name: 'ExamOnlineDoResult', params: {id : scope.row.id}}">
+            <router-link :to="{ name: 'ExamOnlineDoResult', params: {id : scope.row.id + ',1'}}">
               {{ scope.row.title }}
             </router-link>
           </template>
@@ -125,11 +125,8 @@ export default {
   components: { ExamSelect, DepartTreeSelect, DataTable },
   data() {
     return {
-
       dialogVisible: false,
-
       captureList: [],
-
       paperStates: [
         { value: 0, label: '考试中' },
         { value: 1, label: '待阅卷' },
@@ -142,7 +139,6 @@ export default {
         label: 'deptName',
         children: 'children'
       },
-
       listQuery: {
         current: 1,
         size: 10,
@@ -155,9 +151,7 @@ export default {
           placeholder: ''
         }
       },
-
       options: {
-
         // 可批量操作
         multi: false,
         // 列表请求URL

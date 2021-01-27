@@ -249,7 +249,7 @@ export default {
           message: '试卷提交成功，即将进入试卷详情！',
           type: 'success'
         })
-        this.$router.push({ name: 'ExamOnlineDoResult', params: { id: this.paperId }})
+        this.$router.push({ name: 'ExamOnlineDoResult', params: { id: this.paperId + ',0' }})
       })
     },
     // 交卷操作

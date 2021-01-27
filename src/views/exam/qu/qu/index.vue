@@ -9,7 +9,7 @@
       <template slot="filter-content">
         <el-row>
           <el-col :span="24">
-            <el-select v-model="listQuery.params.quType" class="filter-item" clearable>
+            <el-select v-model="listQuery.params.quType" placeholder="选择题型" class="filter-item" clearable>
               <el-option
                 v-for="item in quTypes"
                 :key="item.name"
@@ -62,6 +62,16 @@
           prop="updateTime"
           width="180px"
         />
+        <el-table-column
+          label="状态"
+          align="center"
+          prop="status"
+          width="70px"
+        >
+          <template slot-scope="scope">
+            {{ getDicDetailValue(statuss, scope.row.status) }}
+          </template>
+        </el-table-column>
       </template>
     </data-table>
     <el-dialog
@@ -126,6 +136,7 @@ export default {
       },
       quTypes: [],
       levels: [],
+      statuss: [],
       options: {
         // 可批量操作
         multi: true,
@@ -168,6 +179,9 @@ export default {
     })
     this.loadDictionaryById(146).then(res => {
       this.levels = res.details
+    })
+    this.loadDictionaryById(11).then(res => {
+      this.statuss = res.details
     })
   },
   methods: {

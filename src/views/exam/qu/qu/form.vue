@@ -3,8 +3,8 @@
     <el-form ref="postForm" :model="postForm" :rules="rules" label-position="left" label-width="150px">
       <el-card>
         <el-row>
-          <el-col :span="8">
-            <el-form-item label="题目类型 " prop="quType">
+          <el-col :span="5">
+            <el-form-item label="题目类型" prop="quType" label-width="80px">
               <el-select v-model="postForm.quType" :disabled="quTypeDisabled" class="filter-item" @change="handleTypeChange">
                 <el-option
                   v-for="item in quTypes"
@@ -16,8 +16,8 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
-            <el-form-item label="难度等级 " prop="level">
+          <el-col :span="5">
+            <el-form-item label="难度等级" prop="level" label-width="80px">
               <el-select v-model="postForm.level" class="filter-item">
                 <el-option
                   v-for="item in levels"
@@ -29,16 +29,29 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
-            <el-form-item label="归属题库" prop="repoIds">
+          <el-col :span="6">
+            <el-form-item label="归属题库" prop="repoIds" label-width="80px">
               <repo-select v-model="postForm.repoIds" :multi="true" />
             </el-form-item>
           </el-col>
+          <el-col :span="4">
+            <el-form-item label="启用状态" prop="status" label-width="80px">
+              <el-select v-model="postForm.status" class="filter-item">
+                <el-option :key="0" label="启用" :value="0" />
+                <el-option :key="1" label="禁用" :value="1" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="3">
+            <el-form-item label="选题权重" prop="weight" label-width="80px">
+              <el-input-number v-model="postForm.weight" size="mini" :step="1" :min="1" />
+            </el-form-item>
+          </el-col>
         </el-row>
-        <el-form-item label="题目内容" prop="content">
+        <el-form-item label="题目内容" prop="content" label-width="80px">
           <el-input v-model="postForm.content" type="textarea" />
         </el-form-item>
-        <el-form-item label="整题解析" prop="oriPrice">
+        <el-form-item label="整题解析" prop="oriPrice" label-width="80px">
           <el-input v-model="postForm.analysis" type="textarea" :precision="1" :max="999999" />
         </el-form-item>
       </el-card>
@@ -105,7 +118,7 @@ import { fetchDetail, saveData } from '@/views/exam/qu/qu/qu'
 import RepoSelect from '@/views/exam/components/RepoSelect'
 
 export default {
-  name: 'ExamManagementQuUpdate',
+  name: 'ExamManagementQuAdd',
   components: { RepoSelect },
   data() {
     return {
@@ -117,6 +130,8 @@ export default {
         tagList: [],
         answerList: [],
         quType: 1,
+        weight: 1,
+        status: 0,
         level: 1
       },
       lastSelected: 0,
@@ -132,6 +147,12 @@ export default {
         ],
         repoIds: [
           { required: true, message: '至少要选择一个题库！' }
+        ],
+        status: [
+          { required: true, message: '至少要选择一个状态！' }
+        ],
+        weight: [
+          { required: true, message: '权重不能小于1！' }
         ]
       }
     }
