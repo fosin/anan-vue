@@ -69,7 +69,7 @@
           width="70px"
         >
           <template slot-scope="scope">
-            {{ getDicDetailValue(statuss, scope.row.status) }}
+            {{ getDicDetailValue(states, scope.row.state) }}
           </template>
         </el-table-column>
       </template>
@@ -136,7 +136,7 @@ export default {
       },
       quTypes: [],
       levels: [],
-      statuss: [],
+      states: [],
       options: {
         // 可批量操作
         multi: true,
@@ -181,7 +181,7 @@ export default {
       this.levels = res.details
     })
     this.loadDictionaryById(11).then(res => {
-      this.statuss = res.details
+      this.states = res.details
     })
   },
   methods: {

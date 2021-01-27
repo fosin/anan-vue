@@ -35,8 +35,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="4">
-            <el-form-item label="启用状态" prop="status" label-width="80px">
-              <el-select v-model="postForm.status" class="filter-item">
+            <el-form-item label="启用状态" prop="state" label-width="80px">
+              <el-select v-model="postForm.state" class="filter-item">
                 <el-option :key="0" label="启用" :value="0" />
                 <el-option :key="1" label="禁用" :value="1" />
               </el-select>
@@ -131,7 +131,7 @@ export default {
         answerList: [],
         quType: 1,
         weight: 1,
-        status: 0,
+        state: 0,
         level: 1
       },
       lastSelected: 0,
@@ -148,7 +148,7 @@ export default {
         repoIds: [
           { required: true, message: '至少要选择一个题库！' }
         ],
-        status: [
+        state: [
           { required: true, message: '至少要选择一个状态！' }
         ],
         weight: [
@@ -269,7 +269,9 @@ export default {
       const form = {
         quType: this.postForm.quType,
         level: this.postForm.level,
-        repoIds: this.postForm.repoIds
+        repoIds: this.postForm.repoIds,
+        weight: 1,
+        state: this.postForm.state
       }
       this.postForm = form
       this.handleTypeChange(form.quType)

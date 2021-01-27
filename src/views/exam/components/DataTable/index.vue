@@ -178,13 +178,6 @@ export default {
       fetchList(this.options.listUrl, this.listQuery).then(response => {
         this.dataList = response.data
         this.listLoading = false
-      }).catch(reason => {
-        this.$notify({
-          title: '获取数据列表失败!',
-          message: reason.message,
-          type: 'error',
-          duration: 5000
-        })
       })
     },
     /**
@@ -221,7 +214,7 @@ export default {
     handleState(state) {
       // 修改状态
       changeState(this.options.stateUrl, this.selectedIds, state).then(response => {
-        if (response.code === 0) {
+        if (response.data === true) {
           this.$message({
             type: 'success',
             message: '状态修改成功!'
@@ -230,13 +223,6 @@ export default {
           // 重新搜索
           this.getList()
         }
-      }).catch(reason => {
-        this.$notify({
-          title: '更新状态失败',
-          message: reason.message,
-          type: 'error',
-          duration: 5000
-        })
       })
     },
     /**
@@ -262,13 +248,6 @@ export default {
             message: '删除成功!'
           })
           this.getList()
-        }).catch(reason => {
-          this.$notify({
-            title: '删除数据失败',
-            message: reason.message,
-            type: 'error',
-            duration: 5000
-          })
         })
       })
     },
