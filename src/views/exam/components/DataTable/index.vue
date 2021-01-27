@@ -68,23 +68,25 @@
       />
       <slot name="data-columns" />
     </el-table>
-    <pagination
-      v-show="dataList.total>0"
-      :total="dataList.total"
-      :page.sync="listQuery.current"
-      :limit.sync="listQuery.size"
-      @pagination="getList"
-    />
+    <div v-show="!listLoading && dataList.total>0" class="pagination-container">
+      <el-pagination
+        :current-page.sync="listQuery.current"
+        :page-sizes="listQuery.pageSizes"
+        :page-size="listQuery.size"
+        :total="dataList.total"
+        layout="total, sizes, prev, pager, next, jumper"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
+    </div>
   </div>
 </template>
 
 <script>
 import { fetchList, deleteData, changeState } from '@/views/exam/common'
-import Pagination from '@/views/exam/components/Pagination'
 
 export default {
   name: 'PagingTable',
-  components: { Pagination },
   // 组件入参
   props: {
     options: {
@@ -111,6 +113,7 @@ export default {
         return {
           current: 1,
           size: 10,
+          pageSizes: [10, 20, 30, 50],
           params: {},
           t: 0,
           search: {
@@ -145,6 +148,14 @@ export default {
     this.getList()
   },
   methods: {
+    handleSizeChange(val) {
+      this.listQuery.pageSize = val
+      this.getList()
+    },
+    handleCurrentChange(val) {
+      this.listQuery.pageNumber = val
+      this.getList()
+    },
     /**
      * 添加数据跳转
      */
