@@ -250,6 +250,13 @@ export default {
           type: 'success'
         })
         this.$router.push({ name: 'ExamOnlineDoResult', params: { id: this.paperId + ',0' }})
+      }).catch((reason) => {
+        this.$notify({
+          title: '交卷失败失败',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
       })
     },
     // 交卷操作
@@ -301,6 +308,13 @@ export default {
         }
         // 查找详情
         this.fetchQuData(item)
+      }).catch((reason) => {
+        this.$notify({
+          title: '提交答案失败',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
       })
     },
 
@@ -331,6 +345,13 @@ export default {
         })
         // 关闭详情
         loading.close()
+      }).catch((reason) => {
+        this.$notify({
+          title: '获取试题失败',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
       })
     },
     // 试卷详情
@@ -368,14 +389,14 @@ export default {
               if (value <= this.paperData.ssCount) {
                 this.$notify({
                   title: '切屏警告',
-                  message: '已切屏' + value + '次，一共只能切屏' + this.paperData.ssCount + '次',
+                  message: '已切屏' + value + '次，只允许切屏' + this.paperData.ssCount + '次！！！',
                   type: 'warning',
-                  duration: 0
+                  duration: 60000
                 })
               } else {
                 this.$notify({
-                  title: '切屏警告',
-                  message: '切屏' + value + '次超过总次数：' + this.paperData.ssCount + ', 系统自动交卷!',
+                  title: 'Game Over！！！',
+                  message: '切屏' + value + '次超过总次数：' + this.paperData.ssCount + '次, 系统自动交卷!',
                   type: 'warning',
                   duration: 0
                 })

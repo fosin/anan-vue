@@ -171,6 +171,13 @@ export default {
     })
     fetchTree({}).then(response => {
       this.treeData = response.data
+    }).catch((reason) => {
+      this.$notify({
+        title: '获取部门数失败',
+        message: reason.message,
+        type: 'error',
+        duration: 5000
+      })
     })
   },
   methods: {

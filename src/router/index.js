@@ -143,8 +143,7 @@ export function dynamicAddAsyncRouter(ananPermissionTree) {
             }),
             meta: {
               title: code,
-              icon: icon,
-              noCache: true
+              icon: icon
             },
             hidden: true,
             children: isEmpty(children) ? [] : dynamicAddAsyncRouter(children)

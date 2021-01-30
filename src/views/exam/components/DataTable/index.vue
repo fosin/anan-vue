@@ -57,6 +57,7 @@
       border
       fit
       highlight-current-row
+      :sort-change="sortChange"
       :header-cell-style="{'background':'#f2f3f4', 'color':'#555', 'font-weight':'bold', 'line-height':'32px'}"
       @selection-change="handleSelection"
     >
@@ -113,9 +114,13 @@ export default {
         return {
           current: 1,
           size: 10,
-          pageSizes: [10, 20, 30, 50],
+          pageSizes: [5, 10, 25, 50, 100],
           params: {},
           t: 0,
+          sort: {
+            sortOrder: 'descending',
+            sortName: ''
+          },
           search: {
             column: '',
             input: '',
@@ -145,15 +150,33 @@ export default {
     }
   },
   created() {
+    this.loadOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数').then(res => {
+      this.listQuery.size = parseInt(res)
+    })
+    this.loadOrganizParameterValue('DefaultPageSizes', '5,10,25,50,100', '表格默认每页记录数可选择项').then(res => {
+      const temp = res.split(',')
+      const pageSizes = []
+      for (let i = 0; i < temp.length; i++) {
+        pageSizes[i] = parseInt(temp[i])
+      }
+      this.listQuery.pageSizes = pageSizes
+    })
     this.getList()
   },
   methods: {
+    sortChange(column) {
+      this.listQuery.sort.sortOrder = (column.order && column.order === 'descending') ? 'DESC' : 'ASC'
+      this.listQuery.sort.sortName = column.prop
+      if (this.listQuery.sort.sortName) {
+        this.getList()
+      }
+    },
     handleSizeChange(val) {
-      this.listQuery.pageSize = val
+      this.listQuery.size = val
       this.getList()
     },
     handleCurrentChange(val) {
-      this.listQuery.pageNumber = val
+      this.listQuery.current = val
       this.getList()
     },
     /**
@@ -161,7 +184,7 @@ export default {
      */
     handleAdd() {
       if (this.options.addRoute) {
-        this.$router.push({ name: this.options.addRoute, params: {}})
+        this.$store.dispatch('pushToView', { name: this.options.addRoute, params: {}})
         return
       }
       console.log('未设置添加数据跳转路由！')
@@ -178,6 +201,13 @@ export default {
       fetchList(this.options.listUrl, this.listQuery).then(response => {
         this.dataList = response.data
         this.listLoading = false
+      }).catch((reason) => {
+        this.$notify({
+          title: '获取数据列表失败',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
       })
     },
     /**
@@ -223,6 +253,13 @@ export default {
           // 重新搜索
           this.getList()
         }
+      }).catch((reason) => {
+        this.$notify({
+          title: '修改状态失败',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
       })
     },
     /**
@@ -248,6 +285,13 @@ export default {
             message: '删除成功!'
           })
           this.getList()
+        }).catch((reason) => {
+          this.$notify({
+            title: '删除数据失败',
+            message: reason.message,
+            type: 'error',
+            duration: 5000
+          })
         })
       })
     },

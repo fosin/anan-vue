@@ -90,6 +90,13 @@ export default {
     fetchExamData(id) {
       fetchDetail(id).then(response => {
         this.examData = response.data
+      }).catch((reason) => {
+        this.$notify({
+          title: '获取考试数据失败',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
       })
     }
   }

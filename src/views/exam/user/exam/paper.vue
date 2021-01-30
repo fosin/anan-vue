@@ -79,10 +79,17 @@ export default {
     fetchPaperList() {
       listPaper(this.userId, this.examId).then(response => {
         this.paperList = response.data.records
+      }).catch((reason) => {
+        this.$notify({
+          title: '获取试卷数据失败',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
       })
     },
     handleExamResult(id) {
-      this.$router.push({ name: 'ExamOnlineDoResult', params: { id: id + ',' + this.showAll }})
+      this.$store.dispatch('pushToView', { name: 'ExamOnlineDoResult', params: { id: id + ',' + this.showAll }})
     }
   }
 }

@@ -181,6 +181,13 @@ export default {
           this.myRadio[item.id] = myRadio
           this.myMulti[item.id] = myMulti
         })
+      }).catch((reason) => {
+        this.$notify({
+          title: '获取考试结果失败',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
       })
     }
   }

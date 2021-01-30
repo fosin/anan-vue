@@ -22,7 +22,7 @@
 import { fetchDetail, saveData } from '@/views/exam/qu/repo/repo'
 
 export default {
-  name: 'ExamManagementRepoUpdate',
+  name: 'ExamManagementRepoAdd',
   data() {
     return {
       postForm: {
@@ -50,6 +50,13 @@ export default {
       const params = { id: id }
       fetchDetail(params).then(response => {
         this.postForm = response.data
+      }).catch((reason) => {
+        this.$notify({
+          title: '获取题库数据失败',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
       })
     },
     submitForm() {
@@ -66,6 +73,13 @@ export default {
             duration: 2000
           })
           this.$store.dispatch('closeAndPushToView', { name: 'ExamManagementRepo' })
+        }).catch((reason) => {
+          this.$notify({
+            title: '保存题库数据失败',
+            message: reason.message,
+            type: 'error',
+            duration: 5000
+          })
         })
       })
     },

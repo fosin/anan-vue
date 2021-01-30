@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { MessageBox, Notification } from 'element-ui'
+import { MessageBox } from 'element-ui'
 import store from '../store'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'
@@ -128,14 +128,14 @@ export const allRequest = ({ url = '',
     }).then(value => {
       resolve(value)
     }).catch(reason => {
-      if (notify) {
-        Notification.error({
-          title: '请求数据失败',
-          message: process.env.NODE_ENV === 'development' ? url + ':' + reason.message : reason.message,
-          type: 'error',
-          duration: 5000
-        })
-      }
+      // if (notify) {
+      //   Notification.error({
+      //     title: '请求数据失败',
+      //     message: process.env.NODE_ENV === 'development' ? url + ':' + reason.message : reason.message,
+      //     type: 'error',
+      //     duration: 5000
+      //   })
+      // }
       reject(reason)
     })
   })

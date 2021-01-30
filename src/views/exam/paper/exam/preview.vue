@@ -112,10 +112,23 @@ export default {
                 this.tryCount = 1
               }
             }
-          }).catch(reason => {
+          }).catch((reason) => {
+            this.$notify({
+              title: '获取考试信息失败',
+              message: reason.message,
+              type: 'error',
+              duration: 5000
+            })
             this.tryCount = 1
           })
         }
+      }).catch((reason) => {
+        this.$notify({
+          title: '获取试卷失败',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
       })
     },
     handleCreate() {
@@ -136,7 +149,13 @@ export default {
           that.dialogVisible = false
           that.$router.push({ name: 'ExamOnlineDoExam', params: { id: data.id }})
         }, 1000)
-      }).catch(() => {
+      }).catch((reason) => {
+        this.$notify({
+          title: '创建试卷失败',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
         loading.close()
       })
     },

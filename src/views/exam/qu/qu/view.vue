@@ -71,6 +71,13 @@ export default {
           //   }
           // }
         })
+      }).catch((reason) => {
+        this.$notify({
+          title: '获取试题数据失败',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
       })
     },
     onCancel() {

@@ -63,6 +63,13 @@ export default {
     fetchData() {
       fetchList().then(response => {
         this.dataList = response.data.records
+      }).catch((reason) => {
+        this.$notify({
+          title: '获取考试数据失败',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
       })
     },
     handlerChange(e) {

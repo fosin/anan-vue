@@ -400,7 +400,6 @@ export default {
           if (!valid) {
             return
           }
-
           if (this.postForm.totalScore === 0) {
             this.$notify({
               title: '提示信息',
@@ -408,10 +407,8 @@ export default {
               type: 'warning',
               duration: 2000
             })
-
             return
           }
-
           if (this.postForm.joinType === 1) {
             for (let i = 0; i < this.postForm.repoList.length; i++) {
               const repo = this.postForm.repoList[i]
@@ -426,7 +423,6 @@ export default {
 
                 return
               }
-
               if ((repo.radioCount > 0 && repo.radioScore === 0) || (repo.radioCount === 0 && repo.radioScore > 0)) {
                 this.$notify({
                   title: '提示信息',
@@ -437,7 +433,6 @@ export default {
 
                 return
               }
-
               if ((repo.multiCount > 0 && repo.multiScore === 0) || (repo.multiCount === 0 && repo.multiScore > 0)) {
                 this.$notify({
                   title: '提示信息',
@@ -448,7 +443,6 @@ export default {
 
                 return
               }
-
               if ((repo.judgeCount > 0 && repo.judgeScore === 0) || (repo.judgeCount === 0 && repo.judgeScore > 0)) {
                 this.$notify({
                   title: '提示信息',
@@ -460,7 +454,6 @@ export default {
               }
             }
           }
-
           this.$confirm('确实要提交保存吗？', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -515,6 +508,13 @@ export default {
         if (this.postForm.joinType === 1) {
           that.repoList = that.postForm.repoList
         }
+      }).catch((reason) => {
+        this.$notify({
+          title: '获取考试数据失败',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
       })
     },
 
@@ -531,6 +531,13 @@ export default {
         })
 
         this.$store.dispatch('closeAndPushToView', { name: 'ExamManagementExam' })
+      }).catch((reason) => {
+        this.$notify({
+          title: '保存考试数据失败',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
       })
     },
 

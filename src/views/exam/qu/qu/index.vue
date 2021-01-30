@@ -211,6 +211,13 @@ export default {
 
         this.dialogVisible = false
         this.$refs.pagingTable.getList()
+      }).catch((reason) => {
+        this.$notify({
+          title: '批量处理失败',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
       })
     },
     exportExcel() {
@@ -243,6 +250,13 @@ export default {
           this.importVisible = false
           this.$refs.pagingTable.getList()
         }
+      }).catch((reason) => {
+        this.$notify({
+          title: '导入excel失败',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
       })
     }
   }

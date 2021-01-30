@@ -210,6 +210,13 @@ export default {
     fetchData(id) {
       fetchDetail(id).then(response => {
         this.postForm = response.data
+      }).catch((reason) => {
+        this.$notify({
+          title: '获取数据失败',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
       })
     },
     submitForm() {
@@ -262,6 +269,13 @@ export default {
           } else {
             this.continueForm()
           }
+        }).catch((reason) => {
+          this.$notify({
+            title: '保存试题失败',
+            message: reason.message,
+            type: 'error',
+            duration: 5000
+          })
         })
       })
     },

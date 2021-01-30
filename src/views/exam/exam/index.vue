@@ -201,10 +201,10 @@ export default {
   },
   methods: {
     handleExamDetail(examId) {
-      this.$store.dispatch('closeAndPushToView', { name: 'ExamManagementExamUsers', params: { examId: examId }})
+      this.$store.dispatch('pushToView', { name: 'ExamManagementExamUsers', params: { examId: examId }})
     },
     handleUpdateExam(examId) {
-      this.$store.dispatch('closeAndPushToView', { name: 'ExamManagementExamUpdate', params: { id: examId }})
+      this.$store.dispatch('pushToView', { name: 'ExamManagementExamUpdate', params: { id: examId }})
     }
   }
 }
