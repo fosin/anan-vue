@@ -164,7 +164,7 @@ export default {
       line-height: 26px;
       border: 1px solid #d8dce5;
       color: $textColor;
-      background: $backgroundColor;
+      background: $inactiveBackgroundColor;
       padding: 0 8px;
       font-size: 12px;
       margin-left: 5px;
@@ -174,11 +174,11 @@ export default {
       }
       &.active {
         background-color: $activeBackgroundColor;
-        color: #fff;
-        border-color: $activeBackgroundColor;
+        color: $textColor;
+        border-color: $green;
         &::before {
           content: '';
-          background: $backgroundColor;
+          background: $red;
           display: inline-block;
           width: 8px;
           height: 8px;
