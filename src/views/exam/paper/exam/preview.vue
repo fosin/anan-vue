@@ -12,7 +12,7 @@
         />
         <el-alert
           v-if="detailData.showCamera"
-          title="警告：本次考试会自动开启摄像头，考试过程中出现非本人或本人离场，可能会被判定考试无效!"
+          title="警告：本次考试会自动开启摄像头(注意放行浏览器权限)，考试过程中请保持周边无其他人，否则可能会被判定考试无效!"
           type="warning"
           effect="dark"
           :closable="false"
@@ -37,27 +37,37 @@
           show-icon
           style="margin-bottom: 10px;font-size: 24px;font-weight: bold;"
         />
+      </el-col>
+
+      <el-col :span="24">
         <el-card class="pre-exam">
-          <div><strong>考试名称：</strong>{{ detailData.title }}</div>
-          <div><strong>考试时长：</strong>{{ detailData.totalTime }}分钟</div>
-          <div><strong>试卷总分：</strong>{{ detailData.totalScore }}分</div>
-          <div><strong>及格分数：</strong>{{ detailData.qualifyScore }}分</div>
-          <div><strong>考试描述：</strong>{{ detailData.content }}</div>
-          <div><strong>开放类型：</strong> {{ getDicDetailValue(openTypes, detailData.openType) }}</div>
-          <div v-if="detailData.allowTimes > 0"><strong>当前次数/总考试次数：</strong>{{ tryCount }}/{{ detailData.allowTimes }}
-          </div>
+          <el-row>
+            <el-col :span="16">
+              <div><strong>考试名称：</strong>{{ detailData.title }}</div>
+              <div><strong>考试时长：</strong>{{ detailData.totalTime }}分钟</div>
+              <div><strong>试卷总分：</strong>{{ detailData.totalScore }}分</div>
+              <div><strong>及格分数：</strong>{{ detailData.qualifyScore }}分</div>
+              <div><strong>考试描述：</strong>{{ detailData.content }}</div>
+              <div><strong>开放类型：</strong> {{ getDicDetailValue(openTypes, detailData.openType) }}</div>
+              <div v-if="detailData.allowTimes > 0"><strong>当前次数/总考试次数：</strong>{{ tryCount }}/{{ detailData.allowTimes }}
+              </div>
+            </el-col>
+            <el-col :span="8">
+              <video ref="videoCamera" :width="videoWidth" :height="videoHeight" autoplay style="float: right" />
+            </el-col>
+          </el-row>
         </el-card>
       </el-col>
       <el-col :span="24">
         <el-button
-          v-if="((detailData.allowTimes > 0 && detailData.allowTimes >= tryCount) || detailData.allowTimes < 1)"
+          v-if="cameraReady && tryCountReady"
           type="primary"
           icon="el-icon-caret-right"
           @click="handleCreate"
         >
           开始考试
         </el-button>
-        <el-button @click="handleBack">
+        <el-button v-if="cameraReady" @click="handleBack">
           返回
         </el-button>
       </el-col>
@@ -69,14 +79,20 @@
 import { Loading } from 'element-ui'
 import { fetchDetail } from '../../exam/exam'
 import { createPaper } from './exam'
+import { callCamera, closeCamera } from '@/utils/videoCamera'
 
 export default {
   name: 'ExamOnlineDoPrepare',
   data() {
     return {
       detailData: {},
+      videoWidth: 400,
+      videoHeight: 300,
+      videoCamera: {},
       userExam: {},
       tryCount: 1,
+      cameraReady: false,
+      tryCountReady: false,
       ssCountAlert: '警告：本次考试切屏超过次后，系统将自动交卷！',
       postForm: {
         examId: '',
@@ -92,15 +108,46 @@ export default {
   },
   created() {
     this.postForm.examId = this.$route.params.examId
-    this.fetchData()
     this.loadDictionaryById(144).then(res => {
       this.openTypes = res.details
     })
+    this.fetchData()
+  },
+  beforeDestroy() {
+    // 关闭摄像头
+    if (this.detailData.showCamera && this.videoCamera) {
+      closeCamera(this.videoCamera).then(() => {
+      }).catch((reason) => {
+        this.$notify({
+          title: '关闭摄像头失败，关闭浏览器可以解决该问题！',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
+      })
+    }
   },
   methods: {
     fetchData() {
       fetchDetail(this.postForm.examId).then(response => {
         this.detailData = response.data
+        // 开启摄像头
+        if (this.detailData.showCamera) {
+          this.videoCamera = this.$refs['videoCamera']
+          callCamera(this.videoCamera).then(value => {
+            this.cameraReady = true
+          }).catch((reason) => {
+            this.cameraReady = false
+            this.$notify({
+              title: '该考试需要开启摄像头，请检查摄像头是否可用！',
+              message: reason.message,
+              type: 'error',
+              duration: 5000
+            })
+          })
+        } else {
+          this.cameraReady = true
+        }
         this.ssCountAlert = '警告：本次考试切屏超过' + this.detailData.ssCount + '次后，系统将自动交卷！'
         if (this.detailData.allowTimes > 0) {
           this.postRequest('gateway/exam/api/user/exam/detail/' + this.postForm.examId, null, false).then(response => {
@@ -112,6 +159,7 @@ export default {
                 this.tryCount = 1
               }
             }
+            this.tryCountReady = this.detailData.allowTimes >= this.tryCount
           }).catch((reason) => {
             this.$notify({
               title: '获取考试信息失败',
@@ -120,7 +168,10 @@ export default {
               duration: 5000
             })
             this.tryCount = 1
+            this.tryCountReady = this.detailData.allowTimes >= this.tryCount
           })
+        } else {
+          this.tryCountReady = true
         }
       }).catch((reason) => {
         this.$notify({
@@ -144,6 +195,18 @@ export default {
           message: '试卷创建成功，即将进入考试！',
           type: 'success'
         })
+        // 关闭摄像头
+        if (this.detailData.showCamera && this.videoCamera) {
+          closeCamera(this.videoCamera).then(() => {
+          }).catch((reason) => {
+            this.$notify({
+              title: '关闭摄像头失败，关闭浏览器可以解决该问题！',
+              message: reason.message,
+              type: 'error',
+              duration: 5000
+            })
+          })
+        }
         setTimeout(function() {
           loading.close()
           that.dialogVisible = false

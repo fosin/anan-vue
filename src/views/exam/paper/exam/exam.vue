@@ -6,8 +6,8 @@
           距离考试结束还有：<span style="color: #ff0000;">{{ min }}分钟{{ sec }}秒</span>
           <el-button
             style="float: right; margin-top: -10px"
-            type="primary"
-            icon="el-icon-plus"
+            type="danger"
+            icon="el-icon-check"
             :loading="loading"
             @click="handHandExam()"
           >
@@ -62,7 +62,7 @@
       </el-col>
       <el-col :span="18" :xs="24">
         <el-card class="qu-content">
-          <p v-if="quData.content">{{ quData.sort + 1 }}.{{ quData.content }}</p>
+          <el-input v-if="quData.content" v-model="quData.quTitle" autosize type="textarea" readonly style="margin-bottom: 20px" />
           <div v-if="quData.quType === 1 || quData.quType===3">
             <el-radio-group v-model="radioValue">
               <el-radio v-for="item in quData.answerList" :key="item.id" :label="item.id" @change="handNext()">
@@ -81,13 +81,19 @@
           </div>
         </el-card>
         <div style="margin-top: 20px">
-          <el-button v-if="showPrevious" type="primary" icon="el-icon-back" @click="handPrevious()">
+          <el-button v-if="showPrevious" type="primary" icon="el-icon-arrow-left" @click="handPrevious()">
             上一题
           </el-button>
-          <el-button v-if="showNext" type="warning" icon="el-icon-right" @click="handNext()">
-            下一题
+          <el-button v-if="showNext" type="warning" @click="handNext()">
+            下一题  <i class="el-icon-arrow-right el-icon--right" />
           </el-button>
         </div>
+      </el-col>
+    </el-row>
+    <el-row :gutter="24">
+      <el-col :span="24">
+        <video ref="videoCamera" :width="videoWidth" :height="videoHeight" autoplay style="float: right" />
+        <canvas ref="canvasCamera" style="display:none;" width="640" height="480" />
       </el-col>
     </el-row>
   </div>
@@ -96,6 +102,7 @@
 <script>
 import { paperDetail, quDetail, handExam, fillAnswer } from './exam'
 import { Loading } from 'element-ui'
+import { callCamera, closeCamera } from '@/utils/videoCamera'
 
 export default {
   name: 'ExamOnlineDoExam',
@@ -131,7 +138,12 @@ export default {
       // 已答ID
       answeredIds: [],
       min: '00',
-      sec: '00'
+      sec: '00',
+      videoWidth: 160,
+      videoHeight: 120,
+      cancasctx2d: {},
+      cancasCamera: {},
+      videoCamera: {}
     }
   },
   created() {
@@ -167,6 +179,18 @@ export default {
       window.onblur = () => {
       }
     }
+    // 关闭摄像头
+    if (this.paperData.showCamera && this.videoCamera) {
+      closeCamera(this.videoCamera).then(() => {
+      }).catch((reason) => {
+        this.$notify({
+          title: '关闭摄像头失败，关闭浏览器可以解决该问题！',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
+      })
+    }
   },
   methods: {
     // 倒计时
@@ -178,7 +202,7 @@ export default {
         return
       }
       // 时
-      const min = parseInt(leftSeconds / 60 % 60)
+      const min = parseInt(leftSeconds / 60)
       const sec = parseInt(leftSeconds % 60)
       this.min = min > 9 ? min : '0' + min
       this.sec = sec > 9 ? sec : '0' + sec
@@ -332,6 +356,7 @@ export default {
       const params = { paperId: this.paperId, quId: item.quId }
       quDetail(params).then(response => {
         this.quData = response.data
+        this.quData.quTitle = '【' + this.quData.actualScore + '分】 ' + (this.quData.sort + 1) + '、' + this.quData.content
         this.radioValue = ''
         this.multiValue = []
         // 填充该题目的答案
@@ -382,6 +407,22 @@ export default {
         this.fetchQuData(this.cardItem)
         // 倒计时
         this.countdown()
+        // 开启摄像头
+        if (this.paperData.showCamera) {
+          this.videoCamera = this.$refs['videoCamera']
+          callCamera(this.videoCamera).then(value => {
+            this.cancasCamera = this.$refs['canvasCamera']
+            this.cancasctx2d = this.cancasCamera.getContext('2d')
+          }).catch((reason) => {
+            this.$notify({
+              title: '摄像头开启失败，请检查摄像头是否可用！',
+              message: reason.message,
+              type: 'error',
+              duration: 5000
+            })
+          })
+        }
+        // 切屏控制
         if (this.paperData.ssCount > 0) {
           window.onblur = () => {
             this.postRequest('gateway/exam/api/paper/paper/issCount/' + this.paperId).then(res => {

@@ -61,7 +61,6 @@ export default {
     this.fetchData()
   },
   methods: {
-
     fetchData() {
       fetchList({}).then(response => {
         this.dataList = response.data
@@ -74,9 +73,9 @@ export default {
         })
       })
     },
-    handlerChange(e) {
-      this.$emit('change', e)
-      this.$emit('input', e)
+    handlerChange(repoId) {
+      this.$emit('change', repoId)
+      this.$emit('input', repoId)
     }
   }
 }

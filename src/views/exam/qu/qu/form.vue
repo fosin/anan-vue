@@ -44,7 +44,7 @@
           </el-col>
           <el-col :span="3">
             <el-form-item label="选题权重" prop="weight" label-width="80px">
-              <el-input-number v-model="postForm.weight" size="mini" :step="1" :min="1" />
+              <el-input-number v-model="postForm.weight" :step="1" :min="1" :max="1000" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -298,6 +298,9 @@ export default {
 </script>
 
 <style scoped>
-
+.el-input-number--medium {
+  width: 120px;
+  line-height: 34px;
+}
 </style>
 

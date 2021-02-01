@@ -3,14 +3,17 @@
     <h2 class="text-center">{{ paperData.title }}</h2>
     <p class="text-center" style="color: #666">{{ paperData.createTime }}</p>
     <el-row :gutter="24" style="margin-top: 50px">
-      <el-col :span="8" class="text-center">
+      <el-col :span="6" class="text-center">
         考生姓名：{{ userInfo.username }}
       </el-col>
-      <el-col :span="8" class="text-center">
-        考试用时：{{ paperData.userTime }}分钟
-      </el-col>
-      <el-col :span="8" class="text-center">
+      <el-col :span="6" class="text-center">
         考试得分：{{ paperData.userScore }}
+      </el-col>
+      <el-col :span="6" class="text-center">
+        总分：{{ paperData.totalScore }}
+      </el-col>
+      <el-col :span="6" class="text-center">
+        考试用时：{{ paperData.userTime }}分钟
       </el-col>
     </el-row>
     <el-card style="margin-top: 20px">

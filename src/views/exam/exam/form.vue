@@ -37,7 +37,25 @@
             width="200"
           >
             <template slot-scope="scope">
-              <repo-select v-model="scope.row.repoId" :multi="false" />
+              <el-select
+                v-model="scope.row.repoId"
+                filterable
+                remote
+                reserve-keyword
+                clearable
+                automatic-dropdown
+                placeholder="选择或搜索题库"
+                :remote-method="fetchData"
+                class="filter-item"
+                @change="repoSelected"
+              >
+                <el-option
+                  v-for="item in reposData"
+                  :key="item.id"
+                  :label="item.title"
+                  :value="item.id"
+                />
+              </el-select>
             </template>
           </el-table-column>
           <el-table-column
@@ -45,7 +63,14 @@
             align="center"
           >
             <template slot-scope="scope">
-              <el-input-number v-model="scope.row.radioCount" :controls="false" style="width: 100%" />
+              <el-input-number
+                v-model="scope.row.radioCount"
+                style="width: 65%"
+                controls-position="right"
+                :min="0"
+                :max="scope.row.radioCountMax"
+                :disabled="scope.row.radioCountMax < 1"
+              />/{{ scope.row.radioCountMax }}题
             </template>
           </el-table-column>
           <el-table-column
@@ -53,7 +78,7 @@
             align="center"
           >
             <template slot-scope="scope">
-              <el-input-number v-model="scope.row.radioScore" :controls="false" style="width: 100%" />
+              <el-input-number v-model="scope.row.radioScore" style="width: 60%" controls-position="right" :min="0" />
             </template>
           </el-table-column>
           <el-table-column
@@ -61,7 +86,14 @@
             align="center"
           >
             <template slot-scope="scope">
-              <el-input-number v-model="scope.row.multiCount" :controls="false" style="width: 100%" />
+              <el-input-number
+                v-model="scope.row.multiCount"
+                style="width: 65%"
+                controls-position="right"
+                :min="0"
+                :max="scope.row.multiCountMax"
+                :disabled="scope.row.multiCountMax < 1"
+              />/{{ scope.row.multiCountMax }}题
             </template>
           </el-table-column>
           <el-table-column
@@ -69,7 +101,7 @@
             align="center"
           >
             <template slot-scope="scope">
-              <el-input-number v-model="scope.row.multiScore" :controls="false" style="width: 100%" />
+              <el-input-number v-model="scope.row.multiScore" style="width: 60%" controls-position="right" :min="0" />
             </template>
           </el-table-column>
           <el-table-column
@@ -77,7 +109,14 @@
             align="center"
           >
             <template slot-scope="scope">
-              <el-input-number v-model="scope.row.judgeCount" :controls="false" style="width: 100%" />
+              <el-input-number
+                v-model="scope.row.judgeCount"
+                style="width: 65%"
+                controls-position="right"
+                :min="0"
+                :max="scope.row.judgeCountMax"
+                :disabled="scope.row.judgeCountMax < 1"
+              />/{{ scope.row.judgeCountMax }}题
             </template>
           </el-table-column>
           <el-table-column
@@ -85,7 +124,7 @@
             align="center"
           >
             <template slot-scope="scope">
-              <el-input-number v-model="scope.row.judgeScore" :controls="false" style="width: 100%" />
+              <el-input-number v-model="scope.row.judgeScore" style="width: 60%" controls-position="right" :min="0" />
             </template>
           </el-table-column>
           <el-table-column
@@ -135,47 +174,47 @@
     </el-card>
     <el-card v-if="step === 3" style="margin-top: 20px">
       <el-form ref="postForm" :model="postForm" :rules="rules" label-position="left" label-width="120px">
-        <el-form-item label="考试名称" prop="title">
+        <el-form-item label="考试名称" prop="title" label-width="80px">
           <el-input v-model="postForm.title" />
         </el-form-item>
-        <el-form-item label="考试描述" prop="content">
+        <el-form-item label="考试描述" prop="content" label-width="80px">
           <el-input v-model="postForm.content" type="textarea" />
         </el-form-item>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="总分数" prop="totalScore">
+            <el-form-item label="总分数" prop="totalScore" label-width="80px">
               <el-input-number :value="postForm.totalScore" disabled />
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="及格分" prop="qualifyScore">
+            <el-form-item label="及格分" prop="qualifyScore" label-width="80px">
               <el-input-number v-model="postForm.qualifyScore" :max="postForm.totalScore" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="考试时长(分钟)" prop="totalTime">
-              <el-input-number v-model="postForm.totalTime" />
+            <el-form-item label="考试时长" prop="totalTime" label-width="80px">
+              <el-input-number v-model="postForm.totalTime" />分钟
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="4">
-            <el-form-item label="查看对错">
+            <el-form-item label="查看对错" label-width="80px">
               <el-checkbox v-model="postForm.showResult" />
             </el-form-item>
           </el-col>
           <el-col :span="4">
-            <el-form-item label="查看答案">
+            <el-form-item label="查看答案" label-width="80px">
               <el-checkbox v-model="postForm.showAnswer" />
             </el-form-item>
           </el-col>
           <el-col :span="4">
-            <el-form-item label="是否限时">
+            <el-form-item label="是否限时" label-width="80px">
               <el-checkbox v-model="postForm.timeLimit" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item v-if="postForm.timeLimit" label="考试时间" prop="totalTime">
+            <el-form-item v-if="postForm.timeLimit" label="考试时间" prop="totalTime" label-width="80px">
               <el-date-picker
                 v-model="dateValues"
                 format="yyyy-MM-dd"
@@ -190,27 +229,27 @@
         </el-row>
         <el-row>
           <el-col :span="4">
-            <el-form-item label="开启摄像头">
+            <el-form-item label="开启摄像头" label-width="90px">
               <el-checkbox v-model="postForm.showCamera" />
             </el-form-item>
           </el-col>
           <el-col :span="4">
-            <el-form-item label="错题训练">
+            <el-form-item label="错题训练" label-width="80px">
               <el-checkbox v-model="postForm.wrongTrain" />
             </el-form-item>
           </el-col>
           <el-col :span="4">
-            <el-form-item label="复制试卷">
+            <el-form-item label="复制试卷" label-width="80px">
               <el-checkbox v-model="postForm.paperCopy" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="切屏次数" prop="ssCount">
+            <el-form-item label="切屏次数" prop="ssCount" label-width="80px">
               <el-input-number v-model="postForm.ssCount" :min="0" :max="99" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="考试次数" prop="allowTimes">
+            <el-form-item label="考试次数" prop="allowTimes" label-width="80px">
               <el-input-number v-model="postForm.allowTimes" :min="0" :max="99" />
             </el-form-item>
           </el-col>
@@ -222,13 +261,12 @@
 
 <script>
 import { fetchDetail, saveData } from '@/views/exam/exam/exam'
-import RepoSelect from '@/views/exam/components/RepoSelect'
 import { getOrganiz, listOrganizChild } from '@/views/platform/organization/organization'
 import { mapGetters } from 'vuex'
+import { fetchList } from '@/views/exam/qu/repo/repo'
 
 export default {
   name: 'ExamManagementExamUpdate',
-  components: { RepoSelect },
   data() {
     return {
       step: 1,
@@ -249,6 +287,7 @@ export default {
       scoreBatch: 0,
       // 题库
       repoList: [],
+      reposData: [],
       // 题目列表
       quList: [[], [], [], []],
       quEnable: [false, false, false, false],
@@ -344,11 +383,28 @@ export default {
     this.loadDictionaryById(146).then(res => {
       this.levels = res.details
     })
-    if (typeof id !== 'undefined') {
-      this.fetchData(id)
-    }
+    fetchList({}).then(response => {
+      this.reposData = response.data
+      if (typeof id !== 'undefined') {
+        this.fetchData(id)
+      }
+    }).catch((reason) => {
+      this.$notify({
+        title: '获取题库数据失败',
+        message: reason.message,
+        type: 'error',
+        duration: 5000
+      })
+    })
   },
   methods: {
+    repoSelected(repoId) {
+      this.repoList.forEach((value2) => {
+        if (value2.repoId === repoId) {
+          value2 = this.setRepoLimit(value2)
+        }
+      })
+    },
     loadChild(node, resolve) {
       if (node.level === 0) {
         const organizId = this.ananUserInfo.organizId
@@ -482,13 +538,40 @@ export default {
 
     // 添加子项
     handleAdd() {
-      this.repoList.push({ radioCount: 0, radioScore: 0, multiCount: 0, multiScore: 0, judgeCount: 0, judgeScore: 0, saqCount: 0, saqScore: 0 })
+      const addRepo = { radioCount: 0, radioCountMax: 0, radioScore: 0, multiCount: 0, multiCountMax: 0, multiScore: 0, judgeCount: 0, judgeCountMax: 0, judgeScore: 0, saqCount: 0, saqCountMax: 0, saqScore: 0 }
+      if (this.repoList && this.repoList.length > 0) {
+        const lastRepo = this.repoList[this.repoList.length - 1]
+        addRepo.radioScore = lastRepo.radioScore
+        addRepo.multiScore = lastRepo.multiScore
+        addRepo.judgeScore = lastRepo.judgeScore
+      }
+      this.repoList.push(addRepo)
     },
 
     removeItem(index) {
       this.repoList.splice(index, 1)
     },
-
+    getRepoData(repoId) {
+      if (this.reposData) {
+        for (let i = 0; i < this.reposData.length; i++) {
+          const repo = this.reposData[i]
+          if (repo.id === repoId) {
+            return repo
+          }
+        }
+      }
+    },
+    setRepoLimit(repoBeSet) {
+      const repo = this.getRepoData(repoBeSet.repoId)
+      if (repo) {
+        repoBeSet.radioCountMax = repo.radioCount
+        repoBeSet.radioCount = Math.min(repoBeSet.radioCount, repoBeSet.radioCountMax)
+        repoBeSet.multiCountMax = repo.multiCount
+        repoBeSet.multiCount = Math.min(repoBeSet.multiCount, repoBeSet.multiCountMax)
+        repoBeSet.judgeCountMax = repo.judgeCount
+        repoBeSet.judgeCount = Math.min(repoBeSet.judgeCount, repoBeSet.judgeCountMax)
+      }
+    },
     fetchData(id) {
       const that = this
 
@@ -507,6 +590,9 @@ export default {
         }
         if (this.postForm.joinType === 1) {
           that.repoList = that.postForm.repoList
+          that.repoList.forEach(value => {
+            value = this.setRepoLimit(value)
+          })
         }
       }).catch((reason) => {
         this.$notify({
@@ -551,6 +637,9 @@ export default {
 </script>
 
 <style scoped>
-
+  .el-input-number--medium {
+    width: 120px;
+    line-height: 34px;
+  }
 </style>
 
