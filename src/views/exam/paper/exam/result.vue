@@ -18,10 +18,12 @@
     </el-row>
     <el-card style="margin-top: 20px">
       <div v-for="item in paperData.quList" :key="item.id" class="qu-content">
-        <p>{{ item.sort + 1 }}.{{ item.content }}（分值：{{ item.actualScore }}）</p>
+        <el-input v-model="item.quTitle" autosize type="textarea" readonly resize="none" style="margin-bottom: 20px;border: 0" />
         <div v-if="item.quType === 1 || item.quType===3">
           <el-radio-group v-model="radioValues[item.id]">
-            <el-radio v-for="an in item.answerList" :key="an.id" :label="an.id">{{ an.abc }}.{{ an.content }}</el-radio>
+            <el-radio v-for="an in item.answerList" :key="an.id" :label="an.id">
+              {{ an.abc }}.  【{{ an.content }}】
+            </el-radio>
           </el-radio-group>
           <el-row :gutter="24">
             <el-col v-if="showAnswer" :span="12" style="color: #24da70">
@@ -47,7 +49,7 @@
         </div>
         <div v-if="item.quType === 2">
           <el-checkbox-group v-model="multiValues[item.id]">
-            <el-checkbox v-for="an in item.answerList" :key="an.id" :label="an.id">{{ an.abc }}.{{ an.content }}</el-checkbox>
+            <el-checkbox v-for="an in item.answerList" :key="an.id" :label="an.id">{{ an.abc }}.  【{{ an.content }}】</el-checkbox>
           </el-checkbox-group>
           <el-row :gutter="24">
             <el-col v-if="showAnswer" :span="12" style="color: #24da70">
@@ -93,6 +95,11 @@ export default {
       multiRights: {},
       myRadio: {},
       myMulti: {}
+    }
+  },
+  computed: {
+    toTitle: function(item) {
+      return '【' + item.actualScore + '分】 ' + (item.sort + 1) + '、' + item.content
     }
   },
   created() {
@@ -152,7 +159,7 @@ export default {
           const multiValue = []
           const multiRight = []
           const myMulti = []
-
+          item.quTitle = '【' + item.actualScore + '分】 ' + (item.sort + 1) + '、' + item.content
           item.answerList.forEach((an) => {
             // 用户选定的
             if (an.checked) {
@@ -227,6 +234,13 @@ export default {
     cursor: pointer;
     margin: 2px;
   }
-
+  .paperview-input-text >>> .el-input__inner {
+    -webkit-appearance: none;
+    background-color: #FFF;
+    background-image: none;
+    border-radius: 4px;
+    border: 0;
+  width: 100%;
+  }
 </style>
 

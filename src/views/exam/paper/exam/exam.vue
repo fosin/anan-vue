@@ -62,11 +62,11 @@
       </el-col>
       <el-col :span="18" :xs="24">
         <el-card class="qu-content">
-          <el-input v-if="quData.content" v-model="quData.quTitle" autosize type="textarea" readonly style="margin-bottom: 20px" />
+          <el-input v-model="quData.quTitle" autosize type="textarea" resize="none" readonly style="margin-bottom: 20px" />
           <div v-if="quData.quType === 1 || quData.quType===3">
             <el-radio-group v-model="radioValue">
               <el-radio v-for="item in quData.answerList" :key="item.id" :label="item.id" @change="handNext()">
-                {{ item.abc }}. {{ item.content }}
+                {{ item.abc }}.  【{{ item.content }}】
                 <div v-if="item.image" style="clear: both" />
               </el-radio>
             </el-radio-group>
@@ -74,7 +74,7 @@
           <div v-if="quData.quType === 2">
             <el-checkbox-group v-model="multiValue">
               <el-checkbox v-for="item in quData.answerList" :key="item.id" :label="item.id">
-                {{ item.abc }}. {{ item.content }}
+                {{ item.abc }}.  【{{ item.content }}】
                 <div v-if="item.image" style="clear: both" />
               </el-checkbox>
             </el-checkbox-group>
@@ -443,6 +443,14 @@ export default {
                 })
                 this.$router.push({ name: 'ExamOnlineDoResult', params: { id: this.paperId + ',0' }})
               }
+            })
+          }
+          if (this.paperData.issCount > 0) {
+            this.$notify({
+              title: '切屏警告',
+              message: '已切屏' + this.paperData.issCount + '次，只允许切屏' + this.paperData.ssCount + '次！！！',
+              type: 'warning',
+              duration: 60000
             })
           }
         }
