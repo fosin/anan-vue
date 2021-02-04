@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-row :gutter="24">
-      <el-col :span="24" style="margin-bottom: 20px">
+      <el-col :span="12">
         <el-alert
           title="点击`开始考试`后将自动进入考试，请诚信考试！"
           type="info"
@@ -10,9 +10,22 @@
           show-icon
           style="margin-bottom: 10px;font-size: 24px;font-weight: bold;"
         />
+      </el-col>
+      <el-col :span="12">
         <el-alert
-          v-if="detailData.showCamera"
-          title="警告：本次考试会自动开启摄像头(注意放行浏览器权限)，考试过程中请保持周边无其他人，否则可能会被判定考试无效!"
+          v-if="!detailData.paperCopy"
+          title="注意：未经允许不得擅自复制考题，更不允许向外泄题!"
+          type="warning"
+          effect="dark"
+          :closable="false"
+          show-icon
+          style="margin-bottom: 10px;font-size: 24px;font-weight: bold;"
+        />
+      </el-col>
+      <el-col :span="24">
+        <el-alert
+          v-if="detailData.photoFrequency > 0"
+          title="注意：本次考试会自动开启摄像头(注意放行浏览器权限)，考试过程中请保持周边无其他人，否则可能会被判定考试无效!"
           type="warning"
           effect="dark"
           :closable="false"
@@ -22,15 +35,6 @@
         <el-alert
           v-if="detailData.ssCount > 0"
           :title="ssCountAlert"
-          type="warning"
-          effect="dark"
-          :closable="false"
-          show-icon
-          style="margin-bottom: 10px;font-size: 24px;font-weight: bold;"
-        />
-        <el-alert
-          v-if="!detailData.paperCopy"
-          title="警告：未经允许不得擅自复制考题，更不允许向外泄题!"
           type="warning"
           effect="dark"
           :closable="false"
@@ -58,7 +62,7 @@
           </el-row>
         </el-card>
       </el-col>
-      <el-col :span="24">
+      <el-col :span="24" style="margin-top: 10px">
         <el-button
           v-if="cameraReady && tryCountReady"
           type="primary"
@@ -93,7 +97,7 @@ export default {
       tryCount: 1,
       cameraReady: false,
       tryCountReady: false,
-      ssCountAlert: '警告：本次考试切屏超过次后，系统将自动交卷！',
+      ssCountAlert: '',
       postForm: {
         examId: '',
         password: ''
@@ -115,11 +119,11 @@ export default {
   },
   beforeDestroy() {
     // 关闭摄像头
-    if (this.detailData.showCamera && this.videoCamera) {
+    if (this.detailData.photoFrequency > 0 && this.videoCamera) {
       closeCamera(this.videoCamera).then(() => {
       }).catch((reason) => {
         this.$notify({
-          title: '关闭摄像头失败，关闭浏览器可以解决该问题！',
+          title: '关闭摄像头失败（PS：关闭浏览器可以解决该问题）！',
           message: reason.message,
           type: 'error',
           duration: 5000
@@ -132,7 +136,7 @@ export default {
       fetchDetail(this.postForm.examId).then(response => {
         this.detailData = response.data
         // 开启摄像头
-        if (this.detailData.showCamera) {
+        if (this.detailData.photoFrequency > 0) {
           this.videoCamera = this.$refs['videoCamera']
           callCamera(this.videoCamera).then(value => {
             this.cameraReady = true
@@ -148,7 +152,7 @@ export default {
         } else {
           this.cameraReady = true
         }
-        this.ssCountAlert = '警告：本次考试切屏超过' + this.detailData.ssCount + '次后，系统将自动交卷！'
+        this.ssCountAlert = '注意：本次考试切屏超过' + this.detailData.ssCount + '次后，系统将自动交卷！'
         if (this.detailData.allowTimes > 0) {
           this.postRequest('gateway/exam/api/user/exam/detail/' + this.postForm.examId, null, false).then(response => {
             if (response.data) {
@@ -196,7 +200,7 @@ export default {
           type: 'success'
         })
         // 关闭摄像头
-        if (this.detailData.showCamera && this.videoCamera) {
+        if (this.detailData.photoFrequency > 0 && this.videoCamera) {
           closeCamera(this.videoCamera).then(() => {
           }).catch((reason) => {
             this.$notify({

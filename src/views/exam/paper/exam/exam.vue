@@ -62,7 +62,14 @@
       </el-col>
       <el-col :span="18" :xs="24">
         <el-card class="qu-content">
-          <el-input v-model="quData.quTitle" autosize type="textarea" resize="none" readonly style="margin-bottom: 20px" />
+          <el-row>
+            <el-col :span="1">
+              <el-tag type="primary">{{ quData.actualScore }}分</el-tag>
+            </el-col>
+            <el-col :span="23">
+              <el-input v-model="quData.quTitle" autosize type="textarea" resize="none" readonly style="margin-bottom: 20px" />
+            </el-col>
+          </el-row>
           <div v-if="quData.quType === 1 || quData.quType===3">
             <el-radio-group v-model="radioValue">
               <el-radio v-for="item in quData.answerList" :key="item.id" :label="item.id" @change="handNext()">
@@ -103,6 +110,7 @@
 import { paperDetail, quDetail, handExam, fillAnswer } from './exam'
 import { Loading } from 'element-ui'
 import { callCamera, closeCamera } from '@/utils/videoCamera'
+import { controlCopy } from '@/utils/documentUtil'
 
 export default {
   name: 'ExamOnlineDoExam',
@@ -152,35 +160,16 @@ export default {
       this.paperId = id
       this.fetchData(id)
     }
-    // 禁止鼠标右键菜单
-    document.oncontextmenu = new Function('event.returnValue=false')
-    // 禁用选择
-    document.onselectstart = new Function('event.returnValue=false')
-    // 监听键盘按下事件
-    document.onkeydown = function() {
-      // 判断 Ctrl+S
-      if (event.ctrlKey === true && event.keyCode === 83) {
-        return false
-      }
-    }
+    controlCopy(true)
   },
   beforeDestroy() {
-    // 恢复鼠标右键菜单
-    document.oncontextmenu = new Function('event.returnValue=true')
-    // 恢复选择
-    document.onselectstart = new Function('event.returnValue=true')
-    // 恢复 Ctrl+S
-    document.onkeydown = function() {
-      if (event.ctrlKey === true && event.keyCode === 83) {
-        return true
-      }
-    }
+    controlCopy(false)
     if (this.paperData.ssCount > 0) {
       window.onblur = () => {
       }
     }
     // 关闭摄像头
-    if (this.paperData.showCamera && this.videoCamera) {
+    if (this.paperData.photoFrequency > 0 && this.videoCamera) {
       closeCamera(this.videoCamera).then(() => {
       }).catch((reason) => {
         this.$notify({
@@ -356,7 +345,7 @@ export default {
       const params = { paperId: this.paperId, quId: item.quId }
       quDetail(params).then(response => {
         this.quData = response.data
-        this.quData.quTitle = '【' + this.quData.actualScore + '分】 ' + (this.quData.sort + 1) + '、' + this.quData.content
+        this.quData.quTitle = (this.quData.sort + 1) + '、' + this.quData.content
         this.radioValue = ''
         this.multiValue = []
         // 填充该题目的答案
@@ -408,7 +397,7 @@ export default {
         // 倒计时
         this.countdown()
         // 开启摄像头
-        if (this.paperData.showCamera) {
+        if (this.paperData.photoFrequency > 0) {
           this.videoCamera = this.$refs['videoCamera']
           callCamera(this.videoCamera).then(value => {
             this.cancasCamera = this.$refs['canvasCamera']
@@ -446,12 +435,22 @@ export default {
             })
           }
           if (this.paperData.issCount > 0) {
-            this.$notify({
-              title: '切屏警告',
-              message: '已切屏' + this.paperData.issCount + '次，只允许切屏' + this.paperData.ssCount + '次！！！',
-              type: 'warning',
-              duration: 60000
-            })
+            if (this.paperData.issCount <= this.paperData.ssCount) {
+              this.$notify({
+                title: '切屏警告',
+                message: '已切屏' + this.paperData.issCount + '次，只允许切屏' + this.paperData.ssCount + '次！！！',
+                type: 'warning',
+                duration: 60000
+              })
+            } else {
+              this.$notify({
+                title: 'Game Over！！！',
+                message: '切屏' + this.paperData.issCount + '次超过总次数：' + this.paperData.ssCount + '次, 系统自动交卷!',
+                type: 'warning',
+                duration: 0
+              })
+              this.$router.push({ name: 'ExamOnlineDoResult', params: { id: this.paperId + ',0' }})
+            }
           }
         }
       })
@@ -521,6 +520,11 @@ export default {
 /deep/
 .el-radio__label {
   line-height: 30px;
+}
+@media print {
+  body {
+    display: none;
+  }
 }
 </style>
 

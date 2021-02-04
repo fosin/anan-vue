@@ -2,7 +2,15 @@
   <div class="app-container">
     <el-card style="margin-top: 20px">
       <div class="qu-content">
-        <p>【{{ getDicDetailValue(quTypes, quData.quType) }}】{{ quData.content }}</p>
+        <el-input
+          ref="quContent"
+          v-model="quData.quContent"
+          autosize
+          type="textarea"
+          readonly
+          resize="none"
+          style="margin-bottom: 20px;border: 0"
+        />
         <div v-if="quData.quType === 1 || quData.quType===3 ">
           <el-radio-group v-model="answerValues[0]" readonly>
             <el-radio v-for="an in quData.answerList" :key="an.id" :label="an.id" readonly>{{ an.abc }}.{{ an.content }}</el-radio>
@@ -21,7 +29,7 @@
     </el-card>
     <el-card v-if="analysisShow" class="qu-analysis" style="margin-top: 20px">
       整题解析：
-      <p>{{ quData.analysis }}</p>
+      <el-input v-model="quData.analysis" type="textarea" autosize readonly />
       <p v-if="!quData.analysis">暂无解析内容！</p>
     </el-card>
     <el-card v-if="analysisShow" class="qu-analysis" style="margin-top: 20px;">
@@ -64,8 +72,8 @@ export default {
     this.examId = this.$route.params.examId
     this.loadDictionaryById(142).then(res => {
       this.quTypes = res.details
+      this.fetchNextQu()
     })
-    this.fetchNextQu()
   },
   methods: {
 
@@ -86,7 +94,7 @@ export default {
       fetchDetail(id).then(response => {
         // 题目信息
         this.quData = response.data
-
+        this.quData.quContent = '【' + this.getDicDetailValue(this.quTypes, this.quData.quType) + '】' + this.quData.content
         // 保存正确答案
         this.quData.answerList.forEach((an, index) => {
           an.abc = this.tags[index]

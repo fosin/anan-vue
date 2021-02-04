@@ -10,6 +10,8 @@
         <el-table-column
           label="考试名称"
           prop="title"
+          width="250px"
+          align="center"
           show-overflow-tooltip
         />
         <el-table-column
@@ -42,7 +44,7 @@
         >
           <template slot-scope="scope">
             <el-button type="primary" size="mini" icon="el-icon-view" @click="handleExamDetail(scope.row.examId)">详情</el-button>
-            <el-button type="warning" size="mini" icon="el-icon-close" @click="handlerExamBook(scope.row.examId)">错题</el-button>
+            <el-button v-if="scope.row.showResult" type="warning" size="mini" icon="el-icon-close" @click="handlerExamBook(scope.row.examId)">错题</el-button>
           </template>
         </el-table-column>
       </template>
@@ -94,7 +96,7 @@ export default {
     ])
   },
   methods: {
-    // 开始考试
+    // 考试明细
     handleExamDetail(examId) {
       this.examId = examId
       this.dialogVisible = true

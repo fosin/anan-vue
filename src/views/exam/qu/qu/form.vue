@@ -49,17 +49,17 @@
           </el-col>
         </el-row>
         <el-form-item label="题目内容" prop="content" label-width="80px">
-          <el-input v-model="postForm.content" type="textarea" />
+          <el-input v-model="postForm.content" type="textarea" autosize />
         </el-form-item>
         <el-form-item label="整题解析" prop="oriPrice" label-width="80px">
-          <el-input v-model="postForm.analysis" type="textarea" :precision="1" :max="999999" />
+          <el-input v-model="postForm.analysis" type="textarea" autosize />
         </el-form-item>
       </el-card>
       <div v-if="postForm.quType!==4" class="filter-container" style="margin-top: 25px">
         <div style="margin-top: 10px;margin-bottom: 10px;">
           <el-row>
             <el-col :span="6">
-              <el-button type="primary" icon="el-icon-plus" plain @click="handleAdd">添加</el-button>
+              <el-button v-if="allowAdd" type="primary" icon="el-icon-plus" plain @click="handleAdd">添加</el-button>
             </el-col>
             <el-col :span="6">
               <el-button type="success" icon="el-icon-circle-plus" plain @click="submitForm">保存</el-button>
@@ -123,6 +123,7 @@ export default {
   data() {
     return {
       quTypeDisabled: false,
+      allowAdd: true,
       levels: [],
       quTypes: [],
       postForm: {
@@ -182,12 +183,8 @@ export default {
   },
   methods: {
     handleTypeChange(v) {
-      if (v === 3) {
-        this.postForm.answerList = []
-        this.postForm.answerList.push({ isRight: true, content: '正确', analysis: '' })
-        this.postForm.answerList.push({ isRight: false, content: '错误', analysis: '' })
-      }
       if (v === 1 || v === 2) {
+        this.allowAdd = true
         if (this.lastSelected === 3 || !this.postForm.answerList) {
           this.postForm.answerList = []
         }
@@ -197,6 +194,16 @@ export default {
           this.postForm.answerList.push({ isRight: false, content: '', analysis: '' })
           this.postForm.answerList.push({ isRight: false, content: '', analysis: '' })
         }
+      }
+      if (v === 3) {
+        this.allowAdd = false
+        this.postForm.answerList = []
+        this.postForm.answerList.push({ isRight: true, content: '正确', analysis: '' })
+        this.postForm.answerList.push({ isRight: false, content: '错误', analysis: '' })
+      }
+      if (v === 4) {
+        this.allowAdd = false
+        this.postForm.answerList = []
       }
       this.lastSelected = v
     },

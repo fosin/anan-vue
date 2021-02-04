@@ -56,9 +56,9 @@
       :data="dataList.records"
       border
       fit
+      style="width: 100%"
       highlight-current-row
       :sort-change="sortChange"
-      :header-cell-style="{'background':'#f2f3f4', 'color':'#555', 'font-weight':'bold', 'line-height':'32px'}"
       @selection-change="handleSelection"
     >
       <el-table-column

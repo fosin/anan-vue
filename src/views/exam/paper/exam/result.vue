@@ -1,24 +1,39 @@
 <template>
-  <div class="app-container">
+  <div class="app-container" :style="dynamicStyle">
     <h2 class="text-center">{{ paperData.title }}</h2>
     <p class="text-center" style="color: #666">{{ paperData.createTime }}</p>
     <el-row :gutter="24" style="margin-top: 50px">
-      <el-col :span="6" class="text-center">
+      <el-col :span="4" class="text-center">
         考生姓名：{{ userInfo.username }}
       </el-col>
-      <el-col :span="6" class="text-center">
+      <el-col :span="4" class="text-center">
         考试得分：{{ paperData.userScore }}
       </el-col>
-      <el-col :span="6" class="text-center">
-        总分：{{ paperData.totalScore }}
+      <el-col :span="4" class="text-center">
+        及格分 / 总分：{{ paperData.qualifyScore }} / {{ paperData.totalScore }}
       </el-col>
-      <el-col :span="6" class="text-center">
+      <el-col :span="4" class="text-center">
+        正确率：{{ paperData.accuracy }}%
+      </el-col>
+      <el-col :span="4" class="text-center">
+        是否通过：{{ paperData.userScore >= paperData.qualifyScore ? '通过' : '未通过' }}
+      </el-col>
+      <el-col :span="4" class="text-center">
         考试用时：{{ paperData.userTime }}分钟
       </el-col>
     </el-row>
-    <el-card style="margin-top: 20px">
+    <el-card v-if="paperData.showPaper" style="margin-top: 20px">
       <div v-for="item in paperData.quList" :key="item.id" class="qu-content">
-        <el-input v-model="item.quTitle" autosize type="textarea" readonly resize="none" style="margin-bottom: 20px;border: 0" />
+        <el-row>
+
+          <el-col v-if="showResult" :span="1">
+            <el-tag v-if="item.isRight" type="success">正确</el-tag>
+            <el-tag v-else type="danger">错误</el-tag>
+          </el-col>
+          <el-col :span="23">
+            <el-input v-model="item.quTitle" autosize type="textarea" readonly resize="none" style="margin-bottom: 20px;border: 0" />
+          </el-col>
+        </el-row>
         <div v-if="item.quType === 1 || item.quType===3">
           <el-radio-group v-model="radioValues[item.id]">
             <el-radio v-for="an in item.answerList" :key="an.id" :label="an.id">
@@ -26,17 +41,11 @@
             </el-radio>
           </el-radio-group>
           <el-row :gutter="24">
-            <el-col v-if="showAnswer" :span="12" style="color: #24da70">
+            <el-col v-if="!item.isRight && showAnswer" :span="12" style="color: #24da70">
               正确答案：{{ radioRights[item.id] }}
             </el-col>
             <el-col v-if="!item.answered" :span="12" style="text-align: right; color: #ff0000;">
               答题结果：未答
-            </el-col>
-            <el-col v-if="showResult && item.answered && !item.isRight" :span="12" style="text-align: right; color: #ff0000;">
-              答题结果：{{ myRadio[item.id] }}
-            </el-col>
-            <el-col v-if="showResult && item.answered && item.isRight" :span="12" style="text-align: right; color: #24da70;">
-              答题结果：{{ myRadio[item.id] }}
             </el-col>
           </el-row>
         </div>
@@ -52,17 +61,11 @@
             <el-checkbox v-for="an in item.answerList" :key="an.id" :label="an.id">{{ an.abc }}.  【{{ an.content }}】</el-checkbox>
           </el-checkbox-group>
           <el-row :gutter="24">
-            <el-col v-if="showAnswer" :span="12" style="color: #24da70">
+            <el-col v-if="!item.isRight && showAnswer" :span="12" style="color: #24da70">
               正确答案：{{ multiRights[item.id].join(',') }}
             </el-col>
             <el-col v-if="!item.answered" :span="12" style="text-align: right; color: #ff0000;">
               答题结果：未答
-            </el-col>
-            <el-col v-if="showResult && item.answered && !item.isRight" :span="12" style="text-align: right; color: #ff0000;">
-              答题结果：{{ myMulti[item.id].join(',') }}
-            </el-col>
-            <el-col v-if="showResult && item.answered && item.isRight" :span="12" style="text-align: right; color: #24da70;">
-              答题结果：{{ myMulti[item.id].join(',') }}
             </el-col>
           </el-row>
         </div>
@@ -75,12 +78,14 @@
 
 import { paperResult } from '@/views/exam/paper/exam/exam'
 import { getUser } from '@/views/platform/user/user'
+import { controlCopy } from '@/utils/documentUtil'
 
 export default {
   name: 'ExamOnlineDoResult',
   data() {
     return {
       // 试卷ID
+      dynamicStyle: {},
       paperId: '',
       paperData: {
         quList: []
@@ -113,16 +118,7 @@ export default {
   },
   beforeDestroy() {
     if (!this.paperData.paperCopy) {
-      // 恢复鼠标右键菜单
-      document.oncontextmenu = new Function('event.returnValue=true')
-      // 恢复选择
-      document.onselectstart = new Function('event.returnValue=true')
-      // 恢复 Ctrl+S
-      document.onkeydown = function() {
-        if (event.ctrlKey === true && event.keyCode === 83) {
-          return true
-        }
-      }
+      controlCopy(false)
     }
   },
   methods: {
@@ -138,18 +134,12 @@ export default {
         })
         // 禁止复制试卷内容
         if (!this.paperData.paperCopy) {
-          // 禁止鼠标右键菜单
-          document.oncontextmenu = new Function('event.returnValue=false')
-          // 禁用选择
-          document.onselectstart = new Function('event.returnValue=false')
-          // 监听键盘按下事件
-          document.onkeydown = function() {
-            // 判断 Ctrl+S
-            if (event.ctrlKey === true && event.keyCode === 83) {
-              return false
-              // event.preventDefault()
+          this.dynamicStyle = {
+            '@media print': {
+              body: { display: 'none' }
             }
           }
+          controlCopy(true)
         }
         // 填充该题目的答案
         this.paperData.quList.forEach((item) => {
@@ -233,14 +223,6 @@ export default {
   .card-line span {
     cursor: pointer;
     margin: 2px;
-  }
-  .paperview-input-text >>> .el-input__inner {
-    -webkit-appearance: none;
-    background-color: #FFF;
-    background-image: none;
-    border-radius: 4px;
-    border: 0;
-  width: 100%;
   }
 </style>
 

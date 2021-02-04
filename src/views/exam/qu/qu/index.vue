@@ -63,6 +63,12 @@
           width="180px"
         />
         <el-table-column
+          label="权重"
+          align="center"
+          prop="weight"
+          width="70px"
+        />
+        <el-table-column
           label="状态"
           align="center"
           prop="status"

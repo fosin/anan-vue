@@ -198,17 +198,22 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="4">
+          <el-col :span="3">
+            <el-form-item label="查看试卷" label-width="80px">
+              <el-checkbox v-model="postForm.showPaper" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="3">
             <el-form-item label="查看对错" label-width="80px">
               <el-checkbox v-model="postForm.showResult" />
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="3">
             <el-form-item label="查看答案" label-width="80px">
               <el-checkbox v-model="postForm.showAnswer" />
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="3">
             <el-form-item label="是否限时" label-width="80px">
               <el-checkbox v-model="postForm.timeLimit" />
             </el-form-item>
@@ -228,29 +233,29 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="4">
-            <el-form-item label="开启摄像头" label-width="90px">
-              <el-checkbox v-model="postForm.showCamera" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="4">
+          <el-col :span="3">
             <el-form-item label="错题训练" label-width="80px">
               <el-checkbox v-model="postForm.wrongTrain" />
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="3">
             <el-form-item label="复制试卷" label-width="80px">
               <el-checkbox v-model="postForm.paperCopy" />
             </el-form-item>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="5">
             <el-form-item label="切屏次数" prop="ssCount" label-width="80px">
-              <el-input-number v-model="postForm.ssCount" :min="0" :max="99" />
+              <el-input-number v-model="postForm.ssCount" :min="0" :max="99" />次
             </el-form-item>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="5">
+            <el-form-item label="拍照频率" label-width="80px">
+              <el-input-number v-model="postForm.photoFrequency" :min="0" />秒
+            </el-form-item>
+          </el-col>
+          <el-col :span="5">
             <el-form-item label="考试次数" prop="allowTimes" label-width="80px">
-              <el-input-number v-model="postForm.allowTimes" :min="0" :max="99" />
+              <el-input-number v-model="postForm.allowTimes" :min="0" :max="99" />次
             </el-form-item>
           </el-col>
         </el-row>
@@ -306,18 +311,20 @@ export default {
         departIds: [],
         // 难度
         level: 0,
-        // 查看考试结果
+        // 查看对错
         showResult: false,
+        // 查看试卷
+        showPaper: true,
         // 查看考试结果
         ssCount: 0,
         // 查看考试结果
         allowTimes: 3,
-        // 查看考试结果
+        // 复制试卷
         paperCopy: true,
         // 查看考试结果
         wrongTrain: true,
         // 查看考试结果
-        showCamera: false,
+        photoFrequency: 0,
         // 查看答案
         showAnswer: false
       },

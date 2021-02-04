@@ -20,7 +20,9 @@
       <el-table-column
         label="考试名称"
         prop="title"
+        align="center"
         show-overflow-tooltip
+        width="250px"
       />
       <el-table-column
         label="考试类型"
@@ -32,7 +34,7 @@
       </el-table-column>
       <el-table-column
         label="考试时间"
-        width="220px"
+        width="170px"
         align="center"
       >
         <template slot-scope="scope">
