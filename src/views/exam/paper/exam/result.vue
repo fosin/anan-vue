@@ -10,13 +10,13 @@
         考试得分：{{ paperData.userScore }}
       </el-col>
       <el-col :span="4" class="text-center">
-        及格分 / 总分：{{ paperData.qualifyScore }} / {{ paperData.totalScore }}
-      </el-col>
-      <el-col :span="4" class="text-center">
         正确率：{{ paperData.accuracy }}%
       </el-col>
       <el-col :span="4" class="text-center">
         是否通过：{{ paperData.userScore >= paperData.qualifyScore ? '通过' : '未通过' }}
+      </el-col>
+      <el-col :span="4" class="text-center">
+        总分 / 及格分：{{ paperData.totalScore }} / {{ paperData.qualifyScore }}
       </el-col>
       <el-col :span="4" class="text-center">
         考试用时：{{ paperData.userTime }}分钟
@@ -25,10 +25,14 @@
     <el-card v-if="paperData.showPaper" style="margin-top: 20px">
       <div v-for="item in paperData.quList" :key="item.id" class="qu-content">
         <el-row>
-
-          <el-col v-if="showResult" :span="1">
-            <el-tag v-if="item.isRight" type="success">正确</el-tag>
-            <el-tag v-else type="danger">错误</el-tag>
+          <el-col v-if="showResult || !item.answered" :span="1">
+            <div v-if="!item.answered">
+              <el-tag type="danger">未答题</el-tag>
+            </div>
+            <div v-else-if="showResult">
+              <el-tag v-if="item.isRight" type="success">正确</el-tag>
+              <el-tag v-else type="danger">错误</el-tag>
+            </div>
           </el-col>
           <el-col :span="23">
             <el-input v-model="item.quTitle" autosize type="textarea" readonly resize="none" style="margin-bottom: 20px;border: 0" />
@@ -43,9 +47,6 @@
           <el-row :gutter="24">
             <el-col v-if="!item.isRight && showAnswer" :span="12" style="color: #24da70">
               正确答案：{{ radioRights[item.id] }}
-            </el-col>
-            <el-col v-if="!item.answered" :span="12" style="text-align: right; color: #ff0000;">
-              答题结果：未答
             </el-col>
           </el-row>
         </div>
@@ -63,9 +64,6 @@
           <el-row :gutter="24">
             <el-col v-if="!item.isRight && showAnswer" :span="12" style="color: #24da70">
               正确答案：{{ multiRights[item.id].join(',') }}
-            </el-col>
-            <el-col v-if="!item.answered" :span="12" style="text-align: right; color: #ff0000;">
-              答题结果：未答
             </el-col>
           </el-row>
         </div>

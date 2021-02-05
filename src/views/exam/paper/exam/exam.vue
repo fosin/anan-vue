@@ -73,7 +73,7 @@
           <div v-if="quData.quType === 1 || quData.quType===3">
             <el-radio-group v-model="radioValue">
               <el-radio v-for="item in quData.answerList" :key="item.id" :label="item.id" @change="handNext()">
-                {{ item.abc }}.  【{{ item.content }}】
+                {{ item.quContent }}
                 <div v-if="item.image" style="clear: both" />
               </el-radio>
             </el-radio-group>
@@ -81,7 +81,7 @@
           <div v-if="quData.quType === 2">
             <el-checkbox-group v-model="multiValue">
               <el-checkbox v-for="item in quData.answerList" :key="item.id" :label="item.id">
-                {{ item.abc }}.  【{{ item.content }}】
+                {{ item.quContent }}
                 <div v-if="item.image" style="clear: both" />
               </el-checkbox>
             </el-checkbox-group>
@@ -356,6 +356,7 @@ export default {
           if (this.quData.quType === 2 && item.checked) {
             this.multiValue.push(item.id)
           }
+          item.quContent = item.abc + '、 【' + item.content + '】'
         })
         // 关闭详情
         loading.close()
@@ -525,6 +526,11 @@ export default {
   body {
     display: none;
   }
+}
+/* 如果你的 el-input type 设置成textarea ，就要用这个了 */
+.inputDeep>>>.el-textarea__inner {
+  border: 0;
+  resize: none;/* 这个是去掉 textarea 下面拉伸的那个标志，如下图 */
 }
 </style>
 

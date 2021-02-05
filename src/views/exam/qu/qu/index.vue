@@ -19,10 +19,10 @@
               />
             </el-select>
             <repo-select v-model="listQuery.params.repoIds" :multi="true" />
-            <el-button-group class="filter-item" style="float:  right">
+            <!--            <el-button-group class="filter-item" style="float:  right">
               <el-button size="mini" icon="el-icon-upload2" @click="showImport">导入</el-button>
               <el-button size="mini" icon="el-icon-download" @click="exportExcel">导出</el-button>
-            </el-button-group>
+            </el-button-group>-->
           </el-col>
         </el-row>
       </template>

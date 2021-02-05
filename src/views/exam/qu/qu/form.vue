@@ -51,7 +51,7 @@
         <el-form-item label="题目内容" prop="content" label-width="80px">
           <el-input v-model="postForm.content" type="textarea" autosize />
         </el-form-item>
-        <el-form-item label="整题解析" prop="oriPrice" label-width="80px">
+        <el-form-item label="整题解析" prop="analysis" label-width="80px">
           <el-input v-model="postForm.analysis" type="textarea" autosize />
         </el-form-item>
       </el-card>
@@ -88,14 +88,14 @@
             label="答案内容"
           >
             <template slot-scope="scope">
-              <el-input v-model="scope.row.content" type="textarea" />
+              <el-input v-model="scope.row.content" type="textarea" autosize />
             </template>
           </el-table-column>
           <el-table-column
             label="答案解析"
           >
             <template slot-scope="scope">
-              <el-input v-model="scope.row.analysis" type="textarea" />
+              <el-input v-model="scope.row.analysis" type="textarea" autosize />
             </template>
           </el-table-column>
           <el-table-column
