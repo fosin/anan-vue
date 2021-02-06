@@ -6,14 +6,14 @@
       <el-col :span="4" class="text-center">
         考生姓名：{{ userInfo.username }}
       </el-col>
-      <el-col :span="4" class="text-center">
+      <el-col v-if="paperData.state === 2" :span="4" class="text-center">
         考试得分：{{ paperData.userScore }}
       </el-col>
-      <el-col :span="4" class="text-center">
+      <el-col v-if="paperData.state === 2" :span="4" class="text-center">
         正确率：{{ paperData.accuracy }}%
       </el-col>
       <el-col :span="4" class="text-center">
-        是否通过：{{ paperData.userScore >= paperData.qualifyScore ? '通过' : '未通过' }}
+        是否通过：{{ paperData.state === 1 ? '待阅卷' : (paperData.userScore >= paperData.qualifyScore ? '通过' : '未通过') }}
       </el-col>
       <el-col :span="4" class="text-center">
         总分 / 及格分：{{ paperData.totalScore }} / {{ paperData.qualifyScore }}
@@ -26,12 +26,21 @@
       <div v-for="item in paperData.quList" :key="item.id" class="qu-content">
         <el-row>
           <el-col v-if="showResult || !item.answered" :span="1">
-            <div v-if="!item.answered">
-              <el-tag type="danger">未答题</el-tag>
-            </div>
-            <div v-else-if="showResult">
-              <el-tag v-if="item.isRight" type="success">正确</el-tag>
-              <el-tag v-else type="danger">错误</el-tag>
+            <div v-if="showResult">
+              <div v-if="item.quType === 4">
+                <div v-if="item.isRight">
+                  <el-tag v-if="item.actualScore > 0" type="success">对-{{ item.actualScore }}分</el-tag>
+                  <el-tag v-else type="danger">错-{{ item.actualScore }}分</el-tag>
+                </div>
+                <el-tag v-else type="warning">待阅卷</el-tag>
+              </div>
+              <div v-else>
+                <el-tag v-if="item.isRight" type="success">对-{{ item.actualScore }}分</el-tag>
+                <div v-else>
+                  <el-tag v-if="item.actualScore > 0" type="warning">得-{{ item.actualScore }}分</el-tag>
+                  <el-tag v-else type="danger">错-{{ item.actualScore }}分</el-tag>
+                </div>
+              </div>
             </div>
           </el-col>
           <el-col :span="23">
@@ -100,11 +109,6 @@ export default {
       myMulti: {}
     }
   },
-  computed: {
-    toTitle: function(item) {
-      return '【' + item.actualScore + '分】 ' + (item.sort + 1) + '、' + item.content
-    }
-  },
   created() {
     const params = this.$route.params.id.split(',')
     const id = params[0]
@@ -147,7 +151,7 @@ export default {
           const multiValue = []
           const multiRight = []
           const myMulti = []
-          item.quTitle = '【' + item.actualScore + '分】 ' + (item.sort + 1) + '、' + item.content
+          item.quTitle = (item.sort + 1) + '、' + item.content
           item.answerList.forEach((an) => {
             // 用户选定的
             if (an.checked) {

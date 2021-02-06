@@ -5,6 +5,9 @@
         <el-form-item label="题库名称" prop="title">
           <el-input v-model="postForm.title" />
         </el-form-item>
+        <el-form-item label="题库编号" prop="title">
+          <el-input v-model="postForm.code" />
+        </el-form-item>
         <el-form-item label="题库备注" prop="remark">
           <el-input v-model="postForm.remark" type="textarea" />
         </el-form-item>

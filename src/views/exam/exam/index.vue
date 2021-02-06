@@ -67,7 +67,7 @@
         align="center"
       />
       <el-table-column
-        label="考试次数"
+        label="限考次数"
         prop="allowTimes"
         align="center"
       >
@@ -135,6 +135,24 @@
       >
         <template slot-scope="scope">
           <el-checkbox v-model=" scope.row.paperCopy" />
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="切屏次数"
+        prop="ssCount"
+        align="center"
+      >
+        <template slot-scope="scope">
+          <el-tag
+            v-if="scope.row.ssCount > 0"
+            type="primary"
+            disable-transitions
+          >{{ scope.row.ssCount }}次</el-tag>
+          <el-tag
+            v-else
+            type="primary"
+            disable-transitions
+          >不限次</el-tag>
         </template>
       </el-table-column>
       <el-table-column

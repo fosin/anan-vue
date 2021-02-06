@@ -16,6 +16,11 @@
         </template>
       </el-table-column>
       <el-table-column
+        label="题库编号"
+        prop="code"
+        align="center"
+      />
+      <el-table-column
         label="单选题数量"
         prop="radioCount"
         align="center"
@@ -28,6 +33,11 @@
       <el-table-column
         label="判断题数量"
         prop="judgeCount"
+        align="center"
+      />
+      <el-table-column
+        label="简答题数量"
+        prop="saqCount"
         align="center"
       />
       <el-table-column

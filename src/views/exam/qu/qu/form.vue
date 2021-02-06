@@ -55,21 +55,21 @@
           <el-input v-model="postForm.analysis" type="textarea" autosize />
         </el-form-item>
       </el-card>
+      <div style="margin-top: 10px;margin-bottom: 10px;">
+        <el-row>
+          <el-col :span="6">
+            <el-button type="success" icon="el-icon-check" plain @click="submitForm">保存</el-button>
+          </el-col>
+          <el-col :span="6">
+            <el-button type="info" icon="el-icon-back" plain @click="onCancel">返回</el-button>
+          </el-col>
+          <el-col v-if="allowAdd" :span="6">
+            <el-button type="primary" icon="el-icon-plus" plain @click="handleAdd">添加</el-button>
+          </el-col>
+          <el-col :span="6" />
+        </el-row>
+      </div>
       <div v-if="postForm.quType!==4" class="filter-container" style="margin-top: 25px">
-        <div style="margin-top: 10px;margin-bottom: 10px;">
-          <el-row>
-            <el-col :span="6">
-              <el-button v-if="allowAdd" type="primary" icon="el-icon-plus" plain @click="handleAdd">添加</el-button>
-            </el-col>
-            <el-col :span="6">
-              <el-button type="success" icon="el-icon-circle-plus" plain @click="submitForm">保存</el-button>
-            </el-col>
-            <el-col :span="6">
-              <el-button type="info" icon="el-icon-close" plain @click="onCancel">返回</el-button>
-            </el-col>
-            <el-col :span="6" />
-          </el-row>
-        </div>
         <el-table
           :data="postForm.answerList"
           :border="true"
@@ -99,6 +99,7 @@
             </template>
           </el-table-column>
           <el-table-column
+            v-if="allowDel"
             label="操作"
             align="center"
             width="100px"
@@ -124,6 +125,7 @@ export default {
     return {
       quTypeDisabled: false,
       allowAdd: true,
+      allowDel: true,
       levels: [],
       quTypes: [],
       postForm: {
@@ -178,13 +180,15 @@ export default {
     if (typeof id !== 'undefined') {
       this.quTypeDisabled = true
       this.fetchData(id)
+    } else {
+      this.handleTypeChange(this.postForm.quType)
     }
-    this.handleTypeChange(this.postForm.quType)
   },
   methods: {
     handleTypeChange(v) {
       if (v === 1 || v === 2) {
         this.allowAdd = true
+        this.allowDel = true
         if (this.lastSelected === 3 || !this.postForm.answerList) {
           this.postForm.answerList = []
         }
@@ -197,12 +201,14 @@ export default {
       }
       if (v === 3) {
         this.allowAdd = false
+        this.allowDel = false
         this.postForm.answerList = []
         this.postForm.answerList.push({ isRight: true, content: '正确', analysis: '' })
         this.postForm.answerList.push({ isRight: false, content: '错误', analysis: '' })
       }
       if (v === 4) {
         this.allowAdd = false
+        this.allowDel = false
         this.postForm.answerList = []
       }
       this.lastSelected = v
@@ -217,6 +223,7 @@ export default {
     fetchData(id) {
       fetchDetail(id).then(response => {
         this.postForm = response.data
+        this.handleTypeChange(this.postForm.quType)
       }).catch((reason) => {
         this.$notify({
           title: '获取数据失败',

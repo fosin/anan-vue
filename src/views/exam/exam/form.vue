@@ -65,8 +65,8 @@
             <template slot-scope="scope">
               <el-input-number
                 v-model="scope.row.radioCount"
-                style="width: 65%"
-                controls-position="right"
+                style="width: 55%"
+                :controls="false"
                 :min="0"
                 :max="scope.row.radioCountMax"
                 :disabled="scope.row.radioCountMax < 1"
@@ -78,7 +78,7 @@
             align="center"
           >
             <template slot-scope="scope">
-              <el-input-number v-model="scope.row.radioScore" style="width: 60%" controls-position="right" :min="0" />
+              <el-input-number v-model="scope.row.radioScore" style="width: 50%" :controls="false" :min="0" />
             </template>
           </el-table-column>
           <el-table-column
@@ -88,8 +88,8 @@
             <template slot-scope="scope">
               <el-input-number
                 v-model="scope.row.multiCount"
-                style="width: 65%"
-                controls-position="right"
+                style="width: 55%"
+                :controls="false"
                 :min="0"
                 :max="scope.row.multiCountMax"
                 :disabled="scope.row.multiCountMax < 1"
@@ -101,7 +101,7 @@
             align="center"
           >
             <template slot-scope="scope">
-              <el-input-number v-model="scope.row.multiScore" style="width: 60%" controls-position="right" :min="0" />
+              <el-input-number v-model="scope.row.multiScore" style="width: 50%" :controls="false" :min="0" />
             </template>
           </el-table-column>
           <el-table-column
@@ -111,8 +111,8 @@
             <template slot-scope="scope">
               <el-input-number
                 v-model="scope.row.judgeCount"
-                style="width: 65%"
-                controls-position="right"
+                style="width: 55%"
+                :controls="false"
                 :min="0"
                 :max="scope.row.judgeCountMax"
                 :disabled="scope.row.judgeCountMax < 1"
@@ -124,13 +124,36 @@
             align="center"
           >
             <template slot-scope="scope">
-              <el-input-number v-model="scope.row.judgeScore" style="width: 60%" controls-position="right" :min="0" />
+              <el-input-number v-model="scope.row.judgeScore" style="width: 50%" :controls="false" :min="0" />
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="简答题数量"
+            align="center"
+          >
+            <template slot-scope="scope">
+              <el-input-number
+                v-model="scope.row.saqCount"
+                style="width: 55%"
+                :controls="false"
+                :min="0"
+                :max="scope.row.saqCountMax"
+                :disabled="scope.row.saqCountMax < 1"
+              />/{{ scope.row.saqCountMax }}题
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="简答题分数"
+            align="center"
+          >
+            <template slot-scope="scope">
+              <el-input-number v-model="scope.row.saqScore" style="width: 50%" :controls="false" :min="0" />
             </template>
           </el-table-column>
           <el-table-column
             label="删除"
             align="center"
-            width="80px"
+            width="50px"
           >
             <template slot-scope="scope">
               <el-button type="danger" icon="el-icon-delete" circle @click="removeItem(scope.$index)" />
@@ -254,7 +277,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="5">
-            <el-form-item label="考试次数" prop="allowTimes" label-width="80px">
+            <el-form-item label="限考次数" prop="allowTimes" label-width="80px">
               <el-input-number v-model="postForm.allowTimes" :min="0" :max="99" />次
             </el-form-item>
           </el-col>
@@ -378,6 +401,7 @@ export default {
           that.postForm.totalScore += item.radioCount * item.radioScore
           that.postForm.totalScore += item.multiCount * item.multiScore
           that.postForm.totalScore += item.judgeCount * item.judgeScore
+          that.postForm.totalScore += item.saqCount * item.saqScore
         })
         // 赋值
         this.postForm.repoList = this.repoList
@@ -515,6 +539,15 @@ export default {
                 })
                 return
               }
+              if ((repo.saqCount > 0 && repo.saqScore === 0) || (repo.saqCount === 0 && repo.saqScore > 0)) {
+                this.$notify({
+                  title: '提示信息',
+                  message: '题库第：[' + (i + 1) + ']项存在无效的简答题配置！',
+                  type: 'warning',
+                  duration: 2000
+                })
+                return
+              }
             }
           }
           this.$confirm('确实要提交保存吗？', '提示', {
@@ -551,6 +584,7 @@ export default {
         addRepo.radioScore = lastRepo.radioScore
         addRepo.multiScore = lastRepo.multiScore
         addRepo.judgeScore = lastRepo.judgeScore
+        addRepo.saqScore = lastRepo.saqScore
       }
       this.repoList.push(addRepo)
     },
@@ -577,6 +611,8 @@ export default {
         repoBeSet.multiCount = Math.min(repoBeSet.multiCount, repoBeSet.multiCountMax)
         repoBeSet.judgeCountMax = repo.judgeCount
         repoBeSet.judgeCount = Math.min(repoBeSet.judgeCount, repoBeSet.judgeCountMax)
+        repoBeSet.saqCountMax = repo.saqCount
+        repoBeSet.saqCount = Math.min(repoBeSet.saqCount, repoBeSet.saqCountMax)
       }
     },
     fetchData(id) {

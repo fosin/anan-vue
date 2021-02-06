@@ -58,13 +58,25 @@
               </el-tag>
             </el-row>
           </div>
+          <div v-if="paperData.saqList!==undefined && paperData.saqList.length > 0">
+            <p class="card-title">简答题</p>
+            <el-row :gutter="24" class="card-line">
+              <el-tag
+                v-for="item in paperData.saqList"
+                :key="item.id"
+                :type="cardItemClass(item.answered, item.quId)"
+                @click="handSave(item)"
+              >{{ item.sort + 1 }}
+              </el-tag>
+            </el-row>
+          </div>
         </el-card>
       </el-col>
       <el-col :span="18" :xs="24">
         <el-card class="qu-content">
           <el-row>
             <el-col :span="1">
-              <el-tag type="primary">{{ quData.actualScore }}分</el-tag>
+              <el-tag type="primary">{{ quData.score }}分</el-tag>
             </el-col>
             <el-col :span="23">
               <el-input v-model="quData.quTitle" autosize type="textarea" resize="none" readonly style="margin-bottom: 20px" />
@@ -85,6 +97,10 @@
                 <div v-if="item.image" style="clear: both" />
               </el-checkbox>
             </el-checkbox-group>
+          </div>
+          <div v-if="quData.quType === 4">
+            <el-tag type="primary">答题：</el-tag>
+            <el-input v-model="quData.answer" :autosize="{ minRows: 12, maxRows: 99}" type="textarea" />
           </div>
         </el-card>
         <div style="margin-top: 20px">
@@ -137,6 +153,7 @@ export default {
         leftSeconds: 99999,
         radioList: [],
         multiList: [],
+        saqList: [],
         judgeList: []
       },
       // 单选选定值
@@ -308,7 +325,7 @@ export default {
       if (this.radioValue !== '') {
         answers.push(this.radioValue)
       }
-      const params = { paperId: this.paperId, quId: this.cardItem.quId, answers: answers, answer: '' }
+      const params = { paperId: this.paperId, quId: this.quData.quId, answers: answers, answer: this.quData.answer, quType: this.quData.quType }
       fillAnswer(params).then(() => {
         // 必须选择一个值
         if (answers.length > 0) {
@@ -375,14 +392,7 @@ export default {
       paperDetail(params).then(response => {
         // 试卷内容
         this.paperData = response.data
-        // 获得第一题内容
-        if (this.paperData.radioList) {
-          this.cardItem = this.paperData.radioList[0]
-        } else if (this.paperData.multiList) {
-          this.cardItem = this.paperData.multiList[0]
-        } else if (this.paperData.judgeList) {
-          this.cardItem = this.paperData.judgeList[0]
-        }
+
         const that = this
         this.paperData.radioList.forEach(function(item) {
           that.allItem.push(item)
@@ -393,6 +403,11 @@ export default {
         this.paperData.judgeList.forEach(function(item) {
           that.allItem.push(item)
         })
+        this.paperData.saqList.forEach(function(item) {
+          that.allItem.push(item)
+        })
+        // 获得第一题内容
+        this.cardItem = this.allItem[0]
         // 当前选定
         this.fetchQuData(this.cardItem)
         // 倒计时
