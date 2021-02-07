@@ -78,7 +78,13 @@
             align="center"
           >
             <template slot-scope="scope">
-              <el-input-number v-model="scope.row.radioScore" style="width: 50%" :controls="false" :min="0" />
+              <el-input-number
+                v-model="scope.row.radioScore"
+                style="width: 50%"
+                :controls="false"
+                :min="0"
+                :disabled="scope.row.radioCountMax < 1"
+              />
             </template>
           </el-table-column>
           <el-table-column
@@ -101,7 +107,13 @@
             align="center"
           >
             <template slot-scope="scope">
-              <el-input-number v-model="scope.row.multiScore" style="width: 50%" :controls="false" :min="0" />
+              <el-input-number
+                v-model="scope.row.multiScore"
+                style="width: 50%"
+                :controls="false"
+                :min="0"
+                :disabled="scope.row.multiCountMax < 1"
+              />
             </template>
           </el-table-column>
           <el-table-column
@@ -124,7 +136,13 @@
             align="center"
           >
             <template slot-scope="scope">
-              <el-input-number v-model="scope.row.judgeScore" style="width: 50%" :controls="false" :min="0" />
+              <el-input-number
+                v-model="scope.row.judgeScore"
+                style="width: 50%"
+                :controls="false"
+                :min="0"
+                :disabled="scope.row.judgeCountMax < 1"
+              />
             </template>
           </el-table-column>
           <el-table-column
@@ -147,7 +165,13 @@
             align="center"
           >
             <template slot-scope="scope">
-              <el-input-number v-model="scope.row.saqScore" style="width: 50%" :controls="false" :min="0" />
+              <el-input-number
+                v-model="scope.row.saqScore"
+                style="width: 50%"
+                :controls="false"
+                :min="0"
+                :disabled="scope.row.saqCountMax < 1"
+              />
             </template>
           </el-table-column>
           <el-table-column
@@ -607,12 +631,18 @@ export default {
       if (repo) {
         repoBeSet.radioCountMax = repo.radioCount
         repoBeSet.radioCount = Math.min(repoBeSet.radioCount, repoBeSet.radioCountMax)
+        repoBeSet.radioScore = repoBeSet.radioCountMax === 0 ? 0 : repoBeSet.radioScore
         repoBeSet.multiCountMax = repo.multiCount
         repoBeSet.multiCount = Math.min(repoBeSet.multiCount, repoBeSet.multiCountMax)
+        repoBeSet.multiScore = repoBeSet.multiCountMax === 0 ? 0 : repoBeSet.multiScore
+
         repoBeSet.judgeCountMax = repo.judgeCount
         repoBeSet.judgeCount = Math.min(repoBeSet.judgeCount, repoBeSet.judgeCountMax)
+        repoBeSet.judgeScore = repoBeSet.judgeCountMax === 0 ? 0 : repoBeSet.judgeScore
+
         repoBeSet.saqCountMax = repo.saqCount
         repoBeSet.saqCount = Math.min(repoBeSet.saqCount, repoBeSet.saqCountMax)
+        repoBeSet.saqScore = repoBeSet.saqCountMax === 0 ? 0 : repoBeSet.saqScore
       }
     },
     fetchData(id) {

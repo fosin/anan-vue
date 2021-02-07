@@ -276,7 +276,7 @@ export default {
       const params = { id: this.paperId }
       handExam(params).then(() => {
         this.$message({
-          message: '试卷提交成功，即将进入试卷详情！',
+          message: '试卷提交成功，即将进入考试结果！',
           type: 'success'
         })
         this.$router.push({ name: 'ExamOnlineDoResult', params: { id: this.paperId + ',0' }})
@@ -324,6 +324,20 @@ export default {
       const answers = this.multiValue
       if (this.radioValue !== '') {
         answers.push(this.radioValue)
+      }
+      if (this.quData.quType !== item.quType) {
+        let notifyInfo = '单选题'
+        if (item.quType === 2) {
+          notifyInfo = '多选题'
+        }
+        if (item.quType === 3) {
+          notifyInfo = '判断题'
+        }
+        if (item.quType === 4) {
+          notifyInfo = '简答题'
+        }
+        notifyInfo = '注意：当前进入' + notifyInfo + '！'
+        this.$message.warning(notifyInfo)
       }
       const params = { paperId: this.paperId, quId: this.quData.quId, answers: answers, answer: this.quData.answer, quType: this.quData.quType }
       fillAnswer(params).then(() => {

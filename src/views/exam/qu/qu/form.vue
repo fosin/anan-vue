@@ -58,10 +58,10 @@
       <div style="margin-top: 10px;margin-bottom: 10px;">
         <el-row>
           <el-col :span="6">
-            <el-button type="success" icon="el-icon-check" plain @click="submitForm">保存</el-button>
+            <el-button type="info" icon="el-icon-back" plain @click="onCancel">返回</el-button>
           </el-col>
           <el-col :span="6">
-            <el-button type="info" icon="el-icon-back" plain @click="onCancel">返回</el-button>
+            <el-button type="success" icon="el-icon-check" plain @click="submitForm">保存</el-button>
           </el-col>
           <el-col v-if="allowAdd" :span="6">
             <el-button type="primary" icon="el-icon-plus" plain @click="handleAdd">添加</el-button>

@@ -135,23 +135,6 @@ export default {
     fetchData() {
       fetchDetail(this.postForm.examId).then(response => {
         this.detailData = response.data
-        // 开启摄像头
-        if (this.detailData.photoFrequency > 0) {
-          this.videoCamera = this.$refs['videoCamera']
-          callCamera(this.videoCamera).then(value => {
-            this.cameraReady = true
-          }).catch((reason) => {
-            this.cameraReady = false
-            this.$notify({
-              title: '该考试需要开启摄像头，请检查摄像头是否可用！',
-              message: reason.message,
-              type: 'error',
-              duration: 5000
-            })
-          })
-        } else {
-          this.cameraReady = true
-        }
         this.ssCountAlert = '注意：本次考试切屏超过' + this.detailData.ssCount + '次后，系统将自动交卷！'
         if (this.detailData.allowTimes > 0) {
           this.postRequest('gateway/exam/api/user/exam/detail/' + this.postForm.examId, null, false).then(response => {
@@ -176,6 +159,23 @@ export default {
           })
         } else {
           this.tryCountReady = true
+        }
+        // 开启摄像头
+        if (this.tryCountReady && this.detailData.photoFrequency > 0) {
+          this.videoCamera = this.$refs['videoCamera']
+          callCamera(this.videoCamera).then(value => {
+            this.cameraReady = true
+          }).catch((reason) => {
+            this.cameraReady = false
+            this.$notify({
+              title: '该考试需要开启摄像头，请检查摄像头是否可用！',
+              message: reason.message,
+              type: 'error',
+              duration: 5000
+            })
+          })
+        } else {
+          this.cameraReady = true
         }
       }).catch((reason) => {
         this.$notify({
