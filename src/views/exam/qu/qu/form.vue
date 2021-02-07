@@ -185,10 +185,19 @@ export default {
     }
   },
   methods: {
-    handleTypeChange(v) {
+    initType(v) {
       if (v === 1 || v === 2) {
         this.allowAdd = true
         this.allowDel = true
+      }
+      if (v === 3 || v === 4) {
+        this.allowAdd = false
+        this.allowDel = false
+      }
+    },
+    handleTypeChange(v) {
+      this.initType(v)
+      if (v === 1 || v === 2) {
         if (this.lastSelected === 3 || !this.postForm.answerList) {
           this.postForm.answerList = []
         }
@@ -200,15 +209,13 @@ export default {
         }
       }
       if (v === 3) {
-        this.allowAdd = false
-        this.allowDel = false
-        this.postForm.answerList = []
-        this.postForm.answerList.push({ isRight: true, content: '正确', analysis: '' })
-        this.postForm.answerList.push({ isRight: false, content: '错误', analysis: '' })
+        if (this.postForm.answerList.length > 2) {
+          this.postForm.answerList = []
+          this.postForm.answerList.push({ isRight: true, content: '正确', analysis: '' })
+          this.postForm.answerList.push({ isRight: false, content: '错误', analysis: '' })
+        }
       }
       if (v === 4) {
-        this.allowAdd = false
-        this.allowDel = false
         this.postForm.answerList = []
       }
       this.lastSelected = v
@@ -223,7 +230,7 @@ export default {
     fetchData(id) {
       fetchDetail(id).then(response => {
         this.postForm = response.data
-        this.handleTypeChange(this.postForm.quType)
+        this.initType(this.postForm.quType)
       }).catch((reason) => {
         this.$notify({
           title: '获取数据失败',
