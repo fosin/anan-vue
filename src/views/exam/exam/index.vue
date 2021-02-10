@@ -67,6 +67,18 @@
         align="center"
       />
       <el-table-column
+        label="考试限时"
+        prop="totalTime"
+        align="center"
+      >
+        <template slot-scope="scope">
+          <el-tag
+            type="warning"
+            disable-transitions
+          >{{ scope.row.totalTime }}分钟</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
         label="限考次数"
         prop="allowTimes"
         align="center"

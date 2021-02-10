@@ -29,16 +29,16 @@
             <div v-if="showResult">
               <div v-if="item.quType === 4">
                 <div v-if="item.isRight">
-                  <el-tag v-if="item.actualScore > 0" type="success">对-{{ item.actualScore }}分</el-tag>
-                  <el-tag v-else type="danger">错-{{ item.actualScore }}分</el-tag>
+                  <el-tag v-if="item.actualScore > 0" type="success">对,{{ item.actualScore }}分</el-tag>
+                  <el-tag v-else type="danger">错,{{ item.actualScore }}分</el-tag>
                 </div>
                 <el-tag v-else type="warning">待阅卷</el-tag>
               </div>
               <div v-else>
-                <el-tag v-if="item.isRight" type="success">对-{{ item.actualScore }}分</el-tag>
+                <el-tag v-if="item.isRight" type="success">对,{{ item.actualScore }}分</el-tag>
                 <div v-else>
-                  <el-tag v-if="item.actualScore > 0" type="warning">得-{{ item.actualScore }}分</el-tag>
-                  <el-tag v-else type="danger">错-{{ item.actualScore }}分</el-tag>
+                  <el-tag v-if="item.actualScore > 0" type="warning">得,{{ item.actualScore }}分</el-tag>
+                  <el-tag v-else type="danger">错,{{ item.actualScore }}分</el-tag>
                 </div>
               </div>
             </div>
@@ -62,7 +62,8 @@
         <div v-if="item.quType === 4">
           <el-row :gutter="24">
             <el-col :span="12">
-              我的回答：{{ item.answer }}
+              我的回答：
+              <el-input v-model="item.answer" autosize type="textarea" readonly resize="none" style="margin-bottom: 10px;border: 0" />
             </el-col>
           </el-row>
         </div>

@@ -209,7 +209,7 @@ export default {
         }
       }
       if (v === 3) {
-        if (this.postForm.answerList.length > 2) {
+        if (!this.postForm.answerList || this.postForm.answerList.length !== 2) {
           this.postForm.answerList = []
           this.postForm.answerList.push({ isRight: true, content: '正确', analysis: '' })
           this.postForm.answerList.push({ isRight: false, content: '错误', analysis: '' })
