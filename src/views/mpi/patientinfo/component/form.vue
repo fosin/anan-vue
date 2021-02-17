@@ -277,7 +277,7 @@ export default {
           return time.getTime() < dat.getTime()
         }
       },
-      listLoading: true,
+      listLoading: false,
       activeName: 'tabPanePatientinfo',
       form: {},
       rules: {

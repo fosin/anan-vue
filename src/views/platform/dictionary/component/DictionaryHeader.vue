@@ -58,7 +58,6 @@
       ref="dictionaryTable"
       v-loading="listLoading"
       :data="dictionaryList"
-      :default-sort="{prop: 'id'}"
       element-loading-text="努力加载中"
       border
       fit
@@ -154,8 +153,8 @@ export default {
         pageNumber: 1,
         pageSize: 10,
         searchText: '',
-        sortName: '',
-        sortOrder: ''
+        sortName: 'id',
+        sortOrder: 'asc'
       },
       pageSizes: [5, 10, 25, 50, 100],
       form: {},
@@ -197,6 +196,7 @@ export default {
         this.pageSizes[i] = parseInt(temp[i])
       }
     })
+    this.getList()
   },
   methods: {
     getTypeName(type) {

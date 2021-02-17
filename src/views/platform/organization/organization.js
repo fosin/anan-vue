@@ -1,11 +1,12 @@
 import request from '@/utils/request'
 
-export function treeOrganiz(topId) {
+export function treeAllChildOrganiz(id) {
   return request({
-    url: 'gateway/platform/v1/organiz/tree/' + topId,
+    url: 'gateway/platform/v1/organiz/treeAllChild/' + id,
     method: 'post'
   })
 }
+
 export function listOrganizChild(pid) {
   return request({
     url: 'gateway/platform/v1/organiz/listChild/' + pid,

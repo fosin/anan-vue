@@ -25,7 +25,6 @@
       v-loading="listLoading"
       :data="list"
       :row-class-name="tableRowClassName"
-      :default-sort="{prop: 'usercode', order: 'descending'}"
       element-loading-text="努力加载中..."
       border
       fit
@@ -279,7 +278,7 @@ import { listUserPage, getUser, postUser, putUser, deleteUser, resetPassword,
   listUserRoles, putUserRoles } from './user'
 import { formatDate } from '@/utils/date'
 import { listOrganizRole } from '../role/role'
-import { listOrganizAllChild, treeOrganiz, getOrganiz, getOrganizAuth } from '../organization/organization'
+import { listOrganizAllChild, treeAllChildOrganiz, getOrganiz, getOrganizAuth } from '../organization/organization'
 import { listVersionChildPermissions } from '../version/version'
 import { mapGetters } from 'vuex'
 import ElOption from 'element-ui/packages/select/src/option'
@@ -317,14 +316,14 @@ export default {
       checkedKeys: [],
       list: [],
       total: 0,
-      listLoading: true,
+      listLoading: false,
       hackReset: true,
       pageModule: {
         pageNumber: 1,
         pageSize: 10,
         searchText: '',
-        sortName: '',
-        sortOrder: ''
+        sortName: 'usercode',
+        sortOrder: 'desc'
       },
       versionId: -1,
       pageSizes: [5, 10, 25, 50, 100],
@@ -500,6 +499,7 @@ export default {
     })
     this.$refs.iconsSelect.init(this.setAvatar)
     this.resetTemp()
+    this.getList()
   },
   methods: {
     handleSelectAvatar() {
@@ -585,8 +585,8 @@ export default {
       if (!this.organizTree || this.organizTree.length < 1) {
         getOrganiz(this.ananUserInfo.organizId).then(response => {
           const topId = response.data.topId
-          treeOrganiz(topId).then(response => {
-            this.organizTree = response.data || []
+          treeAllChildOrganiz(topId).then(response => {
+            this.organizTree[0] = response.data || []
           }).catch(reason => {
             this.$notify({
               title: '查询机构信息失败',

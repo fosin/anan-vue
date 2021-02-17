@@ -8,7 +8,6 @@
     <el-table
       v-loading="listLoading"
       :data="list"
-      :default-sort="{prop: 'createTime', order: 'descending'}"
       element-loading-text="努力加载中"
       border
       fit
@@ -49,14 +48,14 @@ export default {
     return {
       list: null,
       total: null,
-      listLoading: true,
+      listLoading: false,
       typeOptions: [{ name: 1, value: '新增数据' }, { name: 2, value: '修改数据' }, { name: 3, value: '删除数据' }],
       pageModule: {
         pageNumber: 1,
         pageSize: 3,
         searchText: '',
-        sortName: '',
-        sortOrder: ''
+        sortName: 'createTime',
+        sortOrder: 'desc'
       },
       pageSizes: [3, 10, 25, 50, 100],
       form: {},
@@ -71,6 +70,7 @@ export default {
     }
   },
   mounted() {
+    this.getList()
   },
   methods: {
     getList() {

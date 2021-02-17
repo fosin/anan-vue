@@ -11,7 +11,7 @@
       ref="tree"
       placeholder="选择部门"
       class="select-tree"
-      check-strictly="false"
+      :check-strictly="false"
       highlight-current
       default-expand-all
       :style="`min-width: ${treeWidth}`"
@@ -45,8 +45,8 @@ export default {
   props: {
     // 接收绑定参数
     value: {
-      type: String,
-      default: ''
+      type: Number,
+      default: 0
     },
     // 输入框宽度
     width: {
@@ -85,7 +85,7 @@ export default {
       // 输入框显示值
       labelModel: '',
       // 实际请求传值
-      valueModel: '0'
+      valueModel: 0
     }
   },
   computed: {
@@ -102,7 +102,7 @@ export default {
   watch: {
     labelModel(val) {
       if (!val) {
-        this.valueModel = ''
+        this.valueModel = 0
       }
       this.$refs.tree.filter(val)
     },

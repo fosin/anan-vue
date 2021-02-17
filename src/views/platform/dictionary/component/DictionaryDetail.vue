@@ -58,7 +58,6 @@
       ref="dictionaryDetailTable"
       v-loading="listLoading"
       :data="dictionaryDetailList"
-      :default-sort="{prop: 'name'}"
       element-loading-text="努力加载中"
       border
       fit
@@ -171,8 +170,8 @@ export default {
         pageNumber: 1,
         pageSize: 10,
         searchText: '',
-        sortName: '',
-        sortOrder: ''
+        sortName: 'name',
+        sortOrder: 'asc'
       },
       pageSizes: [5, 10, 25, 50, 100],
       form: {},
@@ -218,6 +217,7 @@ export default {
     this.loadOrganizParameterValue('DefaultDictionaryDetailNameAndSort', '1', '新增字典明细时是否按当前数据总量自动生成字典key和字典Sort，0=不自动 1=自动，默认为自动').then(res => {
       this.DefaultDictionaryDetailNameAndSort = res
     })
+    this.getList()
   },
   methods: {
     getStatusValue(status) {

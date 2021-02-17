@@ -84,7 +84,7 @@ export default {
         total: 0,
         records: []
       },
-      listLoading: true,
+      listLoading: false,
       listQuery: {
         current: 1,
         size: 10,

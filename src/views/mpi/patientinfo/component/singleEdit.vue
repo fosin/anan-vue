@@ -307,7 +307,7 @@ export default {
   },
   data() {
     return {
-      listLoading: true,
+      listLoading: false,
       activeName: 'singleEdit',
       form: {},
       rules: {

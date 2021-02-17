@@ -19,7 +19,6 @@
     <el-table
       v-loading="listLoading"
       :data="list"
-      :default-sort="{prop: 'updateTime', order: 'descending'}"
       :disabled="disabled"
       element-loading-text="努力加载中"
       border
@@ -100,13 +99,13 @@ export default {
     return {
       list: null,
       total: null,
-      listLoading: true,
+      listLoading: false,
       pageModule: {
         pageNumber: 1,
         pageSize: 5,
         searchText: '',
-        sortName: '',
-        sortOrder: ''
+        sortName: 'updateTime',
+        sortOrder: 'desc'
       },
       pageSizes: [5, 10, 25, 50, 100],
       form: {},
@@ -149,6 +148,7 @@ export default {
         this.pageSizes[i] = parseInt(temp[i])
       }
     })
+    this.getList()
   },
   methods: {
     getList() {

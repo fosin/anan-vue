@@ -18,7 +18,6 @@
     <el-table
       v-loading="listLoading"
       :data="list"
-      :default-sort="{prop: 'mpiId', order: 'ascending'}"
       element-loading-text="努力加载中"
       border
       fit
@@ -104,13 +103,13 @@ export default {
     return {
       list: null,
       total: null,
-      listLoading: true,
+      listLoading: false,
       pageModule: {
         pageNumber: 1,
         pageSize: 10,
         searchText: '',
-        sortName: '',
-        sortOrder: ''
+        sortName: 'mpiId',
+        sortOrder: 'asc'
       },
       pageSizes: [5, 10, 25, 50, 100],
       form: {},
@@ -135,6 +134,7 @@ export default {
         this.pageSizes[i] = parseInt(temp[i])
       }
     })
+    this.getList()
   },
   methods: {
     getList() {

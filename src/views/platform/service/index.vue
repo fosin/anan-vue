@@ -55,7 +55,6 @@
       fit
       highlight-current-row
       style="width: 100%"
-      :default-sort="{prop: 'id', order: 'ascending'}"
       @sort-change="sortChange"
       @row-click="rowClick"
     >
@@ -148,13 +147,13 @@ export default {
     return {
       list: null,
       total: null,
-      listLoading: true,
+      listLoading: false,
       pageModule: {
         pageNumber: 1,
         pageSize: 10,
         searchText: '',
-        sortName: '',
-        sortOrder: ''
+        sortName: 'id',
+        sortOrder: 'asc'
       },
       pageSizes: [5, 10, 25, 50, 100],
       form: {},
@@ -189,6 +188,7 @@ export default {
         duration: 5000
       })
     })
+    this.getList()
   },
   methods: {
     getList() {

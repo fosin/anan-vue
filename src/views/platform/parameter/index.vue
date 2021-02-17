@@ -79,7 +79,6 @@
       ref="parameterTable"
       v-loading="listLoading"
       :data="parameterList"
-      :default-sort="{prop: 'name'}"
       :row-class-name="tableRowClassName"
       element-loading-text="努力加载中"
       border
@@ -202,8 +201,8 @@ export default {
         pageNumber: 1,
         pageSize: 10,
         searchText: '',
-        sortName: '',
-        sortOrder: ''
+        sortName: 'name',
+        sortOrder: 'asc'
       },
       pageSizes: [5, 10, 25, 50, 100],
       form: {},
@@ -261,6 +260,7 @@ export default {
     })
     this.listOrganizUser(this.ananUserInfo.organizId)
     this.listOrganizAllChild(this.ananUserInfo.organizId)
+    this.getList()
   },
   methods: {
     typeChange(type) {

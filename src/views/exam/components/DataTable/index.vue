@@ -137,7 +137,7 @@ export default {
         total: 0
       },
       // 数据加载标识
-      listLoading: true,
+      listLoading: false,
       // 选定和批量操作
       selectedIds: [],
       selectedObjs: [],

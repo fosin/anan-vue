@@ -2,8 +2,17 @@ import { postRequest } from '@/utils/request'
 
 /**
  * 试卷列表
- * @param data
+ * @param userId
+ * @param examId
  */
 export function listPaper(userId, examId) {
-  return postRequest('gateway/exam/api/paper/paper/paging', { current: 1, size: 5, params: { userId: userId, examId: examId }})
+  return postRequest('gateway/exam/api/paper/paper/paging', { current: 1, size: 99, params: { userId: userId, examId: examId }})
+}
+
+/**
+ * 提交阅卷结果
+ * @param paperData 阅卷后的试卷信息
+ */
+export function reviewPaper(paperData) {
+  return postRequest('gateway/exam/api/paper/paper/review-paper', paperData)
 }

@@ -53,7 +53,6 @@
     <el-table
       v-loading="listLoading"
       :data="roleList"
-      :default-sort="{prop: 'value', order: 'descending'}"
       element-loading-text="努力加载中"
       border
       fit
@@ -62,35 +61,36 @@
       @sort-change="sortChange"
       @row-click="rowClick"
     >
-      <el-table-column :label="$t('anan_role.value.label')" prop="value" sortable />
+      <el-table-column :label="$t('anan_role.value.label')" align="center" prop="value" sortable />
 
-      <el-table-column :label="$t('anan_role.name.label')" sortable prop="name" />
+      <el-table-column :label="$t('anan_role.name.label')" align="center" sortable prop="name" />
       <el-table-column
         :label="$t('anan_role.organizId.label')"
         :formatter="getOrganizName"
         prop="organizId"
         show-overflow-tooltip
         sortable
+        align="center"
       />
-      <!--      <el-table-column  :label="$t('anan_role.tips.label')" sortable prop="tips">
+      <!--      <el-table-column  :label="$t('anan_role.tips.label')" align="center" sortable prop="tips">
             </el-table-column>-->
 
-      <el-table-column :label="$t('anan_role.createTime.label')" sortable prop="createTime">
+      <el-table-column :label="$t('anan_role.createTime.label')" align="center" sortable prop="createTime">
         <template slot-scope="scope">
           <span>{{ scope.row.createTime | dateFormatFilter('yyyy-MM-dd HH:mm:ss') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('anan_role.updateTime.label')" sortable prop="updateTime">
+      <el-table-column :label="$t('anan_role.updateTime.label')" align="center" sortable prop="updateTime">
         <template slot-scope="scope">
           <span>{{ scope.row.updateTime | dateFormatFilter('yyyy-MM-dd HH:mm:ss') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('anan_role.status.label')" class-name="status-col" width="80" sortable prop="status">
+      <el-table-column :label="$t('anan_role.status.label')" align="center" class-name="status-col" width="80" sortable prop="status">
         <template slot-scope="scope">
           <el-tag>{{ scope.row.status | statusFilter }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.permission')" width="200">
+      <el-table-column :label="$t('table.permission')" align="center" width="200">
         <template slot-scope="scope">
           <el-button round size="mini" type="primary" @click="handleRoleUser(scope.row)">
             {{ $t('table.user') }}
@@ -108,6 +108,7 @@
         :page-sizes="pageSizes"
         :page-size="pageModule.pageSize"
         :total="total"
+        :hide-on-single-page="true"
         layout="total, sizes, prev, pager, next, jumper"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -253,13 +254,13 @@ export default {
       },
       roleList: null,
       total: null,
-      listLoading: true,
+      listLoading: false,
       pageModule: {
         pageNumber: 1,
         pageSize: 10,
         searchText: '',
-        sortName: '',
-        sortOrder: ''
+        sortName: 'value',
+        sortOrder: 'asc'
       },
       pageSizes: [5, 10, 25, 50, 100],
       form: {},
@@ -320,9 +321,6 @@ export default {
     ...mapGetters(['ananPermissions', 'ananUserInfo'])
   },
   mounted() {
-    if (!this.organizList || this.organizList.length < 1) {
-      this.loadOrganizAllChild(this.ananUserInfo.organizId)
-    }
     this.loadOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数').then(res => {
       this.pageModule.pageSize = parseInt(res)
     })
@@ -333,6 +331,10 @@ export default {
         this.pageSizes[i] = parseInt(temp[i])
       }
     })
+    if (!this.organizList || this.organizList.length < 1) {
+      this.loadOrganizAllChild(this.ananUserInfo.organizId)
+    }
+    this.getList()
   },
   methods: {
     roleUserfilterMethod(query, item) {
@@ -664,6 +666,7 @@ export default {
       }
     },
     sortChange(column) {
+      debugger
       this.pageModule.sortOrder = (column.order && column.order === 'descending') ? 'DESC' : 'ASC'
       this.pageModule.sortName = column.prop
       if (this.pageModule.sortName) {

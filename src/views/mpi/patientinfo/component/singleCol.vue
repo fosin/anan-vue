@@ -262,7 +262,7 @@ export default {
   },
   data() {
     return {
-      listLoading: true,
+      listLoading: false,
       activeName: 'tabPanePatientinfo',
       form: {},
       colData: {},

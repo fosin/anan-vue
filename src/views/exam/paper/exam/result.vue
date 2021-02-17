@@ -25,14 +25,14 @@
     <el-card v-if="paperData.showPaper" style="margin-top: 20px">
       <div v-for="item in paperData.quList" :key="item.id" class="qu-content">
         <el-row>
-          <el-col v-if="showResult || !item.answered" :span="1">
+          <el-col v-if="showResult" :span="1">
             <div v-if="showResult">
               <div v-if="item.quType === 4">
-                <div v-if="item.isRight">
+                <el-tag v-if="paperData.state===1" type="warning">待阅卷</el-tag>
+                <div v-else>
                   <el-tag v-if="item.actualScore > 0" type="success">对,{{ item.actualScore }}分</el-tag>
                   <el-tag v-else type="danger">错,{{ item.actualScore }}分</el-tag>
                 </div>
-                <el-tag v-else type="warning">待阅卷</el-tag>
               </div>
               <div v-else>
                 <el-tag v-if="item.isRight" type="success">对,{{ item.actualScore }}分</el-tag>
@@ -59,14 +59,6 @@
             </el-col>
           </el-row>
         </div>
-        <div v-if="item.quType === 4">
-          <el-row :gutter="24">
-            <el-col :span="12">
-              我的回答：
-              <el-input v-model="item.answer" autosize type="textarea" readonly resize="none" style="margin-bottom: 10px;border: 0" />
-            </el-col>
-          </el-row>
-        </div>
         <div v-if="item.quType === 2">
           <el-checkbox-group v-model="multiValues[item.id]">
             <el-checkbox v-for="an in item.answerList" :key="an.id" :label="an.id">{{ an.abc }}.  【{{ an.content }}】</el-checkbox>
@@ -74,6 +66,14 @@
           <el-row :gutter="24">
             <el-col v-if="!item.isRight && showAnswer" :span="12" style="color: #24da70">
               正确答案：{{ multiRights[item.id].join(',') }}
+            </el-col>
+          </el-row>
+        </div>
+        <div v-if="item.quType === 4">
+          <el-row>
+            <el-col :span="24">
+              我的回答：
+              <el-input v-model="item.answer" autosize type="textarea" readonly resize="none" style="margin-bottom: 10px;border: 0" />
             </el-col>
           </el-row>
         </div>

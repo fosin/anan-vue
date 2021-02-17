@@ -5,12 +5,13 @@ on:
       - '*'
 jobs:
   build:
-    env:
-      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     runs-on: ubuntu-latest
     steps:
       - name: Set env
-        run: echo ::set-env name=MODULE_VERSION::$(echo ${GITHUB_REF:10})
+        run: |
+          echo MODULE_VERSION=$(echo ${GITHUB_REF:10}) >> $GITHUB_ENV
+          echo DOCKER_MIRROR_SERVER=registry.cn-hongkong.aliyuncs.com >> $GITHUB_ENV
+          echo DOCKER_MIRROR_NS=fosin >> $GITHUB_ENV
 
       - name: Checkout branche
         uses: actions/checkout@v2
@@ -40,7 +41,7 @@ jobs:
           MODULE_PATH: .
           MODULE_NAME: anan-vue
         run: |
-          docker login --username=${{ secrets.dockerhub_user }} --password=${{ secrets.dockerhub_pass }}
-          docker build $MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f $MODULE_PATH/Dockerfile
-          docker push fosin/$MODULE_NAME:$MODULE_VERSION
+          docker login --username=${{ secrets.alidocker_username }} --password=${{ secrets.alidocker_secrect }} ${{ env.DOCKER_MIRROR_SERVER }}
+          docker build $MODULE_PATH -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION -f $MODULE_PATH/Dockerfile
+          docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
           docker logout

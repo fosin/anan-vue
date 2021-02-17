@@ -9,10 +9,11 @@
           考试用时：{{ item.userTime }}分钟
         </el-col>
         <el-col :span="8">
-          考试得分：{{ item.userScore }}
+          得分/总分：{{ item.userScore }} / {{ item.totalScore }}
         </el-col>
-        <el-col :span="8">
-          是否合格：{{ item.userScore > item.qualifyScore ? '是' : '否' }}
+        <el-col v-if="item.state !==1" :span="8">
+          <el-span v-if="item.userScore >= item.qualifyScore" style="color: #24da70">是否合格：是</el-span>
+          <el-span v-else style="color: #ff0000">是否合格：否</el-span>
         </el-col>
         <el-col :span="8">
           考试状态：{{ getDicDetailValue(paperStates, item.state) }}

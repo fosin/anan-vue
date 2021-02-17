@@ -54,7 +54,6 @@
     <el-table
       v-loading="listLoading"
       :data="roleList"
-      :default-sort="{prop: 'value', order: 'descending'}"
       element-loading-text="努力加载中"
       border
       fit
@@ -215,13 +214,13 @@ export default {
       },
       roleList: null,
       total: null,
-      listLoading: true,
+      listLoading: false,
       pageModule: {
         pageNumber: 1,
         pageSize: 10,
         searchText: '',
-        sortName: '',
-        sortOrder: ''
+        sortName: 'value',
+        sortOrder: 'desc'
       },
       pageSizes: [5, 10, 25, 50, 100],
       form: {},
@@ -291,6 +290,7 @@ export default {
         this.pageSizes[i] = parseInt(temp[i])
       }
     })
+    this.getList()
   },
   methods: {
     getList() {

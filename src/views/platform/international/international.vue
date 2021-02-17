@@ -68,7 +68,6 @@
       fit
       highlight-current-row
       style="width: 100%"
-      :default-sort="{prop: 'defaultFlag', order: 'descending'}"
       @sort-change="sortChange"
       @row-click="rowClick"
     >
@@ -205,13 +204,13 @@ export default {
     return {
       list: null,
       total: null,
-      listLoading: true,
+      listLoading: false,
       pageModule: {
         pageNumber: 1,
         pageSize: 10,
         searchText: '',
-        sortName: '',
-        sortOrder: ''
+        sortName: 'defaultFlag',
+        sortOrder: 'desc'
       },
       pageSizes: [5, 10, 25, 50, 100],
       form: {},
@@ -235,6 +234,7 @@ export default {
         this.pageSizes[i] = parseInt(temp[i])
       }
     })
+    this.getList()
   },
   methods: {
     getList() {
