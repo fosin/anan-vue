@@ -1,36 +1,164 @@
 <template>
   <div class="app-container">
-    <el-steps :active="step" simple>
-      <el-step title="组卷配置" icon="el-icon-set-up" />
-      <el-step title="考试权限" icon="el-icon-unlock" />
-      <el-step title="补充配置" icon="el-icon-s-tools" />
-    </el-steps>
-    <div style="margin-top: 20px;width:100%; height: 40px;">
-      <el-button v-if="step > 1" @click="prevStep">上一步</el-button>
-      <el-button type="primary" style="float:right;" @click="nextStep">{{ step===3?'提交保存':'下一步' }}</el-button>
-    </div>
-    <el-card v-if="step === 1" style="margin-top: 20px">
-      <div style="float: right; font-weight: bold; color: #ff0000">试卷总分：{{ postForm.totalScore }}分</div>
+    <el-card style="margin-top: 20px">
+      <el-form ref="postForm" :model="postForm" :rules="rules" label-position="left" label-width="120px">
+        <el-row>
+          <el-col :span="20">
+            <el-form-item label="考试名称" prop="title" label-width="80px">
+              <el-input v-model="postForm.title" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-button type="primary" style="float:right;" @click="saveForm">提交保存</el-button>
+          </el-col>
+        </el-row>
+        <el-form-item label="考试描述" prop="content" label-width="80px">
+          <el-input v-model="postForm.content" type="textarea" />
+        </el-form-item>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="总分数" prop="totalScore" label-width="80px">
+              <el-input-number :value="postForm.totalScore" disabled />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="及格分" prop="qualifyScore" label-width="80px">
+              <el-input-number v-model="postForm.qualifyScore" :max="postForm.totalScore" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="考试时长" prop="totalTime" label-width="80px">
+              <el-input-number v-model="postForm.totalTime" />分钟
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="3">
+            <el-form-item label="查看试卷" label-width="80px">
+              <el-checkbox v-model="postForm.showPaper" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="3">
+            <el-form-item label="查看对错" label-width="80px">
+              <el-checkbox v-model="postForm.showResult" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="3">
+            <el-form-item label="查看答案" label-width="80px">
+              <el-checkbox v-model="postForm.showAnswer" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="3">
+            <el-form-item label="是否限时" label-width="80px">
+              <el-checkbox v-model="postForm.timeLimit" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item v-if="postForm.timeLimit" label="考试时间" prop="totalTime" label-width="80px">
+              <el-date-picker
+                v-model="dateValues"
+                format="yyyy-MM-dd"
+                value-format="yyyy-MM-dd"
+                type="daterange"
+                range-separator="至"
+                start-placeholder="开始时间"
+                end-placeholder="结束时间"
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="3">
+            <el-form-item label="错题训练" label-width="80px">
+              <el-checkbox v-model="postForm.wrongTrain" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="3">
+            <el-form-item label="复制试卷" label-width="80px">
+              <el-checkbox v-model="postForm.paperCopy" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="5">
+            <el-form-item label="切屏次数" prop="ssCount" label-width="80px">
+              <el-input-number v-model="postForm.ssCount" :min="0" :max="99" />次
+            </el-form-item>
+          </el-col>
+          <el-col :span="5">
+            <el-form-item label="拍照频率" label-width="80px">
+              <el-input-number v-model="postForm.photoFrequency" :min="0" />秒
+            </el-form-item>
+          </el-col>
+          <el-col :span="5">
+            <el-form-item label="限考次数" prop="allowTimes" label-width="80px">
+              <el-input-number v-model="postForm.allowTimes" :min="0" :max="99" />次
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+    </el-card>
+    <el-card style="margin-top: 20px;">
+      <el-radio-group v-model="postForm.openType" style="margin-bottom: 20px">
+        <el-radio :label="1" border>完全公开</el-radio>
+        <el-radio :label="2" border>部门开放</el-radio>
+      </el-radio-group>
+      <el-alert
+        v-if="postForm.openType===1"
+        title="开放的，任何人都可以进行考试！"
+        type="warning"
+      />
+      <div v-if="postForm.openType===2">
+        <el-input
+          v-model="filterText"
+          placeholder="输入关键字进行过滤"
+        />
+        <el-tree
+          ref="tree"
+          v-loading="treeLoading"
+          :load="loadChild"
+          :default-expanded-keys="defaultExpandedKeys"
+          :filter-node-method="filterNode"
+          :props="defaultProps"
+          class="filter-tree"
+          node-key="id"
+          highlight-current
+          lazy
+          show-checkbox
+          check-strictly
+          :default-checked-keys="postForm.departIds"
+          @check-change="handleCheckChange"
+        />
+      </div>
+    </el-card>
+    <el-card style="margin-top: 20px">
+      <el-row>
+        <el-col :span="3">
+          <el-button class="filter-item" size="small" type="primary" icon="el-icon-plus" @click="handleAdd">
+            添加题库
+          </el-button>
+        </el-col>
+        <el-col :span="6">
+          <div style="margin-bottom: 20px">
+            <el-select v-model="postForm.level" class="filter-item" placeholder="选择难度等级" clearable="">
+              <el-option
+                v-for="item in levels"
+                :key="item.name"
+                :label="item.value"
+                :value="item.name"
+                :disabled="item.status === 1"
+              />
+            </el-select>
+          </div>
+        </el-col>
+        <el-col :span="15">
+          <div style="float: right; font-weight: bold; color: #ff0000">试卷总分：{{ postForm.totalScore }}分</div>
+        </el-col>
+      </el-row>
       <div>
-        <div style="margin-bottom: 20px">
-          <el-select v-model="postForm.level" class="filter-item" placeholder="选择难度等级" clearable="">
-            <el-option
-              v-for="item in levels"
-              :key="item.name"
-              :label="item.value"
-              :value="item.name"
-              :disabled="item.status === 1"
-            />
-          </el-select>
-        </div>
-        <el-button class="filter-item" size="small" type="primary" icon="el-icon-plus" @click="handleAdd">
-          添加题库
-        </el-button>
         <el-table
           :data="repoList"
           :border="false"
           empty-text="请点击上面的`添加题库`进行设置"
-          style="width: 100%; margin-top: 15px"
+          style="width: 100%;"
         >
           <el-table-column
             label="题库"
@@ -186,128 +314,6 @@
         </el-table>
       </div>
     </el-card>
-    <el-card v-if="step === 2" style="margin-top: 20px;">
-      <el-radio-group v-model="postForm.openType" style="margin-bottom: 20px">
-        <el-radio :label="1" border>完全公开</el-radio>
-        <el-radio :label="2" border>部门开放</el-radio>
-      </el-radio-group>
-      <el-alert
-        v-if="postForm.openType===1"
-        title="开放的，任何人都可以进行考试！"
-        type="warning"
-      />
-      <div v-if="postForm.openType===2">
-        <el-input
-          v-model="filterText"
-          placeholder="输入关键字进行过滤"
-        />
-        <el-tree
-          ref="tree"
-          v-loading="treeLoading"
-          :load="loadChild"
-          :default-expanded-keys="defaultExpandedKeys"
-          :filter-node-method="filterNode"
-          :props="defaultProps"
-          class="filter-tree"
-          node-key="id"
-          highlight-current
-          lazy
-          show-checkbox
-          check-strictly
-          :default-checked-keys="postForm.departIds"
-          @check-change="handleCheckChange"
-        />
-      </div>
-    </el-card>
-    <el-card v-if="step === 3" style="margin-top: 20px">
-      <el-form ref="postForm" :model="postForm" :rules="rules" label-position="left" label-width="120px">
-        <el-form-item label="考试名称" prop="title" label-width="80px">
-          <el-input v-model="postForm.title" />
-        </el-form-item>
-        <el-form-item label="考试描述" prop="content" label-width="80px">
-          <el-input v-model="postForm.content" type="textarea" />
-        </el-form-item>
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="总分数" prop="totalScore" label-width="80px">
-              <el-input-number :value="postForm.totalScore" disabled />
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="及格分" prop="qualifyScore" label-width="80px">
-              <el-input-number v-model="postForm.qualifyScore" :max="postForm.totalScore" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="考试时长" prop="totalTime" label-width="80px">
-              <el-input-number v-model="postForm.totalTime" />分钟
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="3">
-            <el-form-item label="查看试卷" label-width="80px">
-              <el-checkbox v-model="postForm.showPaper" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="3">
-            <el-form-item label="查看对错" label-width="80px">
-              <el-checkbox v-model="postForm.showResult" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="3">
-            <el-form-item label="查看答案" label-width="80px">
-              <el-checkbox v-model="postForm.showAnswer" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="3">
-            <el-form-item label="是否限时" label-width="80px">
-              <el-checkbox v-model="postForm.timeLimit" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item v-if="postForm.timeLimit" label="考试时间" prop="totalTime" label-width="80px">
-              <el-date-picker
-                v-model="dateValues"
-                format="yyyy-MM-dd"
-                value-format="yyyy-MM-dd"
-                type="daterange"
-                range-separator="至"
-                start-placeholder="开始时间"
-                end-placeholder="结束时间"
-              />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="3">
-            <el-form-item label="错题训练" label-width="80px">
-              <el-checkbox v-model="postForm.wrongTrain" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="3">
-            <el-form-item label="复制试卷" label-width="80px">
-              <el-checkbox v-model="postForm.paperCopy" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="5">
-            <el-form-item label="切屏次数" prop="ssCount" label-width="80px">
-              <el-input-number v-model="postForm.ssCount" :min="0" :max="99" />次
-            </el-form-item>
-          </el-col>
-          <el-col :span="5">
-            <el-form-item label="拍照频率" label-width="80px">
-              <el-input-number v-model="postForm.photoFrequency" :min="0" />秒
-            </el-form-item>
-          </el-col>
-          <el-col :span="5">
-            <el-form-item label="限考次数" prop="allowTimes" label-width="80px">
-              <el-input-number v-model="postForm.allowTimes" :min="0" :max="99" />次
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-    </el-card>
   </div>
 </template>
 
@@ -321,7 +327,6 @@ export default {
   name: 'ExamManagementExamUpdate',
   data() {
     return {
-      step: 1,
       defaultExpandedKeys: [1],
       defaultProps: {
         children: 'children',
@@ -438,10 +443,11 @@ export default {
     this.loadDictionaryById(146).then(res => {
       this.levels = res.details
     })
+    const that = this
     fetchList({}).then(response => {
       this.reposData = response.data
       if (typeof id !== 'undefined') {
-        this.fetchData(id)
+        that.fetchData(id)
       }
     }).catch((reason) => {
       this.$notify({
@@ -503,92 +509,83 @@ export default {
         })
       }
     },
-    nextStep() {
-      if (this.step < 3) {
-        this.step += 1
-      } else {
-        this.$refs.postForm.validate((valid) => {
-          if (!valid) {
-            return
-          }
-          if (this.postForm.totalScore === 0) {
-            this.$notify({
-              title: '提示信息',
-              message: '考试规则设置不正确，请确认！',
-              type: 'warning',
-              duration: 2000
-            })
-            return
-          }
-          if (this.postForm.joinType === 1) {
-            for (let i = 0; i < this.postForm.repoList.length; i++) {
-              const repo = this.postForm.repoList[i]
+    saveForm() {
+      this.$refs.postForm.validate((valid) => {
+        if (!valid) {
+          return
+        }
+        if (this.postForm.totalScore === 0) {
+          this.$notify({
+            title: '提示信息',
+            message: '考试规则设置不正确，请确认！',
+            type: 'warning',
+            duration: 2000
+          })
+          return
+        }
+        if (this.postForm.joinType === 1) {
+          for (let i = 0; i < this.postForm.repoList.length; i++) {
+            const repo = this.postForm.repoList[i]
 
-              if (!repo.repoId) {
-                this.$notify({
-                  title: '提示信息',
-                  message: '考试题库选择不正确！',
-                  type: 'warning',
-                  duration: 2000
-                })
+            if (!repo.repoId) {
+              this.$notify({
+                title: '提示信息',
+                message: '考试题库选择不正确！',
+                type: 'warning',
+                duration: 2000
+              })
 
-                return
-              }
-              if ((repo.radioCount > 0 && repo.radioScore === 0) || (repo.radioCount === 0 && repo.radioScore > 0)) {
-                this.$notify({
-                  title: '提示信息',
-                  message: '题库第：[' + (i + 1) + ']项存在无效的单选题配置！',
-                  type: 'warning',
-                  duration: 2000
-                })
+              return
+            }
+            if ((repo.radioCount > 0 && repo.radioScore === 0) || (repo.radioCount === 0 && repo.radioScore > 0)) {
+              this.$notify({
+                title: '提示信息',
+                message: '题库第：[' + (i + 1) + ']项存在无效的单选题配置！',
+                type: 'warning',
+                duration: 2000
+              })
 
-                return
-              }
-              if ((repo.multiCount > 0 && repo.multiScore === 0) || (repo.multiCount === 0 && repo.multiScore > 0)) {
-                this.$notify({
-                  title: '提示信息',
-                  message: '题库第：[' + (i + 1) + ']项存在无效的多选题配置！',
-                  type: 'warning',
-                  duration: 2000
-                })
+              return
+            }
+            if ((repo.multiCount > 0 && repo.multiScore === 0) || (repo.multiCount === 0 && repo.multiScore > 0)) {
+              this.$notify({
+                title: '提示信息',
+                message: '题库第：[' + (i + 1) + ']项存在无效的多选题配置！',
+                type: 'warning',
+                duration: 2000
+              })
 
-                return
-              }
-              if ((repo.judgeCount > 0 && repo.judgeScore === 0) || (repo.judgeCount === 0 && repo.judgeScore > 0)) {
-                this.$notify({
-                  title: '提示信息',
-                  message: '题库第：[' + (i + 1) + ']项存在无效的判断题配置！',
-                  type: 'warning',
-                  duration: 2000
-                })
-                return
-              }
-              if ((repo.saqCount > 0 && repo.saqScore === 0) || (repo.saqCount === 0 && repo.saqScore > 0)) {
-                this.$notify({
-                  title: '提示信息',
-                  message: '题库第：[' + (i + 1) + ']项存在无效的简答题配置！',
-                  type: 'warning',
-                  duration: 2000
-                })
-                return
-              }
+              return
+            }
+            if ((repo.judgeCount > 0 && repo.judgeScore === 0) || (repo.judgeCount === 0 && repo.judgeScore > 0)) {
+              this.$notify({
+                title: '提示信息',
+                message: '题库第：[' + (i + 1) + ']项存在无效的判断题配置！',
+                type: 'warning',
+                duration: 2000
+              })
+              return
+            }
+            if ((repo.saqCount > 0 && repo.saqScore === 0) || (repo.saqCount === 0 && repo.saqScore > 0)) {
+              this.$notify({
+                title: '提示信息',
+                message: '题库第：[' + (i + 1) + ']项存在无效的简答题配置！',
+                type: 'warning',
+                duration: 2000
+              })
+              return
             }
           }
-          this.$confirm('确实要提交保存吗？', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
-            this.submitForm()
-          })
+        }
+        this.$confirm('确实要提交保存吗？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.submitForm()
         })
-      }
+      })
     },
-
-    prevStep() {
-      this.step -= 1
-    },
-
     handleCheckChange() {
       const that = this
       // 置空
@@ -599,7 +596,6 @@ export default {
         that.postForm.departIds.push(item.id)
       })
     },
-
     // 添加子项
     handleAdd() {
       const addRepo = { radioCount: 0, radioCountMax: 0, radioScore: 0, multiCount: 0, multiCountMax: 0, multiScore: 0, judgeCount: 0, judgeCountMax: 0, judgeScore: 0, saqCount: 0, saqCountMax: 0, saqScore: 0 }
@@ -678,7 +674,7 @@ export default {
     },
 
     submitForm() {
-      // 校验和处理数据
+    // 校验和处理数据
       this.postForm.repoList = this.repoList
 
       saveData(this.postForm).then(() => {
@@ -704,7 +700,6 @@ export default {
       if (!value) return true
       return data.label.indexOf(value) !== -1
     }
-
   }
 }
 </script>

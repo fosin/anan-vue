@@ -1,24 +1,27 @@
 <template>
   <div>
     <el-card v-for="item in paperList" :key="item.id" style="margin-bottom: 10px; line-height: 30px;">
-      <el-row :gutter="20">
-        <el-col :span="8">
-          考试时间：{{ item.createTime }}
+      <el-row>
+        <el-col :span="6">
+          得分/正确率：{{ item.userScore }} / {{ item.accuracy }}%
         </el-col>
-        <el-col :span="8">
+        <el-col :span="6">
+          及格分/总分：{{ item.qualifyScore }} / {{ item.totalScore }}
+        </el-col>
+        <el-col :span="6">
           考试用时：{{ item.userTime }}分钟
         </el-col>
-        <el-col :span="8">
-          得分/总分：{{ item.userScore }} / {{ item.totalScore }}
-        </el-col>
-        <el-col v-if="item.state !==1" :span="8">
-          <el-span v-if="item.userScore >= item.qualifyScore" style="color: #24da70">是否合格：是</el-span>
-          <el-span v-else style="color: #ff0000">是否合格：否</el-span>
-        </el-col>
-        <el-col :span="8">
+        <el-col :span="6">
           考试状态：{{ getDicDetailValue(paperStates, item.state) }}
         </el-col>
         <el-col :span="8">
+          考试时间：{{ item.createTime }}
+        </el-col>
+        <el-col v-if="item.state !==1" :span="8">
+          <span v-if="item.userScore >= item.qualifyScore" style="color: #24da70">是否通过：是</span>
+          <span v-else style="color: #ff0000">是否通过：否</span>
+        </el-col>
+        <el-col v-if="item.showPaper" :span="8">
           <el-button type="primary" size="mini" icon="el-icon-user" @click="handleExamResult(item.id)">考试详情</el-button>
         </el-col>
       </el-row>

@@ -6,20 +6,21 @@
       <el-col :span="4" class="text-center">
         考生姓名：{{ userInfo.username }}
       </el-col>
-      <el-col v-if="paperData.state === 2" :span="4" class="text-center">
-        考试得分：{{ paperData.userScore }}
-      </el-col>
-      <el-col v-if="paperData.state === 2" :span="4" class="text-center">
-        正确率：{{ paperData.accuracy }}%
-      </el-col>
-      <el-col :span="4" class="text-center">
-        是否通过：{{ paperData.state === 1 ? '待阅卷' : (paperData.userScore >= paperData.qualifyScore ? '通过' : '未通过') }}
-      </el-col>
-      <el-col :span="4" class="text-center">
-        总分 / 及格分：{{ paperData.totalScore }} / {{ paperData.qualifyScore }}
-      </el-col>
       <el-col :span="4" class="text-center">
         考试用时：{{ paperData.userTime }}分钟
+      </el-col>
+      <el-col :span="4">
+        考试状态：{{ getDicDetailValue(paperStates, paperData.state) }}
+      </el-col>
+      <el-col :span="4" class="text-center">
+        及格分/总分：{{ paperData.qualifyScore }} / {{ paperData.totalScore }}
+      </el-col>
+      <el-col v-if="paperData.state === 2 || paperData.state === 3" :span="4" class="text-center">
+        <span v-if="paperData.userScore >= paperData.qualifyScore" style="color: #24da70">是否通过：是</span>
+        <span v-else style="color: #ff0000">是否通过：否</span>
+      </el-col>
+      <el-col v-if="paperData.state === 2 || paperData.state === 3" :span="4" class="text-center">
+        得分/正确率：{{ paperData.userScore }} / {{ paperData.accuracy }}%
       </el-col>
     </el-row>
     <el-card v-if="paperData.showPaper" style="margin-top: 20px">
@@ -94,6 +95,7 @@ export default {
     return {
       // 试卷ID
       dynamicStyle: {},
+      paperStates: [],
       paperId: '',
       paperData: {
         quList: []
@@ -111,6 +113,9 @@ export default {
     }
   },
   created() {
+    this.loadDictionaryById(143).then(res => {
+      this.paperStates = res.details
+    })
     const params = this.$route.params.id.split(',')
     const id = params[0]
     if (typeof id !== 'undefined') {

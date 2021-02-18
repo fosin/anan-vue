@@ -6,14 +6,11 @@
       <el-col :span="4" class="text-center">
         考生姓名：{{ userInfo.username }}
       </el-col>
-      <el-col :span="4" class="text-center">
-        客观得分：{{ paperData.objScore }}
+      <el-col :span="8" class="text-center">
+        得分：{{ paperData.userScore }} = {{ paperData.objScore }}(客观) + {{ paperData.subjScore }}(主观)
       </el-col>
       <el-col :span="4" class="text-center">
-        主观得分：{{ paperData.subjScore }}
-      </el-col>
-      <el-col :span="4" class="text-center">
-        总分 / 及格分：{{ paperData.totalScore }} / {{ paperData.qualifyScore }}
+        及格分/总分：{{ paperData.qualifyScore }} / {{ paperData.totalScore }}
       </el-col>
       <el-col :span="4" class="text-center">
         考试用时：{{ paperData.userTime }}分钟
@@ -65,7 +62,7 @@
                 />
               </el-col>
               <el-col v-if="item.isRight" :span="6">
-                老师评分：<el-input-number v-model="item.actualScore" :min="0" :max="item.score" style="width: 40%" :disabled="!item.isRight">分</el-input-number>
+                老师评分：<el-input-number v-model="item.actualScore" :min="0" :max="item.score" style="width: 40%" :disabled="!item.isRight" />共{{ item.score }}分
               </el-col>
             </el-row>
           </div>
@@ -100,18 +97,20 @@
                 />
               </el-col>
               <el-col v-if="item.isRight" :span="6">
-                老师评分：<el-input-number v-model="item.actualScore" :min="0" :max="item.score" style="width: 40%" :disabled="!item.isRight">分</el-input-number>
+                老师评分：<el-input-number v-model="item.actualScore" :min="0" :max="item.score" style="width: 40%" :disabled="!item.isRight" />共{{ item.score }}分
               </el-col>
             </el-row>
           </div>
         </div>
       </div>
-      <el-divider v-if="hideObj">
-        <el-button type="primary" @click="showAllQu"><i class="el-icon-arrow-down" /><i class="el-icon-arrow-down" /><i class="el-icon-arrow-down" />显示客观题<i class="el-icon-arrow-down" /><i class="el-icon-arrow-down" /><i class="el-icon-arrow-down" /></el-button>
-      </el-divider>
-      <el-divider v-else>
-        <el-button type="primary" @click="showAllQu"><i class="el-icon-arrow-up" /><i class="el-icon-arrow-up" /><i class="el-icon-arrow-up" />隐藏客观题<i class="el-icon-arrow-up" /><i class="el-icon-arrow-up" /><i class="el-icon-arrow-up" /></el-button>
-      </el-divider>
+      <div v-if="paperData.hasSaq">
+        <el-divider v-if="hideObj">
+          <el-button type="primary" @click="showAllQu"><i class="el-icon-arrow-down" /><i class="el-icon-arrow-down" /><i class="el-icon-arrow-down" />显示客观题<i class="el-icon-arrow-down" /><i class="el-icon-arrow-down" /><i class="el-icon-arrow-down" /></el-button>
+        </el-divider>
+        <el-divider v-else>
+          <el-button type="primary" @click="showAllQu"><i class="el-icon-arrow-up" /><i class="el-icon-arrow-up" /><i class="el-icon-arrow-up" />隐藏客观题<i class="el-icon-arrow-up" /><i class="el-icon-arrow-up" /><i class="el-icon-arrow-up" /></el-button>
+        </el-divider>
+      </div>
       <div v-for="item in saqList" :key="item.id" class="qu-content">
         <div v-if="item.quType === 4">
           <el-row>
@@ -146,7 +145,7 @@
               />
             </el-col>
             <el-col v-if="item.isRight" :span="6">
-              老师评分：<el-input-number v-model="item.actualScore" :min="0" :max="item.score" style="width: 40%" :disabled="!item.isRight">分</el-input-number>
+              老师评分：<el-input-number v-model="item.actualScore" :min="0" :max="item.score" style="width: 40%" :disabled="!item.isRight" />共{{ item.score }}分
             </el-col>
           </el-row>
         </div>
@@ -206,6 +205,7 @@ export default {
         })
         this.paperData.objScore = objScore
         this.paperData.subjScore = subjScore
+        this.paperData.userScore = objScore + subjScore
       },
       deep: true
     }
@@ -239,7 +239,7 @@ export default {
             message: '提交阅卷完成！',
             type: 'success'
           })
-          this.$router.push({ name: 'ExamOnlineDoResult', params: { id: this.paperData.id + ',1' }})
+          this.$store.dispatch('closeAndPushToView', { name: 'ExamManagementReview' })
         }).catch((reason) => {
           this.loading = false
           this.$notify({
