@@ -10,7 +10,7 @@
         得分：{{ paperData.userScore }} = {{ paperData.objScore }}(客观) + {{ paperData.subjScore }}(主观)
       </el-col>
       <el-col :span="4" class="text-center">
-        及格分/总分：{{ paperData.qualifyScore }} / {{ paperData.totalScore }}
+        合格分/总分：{{ paperData.qualifyScore }} / {{ paperData.totalScore }}
       </el-col>
       <el-col :span="4" class="text-center">
         考试用时：{{ paperData.userTime }}分钟

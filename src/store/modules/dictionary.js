@@ -63,10 +63,27 @@ Vue.prototype.loadDictionaryById = function(dicId) {
   })
 }
 Vue.prototype.getDicDetailValue = function(dicDetails, dicName) {
+  const dic = getDicDetail(dicDetails, dicName)
+  if (typeof dic === 'object') {
+    return dic.value
+  } else {
+    return dic
+  }
+}
+Vue.prototype.getDicDetailDescription = function(dicDetails, dicName) {
+  const dic = getDicDetail(dicDetails, dicName)
+  if (typeof dic === 'object') {
+    return dic.description
+  } else {
+    return dic
+  }
+}
+
+function getDicDetail(dicDetails, dicName) {
   if (dicDetails && dicDetails.length > 0) {
     for (const dicDetail of dicDetails) {
       if (dicDetail.name === dicName) {
-        return dicDetail.value
+        return dicDetail
       }
     }
   }

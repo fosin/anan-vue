@@ -22,12 +22,11 @@
           align="center"
         />
         <el-table-column
-          label="是否通过"
+          label="考试评级"
           align="center"
         >
           <template slot-scope="scope">
-            <span v-if="scope.row.passed" style="color: #00ff00;">通过</span>
-            <span v-else style="color: #ff0000;">未通过</span>
+            <span :style="{ color: rankColor[scope.row.rank] }">{{ getDicDetailValue(rankDics, scope.row.rank) }}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -62,6 +61,14 @@ export default {
   components: { MyPaperList, DataTable },
   data() {
     return {
+      rankDics: [],
+      rankColor: {
+        0: '#ff0000',
+        1: '#00ff00',
+        2: '#0000FF',
+        3: '#FF00FF',
+        4: '#5f3100'
+      },
       dialogVisible: false,
       examId: '',
       userId: '',
@@ -91,6 +98,9 @@ export default {
     // this.postRequest('gateway/platform/v1/user/childList/organizId/' + this.ananUserInfo.organizId).then(res => {
     //   this.organizUsers = res.data
     // })
+    this.loadDictionaryById(148).then(res => {
+      this.rankDics = res.details
+    })
   },
   methods: {
     // getUserName(userId) {

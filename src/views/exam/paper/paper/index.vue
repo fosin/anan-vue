@@ -76,15 +76,14 @@
           width="180px"
         />
         <el-table-column
-          label="考试结果"
+          label="考试评级"
           align="center"
         >
           <template slot-scope="scope">
             <span v-if="scope.row.state===1">待阅卷</span>
             <span v-else-if="scope.row.state===0">待交卷</span>
             <span v-else>
-              <span v-if="scope.row.userScore >= scope.row.qualifyScore" style="color:#00ff00">合格</span>
-              <span v-else style="color: #ff0000">不合格</span>
+              <span :style="{ color: rankColor[scope.row.rank] }">{{ getDicDetailValue(rankDics, scope.row.rank) }}</span>
             </span>
           </template>
         </el-table-column>
@@ -131,6 +130,14 @@ export default {
   components: { DepartTreeSelect, DataTable },
   data() {
     return {
+      rankDics: [],
+      rankColor: {
+        0: '#ff0000',
+        1: '#00ff00',
+        2: '#0000FF',
+        3: '#FF00FF',
+        4: '#5f3100'
+      },
       dialogVisible: false,
       captureList: [],
       paperStates: [
@@ -173,6 +180,9 @@ export default {
   created() {
     this.loadDictionaryById(143).then(res => {
       this.paperStates = res.details
+    })
+    this.loadDictionaryById(148).then(res => {
+      this.rankDics = res.details
     })
     treeAllChildOrganiz(this.ananUserInfo.organizId).then(response => {
       this.treeData[0] = response.data || []

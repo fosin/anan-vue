@@ -50,7 +50,7 @@
               <div><strong>考试名称：</strong>{{ detailData.title }}</div>
               <div><strong>考试时长：</strong>{{ detailData.totalTime }}分钟</div>
               <div><strong>试卷总分：</strong>{{ detailData.totalScore }}分</div>
-              <div><strong>及格分数：</strong>{{ detailData.qualifyScore }}分</div>
+              <div><strong>合格分数：</strong>{{ detailData.qualifyScore }}分</div>
               <div><strong>考试描述：</strong>{{ detailData.content }}</div>
               <div><strong>开放类型：</strong> {{ getDicDetailValue(openTypes, detailData.openType) }}</div>
               <div v-if="detailData.allowTimes > 0"><strong>当前次数/总考试次数：</strong>{{ tryCount }}/{{ detailData.allowTimes }}

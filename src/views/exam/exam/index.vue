@@ -62,7 +62,7 @@
         align="center"
       />
       <el-table-column
-        label="及格线"
+        label="合格分"
         prop="qualifyScore"
         align="center"
       />

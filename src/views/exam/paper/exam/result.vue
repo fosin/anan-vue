@@ -6,20 +6,19 @@
       <el-col :span="4" class="text-center">
         考生姓名：{{ userInfo.username }}
       </el-col>
-      <el-col :span="4" class="text-center">
+      <el-col :span="3" class="text-center">
         考试用时：{{ paperData.userTime }}分钟
       </el-col>
       <el-col :span="4">
         考试状态：{{ getDicDetailValue(paperStates, paperData.state) }}
       </el-col>
       <el-col :span="4" class="text-center">
-        及格分/总分：{{ paperData.qualifyScore }} / {{ paperData.totalScore }}
+        合格分/总分：{{ paperData.qualifyScore }} / {{ paperData.totalScore }}
       </el-col>
       <el-col v-if="paperData.state === 2 || paperData.state === 3" :span="4" class="text-center">
-        <span v-if="paperData.userScore >= paperData.qualifyScore" style="color: #24da70">是否通过：是</span>
-        <span v-else style="color: #ff0000">是否通过：否</span>
+        考试评级：<span :style="{ color: rankColor[paperData.rank] }">{{ getDicDetailValue(rankDics, paperData.rank) }}</span>
       </el-col>
-      <el-col v-if="paperData.state === 2 || paperData.state === 3" :span="4" class="text-center">
+      <el-col v-if="paperData.state === 2 || paperData.state === 3" :span="5" class="text-center">
         得分/正确率：{{ paperData.userScore }} / {{ paperData.accuracy }}%
       </el-col>
     </el-row>
@@ -96,6 +95,14 @@ export default {
       // 试卷ID
       dynamicStyle: {},
       paperStates: [],
+      rankDics: [],
+      rankColor: {
+        0: '#ff0000',
+        1: '#00ff00',
+        2: '#0000FF',
+        3: '#FF00FF',
+        4: '#5f3100'
+      },
       paperId: '',
       paperData: {
         quList: []
@@ -115,6 +122,9 @@ export default {
   created() {
     this.loadDictionaryById(143).then(res => {
       this.paperStates = res.details
+    })
+    this.loadDictionaryById(148).then(res => {
+      this.rankDics = res.details
     })
     const params = this.$route.params.id.split(',')
     const id = params[0]

@@ -6,7 +6,7 @@
           得分/正确率：{{ item.userScore }} / {{ item.accuracy }}%
         </el-col>
         <el-col :span="6">
-          及格分/总分：{{ item.qualifyScore }} / {{ item.totalScore }}
+          合格分/总分：{{ item.qualifyScore }} / {{ item.totalScore }}
         </el-col>
         <el-col :span="6">
           考试用时：{{ item.userTime }}分钟
@@ -18,8 +18,7 @@
           考试时间：{{ item.createTime }}
         </el-col>
         <el-col v-if="item.state !==1" :span="8">
-          <span v-if="item.userScore >= item.qualifyScore" style="color: #24da70">是否通过：是</span>
-          <span v-else style="color: #ff0000">是否通过：否</span>
+          考试评级：<span :style="{ color: rankColor[item.rank] }">{{ getDicDetailValue(rankDics, item.rank) }}</span>
         </el-col>
         <el-col v-if="item.showPaper" :span="8">
           <el-button type="primary" size="mini" icon="el-icon-user" @click="handleExamResult(item.id)">考试详情</el-button>
@@ -51,6 +50,14 @@ export default {
   },
   data() {
     return {
+      rankDics: [],
+      rankColor: {
+        0: '#ff0000',
+        1: '#00ff00',
+        2: '#0000FF',
+        3: '#FF00FF',
+        4: '#5f3100'
+      },
       value1: null,
       paperList: [],
       paperStates: []
@@ -76,6 +83,9 @@ export default {
   created() {
     this.loadDictionaryById(143).then(res => {
       this.paperStates = res.details
+    })
+    this.loadDictionaryById(148).then(res => {
+      this.rankDics = res.details
     })
     this.fetchPaperList()
   },
