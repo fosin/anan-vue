@@ -30,19 +30,20 @@
           prop="title"
         />
         <el-table-column
-          label="人员"
-          align="center"
-          prop="realName"
-        />
-        <el-table-column
           label="部门"
           align="center"
           prop="departName"
         />
         <el-table-column
+          label="人员"
+          align="center"
+          prop="realName"
+          width="100px"
+        />
+        <el-table-column
           label="用时/时长"
           align="center"
-          prop="totalTime"
+          width="100px"
         >
           <template slot-scope="scope">
             {{ scope.row.userTime }} / {{ scope.row.totalTime }}分钟
@@ -64,6 +65,7 @@
         <el-table-column
           label="得分/总分"
           align="center"
+          width="100px"
         >
           <template slot-scope="scope">
             {{ scope.row.userScore }} / {{ scope.row.totalScore }}分
@@ -73,11 +75,12 @@
           label="考试时间"
           align="center"
           prop="createTime"
-          width="180px"
+          width="160px"
         />
         <el-table-column
           label="考试评级"
           align="center"
+          width="90px"
         >
           <template slot-scope="scope">
             <span v-if="scope.row.state===1">待阅卷</span>
@@ -90,6 +93,7 @@
         <el-table-column
           label="考试状态"
           align="center"
+          width="90px"
         >
           <template slot-scope="scope">
             {{ getDicDetailValue(paperStates, scope.row.state) }}
@@ -98,6 +102,7 @@
         <el-table-column
           label="操作"
           align="center"
+          width="90px"
         >
           <template slot-scope="scope">
             <el-button v-if="scope.row.state===1 || scope.row.state===2" type="primary" size="small" @click="handleReview(scope.row.id)">去阅卷</el-button>
@@ -136,7 +141,7 @@ export default {
         1: '#00ff00',
         2: '#0000FF',
         3: '#FF00FF',
-        4: '#5f3100'
+        4: '#ff8000'
       },
       dialogVisible: false,
       captureList: [],

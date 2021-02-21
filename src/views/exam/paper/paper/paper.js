@@ -16,3 +16,7 @@ export function listPaper(userId, examId) {
 export function reviewPaper(paperData) {
   return postRequest('gateway/exam/api/paper/paper/review-paper', paperData)
 }
+
+export function trycount(paperData) {
+  return postRequest('gateway/exam/api/paper/paper/trycount', paperData)
+}

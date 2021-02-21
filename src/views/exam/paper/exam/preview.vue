@@ -24,7 +24,7 @@
       </el-col>
       <el-col :span="24">
         <el-alert
-          v-if="detailData.photoFrequency > 0"
+          v-if="tryCountReady && detailData.photoFrequency > 0"
           title="注意：本次考试会自动开启摄像头(注意放行浏览器权限)，考试过程中请保持周边无其他人，否则可能会被判定考试无效!"
           type="warning"
           effect="dark"
@@ -53,7 +53,7 @@
               <div><strong>合格分数：</strong>{{ detailData.qualifyScore }}分</div>
               <div><strong>考试描述：</strong>{{ detailData.content }}</div>
               <div><strong>开放类型：</strong> {{ getDicDetailValue(openTypes, detailData.openType) }}</div>
-              <div v-if="detailData.allowTimes > 0"><strong>当前次数/总考试次数：</strong>{{ tryCount }}/{{ detailData.allowTimes }}
+              <div v-if="detailData.allowTimes > 0"><strong>已考次数/限考次数：</strong>{{ tryCount }}/{{ detailData.allowTimes }}
               </div>
             </el-col>
             <el-col :span="8">
@@ -71,7 +71,7 @@
         >
           开始考试
         </el-button>
-        <el-button v-if="cameraReady" @click="handleBack">
+        <el-button @click="handleBack">
           返回
         </el-button>
       </el-col>
@@ -84,6 +84,8 @@ import { Loading } from 'element-ui'
 import { fetchDetail } from '../../exam/exam'
 import { createPaper } from './exam'
 import { callCamera, closeCamera } from '@/utils/videoCamera'
+import { trycount } from '@/views/exam/paper/paper/paper'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'ExamOnlineDoPrepare',
@@ -92,7 +94,7 @@ export default {
       detailData: {},
       videoWidth: 400,
       videoHeight: 300,
-      videoCamera: {},
+      videoCamera: undefined,
       userExam: {},
       tryCount: 1,
       cameraReady: false,
@@ -107,6 +109,32 @@ export default {
         password: [
           { required: true, message: '考试密码不能为空！' }
         ]
+      }
+    }
+  },
+  computed: {
+    ...mapGetters(['ananUserInfo'])
+  },
+  watch: {
+    tryCountReady(newValue) {
+      // 开启摄像头
+      if (newValue) {
+        if (this.tryCountReady && this.detailData.photoFrequency > 0) {
+          this.videoCamera = this.$refs['videoCamera']
+          callCamera(this.videoCamera).then(() => {
+            this.cameraReady = true
+          }).catch((reason) => {
+            this.cameraReady = false
+            this.$notify({
+              title: '该考试需要开启摄像头，请检查摄像头是否可用！',
+              message: reason.message,
+              type: 'error',
+              duration: 5000
+            })
+          })
+        } else {
+          this.cameraReady = true
+        }
       }
     }
   },
@@ -137,45 +165,27 @@ export default {
         this.detailData = response.data
         this.ssCountAlert = '注意：本次考试切屏超过' + this.detailData.ssCount + '次后，系统将自动交卷！'
         if (this.detailData.allowTimes > 0) {
-          this.postRequest('gateway/exam/api/user/exam/detail/' + this.postForm.examId, null, false).then(response => {
+          const req = {
+            examId: this.postForm.examId,
+            userId: this.ananUserInfo.id
+          }
+          trycount(req).then(response => {
             if (response.data) {
-              this.userExam = response.data
-              if (this.userExam.tryCount) {
-                this.tryCount = this.userExam.tryCount + 1
-              } else {
-                this.tryCount = 1
-              }
+              this.tryCount = response.data
             }
-            this.tryCountReady = this.detailData.allowTimes >= this.tryCount
+            this.tryCountReady = this.detailData.allowTimes > this.tryCount
           }).catch((reason) => {
             this.$notify({
-              title: '获取考试信息失败',
+              title: '获取考试次数失败',
               message: reason.message,
               type: 'error',
               duration: 5000
             })
             this.tryCount = 1
-            this.tryCountReady = this.detailData.allowTimes >= this.tryCount
+            this.tryCountReady = this.detailData.allowTimes > this.tryCount
           })
         } else {
           this.tryCountReady = true
-        }
-        // 开启摄像头
-        if (this.tryCountReady && this.detailData.photoFrequency > 0) {
-          this.videoCamera = this.$refs['videoCamera']
-          callCamera(this.videoCamera).then(value => {
-            this.cameraReady = true
-          }).catch((reason) => {
-            this.cameraReady = false
-            this.$notify({
-              title: '该考试需要开启摄像头，请检查摄像头是否可用！',
-              message: reason.message,
-              type: 'error',
-              duration: 5000
-            })
-          })
-        } else {
-          this.cameraReady = true
         }
       }).catch((reason) => {
         this.$notify({

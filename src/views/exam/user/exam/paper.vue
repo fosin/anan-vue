@@ -3,9 +3,6 @@
     <el-card v-for="item in paperList" :key="item.id" style="margin-bottom: 10px; line-height: 30px;">
       <el-row>
         <el-col :span="6">
-          得分/正确率：{{ item.userScore }} / {{ item.accuracy }}%
-        </el-col>
-        <el-col :span="6">
           合格分/总分：{{ item.qualifyScore }} / {{ item.totalScore }}
         </el-col>
         <el-col :span="6">
@@ -14,13 +11,16 @@
         <el-col :span="6">
           考试状态：{{ getDicDetailValue(paperStates, item.state) }}
         </el-col>
-        <el-col :span="8">
+        <el-col :span="6">
           考试时间：{{ item.createTime }}
         </el-col>
-        <el-col v-if="item.state !==1" :span="8">
+        <el-col v-if="item.state ===2 || item.state ===3" :span="6">
+          得分/正确率：{{ item.userScore }} / {{ item.accuracy }}%
+        </el-col>
+        <el-col v-if="item.state ===2 || item.state ===3" :span="6">
           考试评级：<span :style="{ color: rankColor[item.rank] }">{{ getDicDetailValue(rankDics, item.rank) }}</span>
         </el-col>
-        <el-col v-if="item.showPaper" :span="8">
+        <el-col v-if="item.showPaper" :span="6">
           <el-button type="primary" size="mini" icon="el-icon-user" @click="handleExamResult(item.id)">考试详情</el-button>
         </el-col>
       </el-row>
@@ -56,7 +56,7 @@ export default {
         1: '#00ff00',
         2: '#0000FF',
         3: '#FF00FF',
-        4: '#5f3100'
+        4: '#ff8000'
       },
       value1: null,
       paperList: [],

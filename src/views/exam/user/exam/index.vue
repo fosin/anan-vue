@@ -22,7 +22,7 @@
           align="center"
         />
         <el-table-column
-          label="考试评级"
+          label="最高评级"
           align="center"
         >
           <template slot-scope="scope">
@@ -67,7 +67,7 @@ export default {
         1: '#00ff00',
         2: '#0000FF',
         3: '#FF00FF',
-        4: '#5f3100'
+        4: '#ff8000'
       },
       dialogVisible: false,
       examId: '',

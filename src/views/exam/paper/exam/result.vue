@@ -101,7 +101,7 @@ export default {
         1: '#00ff00',
         2: '#0000FF',
         3: '#FF00FF',
-        4: '#5f3100'
+        4: '#ff8000'
       },
       paperId: '',
       paperData: {
