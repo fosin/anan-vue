@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-card style="margin-top: 20px">
+    <el-card>
       <el-form ref="postForm" :model="postForm" :rules="rules" label-position="left" label-width="120px">
         <el-row>
           <el-col :span="20">
@@ -22,8 +22,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="及格分" prop="qualifyScore" label-width="80px">
-              <el-input-number v-model="postForm.qualifyScore" :max="postForm.totalScore" />
+            <el-form-item label="合格分" prop="qualifyScore" label-width="80px">
+              <el-input-number v-model="postForm.qualifyScore" :min="0" :max="postForm.totalScore" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -96,7 +96,7 @@
         </el-row>
       </el-form>
     </el-card>
-    <el-card style="margin-top: 20px;">
+    <el-card style="margin-top: 15px;">
       <el-radio-group v-model="postForm.openType" style="margin-bottom: 20px">
         <el-radio :label="1" border>完全公开</el-radio>
         <el-radio :label="2" border>部门开放</el-radio>
@@ -129,31 +129,28 @@
         />
       </div>
     </el-card>
-    <el-card style="margin-top: 20px">
-      <el-row>
-        <el-col :span="3">
-          <el-button class="filter-item" size="small" type="primary" icon="el-icon-plus" @click="handleAdd">
-            添加题库
-          </el-button>
-        </el-col>
-        <el-col :span="6">
-          <div style="margin-bottom: 20px">
-            <el-select v-model="postForm.level" class="filter-item" placeholder="选择难度等级" clearable="">
-              <el-option
-                v-for="item in levels"
-                :key="item.name"
-                :label="item.value"
-                :value="item.name"
-                :disabled="item.status === 1"
-              />
-            </el-select>
-          </div>
-        </el-col>
-        <el-col :span="15">
-          <div style="float: right; font-weight: bold; color: #ff0000">试卷总分：{{ postForm.totalScore }}分</div>
-        </el-col>
-      </el-row>
-      <div>
+    <el-tabs v-model="sjoinType" type="border-card" style="margin-top: 15px;" @tab-click="handleTabClick">
+      <el-tab-pane label="题库组卷" name="1">
+        <el-row>
+          <el-col :span="3">
+            <el-button class="filter-item" size="small" type="primary" icon="el-icon-plus" @click="handleAdd">
+              添加题库
+            </el-button>
+          </el-col>
+          <el-col :span="6">
+            <div style="margin-bottom: 20px">
+              <el-select v-model="postForm.level" class="filter-item" placeholder="选择难度等级" clearable="">
+                <el-option
+                  v-for="item in levels"
+                  :key="item.name"
+                  :label="item.value"
+                  :value="item.name"
+                  :disabled="item.status === 1"
+                />
+              </el-select>
+            </div>
+          </el-col>
+        </el-row>
         <el-table
           :data="repoList"
           :border="false"
@@ -163,27 +160,10 @@
           <el-table-column
             label="题库"
             width="200"
+            align="center"
           >
             <template slot-scope="scope">
-              <el-select
-                v-model="scope.row.repoId"
-                filterable
-                remote
-                reserve-keyword
-                clearable
-                automatic-dropdown
-                placeholder="选择或搜索题库"
-                :remote-method="fetchData"
-                class="filter-item"
-                @change="repoSelected"
-              >
-                <el-option
-                  v-for="item in reposData"
-                  :key="item.id"
-                  :label="item.title"
-                  :value="item.id"
-                />
-              </el-select>
+              <repo-tree-select v-model="scope.row.repoId" :user-id="ananUserInfo.id" :width="150" @selected="repoSelected" />
             </template>
           </el-table-column>
           <el-table-column
@@ -245,7 +225,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            label="判断题数量"
+            label="判断数量"
             align="center"
           >
             <template slot-scope="scope">
@@ -260,7 +240,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            label="判断题分数"
+            label="判断分数"
             align="center"
           >
             <template slot-scope="scope">
@@ -274,7 +254,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            label="简答题数量"
+            label="简答数量"
             align="center"
           >
             <template slot-scope="scope">
@@ -289,7 +269,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            label="简答题分数"
+            label="简答分数"
             align="center"
           >
             <template slot-scope="scope">
@@ -308,12 +288,13 @@
             width="50px"
           >
             <template slot-scope="scope">
-              <el-button type="danger" icon="el-icon-delete" circle @click="removeItem(scope.$index)" />
+              <el-button type="danger" icon="el-icon-delete" circle @click="removeItem(scope.$index,repoList)" />
             </template>
           </el-table-column>
         </el-table>
-      </div>
-    </el-card>
+      </el-tab-pane>
+      <el-tab-pane label="选题组卷" name="2" />
+    </el-tabs>
   </div>
 </template>
 
@@ -321,10 +302,12 @@
 import { fetchDetail, saveData } from '@/views/exam/exam/exam'
 import { getOrganiz, listOrganizChild } from '@/views/platform/organization/organization'
 import { mapGetters } from 'vuex'
-import { fetchList } from '@/views/exam/qu/repo/repo'
+import RepoTreeSelect from '@/views/exam/components/RepoTreeSelect'
+import { fetchRepoList } from '@/views/exam/qu/repo/repo'
 
 export default {
   name: 'ExamManagementExamUpdate',
+  components: { RepoTreeSelect },
   data() {
     return {
       defaultExpandedKeys: [1],
@@ -335,6 +318,7 @@ export default {
       },
       levels: [],
       filterText: '',
+      sjoinType: '1',
       treeLoading: false,
       dateValues: [],
       quDialogShow: false,
@@ -345,15 +329,17 @@ export default {
       // 题库
       repoList: [],
       reposData: [],
-      // 题目列表
+      // 试题列表
       quList: [[], [], [], []],
       quEnable: [false, false, false, false],
       postForm: {
         // 总分数
         totalScore: 0,
+        qualifyScore: 0,
+        totalTime: 60,
         // 题库列表
         repoList: [],
-        // 题目列表
+        // 试题列表
         quList: [],
         // 组题方式
         joinType: 1,
@@ -364,18 +350,18 @@ export default {
         // 难度
         level: 0,
         // 查看对错
-        showResult: false,
+        showResult: true,
         // 查看试卷
         showPaper: true,
-        // 查看考试结果
+        // 切屏次数
         ssCount: 0,
-        // 查看考试结果
+        // 限考次数
         allowTimes: 3,
         // 复制试卷
-        paperCopy: true,
-        // 查看考试结果
+        paperCopy: false,
+        // 错题训练
         wrongTrain: true,
-        // 查看考试结果
+        // 拍照频率
         photoFrequency: 0,
         // 查看答案
         showAnswer: false
@@ -394,10 +380,19 @@ export default {
           { required: true, message: '考试分数不能为空！' }
         ],
         qualifyScore: [
-          { required: true, message: '及格分不能为空！' }
+          { required: true, message: '合格分不能为空！' }
         ],
         totalTime: [
           { required: true, message: '考试时间不能为空！' }
+        ],
+        allowTimes: [
+          { required: true, message: '限考次数不能为空' }
+        ],
+        ssCount: [
+          { required: true, message: '切屏次数不能为空' }
+        ],
+        photoFrequency: [
+          { required: true, message: '拍照频率不能为空' }
         ],
         ruleId: [
           { required: true, message: '考试规则不能为空' }
@@ -444,7 +439,7 @@ export default {
       this.levels = res.details
     })
     const that = this
-    fetchList({}).then(response => {
+    fetchRepoList({}).then(response => {
       this.reposData = response.data
       if (typeof id !== 'undefined') {
         that.fetchData(id)
@@ -459,10 +454,13 @@ export default {
     })
   },
   methods: {
+    handleTabClick(tab, event) {
+      console.log(tab, event)
+    },
     repoSelected(repoId) {
       this.repoList.forEach((value2) => {
         if (value2.repoId === repoId) {
-          value2 = this.setRepoLimit(value2)
+          this.setRepoLimit(value2)
         }
       })
     },
@@ -523,6 +521,7 @@ export default {
           })
           return
         }
+        this.postForm.joinType = parseInt(this.sjoinType)
         if (this.postForm.joinType === 1) {
           for (let i = 0; i < this.postForm.repoList.length; i++) {
             const repo = this.postForm.repoList[i]
@@ -609,8 +608,8 @@ export default {
       this.repoList.push(addRepo)
     },
 
-    removeItem(index) {
-      this.repoList.splice(index, 1)
+    removeItem(index, data) {
+      data.splice(index, 1)
     },
     getRepoData(repoId) {
       if (this.reposData) {
@@ -646,21 +645,21 @@ export default {
 
       fetchDetail(id).then(response => {
         this.postForm = response.data
+        this.sjoinType = this.postForm.joinType.toString()
         this.dateValues[0] = this.postForm.startTime
         this.dateValues[1] = this.postForm.endTime
 
-        // 按分组填充题目
+        // 按分组填充试题
         if (this.postForm.joinType === 2) {
           this.postForm.quList.forEach(function(item) {
-            const index = item.quType - 1
-            that.quList[index].push(item)
-            that.quEnable[index] = true
+            // const index = item.quType - 1
+            // that.quList[index].push(item)
           })
         }
         if (this.postForm.joinType === 1) {
           that.repoList = that.postForm.repoList
           that.repoList.forEach(value => {
-            value = this.setRepoLimit(value)
+            this.setRepoLimit(value)
           })
         }
       }).catch((reason) => {

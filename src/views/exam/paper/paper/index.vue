@@ -74,9 +74,15 @@
         <el-table-column
           label="考试时间"
           align="center"
-          prop="createTime"
+          prop="create_time"
           width="160px"
-        />
+          sortable="custom"
+          :sort-orders="['ascending','descending']"
+        >
+          <template slot-scope="scope">
+            {{ scope.row.createTime }}
+          </template>
+        </el-table-column>
         <el-table-column
           label="考试评级"
           align="center"
@@ -164,6 +170,10 @@ export default {
           title: '',
           state: 1,
           departId: 0
+        },
+        sort: {
+          sortOrder: 'DESC',
+          sortName: 'create_time'
         },
         search: {
           column: 'title',

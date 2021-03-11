@@ -92,7 +92,7 @@ export default {
       this.clearValues()
 
       fetchDetail(id).then(response => {
-        // 题目信息
+        // 试题信息
         this.quData = response.data
         this.quData.quContent = '【' + this.getDicDetailValue(this.quTypes, this.quData.quType) + '】' + this.quData.content
         // 保存正确答案

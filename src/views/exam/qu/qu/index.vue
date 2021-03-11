@@ -8,7 +8,7 @@
     >
       <template slot="filter-content">
         <el-row>
-          <el-col :span="24">
+          <el-col :span="3">
             <el-select v-model="listQuery.params.quType" placeholder="选择题型" class="filter-item" clearable>
               <el-option
                 v-for="item in quTypes"
@@ -18,7 +18,9 @@
                 :disabled="item.status === 1"
               />
             </el-select>
-            <repo-select v-model="listQuery.params.repoIds" :multi="true" />
+          </el-col>
+          <el-col :span="4">
+            <repo-tree-select :user-id="ananUserInfo.id" :width="300" @nodeClick="onNodeClick" />
             <!--            <el-button-group class="filter-item" style="float:  right">
               <el-button size="mini" icon="el-icon-upload2" @click="showImport">导入</el-button>
               <el-button size="mini" icon="el-icon-download" @click="exportExcel">导出</el-button>
@@ -29,25 +31,34 @@
 
       <template slot="data-columns">
         <el-table-column
-          label="题目类型"
+          label="试题类型"
           align="center"
-          width="90px"
+          width="110px"
+          prop="qu_type"
+          sortable="custom"
+          :sort-orders="['ascending','descending']"
         >
           <template slot-scope="scope">
             {{ getDicDetailValue(quTypes, scope.row.quType) }}
           </template>
         </el-table-column>
         <el-table-column
-          label="题目难度"
+          label="试题难度"
           align="center"
-          width="90px"
+          sortable="custom"
+          :sort-orders="['ascending','descending']"
+          prop="level"
+          width="110px"
         >
           <template slot-scope="scope">
             {{ getDicDetailValue(levels, scope.row.level) }}
           </template>
         </el-table-column>
         <el-table-column
-          label="题目内容"
+          label="试题内容"
+          sortable="custom"
+          :sort-orders="['ascending','descending']"
+          prop="content"
           show-overflow-tooltip
         >
           <template slot-scope="scope">
@@ -59,20 +70,30 @@
         <el-table-column
           label="更新时间"
           align="center"
-          prop="updateTime"
+          prop="update_time"
           width="180px"
-        />
+          sortable="custom"
+          :sort-orders="['ascending','descending']"
+        >
+          <template slot-scope="scope">
+            {{ scope.row.updateTime }}
+          </template>
+        </el-table-column>
         <el-table-column
           label="权重"
           align="center"
           prop="weight"
-          width="70px"
+          width="80px"
+          sortable="custom"
+          :sort-orders="['ascending','descending']"
         />
         <el-table-column
           label="状态"
           align="center"
-          prop="status"
-          width="70px"
+          prop="state"
+          width="80px"
+          sortable="custom"
+          :sort-orders="['ascending','descending']"
         >
           <template slot-scope="scope">
             {{ getDicDetailValue(states, scope.row.state) }}
@@ -87,7 +108,7 @@
     >
       <el-form label-position="left" label-width="100px">
         <el-form-item label="操作题库" prop="repoIds">
-          <repo-select v-model="dialogRepos" :multi="true" />
+          <repo-tree-select v-model="dialogRepo" :width="300" />
         </el-form-item>
         <el-row>
           <el-button type="primary" @click="handlerRepoAction">保存</el-button>
@@ -111,19 +132,20 @@
 
 <script>
 import DataTable from '@/views/exam/components/DataTable'
-import RepoSelect from '@/views/exam/components/RepoSelect'
 import { batchAction } from '@/views/exam/qu/repo/repo'
+import RepoTreeSelect from '@/views/exam/components/RepoTreeSelect'
 import { exportExcel, importExcel, importTemplate } from '@/views/exam/qu/qu/qu'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'ExamManagementQu',
-  components: { RepoSelect, DataTable },
+  components: { RepoTreeSelect, DataTable },
   data() {
     return {
       dialogTitle: '加入题库',
       dialogVisible: false,
       importVisible: false,
-      dialogRepos: [],
+      dialogRepo: '',
       dialogQuIds: [],
       dialogFlag: false,
       listQuery: {
@@ -132,12 +154,16 @@ export default {
         params: {
           content: '',
           quType: '',
-          repoIds: []
+          code: ''
+        },
+        sort: {
+          sortOrder: 'DESC',
+          sortName: 'update_time'
         },
         search: {
           column: 'content',
           input: '',
-          placeholder: '搜索题目名称'
+          placeholder: '搜索试题名称'
         }
       },
       quTypes: [],
@@ -179,6 +205,9 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters(['ananUserInfo'])
+  },
   created() {
     this.loadDictionaryById(142).then(res => {
       this.quTypes = res.details
@@ -191,6 +220,9 @@ export default {
     })
   },
   methods: {
+    onNodeClick(node) {
+      this.listQuery.params.code = node ? node.code : ''
+    },
     handleMultiAction(obj) {
       if (obj.opt === 'add-repo') {
         this.dialogTitle = '加入题库'
@@ -205,8 +237,8 @@ export default {
       this.dialogQuIds = obj.ids
     },
     handlerRepoAction() {
-      const postForm = { repoIds: this.dialogRepos, quIds: this.dialogQuIds, remove: this.dialogFlag }
-
+      const postForm = { repoIds: [], quIds: this.dialogQuIds, remove: this.dialogFlag }
+      postForm.repoIds.push(this.dialogRepo)
       batchAction(postForm).then(() => {
         this.$notify({
           title: '成功',

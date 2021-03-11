@@ -58,7 +58,7 @@
       fit
       style="width: 100%"
       highlight-current-row
-      :sort-change="sortChange"
+      @sort-change="sortChange"
       @selection-change="handleSelection"
     >
       <el-table-column
@@ -118,7 +118,7 @@ export default {
           params: {},
           t: 0,
           sort: {
-            sortOrder: 'descending',
+            sortOrder: 'DESC',
             sortName: ''
           },
           search: {

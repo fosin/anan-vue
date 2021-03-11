@@ -268,7 +268,7 @@ export default {
           }
           controlCopy(true)
         }
-        // 填充该题目的答案
+        // 填充该试题的答案
         this.paperData.quList.forEach((item) => {
           let radioValue = ''
           let radioRight = ''

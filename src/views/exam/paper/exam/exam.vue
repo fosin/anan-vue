@@ -144,7 +144,7 @@ export default {
       // 当前答题卡
       cardItem: {},
       allItem: [],
-      // 当前题目内容
+      // 当前试题内容
       quData: {
         answerList: []
       },
@@ -379,7 +379,7 @@ export default {
         this.quData.quTitle = (this.quData.sort + 1) + '、' + this.quData.content
         this.radioValue = ''
         this.multiValue = []
-        // 填充该题目的答案
+        // 填充该试题的答案
         this.quData.answerList.forEach((item) => {
           if ((this.quData.quType === 1 || this.quData.quType === 3) && item.checked) {
             this.radioValue = item.id

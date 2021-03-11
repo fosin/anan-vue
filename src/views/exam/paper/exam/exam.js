@@ -17,7 +17,7 @@ export function paperDetail(data) {
 }
 
 /**
- * 题目详情
+ * 试题详情
  * @param data
  */
 export function quDetail(data) {

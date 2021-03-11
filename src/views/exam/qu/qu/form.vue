@@ -4,7 +4,7 @@
       <el-card>
         <el-row>
           <el-col :span="5">
-            <el-form-item label="题目类型" prop="quType" label-width="80px">
+            <el-form-item label="试题类型" prop="quType" label-width="80px">
               <el-select v-model="postForm.quType" :disabled="quTypeDisabled" class="filter-item" @change="handleTypeChange">
                 <el-option
                   v-for="item in quTypes"
@@ -31,7 +31,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="归属题库" prop="repoIds" label-width="80px">
-              <repo-select v-model="postForm.repoIds" :multi="true" />
+              <repo-tree-select v-model="repoId" :user-id="ananUserInfo.id" @nodeClick="onNodeClick" />
             </el-form-item>
           </el-col>
           <el-col :span="4">
@@ -48,7 +48,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="题目内容" prop="content" label-width="80px">
+        <el-form-item label="试题内容" prop="content" label-width="80px">
           <el-input v-model="postForm.content" type="textarea" autosize />
         </el-form-item>
         <el-form-item label="整题解析" prop="analysis" label-width="80px">
@@ -116,11 +116,12 @@
 
 <script>
 import { fetchDetail, saveData } from '@/views/exam/qu/qu/qu'
-import RepoSelect from '@/views/exam/components/RepoSelect'
+import RepoTreeSelect from '@/views/exam/components/RepoTreeSelect'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'ExamManagementQuAdd',
-  components: { RepoSelect },
+  components: { RepoTreeSelect },
   data() {
     return {
       quTypeDisabled: false,
@@ -137,13 +138,14 @@ export default {
         state: 0,
         level: 1
       },
+      repoId: '',
       lastSelected: 0,
       rules: {
         content: [
-          { required: true, message: '题目内容不能为空！' }
+          { required: true, message: '试题内容不能为空！' }
         ],
         quType: [
-          { required: true, message: '题目类型不能为空！' }
+          { required: true, message: '试题类型不能为空！' }
         ],
         level: [
           { required: true, message: '必须选择难度等级！' }
@@ -159,6 +161,9 @@ export default {
         ]
       }
     }
+  },
+  computed: {
+    ...mapGetters(['ananUserInfo'])
   },
   created() {
     const id = this.$route.params.id
@@ -185,6 +190,12 @@ export default {
     }
   },
   methods: {
+    onNodeClick(node) {
+      this.postForm.repoIds = []
+      if (node) {
+        this.postForm.repoIds.push(node.id)
+      }
+    },
     initType(v) {
       if (v === 1 || v === 2) {
         this.allowAdd = true
@@ -194,6 +205,7 @@ export default {
         this.allowAdd = false
         this.allowDel = false
       }
+      this.repoId = this.postForm.repoIds[0]
     },
     handleTypeChange(v) {
       this.initType(v)

@@ -34,7 +34,7 @@
       <el-table-column
         label="考试名称"
         prop="title"
-        width="200px"
+        width="250px"
       />
       <el-table-column
         label="考试类型"

@@ -11,7 +11,7 @@
     </template>
     <template slot="data-columns">
       <el-table-column
-        label="题目内容"
+        label="试题内容"
         show-overflow-tooltip
       >
         <template slot-scope="scope">
