@@ -1,17 +1,17 @@
 <template>
   <div class="app-container">
-    <el-form ref="repoForm" :model="repoForm" :rules="rules">
+    <el-form ref="repoForm" :model="repoForm" :rules="rules" label-position="left">
       <el-card>
-        <el-form-item label="上级题库" prop="pId">
-          <repo-tree-select v-model="repoForm.pId" @nodeClick="nodeClick" />
-        </el-form-item>
-        <el-form-item label="题库名称" prop="title">
+        <el-form-item label="题库名称" prop="title" label-width="80px">
           <el-input v-model="repoForm.title" />
         </el-form-item>
-        <el-form-item label="题库编码" prop="code">
+        <el-form-item label="题库编码" prop="code" label-width="80px">
           <el-input v-model="repoForm.code" />
         </el-form-item>
-        <el-form-item label="权限用户" prop="userList">
+        <el-form-item label="上级题库" prop="pId" label-width="80px">
+          <repo-tree-select ref="repoTree" v-model="repoForm.pId" @nodeClick="nodeClick" />
+        </el-form-item>
+        <el-form-item label="权限用户" prop="userList" label-width="80px">
           <organiz-user-select v-model="userIds" :multi="true" />
         </el-form-item>
         <el-form-item label="题库备注" prop="remark">
@@ -20,7 +20,7 @@
       </el-card>
       <div style="margin-top: 20px">
         <el-button type="primary" @click="submitForm">保存</el-button>
-        <el-button type="info" @click="onCancel">返回</el-button>
+        <el-button type="info" @click="onCancel">取消</el-button>
       </div>
     </el-form>
   </div>
@@ -35,26 +35,29 @@ import OrganizUserSelect from '@/components/OrganizUserSelect'
 export default {
   name: 'ExamManagementRepoAdd',
   components: { OrganizUserSelect, RepoTreeSelect },
+  props: {
+    repoId: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     const validateCode = (rule, value, callback) => {
-      if (this.repoForm.id !== this.repoParentForm.id) {
+      if (this.repoParentForm.id && this.repoForm.id !== this.repoParentForm.id) {
         if (value.substring(0, this.repoParentForm.code.length) !== this.repoParentForm.code) {
           callback(new Error('题库编码必须以父题库编码为前缀!'))
         }
         if (value === this.repoParentForm.code) {
           callback(new Error('题库编码不能和父题库编码相同!'))
         }
+        if (this.$refs.repoTree.isRepoCodeExsit(value)) {
+          callback(new Error('该编码已存在，请修改一个新值!'))
+        }
       }
       callback()
     }
     return {
-      repoForm: {
-        pId: '',
-        code: '',
-        title: '',
-        remark: '',
-        userIds: []
-      },
+      repoForm: {},
       repoParentForm: {},
       loading: false,
       code: '',
@@ -76,22 +79,23 @@ export default {
             trigger: 'blur'
           },
           { validator: validateCode, trigger: 'blur' }
-        ],
-        pId: [
-          { required: true, message: '上级题库不能为空！' }
         ]
       }
     }
   },
-  created() {
-    const id = this.$route.params.id
-    if (typeof id !== 'undefined') {
-      this.fetchData(id)
+  watch: {
+    repoId(val) {
+      if (val && val.length > 0) {
+        this.fetchData(val)
+      } else {
+        this.initForm()
+      }
     }
   },
   methods: {
     nodeClick(node) {
       this.repoParentForm = node
+      this.repoForm.code = node.code
     },
     fetchData(id) {
       const params = { id: id }
@@ -143,7 +147,7 @@ export default {
             type: 'success',
             duration: 2000
           })
-          this.$store.dispatch('closeAndPushToView', { name: 'ExamManagementRepo' })
+          this.$emit('submit', 1)
         }).catch((reason) => {
           this.$notify({
             title: '保存题库数据失败',
@@ -151,11 +155,24 @@ export default {
             type: 'error',
             duration: 5000
           })
+          this.$emit('submit', -1)
         })
       })
     },
     onCancel() {
-      this.$store.dispatch('closeAndPushToView', { name: 'ExamManagementRepo' })
+      this.$emit('cancel')
+    },
+    initForm() {
+      this.repoForm = {
+        pId: '',
+        id: '',
+        code: '',
+        title: '',
+        remark: '',
+        userList: []
+      }
+      this.repoParentForm = {}
+      this.userIds = []
     }
   }
 }

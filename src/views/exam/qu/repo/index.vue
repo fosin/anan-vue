@@ -1,97 +1,244 @@
 <template>
-
-  <data-table
-    ref="pagingTable"
-    :options="options"
-    :list-query="listQuery"
-  >
-    <template slot="data-columns">
+  <div class="app-container calendar-list-container">
+    <div class="filter-container">
+      <el-button-group>
+        <el-button v-waves round class="filter-item" type="primary" icon="el-icon-search" @click="handleSearch">
+          {{ $t('table.refresh') }}
+        </el-button>
+        <el-button
+          v-waves
+          round
+          class="filter-item"
+          style="margin-left: 5px;"
+          type="primary"
+          icon="el-icon-circle-plus"
+          @click="handleAdd"
+        >
+          {{ $t('table.add') }}
+        </el-button>
+        <el-button
+          v-waves
+          round
+          type="success"
+          class="filter-item"
+          style="margin-left: 5px;"
+          icon="el-icon-edit"
+          @click="handleEdit()"
+        >
+          {{ $t('table.edit') }}
+        </el-button>
+        <el-button
+          v-waves
+          round
+          type="danger"
+          class="filter-item"
+          style="margin-left: 5px;"
+          icon="el-icon-delete"
+          @click="handleDelete()"
+        >
+          {{ $t('table.delete') }}
+        </el-button>
+      </el-button-group>
+    </div>
+    <el-table
+      ref="pagingTable"
+      style="width: 100%;margin-bottom: 20px;"
+      row-key="id"
+      border
+      lazy
+      highlight-current-row
+      default-expand-all
+      :load="loadRepoChild"
+      :data="repoData"
+      :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+      @row-click="rowClick"
+    >
       <el-table-column
         label="题库名称"
-      >
-        <template slot-scope="data">
-          <router-link :to="{ name: 'ExamManagementRepoUpdate', params:{id: data.row.id}}">
-            {{ data.row.title }}
-          </router-link>
-        </template>
-      </el-table-column>
+        prop="title"
+      />
       <el-table-column
         label="题库编号"
         prop="code"
         align="center"
+        width="180px"
       />
       <el-table-column
         label="单选题数量"
         prop="radioCount"
         align="center"
+        width="120px"
       />
       <el-table-column
         label="多选题数量"
         prop="multiCount"
         align="center"
+        width="120px"
       />
       <el-table-column
         label="判断题数量"
         prop="judgeCount"
         align="center"
+        width="120px"
       />
       <el-table-column
         label="简答题数量"
         prop="saqCount"
         align="center"
+        width="120px"
       />
       <el-table-column
         label="创建时间"
         align="center"
+        width="180px"
         prop="createTime"
       />
-    </template>
-  </data-table>
+    </el-table>
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
+      <exam-management-repo-add :repo-id="repoId" @submit="handleFormSubmit" @cancel="handleFormCancel" />
+    </el-dialog>
+  </div>
 </template>
 
 <script>
-import DataTable from '@/views/exam/components/DataTable'
+import { deleteRepos, fetchRepoChild } from '@/views/exam/qu/repo/repo'
+import ExamManagementRepoAdd from '@/views/exam/qu/repo/form'
 
 export default {
   name: 'ExamManagementRepo',
-  components: { DataTable },
+  components: { ExamManagementRepoAdd },
   data() {
     return {
-      listQuery: {
-        current: 1,
-        size: 10,
-        params: {
-          title: ''
-        },
-        search: {
-          column: 'title',
-          input: '',
-          placeholder: '搜索题库名称'
-        }
+      listLoading: false,
+      dialogFormVisible: false,
+      dialogStatus: '',
+      repoForm: {},
+      repoId: '',
+      textMap: {
+        update: '编辑',
+        create: '创建'
       },
-      options: {
-        // 可批量操作
-        multi: true,
-        // 批量操作列表
-        multiActions: [
-          {
-            value: 'delete',
-            label: this.$t('table.delete')
-          }
-        ],
-        // 列表请求URL
-        listUrl: 'gateway/exam/api/repo/paging',
-        // 删除请求URL
-        deleteUrl: 'gateway/exam/api/repo/delete',
-        // 启用禁用
-        stateUrl: '/qu/repo/state',
-        // 添加数据路由
-        addRoute: 'ExamManagementRepoAdd'
-      }
+      repoData: []
     }
   },
+  created() {
+    this.handleSearch()
+  },
   methods: {
-
+    handleSearch() {
+      this.listLoading = true
+      this.repoData = []
+      fetchRepoChild(0).then(res => {
+        this.listLoading = false
+        if (res.data && res.data.length > 0) {
+          this.repoData = res.data
+          for (let i = 0; i < this.repoData.length; i++) {
+            const repo = this.repoData[i]
+            repo.hasChildren = !repo.leaf
+          }
+        }
+      }).catch((reason) => {
+        this.listLoading = false
+        this.$notify({
+          title: '获取根题库数据失败!',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
+      })
+    },
+    handleAdd() {
+      this.repoId = ''
+      this.dialogStatus = 'create'
+      this.dialogFormVisible = true
+    },
+    handleFormSubmit(flag) {
+      if (flag === 1) {
+        this.dialogFormVisible = false
+        this.handleSearch()
+      }
+    },
+    handleFormCancel() {
+      this.dialogFormVisible = false
+    },
+    handleEdit() {
+      if (!this.repoForm || !this.repoForm.id) {
+        this.$message({
+          message: '操作前请先选择一条数据!'
+        })
+        return
+      }
+      this.repoId = this.repoForm.id
+      this.dialogStatus = 'edit'
+      this.dialogFormVisible = true
+    },
+    handleDelete() {
+      if (!this.repoForm || !this.repoForm.id || !this.repoForm.title) {
+        this.$message({
+          message: '操作前请先选择一条数据!'
+        })
+        return
+      }
+      if (this.repoForm.hasChildren === true) {
+        this.$message({
+          message: '该数据是上级题库不能直接删除，请先删除其子节点!'
+        })
+        return
+      }
+      this.$confirm(
+        '此操作将永久删除题库名( ' + this.repoForm.title + ' )的相关数据, 是否继续?',
+        '提示',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }
+      ).then(() => {
+        const data = {
+          ids: new Array(this.repoForm.id)
+        }
+        deleteRepos(data).then(() => {
+          this.$notify({
+            title: '删除题库成功',
+            type: 'success',
+            duration: 5000
+          })
+          this.handleSearch()
+        }).catch(reason => {
+          this.$notify({
+            title: '删除题库失败',
+            message: reason.message,
+            type: 'error',
+            duration: 5000
+          })
+        })
+      }).catch(() => {
+      })
+    },
+    rowClick(row, event, column) {
+      this.repoForm = row
+    },
+    loadRepoChild(row, treeNode, resolve) {
+      let repoData = []
+      fetchRepoChild(row.id).then(res => {
+        if (res.data && res.data.length > 0) {
+          repoData = res.data
+          for (let i = 0; i < repoData.length; i++) {
+            const repo = repoData[i]
+            repo.hasChildren = !repo.leaf
+          }
+        }
+        resolve(repoData)
+      }).catch((reason) => {
+        this.$notify({
+          title: '获取子题库数据失败!',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
+        resolve(repoData)
+      })
+    }
   }
 }
 </script>

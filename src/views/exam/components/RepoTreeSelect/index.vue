@@ -189,6 +189,20 @@ export default {
       }
       return null
     },
+    isRepoCodeExsit(code) {
+      let stark = []
+      stark = stark.concat(this.treedata)
+      while (stark.length) {
+        const temp = stark.shift()
+        if (temp[this.props.children]) {
+          stark = stark.concat(temp[this.props.children])
+        }
+        if (temp['code'] === code) {
+          return true
+        }
+      }
+      return false
+    },
     // 清除空 children项
     cleanChildren(data) {
       const fa = (list) => {

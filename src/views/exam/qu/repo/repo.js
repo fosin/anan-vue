@@ -31,6 +31,13 @@ export function fetchRepoList(data) {
 export function batchAction(data) {
   return postRequest('gateway/exam/api/repo/batch-action', data)
 }
+/**
+ * 题库批量删除操作
+ * @param data
+ */
+export function deleteRepos(data) {
+  return postRequest('gateway/exam/api/repo/delete', data)
+}
 
 /**
  * 题库批量操作
