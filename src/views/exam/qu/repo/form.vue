@@ -2,17 +2,17 @@
   <div class="app-container">
     <el-form ref="repoForm" :model="repoForm" :rules="rules" label-position="left">
       <el-card>
-        <el-form-item label="题库名称" prop="title" label-width="80px">
-          <el-input v-model="repoForm.title" />
+        <el-form-item label="上级题库" prop="pId" label-width="80px">
+          <repo-tree-select ref="repoTree" v-model="repoForm.pId" :width="400" @nodeClick="nodeClick" />
         </el-form-item>
         <el-form-item label="题库编码" prop="code" label-width="80px">
           <el-input v-model="repoForm.code" />
         </el-form-item>
-        <el-form-item label="上级题库" prop="pId" label-width="80px">
-          <repo-tree-select ref="repoTree" v-model="repoForm.pId" @nodeClick="nodeClick" />
+        <el-form-item label="题库名称" prop="title" label-width="80px">
+          <el-input v-model="repoForm.title" />
         </el-form-item>
         <el-form-item label="权限用户" prop="userList" label-width="80px">
-          <organiz-user-select v-model="userIds" :multi="true" />
+          <organiz-user-select v-model="userIds" :multi="true" :width="400" />
         </el-form-item>
         <el-form-item label="题库备注" prop="remark">
           <el-input v-model="repoForm.remark" type="textarea" />
@@ -43,16 +43,16 @@ export default {
   },
   data() {
     const validateCode = (rule, value, callback) => {
-      if (this.repoParentForm.id && this.repoForm.id !== this.repoParentForm.id) {
+      if (this.repoParentForm && this.repoParentForm.id && this.repoForm.id !== this.repoParentForm.id) {
         if (value.substring(0, this.repoParentForm.code.length) !== this.repoParentForm.code) {
           callback(new Error('题库编码必须以父题库编码为前缀!'))
         }
         if (value === this.repoParentForm.code) {
           callback(new Error('题库编码不能和父题库编码相同!'))
         }
-        if (this.$refs.repoTree.isRepoCodeExsit(value)) {
-          callback(new Error('该编码已存在，请修改一个新值!'))
-        }
+      }
+      if (this.$refs.repoTree.isRepoCodeExsit(value, this.repoForm.id)) {
+        callback(new Error('该编码已存在，请修改一个新值!'))
       }
       callback()
     }
@@ -83,19 +83,22 @@ export default {
       }
     }
   },
-  watch: {
-    repoId(val) {
-      if (val && val.length > 0) {
-        this.fetchData(val)
-      } else {
-        this.initForm()
-      }
+  created() {
+    if (this.repoId && this.repoId.length > 0) {
+      this.fetchData(this.repoId)
+    } else {
+      this.initForm()
     }
   },
   methods: {
     nodeClick(node) {
-      this.repoParentForm = node
-      this.repoForm.code = node.code
+      if (node) {
+        this.repoParentForm = node
+        this.repoForm.code = node.code
+      } else {
+        this.repoParentForm = {}
+        this.repoForm.code = ''
+      }
     },
     fetchData(id) {
       const params = { id: id }

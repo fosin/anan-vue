@@ -2,13 +2,12 @@
   <el-select
     v-model="currentValue"
     filterable
-    remote
     :multiple="multi"
     reserve-keyword
+    :style="`width: ${width}px`"
     clearable
     automatic-dropdown
     placeholder="选择或搜索用户"
-    :remote-method="fetchData"
     class="filter-item"
     @change="handlerChange"
   >
@@ -37,8 +36,17 @@ export default {
       default: () => ([])
     },
     default: {
-      type: String,
-      default: ''
+      type: Number,
+      default: 0
+    },
+    // 输入框宽度
+    width: {
+      type: Number,
+      default: 200
+    },
+    showAll: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -59,15 +67,16 @@ export default {
       }
     }
   },
-  created() {
-    this.currentValue = this.value
+  mounted() {
     this.fetchData()
   },
   methods: {
     fetchData() {
       listOrganizUser(this.ananUserInfo.organizId).then(response => {
         this.dataList = response.data
-        this.currentValue = this.value
+        if (!this.showAll) {
+          this.dataList = this.dataList.filter(value => value.status === 0)
+        }
       }).catch((reason) => {
         this.$notify({
           title: '获取机构用户数据失败',

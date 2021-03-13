@@ -3,6 +3,7 @@ import router from '../router'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'// progress bar style
 import getPageTitle from '@/utils/get-page-title'
+import { Notification } from 'element-ui'
 
 NProgress.configure({ showSpinner: false })// NProgress Configuration
 

@@ -94,8 +94,8 @@
         prop="createTime"
       />
     </el-table>
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
-      <exam-management-repo-add :repo-id="repoId" @submit="handleFormSubmit" @cancel="handleFormCancel" />
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px" @closed="onDialogClosed">
+      <exam-management-repo-add v-if="dialogFormVisible" :repo-id="repoId" @submit="handleFormSubmit" @cancel="handleFormCancel" />
     </el-dialog>
   </div>
 </template>
@@ -110,24 +110,32 @@ export default {
   data() {
     return {
       listLoading: false,
+      dialogStatus: null,
       dialogFormVisible: false,
-      dialogStatus: '',
       repoForm: {},
       repoId: '',
       textMap: {
         update: '编辑',
         create: '创建'
       },
-      repoData: []
+      repoData: undefined
+    }
+  },
+  watch: {
+    dialogStatus(val) {
+      this.dialogFormVisible = val !== null
     }
   },
   created() {
     this.handleSearch()
   },
   methods: {
+    onDialogClosed() {
+      this.dialogStatus = null
+    },
     handleSearch() {
       this.listLoading = true
-      this.repoData = []
+      this.repoData = undefined
       fetchRepoChild(0).then(res => {
         this.listLoading = false
         if (res.data && res.data.length > 0) {
@@ -150,16 +158,15 @@ export default {
     handleAdd() {
       this.repoId = ''
       this.dialogStatus = 'create'
-      this.dialogFormVisible = true
     },
     handleFormSubmit(flag) {
+      this.dialogStatus = null
       if (flag === 1) {
-        this.dialogFormVisible = false
         this.handleSearch()
       }
     },
     handleFormCancel() {
-      this.dialogFormVisible = false
+      this.dialogStatus = null
     },
     handleEdit() {
       if (!this.repoForm || !this.repoForm.id) {
@@ -170,7 +177,6 @@ export default {
       }
       this.repoId = this.repoForm.id
       this.dialogStatus = 'edit'
-      this.dialogFormVisible = true
     },
     handleDelete() {
       if (!this.repoForm || !this.repoForm.id || !this.repoForm.title) {

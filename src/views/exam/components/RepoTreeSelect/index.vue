@@ -189,7 +189,7 @@ export default {
       }
       return null
     },
-    isRepoCodeExsit(code) {
+    isRepoCodeExsit(code, repoId) {
       let stark = []
       stark = stark.concat(this.treedata)
       while (stark.length) {
@@ -197,7 +197,7 @@ export default {
         if (temp[this.props.children]) {
           stark = stark.concat(temp[this.props.children])
         }
-        if (temp['code'] === code) {
+        if (temp['code'] === code && repoId !== temp['id']) {
           return true
         }
       }
