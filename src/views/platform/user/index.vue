@@ -191,7 +191,11 @@
         </el-button>
       </div>
     </el-dialog>
-    <el-dialog :title="textMap[dialogStatus] + ' ---> ' + form.username" :visible.sync="dialogUserRoleVisible" width="550px">
+    <el-dialog
+      :title="textMap[dialogStatus] + ' ---> ' + form.username"
+      :visible.sync="dialogUserRoleVisible"
+      width="650px"
+    >
       <el-transfer
         ref="userRole"
         v-model="userRoles"

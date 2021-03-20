@@ -16,15 +16,18 @@
           label="考试次数"
           prop="tryCount"
           align="center"
+          width="100px"
         />
         <el-table-column
           label="最高分"
           prop="maxScore"
           align="center"
+          width="100px"
         />
         <el-table-column
           label="最高评级"
           align="center"
+          width="100px"
         >
           <template slot-scope="scope">
             <span :style="{ color: rankColor[scope.row.rank] }">{{ getDicDetailValue(rankDics, scope.row.rank) }}</span>
@@ -34,10 +37,12 @@
           label="最后考试时间"
           prop="updateTime"
           align="center"
+          width="180px"
         />
         <el-table-column
           label="操作"
           align="center"
+          width="180px"
         >
           <template slot-scope="scope">
             <el-button type="primary" size="mini" icon="el-icon-view" @click="handleExamDetail(scope.row.examId)">详情</el-button>

@@ -173,7 +173,7 @@
     <el-dialog
       :title="textMap[dialogStatus] + ' ---> ' + form.name"
       :visible.sync="dialogRoleUserVisible"
-      width="550px"
+      width="650px"
     >
       <el-transfer
         ref="roleUser"
