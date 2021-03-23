@@ -84,7 +84,7 @@
 </template>
 
 <script>
-import { fetchList, deleteData, changeState } from '@/views/exam/common'
+import { deleteData, changeState } from '@/views/exam/common'
 
 export default {
   name: 'PagingTable',
@@ -198,7 +198,7 @@ export default {
       if (this.listQuery.search && this.listQuery.search.column) {
         this.listQuery.params[this.listQuery.search.column] = this.listQuery.search.input
       }
-      fetchList(this.options.listUrl, this.listQuery).then(response => {
+      this.postRequest(this.options.listUrl, this.listQuery).then(response => {
         this.dataList = response.data
         this.listLoading = false
       }).catch((reason) => {

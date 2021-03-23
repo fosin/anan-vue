@@ -129,12 +129,15 @@
         />
       </div>
     </el-card>
-    <el-tabs v-model="sjoinType" type="border-card" style="margin-top: 15px;" @tab-click="handleTabClick">
+    <el-tabs v-model="sjoinType" type="border-card" :stretch="true" style="margin-top: 15px;" @tab-click="handleTabClick">
       <el-tab-pane label="题库组卷" name="1">
         <el-row>
-          <el-col :span="3">
+          <el-col :span="5">
             <el-button class="filter-item" size="small" type="primary" icon="el-icon-plus" @click="handleAdd">
               添加题库
+            </el-button>
+            <el-button v-if="isSaved" class="filter-item" size="small" type="primary" icon="el-icon-sell" @click="handlePreQus">
+              预生成试题
             </el-button>
           </el-col>
           <el-col :span="6">
@@ -293,21 +296,24 @@
           </el-table-column>
         </el-table>
       </el-tab-pane>
-      <el-tab-pane label="选题组卷" name="2" />
+      <el-tab-pane label="选题组卷" name="2">
+        <qupaper :qu-list="postForm.quList" />
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 
 <script>
-import { fetchDetail, saveData } from '@/views/exam/exam/exam'
+import { fetchDetail, saveData, prepareQus } from '@/views/exam/exam/exam'
 import { getOrganiz, listOrganizChild } from '@/views/platform/organization/organization'
 import { mapGetters } from 'vuex'
 import RepoTreeSelect from '@/views/exam/components/RepoTreeSelect'
 import { fetchRepoList } from '@/views/exam/qu/repo/repo'
+import Qupaper from './qupaper'
 
 export default {
   name: 'ExamManagementExamUpdate',
-  components: { RepoTreeSelect },
+  components: { RepoTreeSelect, Qupaper },
   data() {
     return {
       defaultExpandedKeys: [1],
@@ -322,6 +328,7 @@ export default {
       treeLoading: false,
       dateValues: [],
       quDialogShow: false,
+      isSaved: false,
       quDialogType: 1,
       excludes: [],
       scoreDialog: false,
@@ -329,8 +336,6 @@ export default {
       // 题库
       repoList: [],
       reposData: [],
-      // 试题列表
-      quList: [[], [], [], []],
       quEnable: [false, false, false, false],
       postForm: {
         // 总分数
@@ -407,8 +412,22 @@ export default {
     ...mapGetters(['ananUserInfo'])
   },
   watch: {
+    // 计算选题组卷的总分
+    'postForm.quList': {
+      handler(quList) {
+        if (!quList || quList.length < 1) {
+          return
+        }
+        this.calcTotalScore()
+      },
+      deep: true
+    },
     filterText(val) {
       this.$refs.tree.filter(val)
+    },
+    sjoinType(val) {
+      this.postForm.joinType = parseInt(val)
+      this.calcTotalScore()
     },
     dateValues: {
       handler() {
@@ -416,17 +435,10 @@ export default {
         this.postForm.endTime = this.dateValues[1]
       }
     },
-    // 题库变换
+    // 计算题库组卷的试卷总分
     repoList: {
       handler() {
-        const that = this
-        that.postForm.totalScore = 0
-        this.repoList.forEach(function(item) {
-          that.postForm.totalScore += item.radioCount * item.radioScore
-          that.postForm.totalScore += item.multiCount * item.multiScore
-          that.postForm.totalScore += item.judgeCount * item.judgeScore
-          that.postForm.totalScore += item.saqCount * item.saqScore
-        })
+        this.calcTotalScore()
         // 赋值
         this.postForm.repoList = this.repoList
       },
@@ -454,8 +466,23 @@ export default {
     })
   },
   methods: {
+    calcTotalScore() {
+      let totalScore = 0
+      if (this.postForm.joinType === 1) {
+        this.repoList.forEach(function(item) {
+          totalScore += item.radioCount * item.radioScore
+          totalScore += item.multiCount * item.multiScore
+          totalScore += item.judgeCount * item.judgeScore
+          totalScore += item.saqCount * item.saqScore
+        })
+      } else {
+        this.postForm.quList.forEach(function(qu) {
+          totalScore += qu.score
+        })
+      }
+      this.postForm.totalScore = totalScore
+    },
     handleTabClick(tab, event) {
-      console.log(tab, event)
     },
     repoSelected(repoId) {
       this.repoList.forEach((value2) => {
@@ -521,7 +548,6 @@ export default {
           })
           return
         }
-        this.postForm.joinType = parseInt(this.sjoinType)
         if (this.postForm.joinType === 1) {
           for (let i = 0; i < this.postForm.repoList.length; i++) {
             const repo = this.postForm.repoList[i]
@@ -576,6 +602,11 @@ export default {
             }
           }
         }
+        if (this.postForm.joinType === 2) {
+          this.postForm.quList.forEach(value => {
+            value.examId = this.postForm.id
+          })
+        }
         this.$confirm('确实要提交保存吗？', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -607,7 +638,29 @@ export default {
       }
       this.repoList.push(addRepo)
     },
-
+    handlePreQus() {
+      this.$confirm('预生成试题会清空原试题，是否继续？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        const data = {
+          id: this.postForm.id,
+          level: this.postForm.level
+        }
+        prepareQus(data).then(response => {
+          this.postForm.quList = response.data
+          this.sjoinType = '2'
+        }).catch(reason => {
+          this.$notify({
+            title: '预生成试题失败!',
+            message: reason.message,
+            type: 'error',
+            duration: 5000
+          })
+        })
+      })
+    },
     removeItem(index, data) {
       data.splice(index, 1)
     },
@@ -644,22 +697,24 @@ export default {
       const that = this
 
       fetchDetail(id).then(response => {
+        this.isSaved = true
         this.postForm = response.data
         this.sjoinType = this.postForm.joinType.toString()
         this.dateValues[0] = this.postForm.startTime
         this.dateValues[1] = this.postForm.endTime
 
+        // 填充题库清单
+        if (this.postForm.joinType === 1) {
+          that.repoList = that.postForm.repoList
+          that.repoList.forEach(value => {
+            this.setRepoLimit(value)
+          })
+        }
         // 按分组填充试题
         if (this.postForm.joinType === 2) {
           this.postForm.quList.forEach(function(item) {
             // const index = item.quType - 1
             // that.quList[index].push(item)
-          })
-        }
-        if (this.postForm.joinType === 1) {
-          that.repoList = that.postForm.repoList
-          that.repoList.forEach(value => {
-            this.setRepoLimit(value)
           })
         }
       }).catch((reason) => {
@@ -677,14 +732,14 @@ export default {
       this.postForm.repoList = this.repoList
 
       saveData(this.postForm).then(() => {
+        this.isSaved = true
         this.$notify({
           title: '成功',
           message: '考试保存成功！',
           type: 'success',
           duration: 2000
         })
-
-        this.$store.dispatch('closeAndPushToView', { name: 'ExamManagementExam' })
+        // this.$store.dispatch('closeAndPushToView', { name: 'ExamManagementExam' })
       }).catch((reason) => {
         this.$notify({
           title: '保存考试数据失败',

@@ -22,7 +22,7 @@
 </template>
 <script>
 
-import { fetchList } from '@/views/exam/qu/repo/repo'
+import { fetchRepoList } from '@/views/exam/qu/repo/repo'
 
 export default {
   name: 'RepoSelect',
@@ -62,7 +62,7 @@ export default {
   },
   methods: {
     fetchData() {
-      fetchList({}).then(response => {
+      fetchRepoList({}).then(response => {
         this.dataList = response.data
       }).catch((reason) => {
         this.$notify({

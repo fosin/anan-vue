@@ -46,6 +46,7 @@
         label="试题内容"
         prop="content"
         align="center"
+        sortable
         show-overflow-tooltip
       >
         <template slot-scope="scope">
@@ -63,6 +64,7 @@
           <el-input-number
             v-model="scope.row.score"
             :min="0"
+            style="width: 100%;"
           />
         </template>
       </el-table-column>
@@ -78,103 +80,121 @@
     </el-table>
     <el-dialog
       title="选择试题"
-      width="80%"
+      width="70%"
+      top="15px"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
       :visible.sync="dialogFormVisible"
     >
+      <el-row>
+        <el-col :span="10">
+          <el-select
+            v-model="listQuery.params.quType"
+            placeholder="选择题型"
+            class="filter-item"
+            clearable
+          >
+            <el-option
+              v-for="item in quTypes"
+              :key="item.name"
+              :label="item.value"
+              :value="item.name"
+              :disabled="item.status === 1"
+            />
+          </el-select>
+          <repo-tree-select :user-id="ananUserInfo.id" @nodeClick="onNodeClick" />
+        </el-col>
+        <el-col :span="7">
+          <el-input
+            v-if="listQuery.search.column"
+            v-model="listQuery.search.input"
+            :placeholder="listQuery.search.placeholder"
+            style="width: 200px;"
+            class="filter-item"
+            @keyup.enter.native="getList"
+          />
+          <el-button v-waves round type="primary" icon="el-icon-search" @click="getList">
+            {{ $t('table.refresh') }}
+          </el-button>
+        </el-col>
+        <el-col :span="6">
+          每题
+          <el-input-number
+            v-model="selecttionScore"
+            style="width: 120px"
+            :min="0"
+          />分
+          <el-button type="primary" @click="selectedQus">选好了</el-button>
+        </el-col>
+      </el-row>
       <el-table
         ref="pagingTable"
-        :data="quList"
-        @select-changed="handleTableCheckChange"
+        :data="dataList.records"
+        fit
+        highlight-current-row
+        style="width: 100%"
+        @selection-change="handleTableCheckChange"
+        @sort-change="sortChange"
       >
-        <template slot="filter-content">
-          <el-row>
-            <el-col :span="5">
-              <el-select v-model="listQuery.params.quType" placeholder="选择题型" class="filter-item" clearable>
-                <el-option
-                  v-for="item in quTypes"
-                  :key="item.name"
-                  :label="item.value"
-                  :value="item.name"
-                  :disabled="item.status === 1"
-                />
-              </el-select>
-            </el-col>
-            <el-col :span="5">
-              <repo-select v-model="listQuery.params.repoIds" :multi="true" />
-            </el-col>
-            <el-input
-              v-if="listQuery.search.column"
-              v-model="listQuery.search.input"
-              :placeholder="listQuery.search.placeholder"
-              style="width: 200px;"
-              class="filter-item"
-              @keyup.enter.native="getList"
-            />
-            <el-button v-waves round type="primary" icon="el-icon-search" @click="getList">
-              {{ $t('table.refresh') }}
-            </el-button>
-            <el-col :span="4">
-              每题
-              <el-input-number
-                v-model="selecttionScore"
-                :min="0"
-              />分
-            </el-col>
-            <el-col :span="3">
-              <el-button type="primary" @click="selectedQus">选好了</el-button>
-            </el-col>
-          </el-row>
-        </template>
-
-        <template slot="data-columns">
-          <el-table-column
-            type="selection"
-            width="55px"
-            align="center"
-          />
-          <el-table-column
-            label="试题类型"
-            align="center"
-            width="90px"
-          >
-            <template slot-scope="scope">
-              {{ getDicDetailValue(quTypes, scope.row.quType) }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="试题难度"
-            align="center"
-            width="90px"
-          >
-            <template slot-scope="scope">
-              {{ getDicDetailValue(levels, scope.row.level) }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="试题内容"
-            prop="content"
-            align="center"
-            show-overflow-tooltip
-          >
-            <template slot-scope="scope">
-              <span>{{ scope.row.content }}</span>
-            </template>
-          </el-table-column>
-        </template>
+        <el-table-column
+          type="selection"
+          width="55px"
+          align="center"
+        />
+        <el-table-column
+          label="试题类型"
+          align="center"
+          width="100px"
+          sortable="custom"
+        >
+          <template slot-scope="scope">
+            {{ getDicDetailValue(quTypes, scope.row.quType) }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="试题难度"
+          align="center"
+          width="100px"
+          sortable="custom"
+        >
+          <template slot-scope="scope">
+            {{ getDicDetailValue(levels, scope.row.level) }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="试题内容"
+          prop="content"
+          align="center"
+          sortable="custom"
+          show-overflow-tooltip
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.content }}</span>
+          </template>
+        </el-table-column>
       </el-table>
+      <div v-show="!listLoading && dataList.total>0" class="pagination-container">
+        <el-pagination
+          :current-page.sync="listQuery.current"
+          :page-sizes="listQuery.pageSizes"
+          :page-size="listQuery.size"
+          :total="dataList.total"
+          layout="total, sizes, prev, pager, next, jumper"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        />
+      </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import RepoSelect from '@/views/exam/components/RepoSelect'
-import { fetchList } from '@/views/exam/common'
+import RepoTreeSelect from '@/views/exam/components/RepoTreeSelect'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Qupaper',
-  components: { RepoSelect },
+  components: { RepoTreeSelect },
   props: {
     // 试题列表
     quList: {
@@ -194,6 +214,7 @@ export default {
       levels: [],
       SelectionQus: [],
       SelectionQuList: [],
+      dataList: [],
       listQuery: {
         current: 1,
         size: 10,
@@ -202,6 +223,10 @@ export default {
           quType: '',
           state: 0,
           repoIds: []
+        },
+        sort: {
+          sortOrder: 'DESC',
+          sortName: ''
         },
         search: {
           column: 'content',
@@ -215,6 +240,9 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters(['ananUserInfo'])
+  },
   created() {
     this.loadDictionaryById(146).then(res => {
       this.levels = res.details
@@ -222,8 +250,15 @@ export default {
     this.loadDictionaryById(142).then(res => {
       this.quTypes = res.details
     })
+    this.getList()
   },
   methods: {
+    onNodeClick(node) {
+      this.listQuery.params.repoIds = []
+      if (node) {
+        this.listQuery.params.repoIds.push(node.id)
+      }
+    },
     /**
      * 查询数据列表
      */
@@ -233,7 +268,7 @@ export default {
       if (this.listQuery.search && this.listQuery.search.column) {
         this.listQuery.params[this.listQuery.search.column] = this.listQuery.search.input
       }
-      fetchList(this.options.listUrl, this.listQuery).then(response => {
+      this.postRequest(this.options.listUrl, this.listQuery).then(response => {
         this.dataList = response.data
         this.listLoading = false
       }).catch((reason) => {
@@ -244,6 +279,21 @@ export default {
           duration: 5000
         })
       })
+    },
+    sortChange(column) {
+      this.listQuery.sort.sortOrder = (column.order && column.order === 'descending') ? 'DESC' : 'ASC'
+      this.listQuery.sort.sortName = column.prop
+      if (this.listQuery.sort.sortName) {
+        this.getList()
+      }
+    },
+    handleSizeChange(val) {
+      this.listQuery.size = val
+      this.getList()
+    },
+    handleCurrentChange(val) {
+      this.listQuery.current = val
+      this.getList()
     },
     removeItem(index, data) {
       data.splice(index, 1)
@@ -263,14 +313,14 @@ export default {
       }
     },
     selectedQus() {
-      if (this.SelectionQus && this.SelectionQus.objs) {
-        const objs = this.SelectionQus.objs
+      if (this.SelectionQus && this.SelectionQus.length > 0) {
+        const objs = this.SelectionQus
         for (let i = 0; i < objs.length; i++) {
           const selectedQu = objs[i]
           const quId = selectedQu.id
           if (this.quList.find(function(x) { return x.quId === quId }) === undefined) {
             const qu = {
-              examId: this.postForm.id,
+              examId: '',
               quId: quId,
               quType: selectedQu.quType,
               level: selectedQu.level,

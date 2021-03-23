@@ -17,6 +17,14 @@ export function saveData(data) {
 }
 
 /**
+ * 准备试题
+ * @param data
+ */
+export function prepareQus(data) {
+  return postRequest('gateway/exam/api/exam/exam/prepareQus', data)
+}
+
+/**
  * 题库详情
  * @param data
  */
