@@ -44,6 +44,11 @@ export default {
       type: Number,
       default: 200
     },
+    // 用户状态
+    status: {
+      type: Number,
+      default: 0
+    },
     showAll: {
       type: Boolean,
       default: false
@@ -72,7 +77,7 @@ export default {
   },
   methods: {
     fetchData() {
-      listOrganizUser(this.ananUserInfo.organizId).then(response => {
+      listOrganizUser(this.ananUserInfo.organizId, this.status).then(response => {
         this.dataList = response.data
         if (!this.showAll) {
           this.dataList = this.dataList.filter(value => value.status === 0)

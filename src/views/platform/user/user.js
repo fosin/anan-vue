@@ -60,9 +60,12 @@ export function listUser() {
 }
 
 // 根据机构ID查询该机构及子机构的所有用户
-export function listOrganizUser(organizId) {
+export function listOrganizUser(organizId, status) {
+  if (status === null || status === undefined) {
+    status = -1
+  }
   return request({
-    url: 'gateway/platform/v1/user/childList/organizId/' + organizId,
+    url: 'gateway/platform/v1/user/childList/organizId/' + organizId + '/' + status,
     method: 'post'
   })
 }

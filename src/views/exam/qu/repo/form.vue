@@ -31,6 +31,7 @@
 import { fetchDetail, saveData } from '@/views/exam/qu/repo/repo'
 import RepoTreeSelect from '@/views/exam/components/RepoTreeSelect'
 import OrganizUserSelect from '@/components/OrganizUserSelect'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'ExamManagementRepoAdd',
@@ -83,6 +84,9 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters(['ananUserInfo'])
+  },
   created() {
     if (this.repoId && this.repoId.length > 0) {
       this.fetchData(this.repoId)
@@ -94,7 +98,7 @@ export default {
     nodeClick(node) {
       if (node) {
         this.repoParentForm = node
-        this.repoForm.code = node.code
+        this.repoForm.code = node.code + String((node.children ? node.children.length : 0) + 1).padStart(2, '0')
       } else {
         this.repoParentForm = {}
         this.repoForm.code = ''
@@ -150,6 +154,11 @@ export default {
             type: 'success',
             duration: 2000
           })
+          debugger
+          if (this.repoParentForm.children) {
+            this.repoParentForm.children.push(this.repoForm)
+          }
+          this.initForm()
           this.$emit('submit', 1)
         }).catch((reason) => {
           this.$notify({
@@ -166,15 +175,21 @@ export default {
       this.$emit('cancel')
     },
     initForm() {
+      let newCode = ''
+      let pId = ''
+      if (this.repoParentForm.id) {
+        newCode = this.repoParentForm.code + String((this.repoParentForm.children ? this.repoParentForm.children.length : 0) + 1).padStart(2, '0')
+        pId = this.repoParentForm.id
+      }
       this.repoForm = {
-        pId: '',
         id: '',
-        code: '',
+        pId: pId,
+        code: newCode,
         title: '',
         remark: '',
         userList: []
       }
-      this.repoParentForm = {}
+      // this.repoParentForm = {}
       this.userIds = []
     }
   }

@@ -111,6 +111,7 @@ export default {
     return {
       listLoading: false,
       dialogStatus: null,
+      dataChanged: false,
       dialogFormVisible: false,
       repoForm: {},
       repoId: '',
@@ -160,13 +161,20 @@ export default {
       this.dialogStatus = 'create'
     },
     handleFormSubmit(flag) {
-      this.dialogStatus = null
       if (flag === 1) {
-        this.handleSearch()
+        if (this.repoId && this.repoId.length > 0) {
+          this.dialogStatus = null
+          this.handleSearch()
+        }
+        this.dataChanged = true
       }
     },
     handleFormCancel() {
       this.dialogStatus = null
+      if (this.dataChanged) {
+        this.dataChanged = false
+        this.handleSearch()
+      }
     },
     handleEdit() {
       if (!this.repoForm || !this.repoForm.id) {
