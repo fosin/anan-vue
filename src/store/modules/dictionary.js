@@ -24,7 +24,7 @@ const dictionary = {
             reject('error')
           }
           const data = response.data
-          postRequest('gateway/platform/v1/dictionaryDetail/byCode/' + dicId).then(response => {
+          postRequest('gateway/platform/v1/dictionarydetail/byCode/' + dicId).then(response => {
             if (!response.data) {
               reject('error')
             }
