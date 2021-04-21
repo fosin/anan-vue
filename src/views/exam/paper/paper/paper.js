@@ -6,7 +6,11 @@ import { postRequest } from '@/utils/request'
  * @param examId
  */
 export function listPaper(userId, examId) {
-  return postRequest('gateway/exam/api/paper/paper/paging', { current: 1, size: 99, params: { userId: userId, examId: examId }})
+  return postRequest('gateway/exam/api/paper/paper/paging', {
+    current: 1,
+    size: 99,
+    params: { userId: userId, examId: examId }
+  })
 }
 
 /**
@@ -19,4 +23,12 @@ export function reviewPaper(paperData) {
 
 export function trycount(paperData) {
   return postRequest('gateway/exam/api/paper/paper/trycount', paperData)
+}
+
+/**
+ * 考试通过率统计
+ * @param params
+ */
+export function rateCount(params) {
+  return postRequest('gateway/exam/api/paper/paper/rateCount', params)
 }
