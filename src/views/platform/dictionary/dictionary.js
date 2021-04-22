@@ -94,7 +94,7 @@ export function deleteDictionaryDetail(id) {
 
 export function putDictionaryDetail(obj) {
   return request({
-    url: 'gateway/platform/v1/dictionaryDetail',
+    url: 'gateway/platform/v1/dictionarydetail',
     method: 'put',
     data: obj
   })

@@ -21,6 +21,7 @@
           <el-row :gutter="24" class="card-line" style="padding-left: 10px">
             <el-tag type="info">未作答</el-tag>
             <el-tag type="success">已作答</el-tag>
+            <el-tag type="warning">当前题</el-tag>
           </el-row>
           <div v-if="paperData.radioList!==undefined && paperData.radioList.length > 0">
             <p class="card-title">单选题</p>
@@ -342,10 +343,8 @@ export default {
       const params = { paperId: this.paperId, quId: this.quData.quId, answers: answers, answer: this.quData.answer, quType: this.quData.quType }
       fillAnswer(params).then(() => {
         // 必须选择一个值
-        if (answers.length > 0) {
-          // 加入已答列表
-          this.cardItem.answered = true
-        }
+        // 加入已答列表
+        this.cardItem.answered = (answers.length > 0 || (this.quData.quType === 4 && this.quData.answer.length > 0))
         // 最后一个动作，交卷
         if (callback) {
           callback()
