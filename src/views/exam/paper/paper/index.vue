@@ -6,22 +6,14 @@
       :list-query="listQuery"
     >
       <template slot="filter-content" style="display: flex; align-items: flex-start">
-        <depart-tree-select
-          v-model="listQuery.params.departId"
-          class="el-select filter-item el-select--medium "
-          :options="treeData"
-          :props="defaultProps"
-          width="200px"
-        />
-        <el-select v-model="listQuery.params.state" placeholder="考试状态" class="filter-item" clearable>
-          <el-option
+        <el-radio-group v-model="listQuery.params.state" @change="stateChanged">
+          <el-radio
             v-for="item in paperStates"
             :key="item.name"
-            :label="item.value"
-            :value="item.name"
-            :disabled="item.status === 1"
-          />
-        </el-select>
+            :label="item.name"
+          >{{ item.value }}
+          </el-radio>
+        </el-radio-group>
       </template>
       <template slot="data-columns">
         <el-table-column
@@ -92,7 +84,9 @@
             <span v-if="scope.row.state===1">待阅卷</span>
             <span v-else-if="scope.row.state===0">待交卷</span>
             <span v-else>
-              <span :style="{ color: rankColor[scope.row.rank] }">{{ getDicDetailValue(rankDics, scope.row.rank) }}</span>
+              <span :style="{ color: rankColor[scope.row.rank] }">{{
+                getDicDetailValue(rankDics, scope.row.rank)
+              }}</span>
             </span>
           </template>
         </el-table-column>
@@ -111,7 +105,13 @@
           width="90px"
         >
           <template slot-scope="scope">
-            <el-button v-if="scope.row.state===1 || scope.row.state===2" type="primary" size="small" @click="handleReview(scope.row.id)">去阅卷</el-button>
+            <el-button
+              v-if="scope.row.state===1 || scope.row.state===2"
+              type="primary"
+              size="small"
+              @click="handleReview(scope.row.id)"
+            >去阅卷
+            </el-button>
           </template>
         </el-table-column>
         <!--        <el-table-column
@@ -132,13 +132,12 @@
 
 <script>
 import DataTable from '@/views/exam/components/DataTable'
-import DepartTreeSelect from '@/views/exam/components/DepartTreeSelect'
 import { mapGetters } from 'vuex'
 import { treeAllChildOrganiz } from '@/views/platform/organization/organization'
 
 export default {
   name: 'ExamManagementReview',
-  components: { DepartTreeSelect, DataTable },
+  components: { DataTable },
   data() {
     return {
       rankDics: [],
@@ -211,6 +210,9 @@ export default {
     })
   },
   methods: {
+    stateChanged(selected) {
+      this.$refs.pagingTable.getList()
+    },
     handleReview(id) {
       if (!id || id.length < 1) {
         this.$message({

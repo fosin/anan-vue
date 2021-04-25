@@ -1,7 +1,6 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <slot name="filter-content" />
       <el-row>
         <el-col :span="3">
           <div v-show="multiShow && options.multiActions" class="filter-container">
@@ -21,7 +20,7 @@
             </el-select>
           </div>
         </el-col>
-        <el-col :span="21">
+        <el-col :span="options.addRoute ? 8 : 6">
           <div>
             <el-button-group style="vertical-align: top;">
               <el-button
@@ -47,6 +46,9 @@
               @keyup.enter.native="getList"
             />
           </div>
+        </el-col>
+        <el-col :span="options.addRoute ? 13 : 15">
+          <slot name="filter-content" />
         </el-col>
       </el-row>
     </div>
