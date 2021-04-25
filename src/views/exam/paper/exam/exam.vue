@@ -317,8 +317,11 @@ export default {
 
     // 保存答案
     handSave(item, callback) {
+      if (!item) {
+        this.$message.error('下一题对象无效，系统出错，请联系管理员!')
+        return
+      }
       this.showPrevious = item.id !== this.allItem[0].id
-
       // 最后一个索引
       const last = this.allItem.length - 1
       this.showNext = item.id !== this.allItem[last].id

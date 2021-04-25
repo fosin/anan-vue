@@ -1,12 +1,28 @@
 <template>
   <div>
-    <div style="margin-top: 10px">
+    <div style="margin-top: 10px;margin-bottom: 10px">
       <el-input
         v-model="listQuery.params.title"
-        style="width: 200px;"
+        style="width: 200px;margin-left: 5px"
         class="filter-item"
         placeholder="输入考试名称查找"
         @keyup.enter.native="handleSearch"
+      />
+      <el-date-picker
+        v-model="listQuery.params.beginCreateTime"
+        style="width: 150px;margin-left: 5px;"
+        class="filter-item"
+        value-format="yyyy-MM-dd"
+        type="date"
+        placeholder="考试开始时间"
+      />
+      <el-date-picker
+        v-model="listQuery.params.endCreateTime"
+        style="width: 150px;margin-left: 5px;"
+        class="filter-item"
+        value-format="yyyy-MM-dd"
+        type="date"
+        placeholder="考试结束时间"
       />
       <el-button
         v-waves
@@ -20,98 +36,70 @@
       >
         {{ $t('table.search') }}
       </el-button>
-      <el-date-picker
-        v-model="listQuery.params.beginCreateTime"
-        class="filter-item"
-        value-format="yyyy-MM-dd"
-        type="date"
-        placeholder="考试开始时间"
-      />
-      <el-date-picker
-        v-model="listQuery.params.endCreateTime"
-        class="filter-item"
-        value-format="yyyy-MM-dd"
-        type="date"
-        placeholder="考试结束时间"
-      />
     </div>
-    <div style="margin-top: 10px">
-      <el-table
-        ref="paperRateCount"
-        :data="dataList.records"
-        border
-        fit
-        highlight-current-row
-        style="width: 100%"
-        :default-sort="{prop: 'title', order: 'ascending'}"
+    <el-table
+      ref="paperRateCount"
+      :data="dataList.records"
+      border
+      fit
+      highlight-current-row
+      style="width: 100%"
+      :default-sort="{prop: 'title', order: 'ascending'}"
+    >
+      <el-table-column
+        label="考试名称"
+        prop="title"
+        align="center"
+        width="250px"
+      />
+      <el-table-column
+        label="考试人数"
+        align="center"
+        prop="userCount"
+        width="170px"
+      />
+      <el-table-column
+        label="通过人数"
+        prop="userPassCount"
+        align="center"
+      />
+      <el-table-column
+        label="人数通过率"
+        prop="userPassRate"
+        align="center"
       >
-        <el-table-column
-          label="考试名称"
-          prop="title"
-          align="center"
-          width="250px"
-        />
-        <el-table-column
-          label="考试人数"
-          align="center"
-          prop="userCount"
-          width="170px"
-        />
-        <el-table-column
-          label="通过人数"
-          prop="userPassCount"
-          align="center"
-        />
-        <el-table-column
-          label="人数通过率"
-          prop="userPassRate"
-          align="center"
-        >
-          <template slot-scope="scope">
-            <el-tag
-              type="warning"
-              disable-transitions
-            >{{ scope.row.userPassRate }}%</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="总人次"
-          prop="paperCount"
-          align="center"
-        >
-          <template slot-scope="scope">
-            <el-tag
-              type="warning"
-              disable-transitions
-            >{{ scope.row.paperCount }}次</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="通过人次"
-          prop="paperPassCount"
-          align="center"
-        >
-          <template slot-scope="scope">
-            <el-tag
-              type="warning"
-              disable-transitions
-            >{{ scope.row.paperPassCount }}次</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="人次通过率"
-          prop="paperPassRate"
-          align="center"
-        >
-          <template slot-scope="scope">
-            <el-tag
-              type="warning"
-              disable-transitions
-            >{{ scope.row.paperPassRate }}%</el-tag>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
+        <template slot-scope="scope">
+          <el-tag
+            type="warning"
+            disable-transitions
+          >{{ scope.row.userPassRate }}%
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="总人次"
+        prop="paperCount"
+        align="center"
+      />
+      <el-table-column
+        label="通过人次"
+        prop="paperPassCount"
+        align="center"
+      />
+      <el-table-column
+        label="人次通过率"
+        prop="paperPassRate"
+        align="center"
+      >
+        <template slot-scope="scope">
+          <el-tag
+            type="warning"
+            disable-transitions
+          >{{ scope.row.paperPassRate }}%
+          </el-tag>
+        </template>
+      </el-table-column>
+    </el-table>
     <div v-show="!listLoading && dataList.total>0" class="pagination-container">
       <el-pagination
         :current-page.sync="listQuery.current"
