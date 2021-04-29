@@ -8,8 +8,13 @@
     >
       <template slot="filter-content">
         <el-row>
-          <el-col :span="3">
-            <el-select v-model="listQuery.params.quType" placeholder="选择题型" class="filter-item" clearable>
+          <el-col :span="4">
+            <el-select
+              v-model="listQuery.params.quType"
+              placeholder="选择题型"
+              class="filter-item"
+              clearable
+            >
               <el-option
                 v-for="item in quTypes"
                 :key="item.name"
@@ -19,7 +24,7 @@
               />
             </el-select>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="4" class="filter-item">
             <repo-tree-select :user-id="ananUserInfo.id" :width="300" @nodeClick="onNodeClick" />
             <!--            <el-button-group class="filter-item" style="float:  right">
               <el-button size="mini" icon="el-icon-upload2" @click="showImport">导入</el-button>

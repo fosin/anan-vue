@@ -5,8 +5,8 @@
       :options="options"
       :list-query="listQuery"
     >
-      <template slot="filter-content" style="display: flex; align-items: flex-start">
-        <el-radio-group v-model="listQuery.params.state" @change="stateChanged">
+      <template slot="filter-content">
+        <el-radio-group v-model="listQuery.params.state" style="margin-top: 10px" @change="stateChanged">
           <el-radio
             v-for="item in paperStates"
             :key="item.name"

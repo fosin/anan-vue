@@ -6,7 +6,13 @@
     style="width: 100%"
   >
     <template slot="filter-content">
-      <el-select v-model="listQuery.params.openType" class="filter-item" placeholder="开放类型" clearable>
+      <el-select
+        v-model="listQuery.params.openType"
+        class="filter-item"
+        placeholder="开放类型"
+        clearable
+        style="width: 150px"
+      >
         <el-option
           v-for="item in openTypes"
           :key="item.name"
@@ -21,6 +27,7 @@
         value-format="yyyy-MM-dd"
         type="date"
         placeholder="考试开始时间"
+        style="width: 150px"
       />
       <el-date-picker
         v-model="listQuery.params.endTime"
@@ -28,6 +35,7 @@
         value-format="yyyy-MM-dd"
         type="date"
         placeholder="考试结束时间"
+        style="width: 150px"
       />
     </template>
     <template slot="data-columns">
