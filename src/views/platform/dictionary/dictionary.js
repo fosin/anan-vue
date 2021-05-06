@@ -8,6 +8,7 @@ export function listDictionaryPage(page) {
     data: page
   })
 }
+
 // 获取所有数据列表
 export function listDictionary() {
   return request({
@@ -48,13 +49,14 @@ export function putDictionary(obj) {
 
 // 以下是字典明细的后台方法
 // 获取数据分页列表
-export function listDictionaryDetailPage(page, code) {
+export function listDictionaryDetailPage(page) {
   return request({
-    url: 'gateway/platform/v1/dictionarydetail/pageList/' + code,
+    url: 'gateway/platform/v1/dictionarydetail/pageList',
     method: 'post',
     data: page
   })
 }
+
 // 获取所有数据列表
 export function listDictionaryDetail() {
   return request({

@@ -2,7 +2,7 @@
   <div class="app-container calendar-list-container">
     <div class="filter-container">
       <el-input
-        v-model="pageModule.searchText"
+        v-model="pageModule.params.name"
         :placeholder="$t('anan_parameter.searchText')"
         style="width: 300px;"
         class="filter-item"
@@ -200,9 +200,36 @@ export default {
       pageModule: {
         pageNumber: 1,
         pageSize: 10,
-        searchText: '',
-        sortName: 'name',
-        sortOrder: 'asc'
+        params: {
+          name: '',
+          value: '',
+          defaultValue: '',
+          description: '',
+          queryRules: [
+            {
+              propertity: 'description',
+              operator: 'like'
+            },
+            {
+              propertity: 'name',
+              operator: 'like'
+            },
+            {
+              propertity: 'defaultValue',
+              operator: 'like'
+            },
+            {
+              propertity: 'value',
+              operator: 'like'
+            }
+          ],
+          sortRules: [
+            {
+              sortName: 'name',
+              sortOrder: 'ASC'
+            }
+          ]
+        }
       },
       pageSizes: [5, 10, 25, 50, 100],
       form: {},
@@ -337,6 +364,9 @@ export default {
     },
     getList() {
       this.listLoading = true
+      this.pageModule.params.value = this.pageModule.params.name
+      this.pageModule.params.defaultValue = this.pageModule.params.name
+      this.pageModule.params.description = this.pageModule.params.name
       listParameterPage(this.pageModule).then(response => {
         this.parameterList = response.data.rows
         this.total = response.data.total

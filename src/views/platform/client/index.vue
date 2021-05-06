@@ -2,7 +2,7 @@
   <div class="app-container calendar-list-container">
     <div class="filter-container">
       <el-input
-        v-model="pageModule.searchText"
+        v-model="pageModule.params.clientId"
         :placeholder="$t('oauth_client_details.searchText')"
         style="width: 200px;"
         class="filter-item"
@@ -165,9 +165,24 @@ export default {
       pageModule: {
         pageNumber: 1,
         pageSize: 10,
-        searchText: '',
-        sortName: 'clientId',
-        sortOrder: 'asc'
+        params: {
+          clientId: '',
+          additionalInformation: '',
+          queryRules: [
+            {
+              propertity: 'clientId',
+              operator: 'like'
+            },
+            {
+              propertity: 'additionalInformation',
+              operator: 'like'
+            }
+          ],
+          sortRules: [{
+            sortName: 'clientId',
+            sortOrder: 'ASC' }
+          ]
+        }
       },
       pageSizes: [5, 10, 25, 50, 100],
       form: {},
@@ -290,6 +305,7 @@ export default {
     },
     getList() {
       this.listLoading = true
+      this.pageModule.params.additionalInformation = this.pageModule.params.clientId
       listClientPage(this.pageModule).then(response => {
         this.list = response.data.rows
         this.total = response.data.total
@@ -378,8 +394,8 @@ export default {
       })
     },
     create(formName) {
-      const set = this.$refs
-      set[formName].validate(valid => {
+      const refs = this.$refs
+      refs[formName].validate(valid => {
         if (valid) {
           this.form.authorizedGrantTypes = this.form.authorizedGrantTypeArray.join(',')
           postClient(this.form).then(() => {

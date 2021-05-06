@@ -93,7 +93,12 @@
       />
     </div>
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="90%" :close-on-click-modal="false">
+    <el-dialog
+      :title="textMap[dialogStatus]"
+      :visible.sync="dialogFormVisible"
+      width="90%"
+      :close-on-click-modal="false"
+    >
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-row>
           <el-col :span="8">
@@ -105,7 +110,12 @@
           </el-col>
           <el-col :span="8">
             <el-form-item :label="$t('anan_permission.serviceId.label')" prop="serviceId">
-              <el-select v-model="form.serviceId" :placeholder="$t('anan_permission.serviceId.placeholder')" class="filter-item" value="">
+              <el-select
+                v-model="form.serviceId"
+                :placeholder="$t('anan_permission.serviceId.placeholder')"
+                class="filter-item"
+                value=""
+              >
                 <el-option v-for="item in allServices" :key="item.id" :label="item.name" :value="item.id" />
               </el-select>
             </el-form-item>
@@ -149,7 +159,13 @@
   </div>
 </template>
 <script>
-import { getCharset, postCharset, putCharset, deleteCharset, listCharsetPageByinternationalId } from './charset'
+import {
+  getCharset,
+  postCharset,
+  putCharset,
+  deleteCharset,
+  listCharsetPage
+} from './charset'
 import waves from '@/directive/waves/index.js' // 水波纹指令
 import { formatDate } from '@/utils/date'
 import { listService } from '@/views/platform/service/service'
@@ -182,9 +198,13 @@ export default {
       pageModule: {
         pageNumber: 1,
         pageSize: 10,
-        searchText: '',
-        sortName: 'internationalId',
-        sortOrder: 'asc'
+        params: {
+          internationalId: 0,
+          sortRules: [{
+            sortName: 'id',
+            sortOrder: 'ASC'
+          }]
+        }
       },
       pageSizes: [5, 10, 25, 50, 100],
       form: {},
@@ -266,7 +286,8 @@ export default {
         }
       }
       this.listLoading = true
-      listCharsetPageByinternationalId(this.pageModule, this.selectedInternational.id).then(response => {
+      this.pageModule.params.internationalId = this.selectedInternational.id
+      listCharsetPage(this.pageModule).then(response => {
         this.list = response.data.rows
         this.total = response.data.total
         this.listLoading = false

@@ -58,7 +58,9 @@ export default {
   data() {
     return {
       form: {},
-      searchText: '',
+      params: {
+
+      },
       multipleSelection: [],
       mpiId: undefined,
       mpiId11: undefined,

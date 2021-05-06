@@ -2,7 +2,7 @@
   <div class="app-container calendar-list-container">
     <div class="filter-container">
       <el-input
-        v-model="pageModule.searchText"
+        v-model="pageModule.params.name"
         :placeholder="$t('anan_role.searchText')"
         style="width: 200px;"
         class="filter-item"
@@ -210,7 +210,7 @@ import {
   listRolePermissions,
   listRoleUsers,
   putRoleUsers,
-  listRolePageByOrganizId
+  listRolePage
 } from './role'
 import { listOrganizUser } from '../user/user'
 import { formatDate } from '@/utils/date'
@@ -258,9 +258,25 @@ export default {
       pageModule: {
         pageNumber: 1,
         pageSize: 10,
-        searchText: '',
-        sortName: 'value',
-        sortOrder: 'asc'
+        params: {
+          organizId: 0,
+          name: '',
+          value: '',
+          queryRules: [
+            {
+              propertity: 'name',
+              operator: 'like'
+            },
+            {
+              propertity: 'value',
+              operator: 'like'
+            }
+          ],
+          sortRules: [{
+            sortName: 'value',
+            sortOrder: 'ASC'
+          }]
+        }
       },
       pageSizes: [5, 10, 25, 50, 100],
       form: {},
@@ -342,7 +358,9 @@ export default {
     },
     getList() {
       this.listLoading = true
-      listRolePageByOrganizId(this.pageModule, this.ananUserInfo.organizId).then(response => {
+      this.pageModule.params.organizId = this.ananUserInfo.organizId
+      this.pageModule.params.value = this.pageModule.params.name
+      listRolePage(this.pageModule).then(response => {
         this.roleList = response.data.rows
         this.total = response.data.total
         this.listLoading = false
@@ -666,7 +684,6 @@ export default {
       }
     },
     sortChange(column) {
-      debugger
       this.pageModule.sortOrder = (column.order && column.order === 'descending') ? 'DESC' : 'ASC'
       this.pageModule.sortName = column.prop
       if (this.pageModule.sortName) {

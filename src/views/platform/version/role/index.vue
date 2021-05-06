@@ -2,7 +2,7 @@
   <div class="app-container calendar-list-container">
     <div class="filter-container">
       <el-input
-        v-model="pageModule.searchText"
+        v-model="pageModule.params.name"
         :placeholder="$t('anan_version_role.searchText')"
         style="width: 200px;"
         class="filter-item"
@@ -218,9 +218,26 @@ export default {
       pageModule: {
         pageNumber: 1,
         pageSize: 10,
-        searchText: '',
-        sortName: 'value',
-        sortOrder: 'desc'
+        params: {
+          name: '',
+          value: '',
+          queryRules: [
+            {
+              propertity: 'name',
+              operator: 'like'
+            },
+            {
+              propertity: 'value',
+              operator: 'like'
+            }
+          ],
+          sortRules: [
+            {
+              sortName: 'value',
+              sortOrder: 'DESC'
+            }
+          ]
+        }
       },
       pageSizes: [5, 10, 25, 50, 100],
       form: {},
@@ -295,6 +312,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
+      this.pageModule.params.value = this.pageModule.params.name
       listVersionRolePage(this.pageModule).then(response => {
         this.roleList = response.data.rows
         this.total = response.data.total

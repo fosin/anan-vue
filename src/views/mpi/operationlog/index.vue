@@ -53,9 +53,12 @@ export default {
       pageModule: {
         pageNumber: 1,
         pageSize: 3,
-        searchText: '',
-        sortName: 'createTime',
-        sortOrder: 'desc'
+        params: {
+          sortRules: [{
+            sortName: 'updateTime',
+            sortOrder: 'DESC' }
+          ]
+        }
       },
       pageSizes: [3, 10, 25, 50, 100],
       form: {},

@@ -94,9 +94,11 @@ export default {
       pageModule: {
         pageNumber: 1,
         pageSize: 10,
-        searchText: '',
-        sortName: 'updateTime',
-        sortOrder: 'desc'
+        params: {
+          sortRules: [{ sortName: 'updateTime',
+            sortOrder: 'DESC' }]
+        }
+
       },
       pageSizes: [5, 10, 25, 50, 100],
       form: {},

@@ -2,14 +2,22 @@
   <div class="app-container calendar-list-container">
     <div class="filter-container">
       <el-input
-        v-model="pageModule.searchText"
+        v-model="pageModule.params.name"
         :placeholder="$t('anan_dictionary.searchText')"
         style="width: 200px;"
         class="filter-item"
         @keyup.enter.native="handleFilter"
       />
       <el-button-group>
-        <el-button v-waves round class="filter-item" type="primary" size="small" icon="el-icon-search" @click="handleFilter">
+        <el-button
+          v-waves
+          round
+          class="filter-item"
+          type="primary"
+          size="small"
+          icon="el-icon-search"
+          @click="handleFilter"
+        >
           {{ $t('table.search') }}
         </el-button>
         <el-button
@@ -98,7 +106,13 @@
         </el-form-item>
         <el-form-item :label="$t('anan_dictionary.type.label')" prop="type">
           <el-select v-model="form.type" :placeholder="$t('anan_dictionary.type.placeholder')" class="filter-item">
-            <el-option v-for="item in typeOptions" :key="item.name" :label="item.value" :value="item.name" :disabled="item.status === 1" />
+            <el-option
+              v-for="item in typeOptions"
+              :key="item.name"
+              :label="item.value"
+              :value="item.name"
+              :disabled="item.status === 1"
+            />
           </el-select>
         </el-form-item>
         <el-form-item :label="$t('anan_dictionary.description.label')" prop="description">
@@ -140,10 +154,10 @@ import {
   deleteDictionary,
   listDictionaryPage
 } from '../dictionary'
+
 export default {
   name: 'DictionaryHeader',
-  filters: {
-  },
+  filters: {},
   data() {
     return {
       dictionaryList: null,
@@ -152,9 +166,18 @@ export default {
       pageModule: {
         pageNumber: 1,
         pageSize: 10,
-        searchText: '',
-        sortName: 'id',
-        sortOrder: 'asc'
+        params: {
+          name: '',
+          queryRules: [
+            {
+              propertity: 'name',
+              operator: 'like'
+            }],
+          sortRules: [{
+            sortName: 'id',
+            sortOrder: 'ASC'
+          }]
+        }
       },
       pageSizes: [5, 10, 25, 50, 100],
       form: {},

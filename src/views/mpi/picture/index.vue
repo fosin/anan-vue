@@ -107,9 +107,12 @@ export default {
       pageModule: {
         pageNumber: 1,
         pageSize: 10,
-        searchText: '',
-        sortName: 'mpiId',
-        sortOrder: 'asc'
+        params: {
+          sortRules: [{
+            sortName: 'mpiId',
+            sortOrder: 'ASC' }
+          ]
+        }
       },
       pageSizes: [5, 10, 25, 50, 100],
       form: {},

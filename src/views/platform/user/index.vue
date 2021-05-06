@@ -1,7 +1,7 @@
 <template>
   <div class="app-container calendar-list-container">
     <div class="filter-container">
-      <el-input v-model="pageModule.searchText" :placeholder="$t('anan_user.searchText')" style="width: 300px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="pageModule.params.username" :placeholder="$t('anan_user.searchText')" style="width: 300px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-button-group>
         <el-button v-waves round class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
           {{ $t('table.search') }}
@@ -325,9 +325,34 @@ export default {
       pageModule: {
         pageNumber: 1,
         pageSize: 10,
-        searchText: '',
-        sortName: 'usercode',
-        sortOrder: 'desc'
+        params: {
+          usercode: '',
+          username: '',
+          phone: '',
+          email: '',
+          queryRules: [
+            {
+              propertity: 'usercode',
+              operator: 'like'
+            },
+            {
+              propertity: 'username',
+              operator: 'like'
+            },
+            {
+              propertity: 'phone',
+              operator: 'like'
+            },
+            {
+              propertity: 'email',
+              operator: 'like'
+            }
+          ],
+          sortRules: [{
+            sortName: 'usercode',
+            sortOrder: 'DESC' }
+          ]
+        }
       },
       versionId: -1,
       pageSizes: [5, 10, 25, 50, 100],
@@ -533,6 +558,9 @@ export default {
     },
     getList() {
       this.listLoading = true
+      this.pageModule.params.usercode = this.pageModule.params.username
+      this.pageModule.params.phone = this.pageModule.params.username
+      this.pageModule.params.email = this.pageModule.params.username
       listUserPage(this.pageModule).then(response => {
         this.list = response.data.rows
         this.total = response.data.total

@@ -2,14 +2,22 @@
   <div class="app-container calendar-list-container">
     <div class="filter-container">
       <el-input
-        v-model="pageModule.searchText"
+        v-model="pageModule.params.value"
         :placeholder="$t('anan_dictionary_detail.searchText')"
         style="width: 200px;"
         class="filter-item"
         @keyup.enter.native="handleFilter"
       />
       <el-button-group>
-        <el-button v-waves round class="filter-item" type="primary" size="small" icon="el-icon-search" @click="handleFilter">
+        <el-button
+          v-waves
+          round
+          class="filter-item"
+          type="primary"
+          size="small"
+          icon="el-icon-search"
+          @click="handleFilter"
+        >
           {{ $t('table.search') }}
         </el-button>
         <el-button
@@ -66,11 +74,35 @@
       @sort-change="sortChange"
       @row-click="rowClick"
     >
-      <el-table-column :label="$t('anan_dictionary_detail.name.label')" align="center" sortable prop="name" width="120px" />
+      <el-table-column
+        :label="$t('anan_dictionary_detail.name.label')"
+        align="center"
+        sortable
+        prop="name"
+        width="120px"
+      />
       <el-table-column :label="$t('anan_dictionary_detail.value.label')" align="center" sortable prop="value" />
-      <el-table-column :label="$t('anan_dictionary_detail.scode.label')" align="center" sortable prop="scode" width="120px" />
-      <el-table-column :label="$t('anan_dictionary_detail.sort.label')" align="center" sortable prop="sort" width="80px" />
-      <el-table-column :label="$t('anan_dictionary_detail.status.label')" align="center" sortable prop="status" width="90px">
+      <el-table-column
+        :label="$t('anan_dictionary_detail.scode.label')"
+        align="center"
+        sortable
+        prop="scode"
+        width="120px"
+      />
+      <el-table-column
+        :label="$t('anan_dictionary_detail.sort.label')"
+        align="center"
+        sortable
+        prop="sort"
+        width="80px"
+      />
+      <el-table-column
+        :label="$t('anan_dictionary_detail.status.label')"
+        align="center"
+        sortable
+        prop="status"
+        width="90px"
+      >
         <template slot-scope="scope">
           <span>{{ getStatusValue(scope.row.status) }}</span>
         </template>
@@ -157,6 +189,7 @@ import {
   deleteDictionaryDetail,
   listDictionaryDetailPage
 } from '../dictionary'
+
 export default {
   name: 'DictionaryDetail',
   data() {
@@ -169,9 +202,24 @@ export default {
       pageModule: {
         pageNumber: 1,
         pageSize: 10,
-        searchText: '',
-        sortName: 'name',
-        sortOrder: 'asc'
+        params: {
+          dictionaryId: 0,
+          value: '',
+          queryRules: [
+            {
+              propertity: 'value',
+              operator: 'like'
+            },
+            {
+              propertity: 'dictionaryId',
+              operator: 'equal'
+            }
+          ],
+          sortRules: [{
+            sortName: 'name',
+            sortOrder: 'ASC'
+          }]
+        }
       },
       pageSizes: [5, 10, 25, 50, 100],
       form: {},
@@ -237,8 +285,9 @@ export default {
           return
         }
       }
+      this.pageModule.params.dictionaryId = this.selectedDictionary.id
       this.listLoading = true
-      listDictionaryDetailPage(this.pageModule, this.selectedDictionary.id).then(response => {
+      listDictionaryDetailPage(this.pageModule).then(response => {
         this.dictionaryDetailList = response.data.rows
         this.total = response.data.total
         this.listLoading = false

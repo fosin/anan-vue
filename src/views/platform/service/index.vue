@@ -2,7 +2,7 @@
   <div class="app-container calendar-list-container">
     <div class="filter-container">
       <el-input
-        v-model="pageModule.searchText"
+        v-model="pageModule.params.name"
         style="width: 200px;"
         class="filter-item"
         placeholder="支持服务标识、服务名称查找"
@@ -151,9 +151,24 @@ export default {
       pageModule: {
         pageNumber: 1,
         pageSize: 10,
-        searchText: '',
-        sortName: 'id',
-        sortOrder: 'asc'
+        params: {
+          name: '',
+          code: '',
+          queryRules: [
+            {
+              propertity: 'name',
+              operator: 'like'
+            },
+            {
+              propertity: 'code',
+              operator: 'like'
+            }
+          ],
+          sortRules: [{
+            sortName: 'id',
+            sortOrder: 'ASC' }
+          ]
+        }
       },
       pageSizes: [5, 10, 25, 50, 100],
       form: {},
@@ -193,6 +208,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
+      this.pageModule.params.code = this.pageModule.params.name
       listServicePage(this.pageModule).then(response => {
         this.list = response.data.rows
         this.total = response.data.total

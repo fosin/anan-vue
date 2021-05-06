@@ -99,6 +99,14 @@ export default {
           title: '',
           beginCreateTime: null,
           endCreateTime: null
+          // queryRules: [{
+          //   'propertity': 'beginCreateTime',
+          //   'operator': 'greaterThanOrEqualTo'
+          // },
+          // {
+          //   'propertity': 'endCreateTime',
+          //   'operator': 'lessThanOrEqualTo'
+          // }]
         },
         sort: {
           sortOrder: 'ASC',

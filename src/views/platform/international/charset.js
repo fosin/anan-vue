@@ -5,12 +5,6 @@ export function listCharsetPage(page) {
   return postRequest('gateway/platform/v1/international/charset/pageList', page)
 }
 
-// 以下是字典明细的后台方法
-// 获取数据分页列表
-export function listCharsetPageByinternationalId(page, id) {
-  return postRequest('gateway/platform/v1/international/charset/pageList/internationalId/' + id, page)
-}
-
 // 获取国际化语言字符集所有数据列表
 export function listCharset() {
   return postRequest('gateway/platform/v1/international/charset/list')

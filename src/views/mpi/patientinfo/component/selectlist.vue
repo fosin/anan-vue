@@ -147,9 +147,12 @@ export default {
       pageModule: {
         pageNumber: 1,
         pageSize: 10,
-        searchText: '',
-        sortName: 'name',
-        sortOrder: 'asc'
+        params: {
+          sortRules: [{
+            sortName: 'name',
+            sortOrder: 'ASC' }
+          ]
+        }
       },
       pageSizes: [5, 10, 25, 50, 100],
       form: {},

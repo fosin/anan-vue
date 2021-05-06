@@ -2,7 +2,7 @@
   <div class="app-container calendar-list-container">
     <div class="filter-container">
       <el-input
-        v-model="pageModule.searchText"
+        v-model="pageModule.params.name"
         :placeholder="$t('anan_version.searchText')"
         style="width: 200px;"
         class="filter-item"
@@ -230,9 +230,21 @@ export default {
       pageModule: {
         pageNumber: 1,
         pageSize: 10,
-        searchText: '',
-        sortName: 'name',
-        sortOrder: 'asc'
+        params: {
+          name: '',
+          queryRules: [
+            {
+              propertity: 'name',
+              operator: 'like'
+            }
+          ],
+          sortRules: [
+            {
+              sortName: 'name',
+              sortOrder: 'ASC'
+            }
+          ]
+        }
       },
       pageSizes: [],
       typeOptions: [],
