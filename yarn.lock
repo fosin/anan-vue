@@ -3300,15 +3300,10 @@ codemirror-spell-checker@*:
   dependencies:
     typo-js "*"
 
-codemirror@*, codemirror@^5.33.0:
-  version "5.58.0"
-  resolved "https://registry.npm.taobao.org/codemirror/download/codemirror-5.58.0.tgz?cache=0&sync_timestamp=1600673056997&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fcodemirror%2Fdownload%2Fcodemirror-5.58.0.tgz#1f1c4faacc8606587b6ac970f30e4fd37c61047f"
-  integrity sha1-HxxPqsyGBlh7aslw8w5P03xhBH8=
-
-codemirror@5.45.0:
-  version "5.45.0"
-  resolved "https://registry.npm.taobao.org/codemirror/download/codemirror-5.45.0.tgz?cache=0&sync_timestamp=1600673056997&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fcodemirror%2Fdownload%2Fcodemirror-5.45.0.tgz#db5ebbb3bf44028c684053f3954d011efcec27ad"
-  integrity sha1-2167s79EAoxoQFPzlU0BHvzsJ60=
+codemirror@*, codemirror@5.58.2, codemirror@^5.33.0:
+  version "5.58.2"
+  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.58.2.tgz#ed54a1796de1498688bea1cdd4e9eeb187565d1b"
+  integrity sha512-K/hOh24cCwRutd1Mk3uLtjWzNISOkm4fvXiMO7LucCrqbh6aJDdtqUziim3MZUI6wOY0rvY1SlL1Ork01uMy6w==
 
 codepage@~1.14.0:
   version "1.14.0"
