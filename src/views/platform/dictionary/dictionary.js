@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取数据分页列表
 export function listDictionaryPage(page) {
   return request({
-    url: 'gateway/platform/v1/dictionary/pageList',
+    url: 'gateway/platform/v1/dictionary/paging',
     method: 'post',
     data: page
   })
@@ -51,7 +51,7 @@ export function putDictionary(obj) {
 // 获取数据分页列表
 export function listDictionaryDetailPage(page) {
   return request({
-    url: 'gateway/platform/v1/dictionarydetail/pageList',
+    url: 'gateway/platform/v1/dictionarydetail/paging',
     method: 'post',
     data: page
   })

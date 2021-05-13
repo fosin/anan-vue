@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取版本角色分页列表
 export function listVersionRolePage(page) {
   return request({
-    url: 'gateway/platform/v1/version/role/pageList',
+    url: 'gateway/platform/v1/version/role/paging',
     method: 'post',
     data: page
   })
@@ -12,7 +12,7 @@ export function listVersionRolePage(page) {
 // 根据机构ID获取该机构及下级机构的版本角色分页列表
 export function listVersionRolePageByVersionId(page, versionId) {
   return request({
-    url: 'gateway/platform/v1/version/role/pageList/versionId/' + versionId,
+    url: 'gateway/platform/v1/version/role/paging/versionId/' + versionId,
     method: 'post',
     data: page
   })

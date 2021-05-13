@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取相关证件信息数据分页列表
 export function listCertificatePage(page) {
   return request({
-    url: 'gateway/mpi/v1/certificate/pageList',
+    url: 'gateway/mpi/v1/certificate/paging',
     method: 'post',
     data: page
   })

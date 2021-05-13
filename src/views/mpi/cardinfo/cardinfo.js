@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取卡信息数据分页列表
 export function listCardinfoPage(page) {
   return request({
-    url: 'gateway/mpi/v1/cardinfo/pageList',
+    url: 'gateway/mpi/v1/cardinfo/paging',
     method: 'post',
     data: page
   })

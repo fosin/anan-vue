@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取半身照数据分页列表
 export function listPicturePage(page) {
   return request({
-    url: 'gateway/mpi/v1/picture/pageList',
+    url: 'gateway/mpi/v1/picture/paging',
     method: 'post',
     data: page
   })

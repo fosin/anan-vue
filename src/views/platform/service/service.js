@@ -2,7 +2,7 @@ import { allRequest, deleteRequest, postRequest, putRequest, getRequest } from '
 
 // 获取系统服务表数据分页列表
 export function listServicePage(page) {
-  return postRequest('gateway/platform/v1/service/pageList', page)
+  return postRequest('gateway/platform/v1/service/paging', page)
 }
 
 // 获取系统服务表所有数据列表

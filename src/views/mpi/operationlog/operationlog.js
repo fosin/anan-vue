@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取操作日志数据分页列表
 export function listOperationlogPage(page) {
   return request({
-    url: 'gateway/mpi/v1/operationlog/pageList',
+    url: 'gateway/mpi/v1/operationlog/paging',
     method: 'post',
     data: page
   })

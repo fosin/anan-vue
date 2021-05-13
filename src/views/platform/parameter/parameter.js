@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取数据分页列表
 export function listParameterPage(page) {
   return request({
-    url: 'gateway/platform/v1/parameter/pageList',
+    url: 'gateway/platform/v1/parameter/paging',
     method: 'post',
     data: page
   })

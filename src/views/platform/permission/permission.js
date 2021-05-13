@@ -1,29 +1,37 @@
 import request from '@/utils/request'
 
-export function listPermissions() {
+export function listPermissions(data) {
   return request({
     url: 'gateway/platform/v1/permission/list',
-    method: 'get'
+    method: 'post',
+    data: data
   })
 }
+
+export function listChildPermissions(pid) {
+  return listPermissions({
+    pid: pid,
+    sortRules: [{
+      sortName: 'sort',
+      sortOrder: 'ASC'
+    }]
+  })
+}
+
 export function treePermissions(type) {
   return request({
     url: 'gateway/platform/v1/permission/tree/' + type,
     method: 'post'
   })
 }
+
 export function treeUserPermissions(userId, type) {
   return request({
     url: 'gateway/platform/v1/permission/userPermissionsTree/' + userId + '/' + type,
     method: 'get'
   })
 }
-export function listChildPermissions(pid) {
-  return request({
-    url: 'gateway/platform/v1/permission/listChild/' + pid,
-    method: 'post'
-  })
-}
+
 export function postPermission(obj) {
   return request({
     url: 'gateway/platform/v1/permission/',

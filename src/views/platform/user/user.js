@@ -46,7 +46,7 @@ export function putUserPermissions(id, permissions) {
 
 export function listUserPage(page) {
   return request({
-    url: 'gateway/platform/v1/user/pageList',
+    url: 'gateway/platform/v1/user/paging',
     method: 'post',
     data: page
   })

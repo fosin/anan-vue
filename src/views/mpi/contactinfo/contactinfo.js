@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取联系方式数据分页列表
 export function listContactinfoPage(page) {
   return request({
-    url: 'gateway/mpi/v1/contactinfo/pageList',
+    url: 'gateway/mpi/v1/contactinfo/paging',
     method: 'post',
     data: page
   })

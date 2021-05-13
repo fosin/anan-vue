@@ -80,7 +80,14 @@
               <el-tag type="primary">{{ quData.score }}分</el-tag>
             </el-col>
             <el-col :span="23">
-              <el-input v-model="quData.quTitle" autosize type="textarea" resize="none" readonly style="margin-bottom: 20px" />
+              <el-input
+                v-model="quData.quTitle"
+                autosize
+                type="textarea"
+                resize="none"
+                readonly
+                style="margin-bottom: 20px"
+              />
             </el-col>
           </el-row>
           <div v-if="quData.quType === 1 || quData.quType===3">
@@ -109,7 +116,7 @@
             上一题
           </el-button>
           <el-button v-if="showNext" type="warning" @click="handNext()">
-            下一题  <i class="el-icon-arrow-right el-icon--right" />
+            下一题 <i class="el-icon-arrow-right el-icon--right" />
           </el-button>
         </div>
       </el-col>
@@ -260,7 +267,9 @@ export default {
      */
     handNext() {
       const index = this.cardItem.sort + 1
-      this.handSave(this.allItem[index])
+      if (index < this.allItem.length) {
+        this.handSave(this.allItem[index])
+      }
     },
 
     /**
@@ -268,7 +277,9 @@ export default {
      */
     handPrevious() {
       const index = this.cardItem.sort - 1
-      this.handSave(this.allItem[index])
+      if (index >= 0) {
+        this.handSave(this.allItem[index])
+      }
     },
 
     doHandler() {
@@ -288,6 +299,8 @@ export default {
           type: 'error',
           duration: 5000
         })
+        this.handleText = '再尝试交卷'
+        this.loading = false
       })
     },
     // 交卷操作
@@ -343,7 +356,13 @@ export default {
         notifyInfo = '注意：当前进入' + notifyInfo + '！'
         this.$message.warning(notifyInfo)
       }
-      const params = { paperId: this.paperId, quId: this.quData.quId, answers: answers, answer: this.quData.answer, quType: this.quData.quType }
+      const params = {
+        paperId: this.paperId,
+        quId: this.quData.quId,
+        answers: answers,
+        answer: this.quData.answer,
+        quType: this.quData.quType
+      }
       fillAnswer(params).then(() => {
         // 必须选择一个值
         // 加入已答列表
@@ -553,15 +572,17 @@ export default {
 .el-radio__label {
   line-height: 30px;
 }
+
 @media print {
   body {
     display: none;
   }
 }
+
 /* 如果你的 el-input type 设置成textarea ，就要用这个了 */
-.inputDeep>>>.el-textarea__inner {
+.inputDeep >>> .el-textarea__inner {
   border: 0;
-  resize: none;/* 这个是去掉 textarea 下面拉伸的那个标志，如下图 */
+  resize: none; /* 这个是去掉 textarea 下面拉伸的那个标志，如下图 */
 }
 </style>
 

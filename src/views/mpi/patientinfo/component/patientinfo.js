@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取个人基本信息表数据分页列表
 export function listPatientinfoPage(page) {
   return request({
-    url: 'gateway/mpi/v1/patientinfo/pageList',
+    url: 'gateway/mpi/v1/patientinfo/paging',
     method: 'post',
     data: page
   })
@@ -11,7 +11,7 @@ export function listPatientinfoPage(page) {
 // 获取个人基本信息表数据分页列表
 export function listPatientinfoPageByStatus(page, status) {
   return request({
-    url: 'gateway/mpi/v1/patientinfo/pageList/status/' + status,
+    url: 'gateway/mpi/v1/patientinfo/paging/status/' + status,
     method: 'post',
     data: page
   })

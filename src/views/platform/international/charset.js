@@ -2,7 +2,7 @@ import { allRequest, deleteRequest, getRequest, postRequest, putRequest } from '
 
 // 获取国际化语言字符集数据分页列表
 export function listCharsetPage(page) {
-  return postRequest('gateway/platform/v1/international/charset/pageList', page)
+  return postRequest('gateway/platform/v1/international/charset/paging', page)
 }
 
 // 获取国际化语言字符集所有数据列表
@@ -34,7 +34,7 @@ export function putCharset(obj) {
 }
 
 // 根据语言ID查找所有字符集清单,不传参数默认使用post查询所有的数据
-export function getCharsetByInternationalId(internationalId, method) {
+export function getInternationlCharsets(internationalId, method) {
   if (!internationalId) internationalId = 0
   const url = 'gateway/platform/v1/international/charset/internationalId/' + internationalId
   if (method === 'get') {
@@ -53,9 +53,4 @@ export function findAllByInternationalIdAndServiceId(internationalId, serviceId,
     return getRequest(url, method)
   }
   return postRequest(url)
-}
-
-// 根据语言ID查找所有字符集清单,不传参数默认使用post查询所有的数据
-export function getInternationlCharsets(id) {
-  return postRequest('gateway/platform/v1/international/charset/internationalId/' + id)
 }

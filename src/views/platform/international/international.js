@@ -2,7 +2,7 @@ import { allRequest, deleteRequest, getRequest, postRequest, putRequest } from '
 
 // 获取国际化语言集数据分页列表
 export function listInternationalPage(page) {
-  return postRequest('gateway/platform/v1/international/pageList', page)
+  return postRequest('gateway/platform/v1/international/paging', page)
 }
 
 // 获取国际化语言集所有数据列表

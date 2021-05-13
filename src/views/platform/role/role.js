@@ -28,7 +28,7 @@ export function putRoleUsers(id, obj) {
 // 获取角色分页列表
 export function listRolePage(page) {
   return request({
-    url: 'gateway/platform/v1/role/pageList',
+    url: 'gateway/platform/v1/role/paging',
     method: 'post',
     data: page
   })

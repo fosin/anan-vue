@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取客户端授权数据分页列表
 export function listClientPage(page) {
   return request({
-    url: 'gateway/platform/v1/client/pageList',
+    url: 'gateway/platform/v1/client/paging',
     method: 'post',
     data: page
   })

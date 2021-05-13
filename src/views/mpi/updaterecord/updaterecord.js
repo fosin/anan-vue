@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取人员信息更新记录数据分页列表
 export function listUpdaterecordPage(page) {
   return request({
-    url: 'gateway/mpi/v1/updaterecord/pageList',
+    url: 'gateway/mpi/v1/updaterecord/paging',
     method: 'post',
     data: page
   })

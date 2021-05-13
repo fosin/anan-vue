@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取地址信息表数据分页列表
 export function listAddressPage(page) {
   return request({
-    url: 'gateway/mpi/v1/address/pageList',
+    url: 'gateway/mpi/v1/address/paging',
     method: 'post',
     data: page
   })

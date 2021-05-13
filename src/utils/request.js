@@ -3,6 +3,7 @@ import { MessageBox } from 'element-ui'
 import store from '../store'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'
+// import { cacheAdapterEnhancer } from '@/utils/cache'
 
 // progress bar style
 
@@ -19,6 +20,10 @@ NProgress.configure({ showSpinner: false })// NProgress Configuration
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // api的base_url
   timeout: 30000, // request timeout
+  // adapter: cacheAdapterEnhancer(axios.defaults.adapter, {
+  //   enabledByDefault: false,
+  //   maxAge: 5000
+  // }),
   withCredentials: true // 跨域请求，允许保存cookie
 })
 let reLogin = false

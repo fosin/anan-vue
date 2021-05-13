@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取系统版本表数据分页列表
 export function listVersionPage(page) {
   return request({
-    url: 'gateway/platform/v1/version/pageList',
+    url: 'gateway/platform/v1/version/paging',
     method: 'post',
     data: page
   })
