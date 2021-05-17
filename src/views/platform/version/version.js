@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request, { postRequest } from '@/utils/request'
 
 // 获取系统版本表数据分页列表
 export function listVersionPage(page) {
@@ -11,11 +11,9 @@ export function listVersionPage(page) {
 
 // 获取系统版本表所有数据列表
 export function listVersion() {
-  return request({
-    url: 'gateway/platform/v1/version/list',
-    method: 'post'
-  })
+  return postRequest('gateway/platform/v1/version/list')
 }
+
 // 新建系统版本表
 export function postVersion(obj) {
   return request({

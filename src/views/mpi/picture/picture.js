@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request, { postRequest } from '@/utils/request'
 
 // 获取半身照数据分页列表
 export function listPicturePage(page) {
@@ -10,10 +10,7 @@ export function listPicturePage(page) {
 }
 // 获取半身照所有数据列表
 export function listPicture() {
-  return request({
-    url: 'gateway/mpi/v1/picture/list',
-    method: 'post'
-  })
+  return postRequest('gateway/platform/v1/picture/list')
 }
 // 新建半身照
 export function postPicture(obj) {

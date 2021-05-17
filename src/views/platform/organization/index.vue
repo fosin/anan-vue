@@ -2,16 +2,51 @@
   <div class="app-container calendar-list-container">
     <div class="filter-container">
       <el-button-group>
-        <el-button v-waves v-permission="'86'" round type="primary" class="filter-item" icon="el-icon-refresh" @click="handlerRefresh">
+        <el-button
+          v-waves
+          v-permission="'86'"
+          round
+          type="primary"
+          class="filter-item"
+          icon="el-icon-refresh"
+          @click="handlerRefresh"
+        >
           {{ $t('table.refresh') }}
         </el-button>
-        <el-button v-waves v-permission="'4'" round type="primary" class="filter-item" icon="el-icon-circle-plus" style="margin-left: 5px;" @click="handlerAdd">
+        <el-button
+          v-waves
+          v-permission="'4'"
+          round
+          type="primary"
+          class="filter-item"
+          icon="el-icon-circle-plus"
+          style="margin-left: 5px;"
+          @click="handlerAdd"
+        >
           {{ $t('table.add') }}
         </el-button>
-        <el-button v-waves v-permission="'5'" round type="success" class="filter-item" icon="el-icon-edit" style="margin-left: 5px;" @click="handlerUpdate">
+        <el-button
+          v-waves
+          v-permission="'5'"
+          round
+          type="success"
+          class="filter-item"
+          icon="el-icon-edit"
+          style="margin-left: 5px;"
+          @click="handlerUpdate"
+        >
           {{ $t('table.edit') }}
         </el-button>
-        <el-button v-waves v-permission="'6'" round type="danger" class="filter-item" icon="el-icon-delete" style="margin-left: 5px;" @click="handleDelete">
+        <el-button
+          v-waves
+          v-permission="'6'"
+          round
+          type="danger"
+          class="filter-item"
+          icon="el-icon-delete"
+          style="margin-left: 5px;"
+          @click="handleDelete"
+        >
           {{ $t('table.delete') }}
         </el-button>
       </el-button-group>
@@ -64,19 +99,39 @@
               </el-col>
             </el-row>
             <el-form-item :label="$t('anan_organization.code.label')" prop="code">
-              <el-input v-model="form.code" :disabled="formUpdate" :placeholder="$t('anan_organization.code.placeholder')" />
+              <el-input
+                v-model="form.code"
+                :disabled="formUpdate"
+                :placeholder="$t('anan_organization.code.placeholder')"
+              />
             </el-form-item>
             <el-form-item :label="$t('anan_organization.name.label')" prop="name">
-              <el-input v-model="form.name" :disabled="formUpdate" :placeholder="$t('anan_organization.name.placeholder')" />
+              <el-input
+                v-model="form.name"
+                :disabled="formUpdate"
+                :placeholder="$t('anan_organization.name.placeholder')"
+              />
             </el-form-item>
             <el-form-item :label="$t('anan_organization.fullname.label')" prop="fullname">
-              <el-input v-model="form.fullname" :disabled="formUpdate" :placeholder="$t('anan_organization.fullname.placeholder')" />
+              <el-input
+                v-model="form.fullname"
+                :disabled="formUpdate"
+                :placeholder="$t('anan_organization.fullname.placeholder')"
+              />
             </el-form-item>
             <el-form-item :label="$t('anan_organization.address.label')" prop="address">
-              <el-input v-model="form.address" :disabled="formUpdate" :placeholder="$t('anan_organization.address.placeholder')" />
+              <el-input
+                v-model="form.address"
+                :disabled="formUpdate"
+                :placeholder="$t('anan_organization.address.placeholder')"
+              />
             </el-form-item>
             <el-form-item :label="$t('anan_organization.telphone.label')" prop="telphone">
-              <el-input v-model="form.telphone" :disabled="formUpdate" :placeholder="$t('anan_organization.telphone.placeholder')" />
+              <el-input
+                v-model="form.telphone"
+                :disabled="formUpdate"
+                :placeholder="$t('anan_organization.telphone.placeholder')"
+              />
             </el-form-item>
             <el-form-item :label="$t('anan_organization.status.label')" prop="status">
               <el-switch
@@ -98,6 +153,7 @@
 <script>
 import { listOrganizChild, getOrganiz, postOrganiz, deleteOrganiz, putOrganiz } from './organization'
 import { mapGetters } from 'vuex'
+
 export default {
   name: 'SystemOrganiz',
   data() {
@@ -340,10 +396,10 @@ export default {
       })
     },
     update() {
-      putOrganiz(this.form).then(response => {
+      putOrganiz(this.form).then(() => {
         const cNode = this.$refs.organizTree.getNode(this.form.id)
         if (cNode) {
-          cNode.data = response.data
+          cNode.data = this.form
         }
         this.$notify({
           title: '成功',

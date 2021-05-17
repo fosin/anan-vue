@@ -422,11 +422,10 @@ export default {
     },
     update() {
       this.form.method = this.form.methodArray.join(',')
-      putPermission(this.form).then(response => {
+      putPermission(this.form).then(() => {
         const cNode = this.$refs.permissionTree.getNode(this.form.id)
         if (cNode) {
-          response.data.vname = getPermissionVname(this.validServices, this.typeOptions, response.data)
-          cNode.data = response.data
+          cNode.data.vname = getPermissionVname(this.validServices, this.typeOptions, this.form)
         }
         this.$notify({
           title: '成功',

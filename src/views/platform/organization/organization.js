@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request, { postRequest } from '@/utils/request'
 
 export function treeAllChildOrganiz(id) {
   return request({
@@ -20,10 +20,7 @@ export function listOrganizAllChild(pid) {
   })
 }
 export function listOrganiz() {
-  return request({
-    url: 'gateway/platform/v1/organiz/list',
-    method: 'post'
-  })
+  return postRequest('gateway/platform/v1/organiz/list')
 }
 export function postOrganiz(obj) {
   return request({

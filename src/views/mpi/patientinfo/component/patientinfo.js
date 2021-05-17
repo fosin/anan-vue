@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request, { postRequest } from '@/utils/request'
 
 // 获取个人基本信息表数据分页列表
 export function listPatientinfoPage(page) {
@@ -18,10 +18,7 @@ export function listPatientinfoPageByStatus(page, status) {
 }
 // 获取个人基本信息表所有数据列表
 export function listPatientinfo() {
-  return request({
-    url: 'gateway/mpi/v1/patientinfo/list',
-    method: 'post'
-  })
+  return postRequest('gateway/platform/v1/patientinfo/list')
 }
 // 新建个人基本信息表
 export function postPatientinfo(obj) {

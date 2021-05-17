@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request, { postRequest } from '@/utils/request'
 
 // 获取卡信息数据分页列表
 export function listCardinfoPage(page) {
@@ -10,10 +10,7 @@ export function listCardinfoPage(page) {
 }
 // 获取卡信息所有数据列表
 export function listCardinfo() {
-  return request({
-    url: 'gateway/mpi/v1/cardinfo/list',
-    method: 'post'
-  })
+  return postRequest('gateway/platform/v1/cardinfo/list')
 }
 // 根据病人主索引ID查找该病人所有卡
 export function listCardinfoByEmpId(id, page) {

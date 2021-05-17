@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request, { postRequest } from '@/utils/request'
 
 // 获取客户端授权数据分页列表
 export function listClientPage(page) {
@@ -10,10 +10,7 @@ export function listClientPage(page) {
 }
 // 获取所有客户端授权数据列表
 export function listClient() {
-  return request({
-    url: 'gateway/platform/v1/client/list',
-    method: 'post'
-  })
+  return postRequest('gateway/platform/v1/client/list')
 }
 
 export function postClient(obj) {

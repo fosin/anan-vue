@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request, { postRequest } from '@/utils/request'
 
 // 获取角色的所有用户列表
 export function listRoleUsers(id) {
@@ -52,10 +52,7 @@ export function putRolePermissions(id, rolePermissions) {
 }
 // 获取所有角色列表
 export function listRole() {
-  return request({
-    url: 'gateway/platform/v1/role/list',
-    method: 'post'
-  })
+  return postRequest('gateway/platform/v1/role/list')
 }
 
 // 根据机构ID查询该机构及子机构的所有角色

@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request, { postRequest } from '@/utils/request'
 
 // 获取联系方式数据分页列表
 export function listContactinfoPage(page) {
@@ -10,10 +10,7 @@ export function listContactinfoPage(page) {
 }
 // 获取联系方式所有数据列表
 export function listContactinfo() {
-  return request({
-    url: 'gateway/mpi/v1/contactinfo/list',
-    method: 'post'
-  })
+  return postRequest('gateway/platform/v1/contactinfo/list')
 }
 // 根据病人主索引ID查找该病人所有联系人
 export function listContactinfoByEmpId(id, page) {

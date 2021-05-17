@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request, { postRequest } from '@/utils/request'
 
 // 获取数据分页列表
 export function listDictionaryPage(page) {
@@ -11,10 +11,7 @@ export function listDictionaryPage(page) {
 
 // 获取所有数据列表
 export function listDictionary() {
-  return request({
-    url: 'gateway/platform/v1/dictionary/list',
-    method: 'post'
-  })
+  return postRequest('gateway/platform/v1/dictionary/list')
 }
 
 export function postDictionary(obj) {
@@ -59,10 +56,7 @@ export function listDictionaryDetailPage(page) {
 
 // 获取所有数据列表
 export function listDictionaryDetail() {
-  return request({
-    url: 'gateway/platform/v1/dictionarydetail/list',
-    method: 'post'
-  })
+  return postRequest('gateway/platform/v1/dictionarydetail/list')
 }
 
 export function postDictionaryDetail(obj) {

@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request, { postRequest } from '@/utils/request'
 import { encrypt } from '@/utils/aesUtil'
 import CryptoJS from 'crypto-js'
 
@@ -53,10 +53,7 @@ export function listUserPage(page) {
 }
 
 export function listUser() {
-  return request({
-    url: 'gateway/platform/v1/user/list',
-    method: 'post'
-  })
+  return postRequest('gateway/platform/v1/user/list')
 }
 
 // 根据机构ID查询该机构及子机构的所有用户

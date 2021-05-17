@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request, { postRequest } from '@/utils/request'
 
 // 获取相关证件信息数据分页列表
 export function listCertificatePage(page) {
@@ -10,10 +10,7 @@ export function listCertificatePage(page) {
 }
 // 获取相关证件信息所有数据列表
 export function listCertificate() {
-  return request({
-    url: 'gateway/mpi/v1/certificate/list',
-    method: 'post'
-  })
+  return postRequest('gateway/platform/v1/certificate/list')
 }
 // 根据病人主索引ID查找该病人所有证件信息
 export function listCertificateByEmpId(id, page) {

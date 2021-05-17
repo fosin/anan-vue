@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request, { postRequest } from '@/utils/request'
 
 // 获取人员信息更新记录数据分页列表
 export function listUpdaterecordPage(page) {
@@ -10,10 +10,7 @@ export function listUpdaterecordPage(page) {
 }
 // 获取人员信息更新记录所有数据列表
 export function listUpdaterecord() {
-  return request({
-    url: 'gateway/mpi/v1/updaterecord/list',
-    method: 'post'
-  })
+  return postRequest('gateway/platform/v1/updaterecord/list')
 }
 // 根据病人主索引ID查找该病人所有更新记录
 export function listUpdaterecordByEmpId(id, page) {

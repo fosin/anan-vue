@@ -1,11 +1,7 @@
-import request from '@/utils/request'
+import request, { postRequest } from '@/utils/request'
 
 export function listPermissions(data) {
-  return request({
-    url: 'gateway/platform/v1/permission/list',
-    method: 'post',
-    data: data
-  })
+  return postRequest('gateway/platform/v1/permission/list', data)
 }
 
 export function listChildPermissions(pid) {

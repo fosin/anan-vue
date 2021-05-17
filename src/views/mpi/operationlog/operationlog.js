@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request, { postRequest } from '@/utils/request'
 
 // 获取操作日志数据分页列表
 export function listOperationlogPage(page) {
@@ -10,10 +10,7 @@ export function listOperationlogPage(page) {
 }
 // 获取操作日志所有数据列表
 export function listOperationlog() {
-  return request({
-    url: 'gateway/mpi/v1/operationlog/list',
-    method: 'post'
-  })
+  return postRequest('gateway/platform/v1/operationlog/list')
 }
 // 根据病人主索引ID查找该病人所有操作记录
 export function listOperationlogByEmpId(id, page) {

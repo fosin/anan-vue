@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request, { postRequest } from '@/utils/request'
 
 // 获取地址信息表数据分页列表
 export function listAddressPage(page) {
@@ -10,10 +10,7 @@ export function listAddressPage(page) {
 }
 // 获取地址信息表所有数据列表
 export function listAddress() {
-  return request({
-    url: 'gateway/mpi/v1/address/list',
-    method: 'post'
-  })
+  return postRequest('gateway/platform/v1/address/list')
 }
 // 获取地址信息表所有数据列表
 export function listAddressByEmpId(id, page) {
