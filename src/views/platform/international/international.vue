@@ -211,16 +211,19 @@ export default {
         params: {
           code: '',
           name: '',
-          queryRules: [
-            {
-              operator: 'like',
-              propertity: 'code'
-            },
-            {
-              operator: 'like',
-              propertity: 'name'
-            }
-          ],
+          queryRule: {
+            logiOperator: 'or',
+            relaRules: [
+              {
+                relaOperator: 'like',
+                filedName: 'code'
+              },
+              {
+                relaOperator: 'like',
+                filedName: 'name'
+              }
+            ]
+          },
           sortRules: [{
             sortName: 'defaultFlag',
             sortOrder: 'DESC'

@@ -168,16 +168,19 @@ export default {
         params: {
           clientId: '',
           additionalInformation: '',
-          queryRules: [
-            {
-              propertity: 'clientId',
-              operator: 'like'
-            },
-            {
-              propertity: 'additionalInformation',
-              operator: 'like'
-            }
-          ],
+          queryRule: {
+            logiOperator: 'or',
+            relaRules: [
+              {
+                filedName: 'clientId',
+                relaOperator: 'like'
+              },
+              {
+                filedName: 'additionalInformation',
+                relaOperator: 'like'
+              }
+            ]
+          },
           sortRules: [{
             sortName: 'clientId',
             sortOrder: 'ASC' }

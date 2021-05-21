@@ -168,11 +168,14 @@ export default {
         pageSize: 10,
         params: {
           name: '',
-          queryRules: [
-            {
-              propertity: 'name',
-              operator: 'like'
-            }],
+          queryRule: {
+            logiOperator: 'or',
+            relaRules: [
+              {
+                filedName: 'name',
+                relaOperator: 'like'
+              }]
+          },
           sortRules: [{
             sortName: 'id',
             sortOrder: 'ASC'

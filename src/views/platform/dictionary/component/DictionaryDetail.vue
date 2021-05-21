@@ -205,16 +205,19 @@ export default {
         params: {
           dictionaryId: 0,
           value: '',
-          queryRules: [
-            {
-              propertity: 'value',
-              operator: 'like'
-            },
-            {
-              propertity: 'dictionaryId',
-              operator: 'equal'
-            }
-          ],
+          queryRule: {
+            logiOperator: 'or',
+            relaRules: [
+              {
+                filedName: 'value',
+                relaOperator: 'like'
+              },
+              {
+                filedName: 'dictionaryId',
+                relaOperator: 'equal'
+              }
+            ]
+          },
           sortRules: [{
             sortName: 'name',
             sortOrder: 'ASC'

@@ -205,24 +205,27 @@ export default {
           value: '',
           defaultValue: '',
           description: '',
-          queryRules: [
-            {
-              propertity: 'description',
-              operator: 'like'
-            },
-            {
-              propertity: 'name',
-              operator: 'like'
-            },
-            {
-              propertity: 'defaultValue',
-              operator: 'like'
-            },
-            {
-              propertity: 'value',
-              operator: 'like'
-            }
-          ],
+          queryRule: {
+            logiOperator: 'or',
+            relaRules: [
+              {
+                filedName: 'description',
+                relaOperator: 'like'
+              },
+              {
+                filedName: 'name',
+                relaOperator: 'like'
+              },
+              {
+                filedName: 'defaultValue',
+                relaOperator: 'like'
+              },
+              {
+                filedName: 'value',
+                relaOperator: 'like'
+              }
+            ]
+          },
           sortRules: [
             {
               sortName: 'name',

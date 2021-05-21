@@ -154,16 +154,19 @@ export default {
         params: {
           name: '',
           code: '',
-          queryRules: [
-            {
-              propertity: 'name',
-              operator: 'like'
-            },
-            {
-              propertity: 'code',
-              operator: 'like'
-            }
-          ],
+          queryRule: {
+            logiOperator: 'or',
+            relaRules: [
+              {
+                filedName: 'name',
+                relaOperator: 'like'
+              },
+              {
+                filedName: 'code',
+                relaOperator: 'like'
+              }
+            ]
+          },
           sortRules: [{
             sortName: 'id',
             sortOrder: 'ASC' }

@@ -262,16 +262,19 @@ export default {
           organizId: 0,
           name: '',
           value: '',
-          queryRules: [
-            {
-              propertity: 'name',
-              operator: 'like'
-            },
-            {
-              propertity: 'value',
-              operator: 'like'
-            }
-          ],
+          queryRule: {
+            relaRules: [
+              {
+                filedName: 'name',
+                relaOperator: 'like'
+              },
+              {
+                filedName: 'value',
+                relaOperator: 'like'
+              }
+            ],
+            logiOperator: 'or'
+          },
           sortRules: [{
             sortName: 'value',
             sortOrder: 'ASC'

@@ -99,7 +99,7 @@ export default {
           title: '',
           beginCreateTime: null,
           endCreateTime: null
-          // queryRules: [{
+          // relaRules:  [{
           //   'propertity': 'beginCreateTime',
           //   'operator': 'greaterThanOrEqualTo'
           // },

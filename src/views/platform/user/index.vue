@@ -330,24 +330,27 @@ export default {
           username: '',
           phone: '',
           email: '',
-          queryRules: [
-            {
-              propertity: 'usercode',
-              operator: 'like'
-            },
-            {
-              propertity: 'username',
-              operator: 'like'
-            },
-            {
-              propertity: 'phone',
-              operator: 'like'
-            },
-            {
-              propertity: 'email',
-              operator: 'like'
-            }
-          ],
+          queryRule: {
+            logiOperator: 'or',
+            relaRules: [
+              {
+                filedName: 'usercode',
+                relaOperator: 'like'
+              },
+              {
+                filedName: 'username',
+                relaOperator: 'like'
+              },
+              {
+                filedName: 'phone',
+                relaOperator: 'like'
+              },
+              {
+                filedName: 'email',
+                relaOperator: 'like'
+              }
+            ]
+          },
           sortRules: [{
             sortName: 'usercode',
             sortOrder: 'DESC' }

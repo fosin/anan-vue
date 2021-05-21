@@ -221,16 +221,19 @@ export default {
         params: {
           name: '',
           value: '',
-          queryRules: [
-            {
-              propertity: 'name',
-              operator: 'like'
-            },
-            {
-              propertity: 'value',
-              operator: 'like'
-            }
-          ],
+          queryRule: {
+            logiOperator: 'or',
+            relaRules: [
+              {
+                filedName: 'name',
+                relaOperator: 'like'
+              },
+              {
+                filedName: 'value',
+                relaOperator: 'like'
+              }
+            ]
+          },
           sortRules: [
             {
               sortName: 'value',
