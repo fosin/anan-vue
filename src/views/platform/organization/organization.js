@@ -3,7 +3,8 @@ import request, { postRequest } from '@/utils/request'
 export function treeAllChildOrganiz(id) {
   return request({
     url: 'gateway/platform/v1/organiz/treeAllChild/' + id,
-    method: 'post'
+    method: 'post',
+    data: {}
   })
 }
 

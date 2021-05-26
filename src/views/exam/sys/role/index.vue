@@ -58,7 +58,7 @@ export default {
         // 列表请求URL
         listUrl: 'gateway/exam/api/sys/role/paging',
         // 启用禁用
-        stateUrl: '/sys/user/state'
+        stateUrl: 'gateway/exam/api/sys/user/status'
       }
     }
   },

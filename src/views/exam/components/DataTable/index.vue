@@ -246,7 +246,7 @@ export default {
     handleState(state) {
       // 修改状态
       changeState(this.options.stateUrl, this.selectedIds, state).then(response => {
-        if (response.data === true) {
+        if (response.data > 0) {
           this.$message({
             type: 'success',
             message: '状态修改成功!'

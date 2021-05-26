@@ -206,7 +206,6 @@ export default {
           dictionaryId: 0,
           value: '',
           queryRule: {
-            logiOperator: 'or',
             relaRules: [
               {
                 filedName: 'value',
