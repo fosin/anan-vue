@@ -26,30 +26,6 @@
           @click="handleAdd"
         >{{ $t('table.add') }}
         </el-button>
-        <el-button
-          v-waves
-          v-permission="'183'"
-          round
-          type="success"
-          class="filter-item"
-          style="margin-left: 10px;"
-          size="small"
-          icon="el-icon-edit"
-          @click="handleEdit()"
-        >{{ $t('table.edit') }}
-        </el-button>
-        <el-button
-          v-waves
-          v-permission="'184'"
-          round
-          type="danger"
-          class="filter-item"
-          style="margin-left: 10px;"
-          size="small"
-          icon="el-icon-delete"
-          @click="handleDelete()"
-        >{{ $t('table.delete') }}
-        </el-button>
       </el-button-group>
     </div>
     <el-table
@@ -63,20 +39,49 @@
       @sort-change="sortChange"
       @row-click="rowClick"
     >
-      <el-table-column label="所属语言" align="center" sortable prop="internationalId" width="160px">
+      <el-table-column label="所属语言" align="center" sortable prop="internationalId">
         <template slot-scope="scope">
           <el-tag>{{ internationalFilter(scope.row.internationalId) }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="所属服务" align="center" sortable prop="serviceId" width="160px">
+      <el-table-column label="所属服务" align="center" sortable prop="serviceId">
         <template slot-scope="scope">
           <el-tag>{{ serviceIdFilter(scope.row.serviceId) }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="更新时间" align="center" sortable prop="updateTime" width="200px" />
+      <el-table-column label="更新时间" align="center" sortable prop="updateTime" width="160px" />
       <el-table-column label="状态码" align="center" class-name="status-col" width="100px" sortable prop="status">
         <template slot-scope="scope">
           <el-tag>{{ scope.row.status | statusFilter }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.actions')" align="center">
+        <template slot-scope="scope">
+          <el-tooltip class="item" effect="dark" :content="$t('table.edit')" placement="top">
+            <el-button
+              v-waves
+              v-permission="'183'"
+              round
+              size="mini"
+              type="success"
+              class="filter-item"
+              icon="el-icon-edit"
+              @click="handleEdit(scope.row)"
+            />
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" :content="$t('table.delete')" placement="top">
+            <el-button
+              v-waves
+              v-permission="'184'"
+              round
+              size="mini"
+              type="danger"
+              class="filter-item"
+              style="margin-left: 5px;"
+              icon="el-icon-delete"
+              @click="handleDelete(scope.row)"
+            />
+          </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
@@ -135,17 +140,18 @@
           </el-col>
           <el-col :span="4">
             <div align="right">
-              <el-button icon="el-icon-circle-close" @click="cancel('form')">{{ $t('table.cancel') }}</el-button>
               <el-button
                 v-if="dialogStatus==='create'"
                 type="primary"
                 icon="el-icon-circle-check"
-                autofocus
                 @click="create('form')"
               >{{ $t('table.confirm') }}
               </el-button>
-              <el-button v-else type="primary" icon="el-icon-circle-check" autofocus @click="update('form')">
+              <el-button v-else type="primary" icon="el-icon-circle-check" @click="update('form')">
                 {{ $t('table.update') }}
+              </el-button>
+              <el-button icon="el-icon-circle-close" autofocus @click="cancel('form')">
+                {{ $t('table.cancel') }}
               </el-button>
             </div>
           </el-col>
@@ -159,13 +165,7 @@
   </div>
 </template>
 <script>
-import {
-  getCharset,
-  postCharset,
-  putCharset,
-  deleteCharset,
-  listCharsetPage
-} from './charset'
+import { deleteCharset, getCharset, listCharsetPage, postCharset, putCharset } from './charset'
 import waves from '@/directive/waves/index.js' // 水波纹指令
 import { formatDate } from '@/utils/date'
 import { listService } from '@/views/platform/service/service'
@@ -323,14 +323,8 @@ export default {
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
     },
-    handleEdit() {
-      if (!this.form || !this.form['id']) {
-        this.$message({
-          message: '操作前请先选择一条数据!'
-        })
-        return
-      }
-      getCharset(this.form['id']).then(response => {
+    handleEdit(row) {
+      getCharset(row['id']).then(response => {
         const data = response.data
         data.charset = JSON.parse(data.charset)
         this.form = data
@@ -345,13 +339,7 @@ export default {
         })
       })
     },
-    handleDelete() {
-      if (!this.form || !this.form['id']) {
-        this.$message({
-          message: '操作前请先选择一条数据!'
-        })
-        return
-      }
+    handleDelete(row) {
       this.$confirm(
         '此操作将永久删除相关数据, 是否继续?',
         '提示',
@@ -361,7 +349,7 @@ export default {
           type: 'warning'
         }
       ).then(() => {
-        deleteCharset(this.form['id']).then(response => {
+        deleteCharset(row['id']).then(response => {
           this.dialogFormVisible = false
           this.getList()
           this.$notify({
@@ -448,9 +436,13 @@ export default {
       }
     },
     sortChange(column) {
-      this.pageModule.sortOrder = (column.order && column.order === 'descending') ? 'DESC' : 'ASC'
-      this.pageModule.sortName = column.prop
-      if (this.pageModule.sortName) {
+      const sortRule = {
+        sortOrder: (column.order && column.order === 'descending') ? 'DESC' : 'ASC',
+        sortName: column.prop
+      }
+      this.pageModule.params.sortRules = []
+      this.pageModule.params.sortRules.push(sortRule)
+      if (column.prop) {
         this.getList()
       }
     },

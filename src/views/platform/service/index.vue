@@ -23,28 +23,6 @@
           @click="handleAdd"
         >{{ $t('table.add') }}
         </el-button>
-        <el-button
-          v-waves
-          v-permission="'172'"
-          round
-          type="success"
-          class="filter-item"
-          style="margin-left: 10px;"
-          icon="el-icon-edit"
-          @click="handleEdit()"
-        >{{ $t('table.edit') }}
-        </el-button>
-        <el-button
-          v-waves
-          v-permission="'173'"
-          round
-          type="danger"
-          class="filter-item"
-          style="margin-left: 10px;"
-          icon="el-icon-delete"
-          @click="handleDelete()"
-        >{{ $t('table.delete') }}
-        </el-button>
       </el-button-group>
     </div>
     <el-table
@@ -66,6 +44,37 @@
       <el-table-column label="状态码" align="center" class-name="status-col" sortable prop="status">
         <template slot-scope="scope">
           <el-tag>{{ scope.row.status | statusFilter }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.actions')" align="center">
+        <template slot-scope="scope">
+          <el-button-group>
+            <el-button
+              v-waves
+              v-permission="'172'"
+              round
+              size="mini"
+              type="success"
+              class="filter-item"
+              icon="el-icon-edit"
+              @click="handleEdit(scope.row)"
+            >
+              {{ $t('table.edit') }}
+            </el-button>
+            <el-button
+              v-waves
+              v-permission="'173'"
+              round
+              size="mini"
+              type="danger"
+              class="filter-item"
+              style="margin-left: 5px;"
+              icon="el-icon-delete"
+              @click="handleDelete(scope.row)"
+            >
+              {{ $t('table.delete') }}
+            </el-button>
+          </el-button-group>
         </template>
       </el-table-column>
     </el-table>
@@ -242,14 +251,8 @@ export default {
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
     },
-    handleEdit() {
-      if (!this.form || !this.form['id']) {
-        this.$message({
-          message: '操作前请先选择一条数据!'
-        })
-        return
-      }
-      getService(this.form['id']).then(response => {
+    handleEdit(row) {
+      getService(row.id).then(response => {
         this.form = response.data
         this.dialogFormVisible = true
         this.dialogStatus = 'update'
@@ -262,13 +265,7 @@ export default {
         })
       })
     },
-    handleDelete() {
-      if (!this.form || !this.form['id']) {
-        this.$message({
-          message: '操作前请先选择一条数据!'
-        })
-        return
-      }
+    handleDelete(row) {
       this.$confirm(
         '此操作将永久删除相关数据, 是否继续?',
         '提示',
@@ -278,7 +275,7 @@ export default {
           type: 'warning'
         }
       ).then(() => {
-        deleteService(this.form['id']).then(response => {
+        deleteService(row.id).then(response => {
           this.dialogFormVisible = false
           this.getList()
           this.$notify({
@@ -363,9 +360,13 @@ export default {
       }
     },
     sortChange(column) {
-      this.pageModule.sortOrder = (column.order && column.order === 'descending') ? 'DESC' : 'ASC'
-      this.pageModule.sortName = column.prop
-      if (this.pageModule.sortName) {
+      const sortRule = {
+        sortOrder: (column.order && column.order === 'descending') ? 'DESC' : 'ASC',
+        sortName: column.prop
+      }
+      this.pageModule.params.sortRules = []
+      this.pageModule.params.sortRules.push(sortRule)
+      if (column.prop) {
         this.getList()
       }
     },

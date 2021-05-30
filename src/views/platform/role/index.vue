@@ -90,7 +90,7 @@
           <el-tag>{{ scope.row.status | statusFilter }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.permission')" align="center" width="200">
+      <el-table-column :label="$t('table.actions')" align="center" width="200">
         <template slot-scope="scope">
           <el-button round size="mini" type="primary" @click="handleRoleUser(scope.row)">
             {{ $t('table.user') }}
@@ -687,9 +687,13 @@ export default {
       }
     },
     sortChange(column) {
-      this.pageModule.sortOrder = (column.order && column.order === 'descending') ? 'DESC' : 'ASC'
-      this.pageModule.sortName = column.prop
-      if (this.pageModule.sortName) {
+      const sortRule = {
+        sortOrder: (column.order && column.order === 'descending') ? 'DESC' : 'ASC',
+        sortName: column.prop
+      }
+      this.pageModule.params.sortRules = []
+      this.pageModule.params.sortRules.push(sortRule)
+      if (column.prop) {
         this.getList()
       }
     },

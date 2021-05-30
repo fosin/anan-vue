@@ -26,18 +26,6 @@
         </el-button>
         <el-button
           v-waves
-          v-permission="'54'"
-          round
-          type="success"
-          class="filter-item"
-          style="margin-left: 5px;"
-          icon="el-icon-edit"
-          @click="handleEdit()"
-        >
-          {{ $t('table.edit') }}
-        </el-button>
-        <el-button
-          v-waves
           v-permission="'55'"
           round
           type="danger"
@@ -47,18 +35,6 @@
           @click="handleDelete()"
         >
           {{ $t('table.delete') }}
-        </el-button>
-        <el-button
-          v-waves
-          v-permission="'56'"
-          round
-          type="warning"
-          class="filter-item"
-          style="margin-left: 5px;"
-          icon="el-icon-upload"
-          @click="handleApply()"
-        >
-          {{ $t('table.apply') }}
         </el-button>
         <el-button
           v-waves
@@ -90,7 +66,6 @@
     >
       <el-table-column :label="$t('anan_parameter.name.label')" align="center" sortable prop="name" width="200px" />
       <el-table-column :label="$t('anan_parameter.value.label')" align="center" sortable prop="value" width="120px" />
-      <el-table-column :label="$t('anan_parameter.defaultValue.label')" align="center" sortable prop="defaultValue" width="130px" />
       <el-table-column :label="$t('anan_parameter.description.label')" align="center" sortable prop="description" />
       <el-table-column :label="$t('anan_parameter.type.label')" align="center" sortable prop="type" width="120px">
         <template slot-scope="scope">
@@ -100,6 +75,35 @@
       <el-table-column :label="$t('anan_parameter.scope.label')" align="center" sortable prop="scope" width="100px">
         <template slot-scope="scope">
           <span>{{ getScopeName(scope.row.type, scope.row.scope) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.actions')" align="center" width="120px">
+        <template slot-scope="scope">
+          <el-tooltip class="item" effect="dark" :content="$t('table.edit')" placement="top">
+            <el-button
+              v-waves
+              v-permission="'54'"
+              round
+              size="mini"
+              type="success"
+              class="filter-item"
+              icon="el-icon-edit"
+              @click="handleEdit(scope.row)"
+            />
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" :content="$t('table.apply')" placement="top">
+            <el-button
+              v-waves
+              v-permission="'56'"
+              round
+              size="mini"
+              type="warning"
+              class="filter-item"
+              style="margin-left: 5px;"
+              icon="el-icon-upload"
+              @click="handleApply(scope.row)"
+            />
+          </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
@@ -429,14 +433,8 @@ export default {
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
     },
-    handleEdit() {
-      if (!this.form || !this.form.id) {
-        this.$message({
-          message: '操作前请先选择一条数据!'
-        })
-        return
-      }
-      getParameter(this.form.id).then(response => {
+    handleEdit(row) {
+      getParameter(row.id).then(response => {
         this.form = response.data
         this.scopeOptions = this.typeScopeOptions[this.form.type]
         this.dialogFormVisible = true
@@ -487,15 +485,9 @@ export default {
       }).catch(() => {
       })
     },
-    handleApply() {
-      if (!this.form || !this.form.id || !this.form.name) {
-        this.$message({
-          message: '操作前请先选择一条数据!'
-        })
-        return
-      }
+    handleApply(row) {
       this.$confirm(
-        '此操作将刷新参数名( ' + this.form.name + ' )的缓存数据, 是否继续?',
+        '此操作将刷新参数名( ' + row.name + ' )的缓存数据, 是否继续?',
         '提示',
         {
           confirmButtonText: '确定',
@@ -503,7 +495,7 @@ export default {
           type: 'warning'
         }
       ).then(() => {
-        applyParameter(this.form.id).then(() => {
+        applyParameter(row.id).then(() => {
           if (this.form.status === 2) {
             this.deleteList(this.form.id)
           } else {
@@ -524,7 +516,6 @@ export default {
             duration: 5000
           })
         })
-      }).catch(() => {
       })
     },
     handleApplys() {
@@ -637,9 +628,13 @@ export default {
       }
     },
     sortChange(column) {
-      this.pageModule.sortOrder = (column.order && column.order === 'descending') ? 'DESC' : 'ASC'
-      this.pageModule.sortName = column.prop
-      if (this.pageModule.sortName) {
+      const sortRule = {
+        sortOrder: (column.order && column.order === 'descending') ? 'DESC' : 'ASC',
+        sortName: column.prop
+      }
+      this.pageModule.params.sortRules = []
+      this.pageModule.params.sortRules.push(sortRule)
+      if (column.prop) {
         this.getList()
       }
     },

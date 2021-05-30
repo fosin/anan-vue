@@ -24,30 +24,6 @@
         >
           {{ $t('table.add') }}
         </el-button>
-        <el-button
-          v-waves
-          v-permission="'122'"
-          round
-          type="success"
-          class="filter-item"
-          style="margin-left: 5px;"
-          icon="el-icon-edit"
-          @click="handleEdit()"
-        >
-          {{ $t('table.edit') }}
-        </el-button>
-        <el-button
-          v-waves
-          v-permission="'123'"
-          round
-          type="danger"
-          class="filter-item"
-          style="margin-left: 5px;"
-          icon="el-icon-delete"
-          @click="handleDelete()"
-        >
-          {{ $t('table.delete') }}
-        </el-button>
       </el-button-group>
     </div>
 
@@ -74,26 +50,79 @@
         sortable
       />
 
-      <el-table-column :label="$t('anan_version_role.createTime.label')" align="center" sortable prop="createTime" width="160">
+      <el-table-column
+        :label="$t('anan_version_role.createTime.label')"
+        align="center"
+        sortable
+        prop="createTime"
+        width="160"
+      >
         <template slot-scope="scope">
           <span>{{ scope.row.createTime | dateFormatFilter('yyyy-MM-dd HH:mm:ss') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('anan_version_role.updateTime.label')" align="center" sortable prop="updateTime" width="160">
+      <el-table-column
+        :label="$t('anan_version_role.updateTime.label')"
+        align="center"
+        sortable
+        prop="updateTime"
+        width="160"
+      >
         <template slot-scope="scope">
           <span>{{ scope.row.updateTime | dateFormatFilter('yyyy-MM-dd HH:mm:ss') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('anan_version_role.status.label')" align="center" class-name="status-col" width="80" sortable prop="status">
+      <el-table-column
+        :label="$t('anan_version_role.status.label')"
+        align="center"
+        class-name="status-col"
+        width="80"
+        sortable
+        prop="status"
+      >
         <template slot-scope="scope">
           <el-tag>{{ scope.row.status | statusFilter }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.permission')" align="center" width="100">
+      <el-table-column :label="$t('table.actions')" align="center" width="280">
         <template slot-scope="scope">
-          <el-button round size="mini" type="warning" @click="handleVersionRolePermission(scope.row)">
-            {{ $t('table.permission') }}
-          </el-button>
+          <el-button-group>
+            <el-button
+              v-waves
+              v-permission="'122'"
+              round
+              size="mini"
+              type="success"
+              class="filter-item"
+              icon="el-icon-edit"
+              @click="handleEdit(scope.row)"
+            >
+              {{ $t('table.edit') }}
+            </el-button>
+            <el-button
+              round
+              size="mini"
+              type="warning"
+              style="margin-left: 5px;"
+              icon="el-icon-menu"
+              @click="handleVersionRolePermission(scope.row)"
+            >
+              {{ $t('table.permission') }}
+            </el-button>
+            <el-button
+              v-waves
+              v-permission="'123'"
+              round
+              size="mini"
+              type="danger"
+              class="filter-item"
+              style="margin-left: 5px;"
+              icon="el-icon-delete"
+              @click="handleDelete(scope.row)"
+            >
+              {{ $t('table.delete') }}
+            </el-button>
+          </el-button-group>
         </template>
       </el-table-column>
     </el-table>
@@ -141,7 +170,11 @@
           <el-input v-model="form.tips" :placeholder="$t('anan_version_role.tips.placeholder')" />
         </el-form-item>
         <el-form-item :label="$t('anan_version_role.status.label')" prop="status">
-          <el-select v-model="form.status" :placeholder="$t('anan_version_role.status.placeholder')" class="filter-item">
+          <el-select
+            v-model="form.status"
+            :placeholder="$t('anan_version_role.status.placeholder')"
+            class="filter-item"
+          >
             <el-option v-for="item in statusOptions" :key="item" :label="item | statusFilter" :value="item" />
           </el-select>
         </el-form-item>
@@ -171,19 +204,20 @@
 
 <script>
 import {
+  deleteVersionRole,
   getVersionRole,
+  listVersionRolePage,
+  listVersionRolePermissions,
   postVersionRole,
   putVersionRole,
-  deleteVersionRole,
-  putVersionRolePermissions,
-  listVersionRolePermissions,
-  listVersionRolePage
+  putVersionRolePermissions
 } from './versionRole'
 import { formatDate } from '@/utils/date'
 import { listVersion, listVersionChildPermissions } from '../version'
 
 import { mapGetters } from 'vuex'
 import grantPermission from '../../permission/grantPermission'
+
 export default {
   name: 'DevelopmentVersionRole',
   components: {
@@ -373,14 +407,8 @@ export default {
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
     },
-    handleEdit() {
-      if (!this.form || !this.form.id || !this.form.name) {
-        this.$message({
-          message: '操作前请先选择一条数据!'
-        })
-        return
-      }
-      getVersionRole(this.form.id).then(response => {
+    handleEdit(row) {
+      getVersionRole(row.id).then(response => {
         this.form = response.data
         this.dialogFormVisible = true
         this.dialogStatus = 'update'
@@ -436,15 +464,9 @@ export default {
         })
       })
     },
-    handleDelete() {
-      if (!this.form || !this.form.id || !this.form.name) {
-        this.$message({
-          message: '操作前请先选择一条数据!'
-        })
-        return
-      }
+    handleDelete(row) {
       this.$confirm(
-        '此操作将永久删除版本角色名( ' + this.form.name + ' )的相关数据, 是否继续?',
+        '此操作将永久删除版本角色名( ' + row.name + ' )的相关数据, 是否继续?',
         '提示',
         {
           confirmButtonText: '确定',
@@ -452,7 +474,7 @@ export default {
           type: 'warning'
         }
       ).then(() => {
-        deleteVersionRole(this.form.id).then(response => {
+        deleteVersionRole(row.id).then(response => {
           this.dialogFormVisible = false
           this.getList()
           this.$notify({
@@ -542,9 +564,13 @@ export default {
       }
     },
     sortChange(column) {
-      this.pageModule.sortOrder = (column.order && column.order === 'descending') ? 'DESC' : 'ASC'
-      this.pageModule.sortName = column.prop
-      if (this.pageModule.sortName) {
+      const sortRule = {
+        sortOrder: (column.order && column.order === 'descending') ? 'DESC' : 'ASC',
+        sortName: column.prop
+      }
+      this.pageModule.params.sortRules = []
+      this.pageModule.params.sortRules.push(sortRule)
+      if (column.prop) {
         this.getList()
       }
     },
@@ -555,7 +581,7 @@ export default {
 }
 </script>
 <style scoped>
-  .el-select {
-    width: 100%;
-  }
+.el-select {
+  width: 100%;
+}
 </style>

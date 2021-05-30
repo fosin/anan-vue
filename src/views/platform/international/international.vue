@@ -33,30 +33,6 @@
           @click="handleAdd"
         >{{ $t('table.add') }}
         </el-button>
-        <el-button
-          v-waves
-          v-permission="'178'"
-          round
-          type="success"
-          class="filter-item"
-          style="margin-left: 10px;"
-          size="small"
-          icon="el-icon-edit"
-          @click="handleEdit()"
-        >{{ $t('table.edit') }}
-        </el-button>
-        <el-button
-          v-waves
-          v-permission="'179'"
-          round
-          type="danger"
-          class="filter-item"
-          style="margin-left: 10px;"
-          size="small"
-          icon="el-icon-delete"
-          @click="handleDelete()"
-        >{{ $t('table.delete') }}
-        </el-button>
       </el-button-group>
     </div>
     <el-table
@@ -71,26 +47,49 @@
       @sort-change="sortChange"
       @row-click="rowClick"
     >
-      <el-table-column label="图标" align="center" sortable prop="icon">
+      <el-table-column label="图标/标识" align="center" prop="icon">
         <template slot-scope="scope">
           <svg-icon :icon-class="scope.row.icon" style="width: 40px; height: 30px; background: #fff; color: #40c9c6;" />
+          {{ scope.row.code }}
         </template>
       </el-table-column>
-      <el-table-column label="标识" align="center" sortable prop="code" />
-      <el-table-column label="名称" align="center" sortable prop="name" />
+      <el-table-column label="名称" align="center" sortable prop="name">
+        <template slot-scope="scope">
+          {{ scope.row.name }}<el-tag v-if="scope.row.defaultFlag===1">{{ scope.row.defaultFlag | defaultFilter }}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="状态" align="center" class-name="status-col" sortable prop="status">
         <template slot-scope="scope">
           <el-tag>{{ scope.row.status | statusFilter }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column
-        label="默认标志"
-        align="center"
-        sortable
-        prop="defaultFlag"
-      >
+      <el-table-column :label="$t('table.actions')" align="center">
         <template slot-scope="scope">
-          <el-tag>{{ scope.row.defaultFlag | defaultFilter }}</el-tag>
+          <el-tooltip class="item" effect="dark" :content="$t('table.edit')" placement="top">
+            <el-button
+              v-waves
+              v-permission="'178'"
+              round
+              size="mini"
+              type="success"
+              class="filter-item"
+              icon="el-icon-edit"
+              @click="handleEdit(scope.row)"
+            />
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" :content="$t('table.delete')" placement="top">
+            <el-button
+              v-waves
+              v-permission="'179'"
+              round
+              size="mini"
+              type="danger"
+              class="filter-item"
+              style="margin-left: 5px;"
+              icon="el-icon-delete"
+              @click="handleDelete(scope.row)"
+            />
+          </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
@@ -150,32 +149,32 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button icon="el-icon-circle-close" @click="cancel('form')">{{ $t('table.cancel') }}</el-button>
         <el-button
           v-if="dialogStatus==='create'"
           type="primary"
           icon="el-icon-circle-check"
-          autofocus
           @click="create('form')"
         >{{ $t('table.confirm') }}
         </el-button>
-        <el-button v-else type="primary" icon="el-icon-circle-check" autofocus @click="update('form')">
+        <el-button v-else type="primary" icon="el-icon-circle-check" @click="update('form')">
           {{ $t('table.update') }}
         </el-button>
+        <el-button icon="el-icon-circle-close" autofocus @click="cancel('form')">{{ $t('table.cancel') }}</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 <script>
 import {
-  getInternational,
-  postInternational,
-  putInternational,
   deleteInternational,
-  listInternationalPage
+  getInternational,
+  listInternationalPage,
+  postInternational,
+  putInternational
 } from './international'
 import waves from '@/directive/waves/index.js'
 import { formatDate } from '@/utils/date'
+
 export default {
   name: 'AnanInternational',
   directives: {
@@ -292,14 +291,8 @@ export default {
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
     },
-    handleEdit() {
-      if (!this.form || !this.form['id']) {
-        this.$message({
-          message: '操作前请先选择一条数据!'
-        })
-        return
-      }
-      getInternational(this.form['id']).then(response => {
+    handleEdit(row) {
+      getInternational(row['id']).then(response => {
         this.form = response.data
         this.dialogFormVisible = true
         this.dialogStatus = 'update'
@@ -312,13 +305,7 @@ export default {
         })
       })
     },
-    handleDelete() {
-      if (!this.form || !this.form['id']) {
-        this.$message({
-          message: '操作前请先选择一条数据!'
-        })
-        return
-      }
+    handleDelete(row) {
       this.$confirm(
         '此操作将永久删除相关数据, 是否继续?',
         '提示',
@@ -328,7 +315,7 @@ export default {
           type: 'warning'
         }
       ).then(() => {
-        deleteInternational(this.form['id']).then(response => {
+        deleteInternational(row['id']).then(() => {
           this.dialogFormVisible = false
           this.getList()
           this.$notify({
@@ -345,7 +332,6 @@ export default {
             duration: 5000
           })
         })
-      }).catch(reason => {
       })
     },
     create(formName) {
@@ -414,15 +400,21 @@ export default {
       }
     },
     sortChange(column) {
-      this.pageModule.sortOrder = (column.order && column.order === 'descending') ? 'DESC' : 'ASC'
-      this.pageModule.sortName = column.prop
-      if (this.pageModule.sortName) {
+      const sortRule = {
+        sortOrder: (column.order && column.order === 'descending') ? 'DESC' : 'ASC',
+        sortName: column.prop
+      }
+      this.pageModule.params.sortRules = []
+      this.pageModule.params.sortRules.push(sortRule)
+      if (column.prop) {
         this.getList()
       }
     },
     rowClick(row, event, column) {
-      this.form = row
-      this.$emit('dic-row-click', row, event, column)
+      if (!this.form || this.form.id !== row.id) {
+        this.form = row
+        this.$emit('dic-row-click', row, event, column)
+      }
     }
   }
 }

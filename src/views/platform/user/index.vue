@@ -73,7 +73,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column :label="$t('table.permission')" align="center" width="200">
+      <el-table-column :label="$t('table.actions')" align="center" width="200">
         <template slot-scope="scope">
           <el-button round size="mini" type="primary" @click="handleUserRole(scope.row)">
             {{ $t('table.role') }}
@@ -309,6 +309,7 @@ export default {
   },
   data() {
     return {
+      defaultPass: '',
       filterAddPermissionText: '',
       filterSubPermissionText: '',
       addCheckedKeys: [],
@@ -521,6 +522,9 @@ export default {
     })
     this.loadOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数').then(res => {
       this.pageModule.pageSize = parseInt(res)
+    })
+    this.loadOrganizParameterValue('UserDefaultPassword', '123456', '用户的默认密码').then(res => {
+      this.defaultPass = res
     })
     this.loadOrganizParameterValue('DefaultPageSizes', '5,10,25,50,100', '表格默认每页记录数可选择项').then(res => {
       const temp = res.split(',')
@@ -1138,7 +1142,7 @@ export default {
         avatar: 'mavatar',
         id: undefined,
         usercode: undefined,
-        password: '123456',
+        password: this.defaultPass,
         userRoles: [],
         status: 0,
         sex: 1,
@@ -1146,9 +1150,13 @@ export default {
       }
     },
     sortChange(column) {
-      this.pageModule.sortOrder = (column.order && column.order === 'descending') ? 'DESC' : 'ASC'
-      this.pageModule.sortName = column.prop
-      if (this.pageModule.sortName) {
+      const sortRule = {
+        sortOrder: (column.order && column.order === 'descending') ? 'DESC' : 'ASC',
+        sortName: column.prop
+      }
+      this.pageModule.params.sortRules = []
+      this.pageModule.params.sortRules.push(sortRule)
+      if (column.prop) {
         this.getList()
       }
     },

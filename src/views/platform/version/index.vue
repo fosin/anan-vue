@@ -24,30 +24,6 @@
         >
           {{ $t('table.add') }}
         </el-button>
-        <el-button
-          v-permission="'113'"
-          v-waves
-          type="success"
-          class="filter-item"
-          style="margin-left: 5px;"
-          icon="el-icon-edit"
-          round
-          @click="handleEdit()"
-        >
-          {{ $t('table.edit') }}
-        </el-button>
-        <el-button
-          v-permission="'114'"
-          v-waves
-          type="danger"
-          class="filter-item"
-          style="margin-left: 5px;"
-          icon="el-icon-delete"
-          round
-          @click="handleDelete()"
-        >
-          {{ $t('table.delete') }}
-        </el-button>
       </el-button-group>
     </div>
     <el-table
@@ -81,12 +57,45 @@
         </template>
       </el-table-column>
 
-      <el-table-column :label="$t('table.permission')" align="center" width="100">
+      <el-table-column :label="$t('table.actions')" align="center" width="280">
         <template slot-scope="scope">
-          <el-button round size="mini" type="warning" @click="handlePermission(scope.row)">
-            {{ $t('table.permission') }}
-          </el-button>
-        </template>
+          <el-button-group>
+            <el-button
+              v-waves
+              v-permission="'113'"
+              round
+              size="mini"
+              type="success"
+              class="filter-item"
+              icon="el-icon-edit"
+              @click="handleEdit(scope.row)"
+            >
+              {{ $t('table.edit') }}
+            </el-button>
+            <el-button
+              round
+              size="mini"
+              type="warning"
+              icon="el-icon-menu"
+              style="margin-left: 5px;"
+              @click="handlePermission(scope.row)"
+            >
+              {{ $t('table.permission') }}
+            </el-button>
+            <el-button
+              v-waves
+              v-permission="'114'"
+              round
+              size="mini"
+              type="danger"
+              class="filter-item"
+              style="margin-left: 5px;"
+              icon="el-icon-delete"
+              @click="handleDelete(scope.row)"
+            >
+              {{ $t('table.delete') }}
+            </el-button>
+          </el-button-group></template>
       </el-table-column>
     </el-table>
 
@@ -185,20 +194,19 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button icon="el-icon-circle-close" @click="cancel('form')">
-          {{ $t('table.cancel') }}
-        </el-button>
         <el-button
           v-if="dialogStatus==='create'"
           type="primary"
           icon="el-icon-circle-check"
-          autofocus
           @click="create('form')"
         >
           {{ $t('table.confirm') }}
         </el-button>
-        <el-button v-else type="primary" icon="el-icon-circle-check" autofocus @click="update('form')">
+        <el-button v-else type="primary" icon="el-icon-circle-check" @click="update('form')">
           {{ $t('table.update') }}
+        </el-button>
+        <el-button icon="el-icon-circle-close" autofocus @click="cancel('form')">
+          {{ $t('table.cancel') }}
         </el-button>
       </div>
     </el-dialog>
@@ -418,14 +426,8 @@ export default {
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
     },
-    handleEdit() {
-      if (!this.form || !this.form['id']) {
-        this.$message({
-          message: '操作前请先选择一条数据!'
-        })
-        return
-      }
-      getVersion(this.form['id']).then(response => {
+    handleEdit(row) {
+      getVersion(row['id']).then(response => {
         this.form = response.data
         this.form.status = this.form.status + ''
         this.tryout = this.form.tryout === 1
@@ -440,15 +442,9 @@ export default {
         })
       })
     },
-    handleDelete() {
-      if (!this.form || !this.form['id']) {
-        this.$message({
-          message: '操作前请先选择一条数据!'
-        })
-        return
-      }
+    handleDelete(row) {
       this.$confirm(
-        '此操作将永久删除相关数据, 是否继续?',
+        '此操作将永久删除版本[' + row.name + '], 是否继续?',
         '提示',
         {
           confirmButtonText: '确定',
@@ -456,7 +452,7 @@ export default {
           type: 'warning'
         }
       ).then(() => {
-        deleteVersion(this.form['id']).then(response => {
+        deleteVersion(row['id']).then(response => {
           this.dialogFormVisible = false
           this.getList()
           this.$notify({
@@ -473,7 +469,6 @@ export default {
             duration: 5000
           })
         })
-      }).catch(reason => {
       })
     },
     create(formName) {
@@ -595,9 +590,13 @@ export default {
       }
     },
     sortChange(column) {
-      this.pageModule.sortOrder = (column.order && column.order === 'descending') ? 'DESC' : 'ASC'
-      this.pageModule.sortName = column.prop
-      if (this.pageModule.sortName) {
+      const sortRule = {
+        sortOrder: (column.order && column.order === 'descending') ? 'DESC' : 'ASC',
+        sortName: column.prop
+      }
+      this.pageModule.params.sortRules = []
+      this.pageModule.params.sortRules.push(sortRule)
+      if (column.prop) {
         this.getList()
       }
     },

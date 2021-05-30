@@ -33,32 +33,6 @@
         >
           {{ $t('table.add') }}
         </el-button>
-        <el-button
-          v-waves
-          v-permission="'63'"
-          round
-          type="success"
-          size="small"
-          class="filter-item"
-          style="margin-left: 5px;"
-          icon="el-icon-edit"
-          @click="handleEdit()"
-        >
-          {{ $t('table.edit') }}
-        </el-button>
-        <el-button
-          v-waves
-          v-permission="'64'"
-          round
-          type="danger"
-          size="small"
-          class="filter-item"
-          style="margin-left: 5px;"
-          icon="el-icon-delete"
-          @click="handleDelete()"
-        >
-          {{ $t('table.delete') }}
-        </el-button>
       </el-button-group>
     </div>
 
@@ -105,6 +79,35 @@
       >
         <template slot-scope="scope">
           <span>{{ getStatusValue(scope.row.status) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.actions')" align="center">
+        <template slot-scope="scope">
+          <el-tooltip class="item" effect="dark" :content="$t('table.edit')" placement="top">
+            <el-button
+              v-waves
+              v-permission="'63'"
+              round
+              size="mini"
+              type="success"
+              class="filter-item"
+              icon="el-icon-edit"
+              @click="handleEdit(scope.row)"
+            />
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" :content="$t('table.delete')" placement="top">
+            <el-button
+              v-waves
+              v-permission="'64'"
+              round
+              size="mini"
+              type="danger"
+              class="filter-item"
+              style="margin-left: 5px;"
+              icon="el-icon-delete"
+              @click="handleDelete(scope.row)"
+            />
+          </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
@@ -331,14 +334,8 @@ export default {
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
     },
-    handleEdit() {
-      if (!this.form || !this.form.id) {
-        this.$message({
-          message: '操作前请先选择一条数据!'
-        })
-        return
-      }
-      getDictionaryDetail(this.form.id).then(response => {
+    handleEdit(row) {
+      getDictionaryDetail(row.id).then(response => {
         this.form = response.data
         this.form.status = this.form.status + ''
         this.dialogFormVisible = true
@@ -352,15 +349,9 @@ export default {
         })
       })
     },
-    handleDelete() {
-      if (!this.form || !this.form.id) {
-        this.$message({
-          message: '操作前请先选择一条数据!'
-        })
-        return
-      }
+    handleDelete(row) {
       this.$confirm(
-        '此操作将永久删除字典明细项( ' + this.form.value + ' )的相关数据, 是否继续?',
+        '此操作将永久删除字典明细项( ' + row.value + ' )的相关数据, 是否继续?',
         '提示',
         {
           confirmButtonText: '确定',
@@ -368,7 +359,7 @@ export default {
           type: 'warning'
         }
       ).then(() => {
-        deleteDictionaryDetail(this.form.id).then(response => {
+        deleteDictionaryDetail(row.id).then(() => {
           this.dialogFormVisible = false
           this.getList()
           this.$notify({
@@ -385,7 +376,6 @@ export default {
             duration: 5000
           })
         })
-      }).catch(reason => {
       })
     },
     create(formName) {
@@ -462,9 +452,13 @@ export default {
       }
     },
     sortChange(column) {
-      this.pageModule.sortOrder = (column.order && column.order === 'descending') ? 'DESC' : 'ASC'
-      this.pageModule.sortName = column.prop
-      if (this.pageModule.sortName) {
+      const sortRule = {
+        sortOrder: (column.order && column.order === 'descending') ? 'DESC' : 'ASC',
+        sortName: column.prop
+      }
+      this.pageModule.params.sortRules = []
+      this.pageModule.params.sortRules.push(sortRule)
+      if (column.prop) {
         this.getList()
       }
     },

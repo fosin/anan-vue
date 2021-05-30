@@ -15,12 +15,6 @@
         <el-button v-waves v-permission="'50'" round class="filter-item" style="margin-left: 5px;" type="primary" icon="el-icon-circle-plus" @click="handleAdd">
           {{ $t('table.add') }}
         </el-button>
-        <el-button v-waves v-permission="'51'" round type="success" class="filter-item" style="margin-left: 5px;" icon="el-icon-edit" @click="handleEdit()">
-          {{ $t('table.edit') }}
-        </el-button>
-        <el-button v-waves v-permission="'52'" round type="danger" class="filter-item" style="margin-left: 5px;" icon="el-icon-delete" @click="handleDelete()">
-          {{ $t('table.delete') }}
-        </el-button>
       </el-button-group>
     </div>
     <el-table
@@ -54,11 +48,47 @@
      <el-table-column align="center" class-name="status-col" :label="$t('oauth_client_details.additionalInformation.label')" sortable prop="additionalInformation">
       </el-table-column>-->
       <el-table-column :label="$t('oauth_client_details.autoapprove.label')" align="center" sortable prop="autoapprove" />
-      <el-table-column :label="$t('table.permission')" align="center" width="110">
+      <el-table-column :label="$t('table.actions')" align="center" width="280">
         <template slot-scope="scope">
-          <el-button round size="mini" type="warning" @click="handlePermission(scope.row)">
-            {{ $t('table.permission') }}
-          </el-button>
+          <el-button-group>
+            <el-button
+              v-waves
+              v-permission="'51'"
+              round
+              size="mini"
+              type="success"
+              class="filter-item"
+              icon="el-icon-edit"
+              @click="handleEdit(scope.row)"
+            >
+              {{ $t('table.edit') }}
+            </el-button>
+            <el-button
+              v-waves
+              v-permission="'133'"
+              round
+              size="mini"
+              type="warning"
+              style="margin-left: 5px;"
+              icon="el-icon-menu"
+              @click="handlePermission(scope.row)"
+            >
+              {{ $t('table.permission') }}
+            </el-button>
+            <el-button
+              v-waves
+              v-permission="'52'"
+              round
+              size="mini"
+              type="danger"
+              class="filter-item"
+              style="margin-left: 5px;"
+              icon="el-icon-delete"
+              @click="handleDelete(scope.row)"
+            >
+              {{ $t('table.delete') }}
+            </el-button>
+          </el-button-group>
         </template>
       </el-table-column>
     </el-table>
@@ -147,7 +177,7 @@
   </div>
 </template>
 <script>
-import { getClient, postClient, putClient, deleteClient, listClientPage } from './client.js'
+import { getClient, postClient, putClient, deleteClient, listClientPage } from './oauthclient.js'
 
 import { listChildPermissions } from '../permission/permission'
 import grantPermission from '../permission/grantPermission'
@@ -339,14 +369,8 @@ export default {
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
     },
-    handleEdit() {
-      if (!this.form || !this.form.clientId) {
-        this.$message({
-          message: '操作前请先选择一条数据!'
-        })
-        return
-      }
-      getClient(this.form.clientId).then(response => {
+    handleEdit(row) {
+      getClient(row.clientId).then(response => {
         this.form = response.data
         this.form.authorizedGrantTypeArray = this.form.authorizedGrantTypes.split(',')
         this.dialogFormVisible = true
@@ -360,15 +384,9 @@ export default {
         })
       })
     },
-    handleDelete() {
-      if (!this.form || !this.form.clientId) {
-        this.$message({
-          message: '操作前请先选择一条数据!'
-        })
-        return
-      }
+    handleDelete(row) {
       this.$confirm(
-        '此操作将永久删除客户端名( ' + this.form.clientId + ' )的相关数据, 是否继续?',
+        '此操作将永久删除客户端名( ' + row.clientId + ' )的相关数据, 是否继续?',
         '提示',
         {
           confirmButtonText: '确定',
@@ -376,7 +394,7 @@ export default {
           type: 'warning'
         }
       ).then(() => {
-        deleteClient(this.form.clientId).then(response => {
+        deleteClient(row.clientId).then(response => {
           this.dialogFormVisible = false
           this.getList()
           this.$notify({
@@ -393,7 +411,6 @@ export default {
             duration: 5000
           })
         })
-      }).catch(reason => {
       })
     },
     create(formName) {
@@ -474,9 +491,13 @@ export default {
       }
     },
     sortChange(column) {
-      this.pageModule.sortOrder = (column.order && column.order === 'descending') ? 'DESC' : 'ASC'
-      this.pageModule.sortName = column.prop
-      if (this.pageModule.sortName) {
+      const sortRule = {
+        sortOrder: (column.order && column.order === 'descending') ? 'DESC' : 'ASC',
+        sortName: column.prop
+      }
+      this.pageModule.params.sortRules = []
+      this.pageModule.params.sortRules.push(sortRule)
+      if (column.prop) {
         this.getList()
       }
     },
