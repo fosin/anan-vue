@@ -1,4 +1,4 @@
-import request, { postRequest } from '@/utils/request'
+import request, { getRequest, postRequest } from '@/utils/request'
 
 // 获取数据分页列表
 export function listParameterPage(page) {
@@ -51,8 +51,5 @@ export function applyParameter(id) {
 }
 
 export function applysParameter() {
-  return request({
-    url: 'gateway/platform/v1/parameter/applys',
-    method: 'post'
-  })
+  return getRequest('gateway/platform/v1/parameter/applys')
 }

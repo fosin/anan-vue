@@ -154,8 +154,8 @@ export const putRequest = (url, data, notify = true) => {
   return allRequest({ url: url, data: data, method: 'put' }, notify)
 }
 
-export const deleteRequest = (url, notify = true) => {
-  return allRequest({ url: url, data: null, method: 'delete' }, notify)
+export const deleteRequest = (url, data, notify = true) => {
+  return allRequest({ url: url, data: data, method: 'delete' }, notify)
 }
 
 export const getRequest = (url, notify = true) => {

@@ -6,8 +6,8 @@ export function listInternationalPage(page) {
 }
 
 // 获取国际化语言集所有数据列表
-export function listInternational() {
-  return postRequest('gateway/platform/v1/international/list')
+export function listInternational(data) {
+  return postRequest('gateway/platform/v1/international/list', data)
 }
 
 // 新建国际化语言集
@@ -34,13 +34,9 @@ export function putInternational(obj) {
 }
 
 // 根据状态码查找所有语言清单,不传参数默认使用post查询status=0的数据
-export function getInternationlsByStatus(status, method) {
+export function getInternationlsByStatus(status) {
   if (!status) status = 0
-  const url = 'gateway/platform/v1/international/status/' + status
-  if (method === 'get') {
-    return getRequest(url, method)
-  }
-  return postRequest(url)
+  return getRequest('gateway/platform/v1/international/status/' + status)
 }
 
 // 根据国际化语言编码查找国际化语言

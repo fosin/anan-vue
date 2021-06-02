@@ -1,119 +1,67 @@
 <template>
   <div class="app-container calendar-list-container">
-    <div class="filter-container">
-      <el-input
-        v-model="pageModule.params.name"
-        :placeholder="$t('anan_role.searchText')"
-        style="width: 200px;"
-        class="filter-item"
-        @keyup.enter.native="handleFilter"
-      />
-      <el-button-group>
-        <el-button v-waves round class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-          {{ $t('table.search') }}
-        </el-button>
-        <el-button
-          v-permission="'24'"
-          round
-          class="filter-item"
-          style="margin-left: 5px;"
-          type="primary"
-          icon="el-icon-circle-plus"
-          @click="handleAdd"
-        >
-          {{ $t('table.add') }}
-        </el-button>
-        <el-button
-          v-waves
-          v-permission="'25'"
-          round
-          type="success"
-          class="filter-item"
-          style="margin-left: 5px;"
-          icon="el-icon-edit"
-          @click="handleEdit()"
-        >
-          {{ $t('table.edit') }}
-        </el-button>
-        <el-button
-          v-waves
-          v-permission="'26'"
-          round
-          type="danger"
-          class="filter-item"
-          style="margin-left: 5px;"
-          icon="el-icon-delete"
-          @click="handleDelete()"
-        >
-          {{ $t('table.delete') }}
-        </el-button>
-      </el-button-group>
-    </div>
-
-    <el-table
-      v-loading="listLoading"
-      :data="roleList"
-      element-loading-text="努力加载中"
-      border
-      fit
-      highlight-current-row
+    <data-table
+      ref="pagingTable"
+      :options="options"
+      :list-query="listQuery"
       style="width: 100%"
-      @sort-change="sortChange"
-      @row-click="rowClick"
+      @handle-add="handleAdd"
     >
-      <el-table-column :label="$t('anan_role.value.label')" align="center" prop="value" sortable />
+      <template slot="filter-content" />
+      <template slot="data-columns">
+        <el-table-column :label="$t('anan_role.value.label')" align="center" prop="value" sortable />
 
-      <el-table-column :label="$t('anan_role.name.label')" align="center" sortable prop="name" />
-      <el-table-column
-        :label="$t('anan_role.organizId.label')"
-        :formatter="getOrganizName"
-        prop="organizId"
-        show-overflow-tooltip
-        sortable
-        align="center"
-      />
-      <!--      <el-table-column  :label="$t('anan_role.tips.label')" align="center" sortable prop="tips">
-            </el-table-column>-->
+        <el-table-column :label="$t('anan_role.name.label')" align="center" sortable prop="name" />
+        <el-table-column
+          :label="$t('anan_role.organizId.label')"
+          :formatter="getOrganizName"
+          prop="organizId"
+          show-overflow-tooltip
+          sortable
+          align="center"
+        />
+        <!--      <el-table-column  :label="$t('anan_role.tips.label')" align="center" sortable prop="tips">
+              </el-table-column>-->
 
-      <el-table-column :label="$t('anan_role.createTime.label')" align="center" sortable prop="createTime">
-        <template slot-scope="scope">
-          <span>{{ scope.row.createTime | dateFormatFilter('yyyy-MM-dd HH:mm:ss') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('anan_role.updateTime.label')" align="center" sortable prop="updateTime">
-        <template slot-scope="scope">
-          <span>{{ scope.row.updateTime | dateFormatFilter('yyyy-MM-dd HH:mm:ss') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('anan_role.status.label')" align="center" class-name="status-col" width="80" sortable prop="status">
-        <template slot-scope="scope">
-          <el-tag>{{ scope.row.status | statusFilter }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('table.actions')" align="center" width="200">
-        <template slot-scope="scope">
-          <el-button round size="mini" type="primary" @click="handleRoleUser(scope.row)">
-            {{ $t('table.user') }}
-          </el-button>
-          <el-button round size="mini" type="warning" @click="handleRolePermission(scope.row)">
-            {{ $t('table.permission') }}
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-
-    <div v-show="!listLoading" class="pagination-container">
-      <el-pagination
-        :current-page.sync="pageModule.pageNumber"
-        :page-sizes="pageSizes"
-        :page-size="pageModule.pageSize"
-        :total="total"
-        :hide-on-single-page="true"
-        layout="total, sizes, prev, pager, next, jumper"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
-    </div>
+        <el-table-column :label="$t('anan_role.createTime.label')" align="center" sortable prop="createTime">
+          <template slot-scope="scope">
+            <span>{{ scope.row.createTime | dateFormatFilter('yyyy-MM-dd HH:mm:ss') }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('anan_role.updateTime.label')" align="center" sortable prop="updateTime">
+          <template slot-scope="scope">
+            <span>{{ scope.row.updateTime | dateFormatFilter('yyyy-MM-dd HH:mm:ss') }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('anan_role.status.label')" align="center" class-name="status-col" width="80" sortable prop="status">
+          <template slot-scope="scope">
+            <el-tag>{{ scope.row.status | statusFilter }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('table.actions')" align="center" width="200">
+          <template slot-scope="scope">
+            <el-tooltip class="item" effect="dark" :content="$t('table.edit')" placement="top">
+              <el-button
+                v-waves
+                v-permission="'25'"
+                round
+                size="mini"
+                type="success"
+                class="filter-item"
+                icon="el-icon-edit"
+                @click="handleEdit(scope.row)"
+              />
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" :content="$t('table.user')" placement="top">
+              <el-button round size="mini" type="primary" icon="el-icon-user-solid" @click="handleRoleUser(scope.row)" />
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" :content="$t('table.permission')" placement="top">
+              <el-button round size="mini" type="warning" icon="el-icon-menu" @click="handleRolePermission(scope.row)" />
+            </el-tooltip>
+          </template>
+        </el-table-column>
+      </template>
+    </data-table>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-form-item :label="$t('anan_role.value.label')" prop="value">
@@ -152,21 +100,20 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button round icon="el-icon-circle-close" @click="cancel('form')">
-          {{ $t('table.cancel') }}
-        </el-button>
         <el-button
           v-if="dialogStatus==='create'"
           round
           type="primary"
           icon="el-icon-circle-check"
-          autofocus
           @click="create('form')"
         >
           {{ $t('table.confirm') }}
         </el-button>
-        <el-button v-else round type="primary" icon="el-icon-circle-check" autofocus @click="update('form')">
+        <el-button v-else round type="primary" icon="el-icon-circle-check" @click="update('form')">
           {{ $t('table.update') }}
+        </el-button>
+        <el-button round icon="el-icon-circle-close" autofocus @click="cancel('form')">
+          {{ $t('table.cancel') }}
         </el-button>
       </div>
     </el-dialog>
@@ -188,11 +135,11 @@
         filterable
       />
       <div slot="footer" class="dialog-footer">
-        <el-button v-waves round icon="el-icon-circle-close" @click="cancel('roleUser')">
-          {{ $t('table.cancel') }}
-        </el-button>
         <el-button v-waves v-permission="'49'" round type="primary" icon="el-icon-circle-check" @click="updateRoleUser()">
           {{ $t('table.update') }}
+        </el-button>
+        <el-button v-waves round icon="el-icon-circle-close" @click="cancel('roleUser')">
+          {{ $t('table.cancel') }}
         </el-button>
       </div>
     </el-dialog>
@@ -205,12 +152,10 @@ import {
   getRole,
   postRole,
   putRole,
-  deleteRole,
   putRolePermissions,
   listRolePermissions,
   listRoleUsers,
-  putRoleUsers,
-  listRolePage
+  putRoleUsers
 } from './role'
 import { listOrganizUser } from '../user/user'
 import { formatDate } from '@/utils/date'
@@ -219,10 +164,12 @@ import { mapGetters } from 'vuex'
 import grantPermission from '../permission/grantPermission'
 import { listVersionChildPermissions } from '../version/version'
 import { getOrganiz, getOrganizAuth } from '../organization/organization'
+import DataTable from '@/components/DataTable'
 export default {
   name: 'SystemRole',
   components: {
-    grantPermission
+    grantPermission,
+    DataTable
   },
   filters: {
     statusFilter(status) {
@@ -252,36 +199,85 @@ export default {
         isLeaf: 'leaf',
         disabled: 'disabled'
       },
-      roleList: null,
-      total: null,
-      listLoading: false,
-      pageModule: {
-        pageNumber: 1,
-        pageSize: 10,
-        params: {
-          organizId: 0,
-          name: '',
-          value: '',
-          queryRule: {
-            relaRules: [
-              {
-                filedName: 'name',
-                relaOperator: 'like'
-              },
-              {
-                filedName: 'value',
-                relaOperator: 'like'
-              }
-            ],
-            logiOperator: 'or'
-          },
-          sortRules: [{
-            sortName: 'value',
-            sortOrder: 'ASC'
-          }]
+      listQuery: {
+        listUrl: 'gateway/platform/v1/role/paging',
+        pageSizes: [5, 10, 25, 50, 100],
+        search: {
+          cols: ['name', 'value'],
+          placeholder: this.$t('anan_role.searchText')
+        },
+        pageModule: {
+          pageNumber: 1,
+          pageSize: 10,
+          params: {
+            organizId: 0,
+            name: '',
+            value: '',
+            queryRule: {
+              relaRules: [
+                {
+                  filedName: 'name',
+                  relaOperator: 'like'
+                },
+                {
+                  filedName: 'value',
+                  relaOperator: 'like'
+                }
+              ],
+              logiOperator: 'or'
+            },
+            sortRules: [{
+              sortName: 'value',
+              sortOrder: 'ASC'
+            }]
+          }
         }
       },
-      pageSizes: [5, 10, 25, 50, 100],
+      options: {
+        // 可批量操作
+        multi: true,
+        // 批量操作列表
+        multiActions: [
+          {
+            value: 'delete',
+            label: this.$t('table.delete'),
+            url: 'gateway/platform/v1/role/ids',
+            method: 'delete',
+            permissionId: '26',
+            confirm: true
+          },
+          {
+            value: 'enableStatus',
+            label: this.$t('table.enable'),
+            url: 'gateway/platform/v1/role/status/0',
+            method: 'post',
+            permissionId: '25',
+            confirm: false
+          },
+          {
+            value: 'disableStatus',
+            label: this.$t('table.disable'),
+            url: 'gateway/platform/v1/role/status/1',
+            method: 'post',
+            permissionId: '25',
+            confirm: false
+          }
+        ],
+        addAction: {
+          enable: true,
+          route: '',
+          permissionId: '24'
+        },
+        tableRowClass: {
+          column: 'status',
+          data: [
+            {
+              key: 1,
+              value: 'info-row'
+            }
+          ]
+        }
+      },
       form: {},
       rules: {
         name: [
@@ -339,42 +335,16 @@ export default {
   computed: {
     ...mapGetters(['ananPermissions', 'ananUserInfo'])
   },
-  mounted() {
-    this.loadOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数').then(res => {
-      this.pageModule.pageSize = parseInt(res)
-    })
-    this.loadOrganizParameterValue('DefaultPageSizes', '5,10,25,50,100', '表格默认每页记录数可选择项').then(res => {
-      const temp = res.split(',')
-      this.pageSizes = []
-      for (let i = 0; i < temp.length; i++) {
-        this.pageSizes[i] = parseInt(temp[i])
-      }
-    })
+  created() {
     if (!this.organizList || this.organizList.length < 1) {
       this.loadOrganizAllChild(this.ananUserInfo.organizId)
     }
-    this.getList()
+    debugger
+    this.listQuery.pageModule.params.organizId = this.ananUserInfo.organizId
   },
   methods: {
     roleUserfilterMethod(query, item) {
       return item.usercode.indexOf(query) > -1 || item.username.indexOf(query) > -1
-    },
-    getList() {
-      this.listLoading = true
-      this.pageModule.params.organizId = this.ananUserInfo.organizId
-      this.pageModule.params.value = this.pageModule.params.name
-      listRolePage(this.pageModule).then(response => {
-        this.roleList = response.data.rows
-        this.total = response.data.total
-        this.listLoading = false
-      }).catch(reason => {
-        this.$notify({
-          title: '获取角色列表失败',
-          message: reason.message,
-          type: 'error',
-          duration: 5000
-        })
-      })
     },
     loadOrganizAllChild(pid) {
       listOrganizAllChild(pid).then(response => {
@@ -403,31 +373,13 @@ export default {
       }
       return organiz[0].fullname || organiz[0].name || row.organizId
     },
-    handleFilter() {
-      this.pageModule.pageNumber = 1
-      this.getList()
-    },
-    handleSizeChange(val) {
-      this.pageModule.pageSize = val
-      this.getList()
-    },
-    handleCurrentChange(val) {
-      this.pageModule.pageNumber = val
-      this.getList()
-    },
     handleAdd() {
       this.resetForm()
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
     },
-    handleEdit() {
-      if (!this.form || !this.form.id || !this.form.name) {
-        this.$message({
-          message: '操作前请先选择一条数据!'
-        })
-        return
-      }
-      getRole(this.form.id).then(response => {
+    handleEdit(row) {
+      getRole(row.id).then(response => {
         const form = response.data
         if (form && form.builtIn === 1) {
           this.$message({
@@ -573,54 +525,13 @@ export default {
       if (!value) return true
       return data.name.indexOf(value) !== -1
     },
-    handleDelete() {
-      if (!this.form || !this.form.id || !this.form.name) {
-        this.$message({
-          message: '操作前请先选择一条数据!'
-        })
-        return
-      }
-      if (this.form && this.form.builtIn === 1) {
-        this.$message({
-          message: '系统内置角色不能删除!'
-        })
-        return
-      }
-      this.$confirm(
-        '此操作将永久删除角色名( ' + this.form.name + ' )的相关数据, 是否继续?',
-        '提示',
-        {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }
-      ).then(() => {
-        deleteRole(this.form.id).then(() => {
-          this.dialogFormVisible = false
-          this.getList()
-          this.$notify({
-            title: '成功',
-            message: '删除角色成功!',
-            type: 'success',
-            duration: 2000
-          })
-        }).catch(reason => {
-          this.$notify({
-            title: '删除角色失败',
-            message: reason.message,
-            type: 'error',
-            duration: 5000
-          })
-        })
-      })
-    },
     create(formName) {
       const set = this.$refs
       set[formName].validate(valid => {
         if (valid) {
           postRole(this.form).then(() => {
             this.dialogFormVisible = false
-            this.getList()
+            this.$refs.pagingTable.getList()
             this.$notify({
               title: '成功',
               message: '创建成功',
@@ -655,7 +566,7 @@ export default {
           this.dialogFormVisible = false
           putRole(this.form).then(() => {
             this.dialogFormVisible = false
-            this.getList()
+            this.$refs.pagingTable.getList()
             this.$notify({
               title: '成功',
               message: '修改成功',
@@ -685,20 +596,6 @@ export default {
         status: 0,
         builtIn: 0
       }
-    },
-    sortChange(column) {
-      const sortRule = {
-        sortOrder: (column.order && column.order === 'descending') ? 'DESC' : 'ASC',
-        sortName: column.prop
-      }
-      this.pageModule.params.sortRules = []
-      this.pageModule.params.sortRules.push(sortRule)
-      if (column.prop) {
-        this.getList()
-      }
-    },
-    rowClick(row) {
-      this.form = row
     }
   }
 }

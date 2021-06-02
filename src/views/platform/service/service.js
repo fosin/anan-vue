@@ -1,4 +1,4 @@
-import { allRequest, deleteRequest, postRequest, putRequest, getRequest } from '@/utils/request'
+import { allRequest, deleteRequest, getRequest, postRequest, putRequest } from '@/utils/request'
 
 // 获取系统服务表数据分页列表
 export function listServicePage(page) {
@@ -6,8 +6,8 @@ export function listServicePage(page) {
 }
 
 // 获取系统服务表所有数据列表
-export function listService() {
-  return postRequest('gateway/platform/v1/service/list')
+export function listService(data) {
+  return postRequest('gateway/platform/v1/service/list', data)
 }
 
 // 新建系统服务表
@@ -34,11 +34,7 @@ export function putService(obj) {
 }
 
 // 根据状态码查找所有服务数据,不传参数默认使用post查询status=0的数据
-export function getServiceByStatus(status, method) {
+export function getServiceByStatus(status) {
   if (!status) status = 0
-  const url = 'gateway/platform/v1/service/status/' + status
-  if (method === 'get') {
-    return getRequest(url, method)
-  }
-  return postRequest(url)
+  return getRequest('gateway/platform/v1/service/status/' + status)
 }

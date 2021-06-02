@@ -1,41 +1,13 @@
 <template>
   <div class="app-container calendar-list-container">
-    <div class="filter-container">
-      <el-input
-        v-model="pageModule.params.name"
-        :placeholder="$t('anan_parameter.searchText')"
-        style="width: 300px;"
-        class="filter-item"
-        @keyup.enter.native="handleFilter"
-      />
-      <el-button-group>
-        <el-button v-waves round class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-          {{ $t('table.search') }}
-        </el-button>
-        <el-button
-          v-waves
-          v-permission="'53'"
-          round
-          class="filter-item"
-          style="margin-left: 5px;"
-          type="primary"
-          icon="el-icon-circle-plus"
-          @click="handleAdd"
-        >
-          {{ $t('table.add') }}
-        </el-button>
-        <el-button
-          v-waves
-          v-permission="'55'"
-          round
-          type="danger"
-          class="filter-item"
-          style="margin-left: 5px;"
-          icon="el-icon-delete"
-          @click="handleDelete()"
-        >
-          {{ $t('table.delete') }}
-        </el-button>
+    <data-table
+      ref="pagingTable"
+      :options="options"
+      :list-query="listQuery"
+      style="width: 100%"
+      @handle-add="handleAdd"
+    >
+      <template slot="filter-content">
         <el-button
           v-waves
           v-permission="'57'"
@@ -48,93 +20,121 @@
         >
           {{ $t('table.applys') }}
         </el-button>
-      </el-button-group>
-    </div>
-
-    <el-table
-      ref="parameterTable"
-      v-loading="listLoading"
-      :data="parameterList"
-      :row-class-name="tableRowClassName"
-      element-loading-text="努力加载中"
-      border
-      fit
-      highlight-current-row
-      style="width: 100%"
-      @sort-change="sortChange"
-      @row-click="rowClick"
-    >
-      <el-table-column :label="$t('anan_parameter.name.label')" align="center" sortable prop="name" width="200px" />
-      <el-table-column :label="$t('anan_parameter.value.label')" align="center" sortable prop="value" width="120px" />
-      <el-table-column :label="$t('anan_parameter.description.label')" align="center" sortable prop="description" />
-      <el-table-column :label="$t('anan_parameter.type.label')" align="center" sortable prop="type" width="120px">
-        <template slot-scope="scope">
-          <span>{{ getTypeName(scope.row.type) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('anan_parameter.scope.label')" align="center" sortable prop="scope" width="100px">
-        <template slot-scope="scope">
-          <span>{{ getScopeName(scope.row.type, scope.row.scope) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('table.actions')" align="center" width="120px">
-        <template slot-scope="scope">
-          <el-tooltip class="item" effect="dark" :content="$t('table.edit')" placement="top">
-            <el-button
-              v-waves
-              v-permission="'54'"
-              round
-              size="mini"
-              type="success"
-              class="filter-item"
-              icon="el-icon-edit"
-              @click="handleEdit(scope.row)"
-            />
-          </el-tooltip>
-          <el-tooltip class="item" effect="dark" :content="$t('table.apply')" placement="top">
-            <el-button
-              v-waves
-              v-permission="'56'"
-              round
-              size="mini"
-              type="warning"
-              class="filter-item"
-              style="margin-left: 5px;"
-              icon="el-icon-upload"
-              @click="handleApply(scope.row)"
-            />
-          </el-tooltip>
-        </template>
-      </el-table-column>
-    </el-table>
-    <div v-show="!listLoading" class="pagination-container">
-      <el-pagination
-        :current-page.sync="pageModule.pageNumber"
-        :page-sizes="pageSizes"
-        :page-size="pageModule.pageSize"
-        :total="total"
-        layout="total, sizes, prev, pager, next, jumper"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
-    </div>
-
+      </template>
+      <template slot="data-columns">
+        <el-table-column
+          :label="$t('anan_parameter.name.label')"
+          fixed
+          align="center"
+          sortable
+          prop="name"
+          width="200px"
+        />
+        <el-table-column :label="$t('anan_parameter.value.label')" align="center" sortable prop="value" width="120px" />
+        <el-table-column
+          :label="$t('anan_parameter.description.label')"
+          align="center"
+          sortable
+          prop="description"
+          width="620px"
+        />
+        <el-table-column :label="$t('anan_parameter.type.label')" align="center" sortable prop="type" width="120px">
+          <template slot-scope="scope">
+            <span>{{ getTypeName(scope.row.type) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('anan_parameter.scope.label')" align="center" sortable prop="scope" width="100px">
+          <template slot-scope="scope">
+            <span>{{ getScopeName(scope.row.type, scope.row.scope) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="$t('anan_parameter.applyTime.label')"
+          align="center"
+          sortable
+          prop="applyTime"
+          width="160px"
+        />
+        <el-table-column :label="$t('anan_parameter.applyBy.label')" align="center" sortable prop="applyBy" width="100px">
+          <template slot-scope="scope">
+            <span>{{ getUserName(scope.row.applyBy) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="$t('anan_parameter.updateTime.label')"
+          align="center"
+          sortable
+          prop="updateTime"
+          width="160px"
+        />
+        <el-table-column
+          :label="$t('anan_parameter.updateBy.label')"
+          align="center"
+          sortable
+          prop="updateBy"
+          width="100px"
+        >
+          <template slot-scope="scope">
+            <span>{{ getUserName(scope.row.updateBy) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column fixed="right" :label="$t('table.actions')" align="center" width="120px">
+          <template slot-scope="scope">
+            <el-tooltip class="item" effect="dark" :content="$t('table.edit')" placement="top">
+              <el-button
+                v-waves
+                v-permission="'54'"
+                round
+                size="mini"
+                type="success"
+                class="filter-item"
+                icon="el-icon-edit"
+                @click="handleEdit(scope.row)"
+              />
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" :content="$t('table.apply')" placement="top">
+              <el-button
+                v-waves
+                v-permission="'56'"
+                round
+                size="mini"
+                type="warning"
+                class="filter-item"
+                style="margin-left: 5px;"
+                icon="el-icon-upload"
+                @click="handleApply(scope.row)"
+              />
+            </el-tooltip>
+          </template>
+        </el-table-column>
+      </template>
+    </data-table>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-form-item :label="$t('anan_parameter.name.label')" prop="name">
           <el-input v-model="form.name" :placeholder="$t('anan_parameter.name.placeholder')" />
         </el-form-item>
         <el-form-item :label="$t('anan_parameter.value.label')" prop="value">
-          <el-input v-model="form.value" :placeholder="$t('anan_parameter.value.placeholder')" />
+          <el-input v-model="form.value" type="textarea" :placeholder="$t('anan_parameter.value.placeholder')" />
         </el-form-item>
         <el-form-item :label="$t('anan_parameter.defaultValue.label')" prop="defaultValue">
-          <el-input v-model="form.defaultValue" :placeholder="$t('anan_parameter.defaultValue.placeholder')" />
+          <el-input v-model="form.defaultValue" type="textarea" :placeholder="$t('anan_parameter.defaultValue.placeholder')" />
         </el-form-item>
         <el-form-item :label="$t('anan_parameter.description.label')" prop="description">
-          <el-input v-model="form.description" :placeholder="$t('anan_parameter.description.placeholder')" />
+          <el-input
+            v-model="form.description"
+            type="textarea"
+            :placeholder="$t('anan_parameter.description.placeholder')"
+          />
         </el-form-item>
         <el-form-item :label="$t('anan_parameter.type.label')" prop="type">
-          <el-select v-model="form.type" :placeholder="$t('anan_parameter.type.placeholder')" :disabled="dialogStatus!=='create'" class="filter-item" @change="typeChange">
+          <el-select
+            v-model="form.type"
+            :placeholder="$t('anan_parameter.type.placeholder')"
+            :disabled="dialogStatus!=='create'"
+            class="filter-item"
+            @change="typeChange"
+          >
             <el-option
               v-for="item in typeOptions"
               :key="item.name"
@@ -144,8 +144,17 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item v-if="form.type ===1 || form.type === 2" :label="$t('anan_parameter.scope.label')" prop="scope">
-          <el-select v-model="form.scope" :placeholder="$t('anan_parameter.scope.placeholder')" class="filter-item">
+        <el-form-item
+          v-if="form.type ===1 || form.type === 2 || form.type === 3"
+          :label="$t('anan_parameter.scope.label')"
+          prop="scope"
+        >
+          <el-select
+            v-model="form.scope"
+            clearable
+            :placeholder="$t('anan_parameter.scope.placeholder')"
+            class="filter-item"
+          >
             <el-option
               v-for="item in scopeOptions"
               :key="item.name"
@@ -159,22 +168,21 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button v-waves round icon="el-icon-circle-close" @click="cancel('form')">
-          {{ $t('table.cancel') }}
-        </el-button>
         <el-button
           v-if="dialogStatus==='create'"
           v-waves
           round
           type="primary"
           icon="el-icon-circle-check"
-          autofocus
           @click="create('form')"
         >
           {{ $t('table.confirm') }}
         </el-button>
-        <el-button v-else v-waves round type="primary" icon="el-icon-circle-check" autofocus @click="update('form')">
+        <el-button v-else v-waves round type="primary" icon="el-icon-circle-check" @click="update('form')">
           {{ $t('table.update') }}
+        </el-button>
+        <el-button v-waves round autofocus icon="el-icon-circle-close" @click="cancel('form')">
+          {{ $t('table.cancel') }}
         </el-button>
       </div>
     </el-dialog>
@@ -186,59 +194,115 @@ import {
   getParameter,
   postParameter,
   putParameter,
-  listParameterPage,
   applyParameter,
   applysParameter
 } from './parameter'
 import { listOrganizUser } from '../user/user'
 import { listOrganizAllChild } from '../organization/organization'
 import { mapGetters } from 'vuex'
+import DataTable from '@/components/DataTable'
+import { listService } from '@/views/platform/service/service'
 
 export default {
   name: 'ConfigParameter',
+  components: { DataTable },
   data() {
     return {
-      parameterList: null,
-      total: null,
-      listLoading: false,
-      pageModule: {
-        pageNumber: 1,
-        pageSize: 10,
-        params: {
-          name: '',
-          value: '',
-          defaultValue: '',
-          description: '',
-          queryRule: {
-            logiOperator: 'or',
-            relaRules: [
+      listQuery: {
+        listUrl: 'gateway/platform/v1/parameter/paging',
+        pageSizes: [5, 10, 25, 50, 100],
+        search: {
+          cols: ['name', 'value', 'defaultValue', 'description'],
+          placeholder: this.$t('anan_parameter.searchText')
+        },
+        pageModule: {
+          pageNumber: 1,
+          pageSize: 10,
+          params: {
+            name: '',
+            value: '',
+            defaultValue: '',
+            description: '',
+            queryRule: {
+              logiOperator: 'or',
+              relaRules: [
+                {
+                  filedName: 'description',
+                  relaOperator: 'like'
+                },
+                {
+                  filedName: 'name',
+                  relaOperator: 'like'
+                },
+                {
+                  filedName: 'defaultValue',
+                  relaOperator: 'like'
+                },
+                {
+                  filedName: 'value',
+                  relaOperator: 'like'
+                }
+              ]
+            },
+            sortRules: [
               {
-                filedName: 'description',
-                relaOperator: 'like'
-              },
-              {
-                filedName: 'name',
-                relaOperator: 'like'
-              },
-              {
-                filedName: 'defaultValue',
-                relaOperator: 'like'
-              },
-              {
-                filedName: 'value',
-                relaOperator: 'like'
+                sortName: 'name',
+                sortOrder: 'ASC'
               }
             ]
+          }
+        }
+      },
+      options: {
+        // 可批量操作
+        multi: true,
+        // 批量操作列表
+        multiActions: [
+          {
+            value: 'delete',
+            label: this.$t('table.delete'),
+            url: 'gateway/platform/v1/parameter/ids',
+            method: 'delete',
+            permissionId: '55',
+            confirm: true,
+            successMsg: '使用【发布】功能才能生效!'
           },
-          sortRules: [
+          {
+            value: 'cancelDelete',
+            label: this.$t('table.cancel') + this.$t('table.delete'),
+            url: 'gateway/platform/v1/parameter/cancelDelete/ids',
+            method: 'post',
+            permissionId: '55',
+            confirm: false
+          },
+          {
+            value: 'applys',
+            label: this.$t('table.apply'),
+            url: 'gateway/platform/v1/parameter/applys',
+            method: 'post',
+            permissionId: '57',
+            confirm: false
+          }
+        ],
+        addAction: {
+          enable: true,
+          route: '',
+          permissionId: '53'
+        },
+        tableRowClass: {
+          column: 'status',
+          data: [
             {
-              sortName: 'name',
-              sortOrder: 'ASC'
+              key: 1,
+              value: 'warning-row'
+            },
+            {
+              key: 2,
+              value: 'danger-row'
             }
           ]
         }
       },
-      pageSizes: [5, 10, 25, 50, 100],
       form: {},
       rules: {
         name: [
@@ -278,32 +342,45 @@ export default {
   computed: {
     ...mapGetters(['ananUserInfo'])
   },
-  mounted() {
+  created() {
     this.loadDictionaryById(10).then(res => {
       this.typeOptions = res.details
     })
-    this.loadOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数').then(res => {
-      this.pageModule.pageSize = parseInt(res)
-    })
-    this.loadOrganizParameterValue('DefaultPageSizes', '5,10,25,50,100', '表格默认每页记录数可选择项').then(res => {
-      const temp = res.split(',')
-      this.pageSizes = []
-      for (let i = 0; i < temp.length; i++) {
-        this.pageSizes[i] = parseInt(temp[i])
-      }
-    })
     this.listOrganizUser(this.ananUserInfo.organizId)
     this.listOrganizAllChild(this.ananUserInfo.organizId)
-    this.getList()
+    this.getServiceScopes()
   },
   methods: {
     typeChange(type) {
       let scopeOptions = this.typeScopeOptions[type]
       if (!scopeOptions) {
         scopeOptions = []
-        this.typeScopeOptions[type] = {}
+        this.typeScopeOptions[type] = []
       }
       this.scopeOptions = scopeOptions
+    },
+    getServiceScopes() {
+      listService().then(response => {
+        this.ServiceOptions = response.data
+        const scopeOptions = []
+        for (let i = 0; i < this.ServiceOptions.length; i++) {
+          const service = this.ServiceOptions[i]
+          const scope = {
+            name: service.id + '',
+            code: service.code,
+            value: service.name
+          }
+          scopeOptions.push(scope)
+        }
+        this.typeScopeOptions[3] = scopeOptions
+      }).catch(reason => {
+        this.$notify({
+          title: '获取所有服务失败',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
+      })
     },
     listOrganizUser(organizId) {
       listOrganizUser(organizId).then(response => {
@@ -318,8 +395,7 @@ export default {
           }
           scopeOptions.push(scope)
         }
-        const type = 2
-        this.typeScopeOptions[type] = scopeOptions
+        this.typeScopeOptions[2] = scopeOptions
       }).catch(reason => {
         this.$notify({
           title: '获取所有用户失败',
@@ -342,8 +418,7 @@ export default {
           }
           scopeOptions.push(scope)
         }
-        const type = 1
-        this.typeScopeOptions[type] = scopeOptions
+        this.typeScopeOptions[1] = scopeOptions
       }).catch(reason => {
         this.$notify({
           title: '查询后代机构信息失败',
@@ -359,6 +434,12 @@ export default {
       })
       return typeOption.length > 0 ? typeOption[0].value : type
     },
+    getUserName(userid) {
+      const userOption = this.organizUserOptions.filter(value => {
+        return value.id === userid
+      })
+      return userOption.length > 0 ? userOption[0].username : userid
+    },
     getScopeName(type, scope) {
       const scopeOptions = this.typeScopeOptions[type]
       if (scopeOptions === undefined || scopeOptions === [] || scopeOptions === {}) {
@@ -368,65 +449,6 @@ export default {
         return value.name === scope
       })
       return scopeOption && scopeOption.length && scopeOption.length > 0 ? scopeOption[0].value : scope
-    },
-    getList() {
-      this.listLoading = true
-      this.pageModule.params.value = this.pageModule.params.name
-      this.pageModule.params.defaultValue = this.pageModule.params.name
-      this.pageModule.params.description = this.pageModule.params.name
-      listParameterPage(this.pageModule).then(response => {
-        this.parameterList = response.data.rows
-        this.total = response.data.total
-        this.listLoading = false
-        if (this.parameterList.length > 0) {
-          this.$refs.parameterTable.setCurrentRow(this.parameterList[0])
-        }
-      }).catch(reason => {
-        this.$notify({
-          title: '获取参数列表失败',
-          message: reason.message,
-          type: 'error',
-          duration: 5000
-        })
-      })
-    },
-    updateList(data) {
-      if (!data || !data.id) {
-        return
-      }
-      let index = this.parameterList.length + 1
-      for (let i = 0; i < this.parameterList.length; i++) {
-        const user = this.parameterList[i]
-        if (data.id === user.id) {
-          index = i
-          break
-        }
-      }
-      this.parameterList[index] = data
-    },
-    deleteList(id) {
-      if (!id) {
-        return
-      }
-      for (let i = 0; i < this.parameterList.length; i++) {
-        const user = this.parameterList[i]
-        if (id === user.id) {
-          this.parameterList.splice(i, 1)
-          break
-        }
-      }
-    },
-    handleFilter() {
-      this.pageModule.pageNumber = 1
-      this.getList()
-    },
-    handleSizeChange(val) {
-      this.pageModule.pageSize = val
-      this.getList()
-    },
-    handleCurrentChange(val) {
-      this.pageModule.pageNumber = val
-      this.getList()
     },
     handleAdd() {
       this.resetForm()
@@ -448,43 +470,6 @@ export default {
         })
       })
     },
-    handleDelete() {
-      if (!this.form || !this.form.id || !this.form.name) {
-        this.$message({
-          message: '操作前请先选择一条数据!'
-        })
-        return
-      }
-      this.$confirm(
-        '此操作将永久删除参数名( ' + this.form.name + ' )的相关数据, 是否继续?',
-        '提示',
-        {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }
-      ).then(() => {
-        this.form.status = 2
-        putParameter(this.form).then(() => {
-          this.dialogFormVisible = false
-          this.updateList(this.form)
-          this.$notify({
-            title: '删除参数成功',
-            message: '若要立即生效则需要使用【发布】功能!',
-            type: 'success',
-            duration: 5000
-          })
-        }).catch(reason => {
-          this.$notify({
-            title: '删除参数失败',
-            message: reason.message,
-            type: 'error',
-            duration: 5000
-          })
-        })
-      }).catch(() => {
-      })
-    },
     handleApply(row) {
       this.$confirm(
         '此操作将刷新参数名( ' + row.name + ' )的缓存数据, 是否继续?',
@@ -496,12 +481,7 @@ export default {
         }
       ).then(() => {
         applyParameter(row.id).then(() => {
-          if (this.form.status === 2) {
-            this.deleteList(this.form.id)
-          } else {
-            this.form.status = 0
-            this.updateList(this.form)
-          }
+          this.$refs.pagingTable.getList()
           this.$notify({
             title: '成功',
             message: '发布参数成功!',
@@ -516,6 +496,7 @@ export default {
             duration: 5000
           })
         })
+      }).catch(() => {
       })
     },
     handleApplys() {
@@ -529,15 +510,7 @@ export default {
         }
       ).then(() => {
         applysParameter().then(() => {
-          for (let i = 0; i < this.parameterList.length; i++) {
-            const paramter = this.parameterList[i]
-            if (paramter.status === 2) {
-              this.deleteList(paramter.id)
-            } else if (paramter.status === 1) {
-              paramter.status = 0
-              this.updateList(paramter)
-            }
-          }
+          this.$refs.pagingTable.getList()
           this.$notify({
             title: '成功',
             message: '发布参数成功!',
@@ -561,8 +534,7 @@ export default {
         if (valid) {
           postParameter(this.form).then(() => {
             this.dialogFormVisible = false
-            // this.updateList(response.data)
-            this.getList()
+            this.$refs.pagingTable.getList()
             this.$notify({
               title: '成功',
               message: '创建成功',
@@ -595,8 +567,7 @@ export default {
           this.form.status = 1
           putParameter(this.form).then(() => {
             this.dialogFormVisible = false
-            this.updateList(this.form)
-            // this.getList()
+            this.$refs.pagingTable.getList()
             this.$notify({
               title: '修改成功',
               message: '若要立即生效则需要使用【发布】功能!',
@@ -626,49 +597,12 @@ export default {
         scope: '',
         status: 0
       }
-    },
-    sortChange(column) {
-      const sortRule = {
-        sortOrder: (column.order && column.order === 'descending') ? 'DESC' : 'ASC',
-        sortName: column.prop
-      }
-      this.pageModule.params.sortRules = []
-      this.pageModule.params.sortRules.push(sortRule)
-      if (column.prop) {
-        this.getList()
-      }
-    },
-    rowClick(row, event, column) {
-      this.form = row
-    },
-    tableRowClassName({ row, rowIndex }) {
-      if (row.status === 1) {
-        return 'warning-row'
-      } else if (row.status === 2) {
-        return 'danger-row'
-      }
-      return ''
     }
   }
 }
 </script>
 
 <style scoped>
-  .el-table .warning-row {
-    color: #E6A23C;
-  }
-
-  .el-table .success-row {
-    color: #67C23A;
-  }
-
-  .el-table .danger-row {
-    color: #F56C6C;
-  }
-
-  .el-table .info-row {
-    color: #909399;
-  }
   .el-select {
     width: 100%;
   }

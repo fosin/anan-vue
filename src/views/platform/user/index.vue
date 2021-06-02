@@ -1,94 +1,90 @@
 <template>
   <div class="app-container calendar-list-container">
-    <div class="filter-container">
-      <el-input v-model="pageModule.params.username" :placeholder="$t('anan_user.searchText')" style="width: 300px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-button-group>
-        <el-button v-waves round class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-          {{ $t('table.search') }}
-        </el-button>
-        <el-button v-waves v-permission="'12'" round class="filter-item" style="margin-left: 5px;" type="primary" icon="el-icon-circle-plus" @click="handleAdd">
-          {{ $t('table.add') }}
-        </el-button>
-        <el-button v-waves v-permission="'14'" round class="filter-item" style="margin-left: 5px;" type="success" icon="el-icon-edit" @click="handleEdit">
-          {{ $t('table.edit') }}
-        </el-button>
-        <el-button v-waves v-permission="'15'" round class="filter-item" style="margin-left: 5px;" type="danger" icon="el-icon-delete" @click="handleDelete">
-          {{ $t('table.delete') }}
-        </el-button>
-        <el-button v-waves v-permission="'27'" round class="filter-item" style="margin-left: 5px;" icon="el-icon-bell" type="info" @click="handleResetPass">
-          {{ $t('table.resetPass') }}
-        </el-button>
-      </el-button-group>
-    </div>
-
-    <el-table
-      v-loading="listLoading"
-      :data="list"
-      :row-class-name="tableRowClassName"
-      element-loading-text="努力加载中..."
-      border
-      fit
-      highlight-current-row
+    <data-table
+      ref="pagingTable"
+      :options="options"
+      :list-query="listQuery"
       style="width: 100%"
-      @sort-change="sortChange"
-      @row-click="rowClick"
+      @handle-add="handleAdd"
     >
-      <el-table-column :label="$t('anan_user.usercode.label')" align="center" width="110px" sortable prop="usercode" />
-      <el-table-column :label="$t('anan_user.username.label')" align="center" sortable prop="username" width="140">
-        <template slot-scope="scope">
-          <span>
-            <svg-icon v-if="scope.row.avatar" :icon-class="scope.row.avatar" style="width: 20px; height: 20px; border-radius: 50%; margin-left: 20px; background: #fff;" />
-            {{ scope.row.username }}
-          </span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('anan_user.sex.label')" align="center" width="80" sortable prop="sex">
-        <template slot-scope="scope">
-          <span>{{ getSexName(scope.row.sex) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('anan_user.birthday.label')" align="center" sortable prop="birthday" width="100">
-        <template slot-scope="scope">
-          <span>{{ scope.row.birthday | dateFormatFilter('yyyy-MM-dd') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('anan_user.phone.label')" align="center" sortable prop="phone" width="130" />
-      <el-table-column :label="$t('anan_user.email.label')" align="center" sortable prop="email" width="150" />
-      <el-table-column
-        :label="$t('anan_user.organizId.label')"
-        :formatter="getOrganizName"
-        prop="organizId"
-        align="center"
-        show-overflow-tooltip
-        sortable
-      />
-      <!-- <el-table-column align="center" :label="$t('anan_user.createTime.label')" sortable prop="createTime">
-        <template slot-scope="scope">
-          <span>{{scope.row.createTime | dateFormatFilter('yyyy-MM-dd HH:mm:ss')}}</span>
-        </template>
-      </el-table-column>-->
-      <el-table-column :label="$t('anan_user.status.label')" align="center" class-name="status-col" width="80" sortable prop="status">
-        <template slot-scope="scope">
-          <el-tag>{{ scope.row.status | statusFilter }}</el-tag>
-        </template>
-      </el-table-column>
+      <template slot="filter-content" />
+      <template slot="data-columns">
+        <el-table-column :label="$t('anan_user.usercode.label')" align="center" width="110px" sortable prop="usercode" />
+        <el-table-column :label="$t('anan_user.username.label')" align="center" sortable prop="username" width="140">
+          <template slot-scope="scope">
+            <span>
+              <svg-icon v-if="scope.row.avatar" :icon-class="scope.row.avatar" style="width: 20px; height: 20px; border-radius: 50%; margin-left: 20px; background: #fff;" />
+              {{ scope.row.username }}
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('anan_user.sex.label')" align="center" width="80" sortable prop="sex">
+          <template slot-scope="scope">
+            <span>{{ getSexName(scope.row.sex) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('anan_user.birthday.label')" align="center" sortable prop="birthday" width="100">
+          <template slot-scope="scope">
+            <span>{{ scope.row.birthday | dateFormatFilter('yyyy-MM-dd') }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('anan_user.phone.label')" align="center" sortable prop="phone" width="130" />
+        <el-table-column :label="$t('anan_user.email.label')" align="center" sortable prop="email" width="150" />
+        <el-table-column
+          :label="$t('anan_user.organizId.label')"
+          :formatter="getOrganizName"
+          prop="organizId"
+          align="center"
+          show-overflow-tooltip
+          sortable
+        />
+        <!-- <el-table-column align="center" :label="$t('anan_user.createTime.label')" sortable prop="createTime">
+          <template slot-scope="scope">
+            <span>{{scope.row.createTime | dateFormatFilter('yyyy-MM-dd HH:mm:ss')}}</span>
+          </template>
+        </el-table-column>-->
+        <el-table-column :label="$t('anan_user.status.label')" align="center" class-name="status-col" width="80" sortable prop="status">
+          <template slot-scope="scope">
+            <el-tag>{{ scope.row.status | statusFilter }}</el-tag>
+          </template>
+        </el-table-column>
 
-      <el-table-column :label="$t('table.actions')" align="center" width="200">
-        <template slot-scope="scope">
-          <el-button round size="mini" type="primary" @click="handleUserRole(scope.row)">
-            {{ $t('table.role') }}
-          </el-button>
-          <el-button round size="mini" type="warning" @click="handleUserPermission(scope.row)">
-            {{ $t('table.permission') }}
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-
-    <div v-show="!listLoading" class="pagination-container">
-      <el-pagination :current-page.sync="pageModule.pageNumber" :page-sizes="pageSizes" :page-size="pageModule.pageSize" :total="total" layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
-    </div>
-
+        <el-table-column :label="$t('table.actions')" align="center" width="240">
+          <template slot-scope="scope">
+            <el-tooltip class="item" effect="dark" :content="$t('table.edit')" placement="top">
+              <el-button
+                v-waves
+                v-permission="'14'"
+                round
+                size="mini"
+                class="filter-item"
+                type="success"
+                icon="el-icon-edit"
+                @click="handleEdit(scope.row)"
+              />
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" :content="$t('table.resetPass')" placement="top">
+              <el-button
+                v-waves
+                v-permission="'27'"
+                round
+                size="mini"
+                class="filter-item"
+                icon="el-icon-bell"
+                type="info"
+                @click="handleResetPass(scope.row)"
+              />
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" :content="$t('table.role')" placement="top">
+              <el-button v-waves round size="mini" type="primary" icon="el-icon-user-solid" @click="handleUserRole(scope.row)" />
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" :content="$t('table.permission')" placement="top">
+              <el-button v-waves round size="mini" type="warning" icon="el-icon-menu" @click="handleUserPermission(scope.row)" />
+            </el-tooltip>
+          </template>
+        </el-table-column>
+      </template>
+    </data-table>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="700px">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
@@ -180,14 +176,14 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button round icon="el-icon-circle-close" @click="cancel('form')">
-          {{ $t('table.cancel') }}
-        </el-button>
-        <el-button v-if="dialogStatus==='create'" round autofocus type="primary" icon="el-icon-circle-check" @click="create('form')">
+        <el-button v-if="dialogStatus==='create'" round type="primary" icon="el-icon-circle-check" @click="create('form')">
           {{ $t('table.confirm') }}
         </el-button>
-        <el-button v-else round type="primary" autofocus icon="el-icon-circle-check" @click="update('form')">
+        <el-button v-else round type="primary" icon="el-icon-circle-check" @click="update('form')">
           {{ $t('table.update') }}
+        </el-button>
+        <el-button round icon="el-icon-circle-close" autofocus @click="cancel('form')">
+          {{ $t('table.cancel') }}
         </el-button>
       </div>
     </el-dialog>
@@ -209,11 +205,11 @@
         filterable
       />
       <div slot="footer" class="dialog-footer">
-        <el-button round icon="el-icon-circle-close" @click="cancel('userRole')">
-          {{ $t('table.cancel') }}
-        </el-button>
         <el-button v-permission="'48'" round type="primary" icon="el-icon-circle-check" @click="updateUserRole()">
           {{ $t('table.update') }}
+        </el-button>
+        <el-button round icon="el-icon-circle-close" @click="cancel('userRole')">
+          {{ $t('table.cancel') }}
         </el-button>
       </div>
     </el-dialog>
@@ -263,11 +259,11 @@
         </el-tab-pane>
       </el-tabs>
       <div slot="footer" class="dialog-footer">
-        <el-button round icon="el-icon-circle-close" @click="cancel('permissionTree')">
-          {{ $t('table.cancel') }}
-        </el-button>
         <el-button v-permission="'42'" round type="primary" icon="el-icon-circle-check" @click="updateUserPermession()">
           {{ $t('table.update') }}
+        </el-button>
+        <el-button round icon="el-icon-circle-close" @click="cancel('permissionTree')">
+          {{ $t('table.cancel') }}
         </el-button>
       </div>
     </el-dialog>
@@ -276,7 +272,7 @@
 </template>
 
 <script>
-import { listUserPage, getUser, postUser, putUser, deleteUser, resetPassword,
+import { getUser, postUser, putUser, resetPassword,
   putUserPermissions,
   listUserPermissions,
   listUserRoles, putUserRoles } from './user'
@@ -287,12 +283,14 @@ import { listVersionChildPermissions } from '../version/version'
 import { mapGetters } from 'vuex'
 import ElOption from 'element-ui/packages/select/src/option'
 import IconsSelect from '@/components/IconsSelect/index'
+import DataTable from '@/components/DataTable'
 
 export default {
   name: 'SystemUser',
   components: {
     ElOption,
-    IconsSelect
+    IconsSelect,
+    DataTable
   },
   filters: {
     statusFilter(status) {
@@ -323,38 +321,87 @@ export default {
       total: 0,
       listLoading: false,
       hackReset: true,
-      pageModule: {
-        pageNumber: 1,
-        pageSize: 10,
-        params: {
-          usercode: '',
-          username: '',
-          phone: '',
-          email: '',
-          queryRule: {
-            logiOperator: 'or',
-            relaRules: [
-              {
-                filedName: 'usercode',
-                relaOperator: 'like'
-              },
-              {
-                filedName: 'username',
-                relaOperator: 'like'
-              },
-              {
-                filedName: 'phone',
-                relaOperator: 'like'
-              },
-              {
-                filedName: 'email',
-                relaOperator: 'like'
-              }
+      listQuery: {
+        listUrl: 'gateway/platform/v1/user/paging',
+        pageSizes: [5, 10, 25, 50, 100],
+        search: {
+          cols: ['usercode', 'username', 'phone', 'email'],
+          placeholder: this.$t('anan_user.searchText')
+        },
+        pageModule: {
+          pageNumber: 1,
+          pageSize: 10,
+          params: {
+            usercode: '',
+            username: '',
+            phone: '',
+            email: '',
+            queryRule: {
+              logiOperator: 'or',
+              relaRules: [
+                {
+                  filedName: 'usercode',
+                  relaOperator: 'like'
+                },
+                {
+                  filedName: 'username',
+                  relaOperator: 'like'
+                },
+                {
+                  filedName: 'phone',
+                  relaOperator: 'like'
+                },
+                {
+                  filedName: 'email',
+                  relaOperator: 'like'
+                }
+              ]
+            },
+            sortRules: [{
+              sortName: 'usercode',
+              sortOrder: 'DESC' }
             ]
+          }
+        }
+      },
+      options: {
+        // 可批量操作
+        multi: true,
+        // 批量操作列表
+        multiActions: [
+          {
+            value: 'delete',
+            label: this.$t('table.delete'),
+            url: 'gateway/platform/v1/user/ids',
+            method: 'delete',
+            permissionId: '15',
+            confirm: true
           },
-          sortRules: [{
-            sortName: 'usercode',
-            sortOrder: 'DESC' }
+          {
+            value: 'notifyInfo',
+            label: this.$t('table.notifyInfo'),
+            url: 'gateway/platform/v1/user/notifyInfo',
+            method: 'post',
+            permissionId: '-1',
+            confirm: false
+          }
+        ],
+        addAction: {
+          enable: true,
+          route: '',
+          permissionId: '12'
+        },
+        tableRowClass: {
+          column: 'status',
+          data: [
+            {
+              key: 1,
+              value: 'info-row'
+            },
+            {
+              key: 9,
+              value: 'info-row'
+            }
           ]
         }
       },
@@ -520,22 +567,11 @@ export default {
     this.loadDictionaryById(15).then(res => {
       this.sexOptions = res.details
     })
-    this.loadOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数').then(res => {
-      this.pageModule.pageSize = parseInt(res)
-    })
     this.loadOrganizParameterValue('UserDefaultPassword', '123456', '用户的默认密码').then(res => {
       this.defaultPass = res
     })
-    this.loadOrganizParameterValue('DefaultPageSizes', '5,10,25,50,100', '表格默认每页记录数可选择项').then(res => {
-      const temp = res.split(',')
-      this.pageSizes = []
-      for (let i = 0; i < temp.length; i++) {
-        this.pageSizes[i] = parseInt(temp[i])
-      }
-    })
     this.$refs.iconsSelect.init(this.setAvatar)
     this.resetTemp()
-    this.getList()
   },
   methods: {
     handleSelectAvatar() {
@@ -552,60 +588,6 @@ export default {
         return value.name === type
       })
       return sexOption.length > 0 ? sexOption[0].value : type
-    },
-    tableRowClassName({ row, rowIndex }) {
-      switch (row.status) {
-        case 1:
-          return 'info-row'
-        case 9:
-          return 'info-row'
-        default:
-          return ''
-      }
-    },
-    getList() {
-      this.listLoading = true
-      this.pageModule.params.usercode = this.pageModule.params.username
-      this.pageModule.params.phone = this.pageModule.params.username
-      this.pageModule.params.email = this.pageModule.params.username
-      listUserPage(this.pageModule).then(response => {
-        this.list = response.data.rows
-        this.total = response.data.total
-        this.listLoading = false
-      }).catch(reason => {
-        this.$notify({
-          title: '查询所有用户失败',
-          message: reason.message,
-          type: 'error',
-          duration: 5000
-        })
-      })
-    },
-    updateList(data) {
-      if (!data || !data.id) {
-        return
-      }
-      let index = this.list.length + 1
-      for (let i = 0; i < this.list.length; i++) {
-        const user = this.list[i]
-        if (data.id === user.id) {
-          index = i
-          break
-        }
-      }
-      this.list[index] = data
-    },
-    deleteList(id) {
-      if (!id) {
-        return
-      }
-      for (let i = 0; i < this.list.length; i++) {
-        const user = this.list[i]
-        if (id === user.id) {
-          this.list.splice(i, 1)
-          break
-        }
-      }
     },
     loadOrganizAllChild(pid) {
       listOrganizAllChild(pid).then(response => {
@@ -670,31 +652,13 @@ export default {
         })
       })
     },
-    handleFilter() {
-      this.pageModule.pageNumber = 1
-      this.getList()
-    },
-    handleSizeChange(val) {
-      this.pageModule.pageSize = val
-      this.getList()
-    },
-    handleCurrentChange(val) {
-      this.pageModule.pageNumber = val
-      this.getList()
-    },
     handleAdd() {
       this.resetTemp()
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
     },
-    handleEdit() {
-      if (!this.form || !this.form.id || !this.form.username) {
-        this.$message({
-          message: '操作前请先选择一条数据!'
-        })
-        return
-      }
-      getUser(this.form.id).then(response => {
+    handleEdit(row) {
+      getUser(row.id).then(response => {
         this.form = response.data
         this.dialogFormVisible = true
         this.dialogStatus = 'update'
@@ -715,15 +679,9 @@ export default {
         })
       })
     },
-    handleResetPass() {
-      if (!this.form || !this.form.id || !this.form.username) {
-        this.$message({
-          message: '重置密码前请先选择一条用户数据!'
-        })
-        return
-      }
+    handleResetPass(row) {
       this.$confirm(
-        '确定要重置用户名( ' + this.form.username + ' )的密码吗?',
+        '确定要重置用户名( ' + row.username + ' )的密码吗?',
         '提示',
         {
           confirmButtonText: '确定',
@@ -731,11 +689,11 @@ export default {
           type: 'warning'
         }
       ).then(() => {
-        resetPassword(this.form.id)
+        resetPassword(row.id)
           .then((response) => {
             this.$notify({
               title: '重置密码成功',
-              message: '用户[' + this.form.username + ']当前密码是:' + response.data,
+              message: '用户[' + row.username + ']当前密码是:' + response.data,
               type: 'success',
               duration: 0
             })
@@ -1018,8 +976,7 @@ export default {
         if (valid) {
           postUser(this.form).then((response) => {
             this.dialogFormVisible = false
-            // this.updateList(this.form)
-            this.getList()
+            this.$refs.pagingTable.getList()
             this.$notify({
               title: '创建成功,用户[' + this.form.username + ']密码是:',
               message: response.data.password,
@@ -1072,8 +1029,7 @@ export default {
           this.dialogFormVisible = false
           putUser(this.form).then(() => {
             this.dialogFormVisible = false
-            // this.updateList(this.form)
-            this.getList()
+            this.$refs.pagingTable.getList()
             this.$notify({
               title: '成功',
               message: '修改成功',
@@ -1092,42 +1048,6 @@ export default {
           return false
         }
       })
-    },
-    handleDelete() {
-      if (!this.form || !this.form.id || !this.form.username) {
-        this.$message({
-          message: '重置密码前请先选择一条用户数据!'
-        })
-        return
-      }
-      this.$confirm(
-        '此操作将永久删除用户名( ' + this.form.username + ' )的相关数据, 是否继续?',
-        '提示',
-        {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }
-      ).then(() => {
-        deleteUser(this.form.id)
-          .then(() => {
-            // this.deleteList(this.form.id)
-            this.getList()
-            this.$notify({
-              title: '成功',
-              message: '删除用户成功',
-              type: 'success',
-              duration: 2000
-            })
-          }).catch((reason) => {
-            this.$notify({
-              title: '删除用户失败',
-              message: reason.message,
-              type: 'error',
-              duration: 5000
-            })
-          })
-      }).catch(() => {})
     },
     resetTemp() {
       this.selectedRoles = []
@@ -1148,20 +1068,6 @@ export default {
         sex: 1,
         expireTime: '2050-12-31 23:59:59'
       }
-    },
-    sortChange(column) {
-      const sortRule = {
-        sortOrder: (column.order && column.order === 'descending') ? 'DESC' : 'ASC',
-        sortName: column.prop
-      }
-      this.pageModule.params.sortRules = []
-      this.pageModule.params.sortRules.push(sortRule)
-      if (column.prop) {
-        this.getList()
-      }
-    },
-    rowClick(row, event, column) {
-      this.form = row
     }
   }
 }
