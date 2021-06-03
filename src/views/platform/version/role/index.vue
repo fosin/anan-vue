@@ -259,11 +259,11 @@ export default {
             logiOperator: 'or',
             relaRules: [
               {
-                filedName: 'name',
+                fieldName: 'name',
                 relaOperator: 'like'
               },
               {
-                filedName: 'value',
+                fieldName: 'value',
                 relaOperator: 'like'
               }
             ]

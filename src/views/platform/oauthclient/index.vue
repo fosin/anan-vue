@@ -202,11 +202,11 @@ export default {
             logiOperator: 'or',
             relaRules: [
               {
-                filedName: 'clientId',
+                fieldName: 'clientId',
                 relaOperator: 'like'
               },
               {
-                filedName: 'additionalInformation',
+                fieldName: 'additionalInformation',
                 relaOperator: 'like'
               }
             ]

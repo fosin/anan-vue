@@ -340,19 +340,19 @@ export default {
               logiOperator: 'or',
               relaRules: [
                 {
-                  filedName: 'usercode',
+                  fieldName: 'usercode',
                   relaOperator: 'like'
                 },
                 {
-                  filedName: 'username',
+                  fieldName: 'username',
                   relaOperator: 'like'
                 },
                 {
-                  filedName: 'phone',
+                  fieldName: 'phone',
                   relaOperator: 'like'
                 },
                 {
-                  filedName: 'email',
+                  fieldName: 'email',
                   relaOperator: 'like'
                 }
               ]
@@ -378,9 +378,33 @@ export default {
             confirm: true
           },
           {
-            value: 'notifyInfo',
-            label: this.$t('table.notifyInfo'),
-            url: 'gateway/platform/v1/user/notifyInfo',
+            value: 'disable',
+            label: this.$t('table.disable'),
+            url: 'gateway/platform/v1/user/field/status/1',
+            method: 'post',
+            permissionId: '14',
+            confirm: false
+          },
+          {
+            value: 'enable',
+            label: this.$t('table.enable'),
+            url: 'gateway/platform/v1/user/field/status/0',
+            method: 'post',
+            permissionId: '14',
+            confirm: false
+          },
+          {
+            value: 'lock',
+            label: this.$t('anan_user.lock'),
+            url: 'gateway/platform/v1/user/field/status/9',
+            method: 'post',
+            permissionId: '14',
+            confirm: false
+          },
+          {
+            value: 'sendMsg',
+            label: this.$t('anan_user.sendMsg'),
+            url: 'gateway/platform/v1/user/sendMsg',
             method: 'post',
             permissionId: '-1',
             confirm: false

@@ -215,11 +215,11 @@ export default {
             relaRules: [
               {
                 relaOperator: 'like',
-                filedName: 'code'
+                fieldName: 'code'
               },
               {
                 relaOperator: 'like',
-                filedName: 'name'
+                fieldName: 'name'
               }
             ]
           },

@@ -157,7 +157,7 @@ export default {
         // 列表请求URL
         listUrl: 'gateway/exam/api/sys/user/paging',
         // 启用禁用
-        stateUrl: 'gateway/exam/api/sys/user/status',
+        stateUrl: 'gateway/exam/api/sys/user/field/state',
         deleteUrl: 'gateway/exam/api/sys/user/delete',
         // 批量操作列表
         multiActions: [

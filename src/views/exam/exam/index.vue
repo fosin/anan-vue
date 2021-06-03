@@ -246,7 +246,7 @@ export default {
         // 删除请求URL
         deleteUrl: 'gateway/exam/api/exam/exam/delete',
         // 删除请求URL
-        stateUrl: 'gateway/exam/api/exam/exam/status',
+        stateUrl: 'gateway/exam/api/exam/exam/field/state',
         addRoute: 'ExamManagementExamForm'
       }
     }

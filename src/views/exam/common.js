@@ -17,5 +17,5 @@ export function deleteData(url, ids) {
 }
 
 export function changeState(url, ids, state) {
-  return postRequest(url, { 'ids': ids, 'status': state })
+  return postRequest(url + '/' + state, ids)
 }

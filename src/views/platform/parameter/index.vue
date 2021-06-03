@@ -227,19 +227,19 @@ export default {
               logiOperator: 'or',
               relaRules: [
                 {
-                  filedName: 'description',
+                  fieldName: 'description',
                   relaOperator: 'like'
                 },
                 {
-                  filedName: 'name',
+                  fieldName: 'name',
                   relaOperator: 'like'
                 },
                 {
-                  filedName: 'defaultValue',
+                  fieldName: 'defaultValue',
                   relaOperator: 'like'
                 },
                 {
-                  filedName: 'value',
+                  fieldName: 'value',
                   relaOperator: 'like'
                 }
               ]

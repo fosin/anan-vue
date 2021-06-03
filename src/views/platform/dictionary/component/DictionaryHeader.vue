@@ -14,7 +14,6 @@
           round
           class="filter-item"
           type="primary"
-          size="small"
           icon="el-icon-search"
           @click="handleFilter"
         >
@@ -24,7 +23,6 @@
           v-waves
           v-permission="'59'"
           round
-          size="small"
           class="filter-item"
           style="margin-left: 5px;"
           type="primary"
@@ -175,7 +173,7 @@ export default {
             logiOperator: 'or',
             relaRules: [
               {
-                filedName: 'name',
+                fieldName: 'name',
                 relaOperator: 'like'
               }]
           },

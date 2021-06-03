@@ -8,7 +8,7 @@
           :placeholder="selectedLabel"
           class="filter-item"
           style="width: 130px"
-          @change="handleOption"
+          @change="handleAction"
         >
           <el-option
             v-for="item in options.multiActions"
@@ -271,7 +271,7 @@ export default {
     /**
      * 批量操作回调
      */
-    handleOption(v) {
+    handleAction(v) {
       this.multiNow = ''
       // 获取操作的选项完整数据
       const actionData = this.getActionData(v)
@@ -283,22 +283,25 @@ export default {
         return
       }
       // 确认是否需要执行
-      if (actionData.confirm) {
-        this.$confirm('确实要' + actionData.label + '吗?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+      if (actionData.url) {
+        if (actionData.confirm) {
+          this.$confirm('确实要' + actionData.label + '吗?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.httpRequest(actionData)
+          })
+        } else {
           this.httpRequest(actionData)
-        })
-      } else {
-        this.httpRequest(actionData)
+        }
       }
       // 向外回调的操作
-      this.$emit('handle-option', actionData)
+      this.$emit('handle-action', { opt: actionData, ids: this.selectedIds })
     },
     httpRequest(actionData) {
-      allRequest({ url: actionData.url, data: this.selectedIds, method: actionData.method }).then(() => {
+      const data = { url: actionData.url, data: this.selectedIds, method: actionData.method || 'post' }
+      allRequest(data).then(() => {
         this.$notify({
           title: actionData.label + '成功!',
           message: actionData.successMsg ? actionData.successMsg : actionData.label + '成功!',
@@ -308,7 +311,7 @@ export default {
         this.getList()
       }).catch((reason) => {
         this.$notify({
-          title: actionData.failureMsg ? actionData.failureMsg : actionData.label + '成功!',
+          title: actionData.failureMsg ? actionData.failureMsg : actionData.label + '失败!',
           message: reason.message,
           type: 'error',
           duration: 5000

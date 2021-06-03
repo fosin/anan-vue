@@ -216,11 +216,11 @@ export default {
             queryRule: {
               relaRules: [
                 {
-                  filedName: 'name',
+                  fieldName: 'name',
                   relaOperator: 'like'
                 },
                 {
-                  filedName: 'value',
+                  fieldName: 'value',
                   relaOperator: 'like'
                 }
               ],
@@ -249,7 +249,7 @@ export default {
           {
             value: 'enableStatus',
             label: this.$t('table.enable'),
-            url: 'gateway/platform/v1/role/status/0',
+            url: 'gateway/platform/v1/role/field/status/0',
             method: 'post',
             permissionId: '25',
             confirm: false
@@ -257,7 +257,7 @@ export default {
           {
             value: 'disableStatus',
             label: this.$t('table.disable'),
-            url: 'gateway/platform/v1/role/status/1',
+            url: 'gateway/platform/v1/role/field/status/1',
             method: 'post',
             permissionId: '25',
             confirm: false
@@ -339,7 +339,6 @@ export default {
     if (!this.organizList || this.organizList.length < 1) {
       this.loadOrganizAllChild(this.ananUserInfo.organizId)
     }
-    debugger
     this.listQuery.pageModule.params.organizId = this.ananUserInfo.organizId
   },
   methods: {

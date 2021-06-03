@@ -1,4 +1,4 @@
-import { allRequest, deleteRequest, getRequest, postRequest, putRequest } from '@/utils/request'
+import { allRequest, deleteRequest, postRequest, putRequest } from '@/utils/request'
 
 // 获取系统服务表数据分页列表
 export function listServicePage(page) {
@@ -36,5 +36,6 @@ export function putService(obj) {
 // 根据状态码查找所有服务数据,不传参数默认使用post查询status=0的数据
 export function getServiceByStatus(status) {
   if (!status) status = 0
-  return getRequest('gateway/platform/v1/service/status/' + status)
+  return listService({ status: status })
+  // return getRequest('gateway/platform/v1/service/status/' + status)
 }
