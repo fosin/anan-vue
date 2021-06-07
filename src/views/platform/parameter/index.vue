@@ -278,7 +278,7 @@ export default {
           {
             value: 'applys',
             label: this.$t('table.apply'),
-            url: 'gateway/platform/v1/parameter/applys',
+            url: 'gateway/platform/v1/parameter/applys/ids',
             method: 'post',
             permissionId: '57',
             confirm: false

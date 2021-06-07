@@ -355,7 +355,7 @@ export default {
       })
     },
     resetForm() {
-      const sort = this.total + 1
+      const sort = this.$refs.pagingTable.dataList.total + 1
       this.form = {
         id: undefined,
         name: this.DefaultDictionaryDetailNameAndSort === 1 ? sort : undefined,
