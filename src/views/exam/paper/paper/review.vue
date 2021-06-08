@@ -1,156 +1,172 @@
 <template>
   <div class="app-container" :style="dynamicStyle">
-    <h2 class="text-center">{{ paperData.title }}(阅卷)</h2>
-    <p class="text-center" style="color: #666">{{ paperData.createTime }}</p>
-    <el-row :gutter="24" style="margin-top: 50px">
-      <el-col :span="4" class="text-center">
-        考生姓名：{{ userInfo.username }}
+    <el-row>
+      <el-col :span="19">
+        <div style="height: 84vh;">
+          <el-scrollbar style="height: 100%" wrap-style="overflow-x:hidden;">
+            <el-card style="margin-top: 10px">
+              <div v-if="!hideObj">
+                <div v-for="item in paperData.quList" :key="item.id" class="qu-content">
+                  <div v-if="item.quType === 1 || item.quType===3">
+                    <el-row>
+                      <el-col :span="1">
+                        <el-tag v-if="item.isRight" type="success">对,{{ item.actualScore }}分</el-tag>
+                        <div v-else>
+                          <el-tag v-if="item.actualScore > 0" type="warning">得,{{ item.actualScore }}分</el-tag>
+                          <el-tag v-else type="danger">错,{{ item.actualScore }}分</el-tag>
+                        </div>
+                      </el-col>
+                      <el-col :span="23">
+                        <el-input v-model="item.quTitle" autosize type="textarea" readonly resize="none" style="margin-bottom: 20px;border: 0" />
+                      </el-col>
+                    </el-row>
+                    <el-radio-group v-model="radioValues[item.id]">
+                      <el-radio v-for="an in item.answerList" :key="an.id" :label="an.id">
+                        {{ an.abc }}.  【{{ an.content }}】
+                      </el-radio>
+                    </el-radio-group>
+                    <el-row>
+                      <el-col :span="4" style="color: #24da70">
+                        正确答案：{{ radioRights[item.id] }}
+                      </el-col>
+                      <el-col :span="3">
+                        <el-switch
+                          v-model="item.isRight"
+                          style="display: block"
+                          active-color="#13ce66"
+                          inactive-color="#ff4949"
+                          active-text="判对"
+                          inactive-text="判错"
+                        />
+                      </el-col>
+                      <el-col v-if="item.isRight" :span="6">
+                        老师评分：<el-input-number v-model="item.actualScore" :min="0" :max="item.score" style="width: 40%" :disabled="!item.isRight" />共{{ item.score }}分
+                      </el-col>
+                    </el-row>
+                  </div>
+                  <div v-if="item.quType === 2">
+                    <el-row>
+                      <el-col :span="1">
+                        <el-tag v-if="item.isRight" type="success">对,{{ item.actualScore }}分</el-tag>
+                        <div v-else>
+                          <el-tag v-if="item.actualScore > 0" type="warning">得,{{ item.actualScore }}分</el-tag>
+                          <el-tag v-else type="danger">错,{{ item.actualScore }}分</el-tag>
+                        </div>
+                      </el-col>
+                      <el-col :span="23">
+                        <el-input v-model="item.quTitle" autosize type="textarea" readonly resize="none" style="margin-bottom: 20px;border: 0" />
+                      </el-col>
+                    </el-row>
+                    <el-checkbox-group v-model="multiValues[item.id]">
+                      <el-checkbox v-for="an in item.answerList" :key="an.id" :label="an.id">{{ an.abc }}.  【{{ an.content }}】</el-checkbox>
+                    </el-checkbox-group>
+                    <el-row>
+                      <el-col :span="4" style="color: #24da70">
+                        正确答案：{{ multiRights[item.id].join(',') }}
+                      </el-col>
+                      <el-col :span="3">
+                        <el-switch
+                          v-model="item.isRight"
+                          style="display: block"
+                          active-color="#13ce66"
+                          inactive-color="#ff4949"
+                          active-text="判对"
+                          inactive-text="判错"
+                        />
+                      </el-col>
+                      <el-col v-if="item.isRight" :span="6">
+                        老师评分：<el-input-number v-model="item.actualScore" :min="0" :max="item.score" style="width: 40%" :disabled="!item.isRight" />共{{ item.score }}分
+                      </el-col>
+                    </el-row>
+                  </div>
+                </div>
+              </div>
+              <div v-if="paperData.hasSaq">
+                <el-divider v-if="hideObj">
+                  <el-button type="primary" @click="showAllQu"><i class="el-icon-arrow-down" /><i class="el-icon-arrow-down" /><i class="el-icon-arrow-down" />显示客观题<i class="el-icon-arrow-down" /><i class="el-icon-arrow-down" /><i class="el-icon-arrow-down" /></el-button>
+                </el-divider>
+                <el-divider v-else>
+                  <el-button type="primary" @click="showAllQu"><i class="el-icon-arrow-up" /><i class="el-icon-arrow-up" /><i class="el-icon-arrow-up" />隐藏客观题<i class="el-icon-arrow-up" /><i class="el-icon-arrow-up" /><i class="el-icon-arrow-up" /></el-button>
+                </el-divider>
+              </div>
+              <div v-for="item in saqList" :key="item.id" class="qu-content">
+                <div v-if="item.quType === 4">
+                  <el-row>
+                    <el-col :span="1">
+                      <div v-if="item.isRight">
+                        <el-tag v-if="item.actualScore > 0" type="success">对,{{ item.actualScore }}分</el-tag>
+                        <el-tag v-else type="danger">错,{{ item.actualScore }}分</el-tag>
+                      </div>
+                      <el-tag v-else type="warning">待阅卷</el-tag>
+                    </el-col>
+                    <el-col :span="23">
+                      <el-input v-model="item.quTitle" autosize type="textarea" readonly resize="none" style="margin-bottom: 20px;border: 0" />
+                    </el-col>
+                  </el-row>
+                  <el-row>
+                    <el-col :span="24">
+                      考生回答：
+                      <el-input v-model="item.answer" autosize type="textarea" readonly resize="none" style="margin-bottom: 10px;border: 0" />
+                    </el-col>
+                    <el-col :span="24">
+                      参考答案：
+                      <el-input v-model="item.analysis" autosize type="textarea" readonly resize="none" style="margin-bottom: 10px;border: 0" />
+                    </el-col>
+                    <el-col :span="3">
+                      <el-switch
+                        v-model="item.isRight"
+                        style="display: block"
+                        active-color="#13ce66"
+                        inactive-color="#ff4949"
+                        active-text="判对"
+                        inactive-text="判错"
+                      />
+                    </el-col>
+                    <el-col v-if="item.isRight" :span="6">
+                      老师评分：<el-input-number v-model="item.actualScore" :min="0" :max="item.score" style="width: 40%" :disabled="!item.isRight" />共{{ item.score }}分
+                    </el-col>
+                  </el-row>
+                </div>
+              </div>
+            </el-card>
+          </el-scrollbar>
+        </div>
       </el-col>
-      <el-col :span="8" class="text-center">
-        得分：{{ paperData.userScore }} = {{ paperData.objScore }}(客观) + {{ paperData.subjScore }}(主观)
-      </el-col>
-      <el-col :span="4" class="text-center">
-        合格分/总分：{{ paperData.qualifyScore }} / {{ paperData.totalScore }}
-      </el-col>
-      <el-col :span="4" class="text-center">
-        考试用时：{{ paperData.userTime }}分钟
-      </el-col>
-      <el-col :span="4" class="text-center">
-        <el-button
-          type="primary"
-          icon="el-icon-check"
-          :loading="loading"
-          @click="reviewResult()"
-        >
-          提交阅卷
-        </el-button>
+      <el-col :span="5">
+        <el-card style="height: 84vh;margin-top: 10px">
+          {{ paperData.title }}
+          <el-form :model="paperData" label-position="left" label-width="55px" style="margin-top: 10px">
+            <el-form-item label="姓名" prop="">
+              {{ userInfo.username }}
+            </el-form-item>
+            <el-form-item label="得分" prop="">
+              {{ paperData.userScore }}={{ paperData.objScore }}(客观)+{{ paperData.subjScore }}(主观)
+            </el-form-item>
+            <el-form-item label="总分" prop="">
+              {{ paperData.totalScore }}
+            </el-form-item>
+            <el-form-item label="合格分" prop="">
+              {{ paperData.qualifyScore }}
+            </el-form-item>
+            <el-form-item label="时间" prop="">
+              {{ paperData.createTime }}
+            </el-form-item>
+            <el-form-item label="用时" prop="">
+              {{ paperData.userTime }}分钟
+            </el-form-item>
+          </el-form>
+          <el-button
+            type="primary"
+            icon="el-icon-check"
+            :loading="loading"
+            style="margin-bottom: 10px"
+            @click="reviewResult()"
+          >
+            提交阅卷
+          </el-button>
+        </el-card>
       </el-col>
     </el-row>
-    <el-card style="margin-top: 20px">
-      <div v-if="!hideObj">
-        <div v-for="item in paperData.quList" :key="item.id" class="qu-content">
-          <div v-if="item.quType === 1 || item.quType===3">
-            <el-row>
-              <el-col :span="1">
-                <el-tag v-if="item.isRight" type="success">对,{{ item.actualScore }}分</el-tag>
-                <div v-else>
-                  <el-tag v-if="item.actualScore > 0" type="warning">得,{{ item.actualScore }}分</el-tag>
-                  <el-tag v-else type="danger">错,{{ item.actualScore }}分</el-tag>
-                </div>
-              </el-col>
-              <el-col :span="23">
-                <el-input v-model="item.quTitle" autosize type="textarea" readonly resize="none" style="margin-bottom: 20px;border: 0" />
-              </el-col>
-            </el-row>
-            <el-radio-group v-model="radioValues[item.id]">
-              <el-radio v-for="an in item.answerList" :key="an.id" :label="an.id">
-                {{ an.abc }}.  【{{ an.content }}】
-              </el-radio>
-            </el-radio-group>
-            <el-row>
-              <el-col :span="4" style="color: #24da70">
-                正确答案：{{ radioRights[item.id] }}
-              </el-col>
-              <el-col :span="3">
-                <el-switch
-                  v-model="item.isRight"
-                  style="display: block"
-                  active-color="#13ce66"
-                  inactive-color="#ff4949"
-                  active-text="判对"
-                  inactive-text="判错"
-                />
-              </el-col>
-              <el-col v-if="item.isRight" :span="6">
-                老师评分：<el-input-number v-model="item.actualScore" :min="0" :max="item.score" style="width: 40%" :disabled="!item.isRight" />共{{ item.score }}分
-              </el-col>
-            </el-row>
-          </div>
-          <div v-if="item.quType === 2">
-            <el-row>
-              <el-col :span="1">
-                <el-tag v-if="item.isRight" type="success">对,{{ item.actualScore }}分</el-tag>
-                <div v-else>
-                  <el-tag v-if="item.actualScore > 0" type="warning">得,{{ item.actualScore }}分</el-tag>
-                  <el-tag v-else type="danger">错,{{ item.actualScore }}分</el-tag>
-                </div>
-              </el-col>
-              <el-col :span="23">
-                <el-input v-model="item.quTitle" autosize type="textarea" readonly resize="none" style="margin-bottom: 20px;border: 0" />
-              </el-col>
-            </el-row>
-            <el-checkbox-group v-model="multiValues[item.id]">
-              <el-checkbox v-for="an in item.answerList" :key="an.id" :label="an.id">{{ an.abc }}.  【{{ an.content }}】</el-checkbox>
-            </el-checkbox-group>
-            <el-row>
-              <el-col :span="4" style="color: #24da70">
-                正确答案：{{ multiRights[item.id].join(',') }}
-              </el-col>
-              <el-col :span="3">
-                <el-switch
-                  v-model="item.isRight"
-                  style="display: block"
-                  active-color="#13ce66"
-                  inactive-color="#ff4949"
-                  active-text="判对"
-                  inactive-text="判错"
-                />
-              </el-col>
-              <el-col v-if="item.isRight" :span="6">
-                老师评分：<el-input-number v-model="item.actualScore" :min="0" :max="item.score" style="width: 40%" :disabled="!item.isRight" />共{{ item.score }}分
-              </el-col>
-            </el-row>
-          </div>
-        </div>
-      </div>
-      <div v-if="paperData.hasSaq">
-        <el-divider v-if="hideObj">
-          <el-button type="primary" @click="showAllQu"><i class="el-icon-arrow-down" /><i class="el-icon-arrow-down" /><i class="el-icon-arrow-down" />显示客观题<i class="el-icon-arrow-down" /><i class="el-icon-arrow-down" /><i class="el-icon-arrow-down" /></el-button>
-        </el-divider>
-        <el-divider v-else>
-          <el-button type="primary" @click="showAllQu"><i class="el-icon-arrow-up" /><i class="el-icon-arrow-up" /><i class="el-icon-arrow-up" />隐藏客观题<i class="el-icon-arrow-up" /><i class="el-icon-arrow-up" /><i class="el-icon-arrow-up" /></el-button>
-        </el-divider>
-      </div>
-      <div v-for="item in saqList" :key="item.id" class="qu-content">
-        <div v-if="item.quType === 4">
-          <el-row>
-            <el-col :span="1">
-              <div v-if="item.isRight">
-                <el-tag v-if="item.actualScore > 0" type="success">对,{{ item.actualScore }}分</el-tag>
-                <el-tag v-else type="danger">错,{{ item.actualScore }}分</el-tag>
-              </div>
-              <el-tag v-else type="warning">待阅卷</el-tag>
-            </el-col>
-            <el-col :span="23">
-              <el-input v-model="item.quTitle" autosize type="textarea" readonly resize="none" style="margin-bottom: 20px;border: 0" />
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="24">
-              考生回答：
-              <el-input v-model="item.answer" autosize type="textarea" readonly resize="none" style="margin-bottom: 10px;border: 0" />
-            </el-col>
-            <el-col :span="24">
-              参考答案：
-              <el-input v-model="item.analysis" autosize type="textarea" readonly resize="none" style="margin-bottom: 10px;border: 0" />
-            </el-col>
-            <el-col :span="3">
-              <el-switch
-                v-model="item.isRight"
-                style="display: block"
-                active-color="#13ce66"
-                inactive-color="#ff4949"
-                active-text="判对"
-                inactive-text="判错"
-              />
-            </el-col>
-            <el-col v-if="item.isRight" :span="6">
-              老师评分：<el-input-number v-model="item.actualScore" :min="0" :max="item.score" style="width: 40%" :disabled="!item.isRight" />共{{ item.score }}分
-            </el-col>
-          </el-row>
-        </div>
-      </div>
-    </el-card>
   </div>
 </template>
 
