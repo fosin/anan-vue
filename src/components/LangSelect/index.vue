@@ -52,7 +52,7 @@ export default {
   methods: {
     handleSetLanguage(lang, notify = true) {
       if (lang) {
-        this.$store.dispatch('setLanguage', lang).then(response => {
+        this.$store.dispatch('setLanguage', lang).then(() => {
           if (notify) {
             this.$message({
               message: this.$t('lang.switchSuccess'),
