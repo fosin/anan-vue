@@ -45,8 +45,21 @@
           width="180px"
         >
           <template slot-scope="scope">
-            <el-button type="primary" size="mini" icon="el-icon-view" @click="handleExamDetail(scope.row.examId)">详情</el-button>
-            <el-button v-if="scope.row.showResult" type="warning" size="mini" icon="el-icon-close" @click="handlerExamBook(scope.row.examId)">错题</el-button>
+            <el-button
+              type="primary"
+              size="mini"
+              round
+              icon="el-icon-view"
+              @click="handleExamDetail(scope.row.examId)"
+            >详情</el-button>
+            <el-button
+              v-if="scope.row.showResult"
+              type="warning"
+              size="mini"
+              round
+              icon="el-icon-close"
+              @click="handlerExamBook(scope.row.examId)"
+            >错题</el-button>
           </template>
         </el-table-column>
       </template>

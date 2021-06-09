@@ -5,7 +5,15 @@
     :list-query="listQuery"
   >
     <template slot="filter-content">
-      <el-button v-if="examData.wrongTrain" class="filter-item" style="float: right" type="primary" icon="el-icon-magic-stick" @click="startTrain">
+      <el-button
+        v-if="examData.wrongTrain"
+        class="filter-item"
+        style="float: right"
+        type="warning"
+        round
+        icon="el-icon-magic-stick"
+        @click="startTrain"
+      >
         错题训练
       </el-button>
     </template>

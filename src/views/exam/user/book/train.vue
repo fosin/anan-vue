@@ -41,8 +41,9 @@
       <!--      <p v-if="analysisCount === 0">暂无选项解析</p>-->
     </el-card>
     <div style="padding-top: 30px">
-      <el-button type="primary" @click="handNext">继续下一题</el-button>
-      <el-button type="info" @click="onCancel">返回</el-button>
+      <el-button type="success" @click="fetchNextQu">跳过这题</el-button>
+      <el-button type="primary" style="margin-left: 50px" @click="handNext">继续下一题</el-button>
+      <el-button type="info" style="float: right" @click="onCancel">返回</el-button>
     </div>
   </div>
 </template>
@@ -126,32 +127,25 @@ export default {
     },
 
     handNext() {
-      // 直接显示下一个
-      if (this.analysisShow) {
+      // 直接判断正确性
+      if (this.rightValues.join(',') === this.answerValues.join(',')) {
+        this.$message({
+          message: '回答正确，你好棒哦！',
+          type: 'success'
+        })
+
         // 正确显示下一个
         this.fetchNextQu()
       } else {
-        // 直接判断正确性
-        if (this.rightValues.join(',') === this.answerValues.join(',')) {
-          this.$message({
-            message: '回答正确，你好棒哦！',
-            type: 'success'
-          })
+        // 错误显示解析
+        this.analysisShow = true
 
-          // 正确显示下一个
-          this.fetchNextQu()
-        } else {
-          // 错误显示解析
-          this.analysisShow = true
-
-          this.$message({
-            message: '很遗憾，又做错了呢，请参考答案解析！',
-            type: 'error'
-          })
-        }
+        this.$message({
+          message: '很遗憾，又做错了呢，请参考答案解析！',
+          type: 'error'
+        })
       }
     }
-
   }
 }
 </script>

@@ -204,7 +204,7 @@ export default {
         // 删除请求URL
         deleteUrl: 'gateway/exam/api/qu/qu/delete',
         // 启用禁用
-        stateUrl: 'gateway/exam/api/qu/qu/update/state',
+        stateUrl: 'gateway/exam/api/qu/qu/field/state',
         // 添加数据路由
         addRoute: 'ExamManagementQuAdd'
       }

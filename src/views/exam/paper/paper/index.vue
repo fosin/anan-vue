@@ -16,11 +16,7 @@
         </el-radio-group>
       </template>
       <template slot="data-columns">
-        <el-table-column
-          label="考试名称"
-          align="center"
-          prop="title"
-        />
+        <el-table-column label="考试名称" align="center" prop="title" />
         <el-table-column
           label="部门"
           align="center"
@@ -41,19 +37,6 @@
             {{ scope.row.userTime }} / {{ scope.row.totalTime }}分钟
           </template>
         </el-table-column>
-
-        <!--      <el-table-column-->
-        <!--        label="客观分"-->
-        <!--        align="center"-->
-        <!--        prop="subjScore"-->
-        <!--      />-->
-
-        <!--      <el-table-column-->
-        <!--        label="主观分"-->
-        <!--        align="center"-->
-        <!--        prop="objScore"-->
-        <!--      />-->
-
         <el-table-column
           label="得分/总分"
           align="center"
@@ -84,9 +67,7 @@
             <span v-if="scope.row.state===1">待阅卷</span>
             <span v-else-if="scope.row.state===0">待交卷</span>
             <span v-else>
-              <span :style="{ color: rankColor[scope.row.rank] }">{{
-                getDicDetailValue(rankDics, scope.row.rank)
-              }}</span>
+              <span :style="{ color: rankColor[scope.row.rank] }">{{ getDicDetailValue(rankDics, scope.row.rank) }}</span>
             </span>
           </template>
         </el-table-column>

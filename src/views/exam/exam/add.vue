@@ -312,7 +312,7 @@ import { fetchRepoList } from '@/views/exam/qu/repo/repo'
 import Qupaper from './qupaper'
 
 export default {
-  name: 'ExamManagementExamUpdate',
+  name: 'ExamManagementExamAdd',
   components: { RepoTreeSelect, Qupaper },
   data() {
     return {
