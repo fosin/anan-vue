@@ -13,7 +13,8 @@
         />
         <div v-if="quData.quType === 1 || quData.quType===3 ">
           <el-radio-group v-model="answerValues[0]" readonly>
-            <el-radio v-for="an in quData.answerList" :key="an.id" :label="an.id" readonly>{{ an.abc }}.{{ an.content }}</el-radio>
+            <el-radio v-for="an in quData.answerList" :key="an.id" :label="an.id" readonly @change="handNext">
+              {{ an.abc }}.{{ an.content }}</el-radio>
           </el-radio-group>
         </div>
         <!-- 多选题 -->
@@ -100,9 +101,10 @@ export default {
         this.quData.answerList.forEach((an, index) => {
           an.abc = this.tags[index]
 
-          // 用户选定的
+          // 正确答案
           if (an.isRight) {
             this.rightValues.push(an.id)
+            this.rightValues.sort()
             this.rightTags.push(an.abc)
           }
         })
@@ -128,12 +130,8 @@ export default {
 
     handNext() {
       // 直接判断正确性
+      this.answerValues.sort()
       if (this.rightValues.join(',') === this.answerValues.join(',')) {
-        this.$message({
-          message: '回答正确，你好棒哦！',
-          type: 'success'
-        })
-
         // 正确显示下一个
         this.fetchNextQu()
       } else {
@@ -141,7 +139,7 @@ export default {
         this.analysisShow = true
 
         this.$message({
-          message: '很遗憾，又做错了呢，请参考答案解析！',
+          message: '做错了，请参考解析重试！',
           type: 'error'
         })
       }

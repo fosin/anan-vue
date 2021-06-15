@@ -36,9 +36,9 @@
 
       <template slot="data-columns">
         <el-table-column
-          label="试题类型"
+          label="题型"
           align="center"
-          width="110px"
+          width="80px"
           prop="qu_type"
           sortable="custom"
           :sort-orders="['ascending','descending']"
@@ -48,19 +48,19 @@
           </template>
         </el-table-column>
         <el-table-column
-          label="试题难度"
+          label="难度"
           align="center"
           sortable="custom"
           :sort-orders="['ascending','descending']"
           prop="level"
-          width="110px"
+          width="80px"
         >
           <template slot-scope="scope">
             {{ getDicDetailValue(levels, scope.row.level) }}
           </template>
         </el-table-column>
         <el-table-column
-          label="试题内容"
+          label="内容"
           sortable="custom"
           :sort-orders="['ascending','descending']"
           prop="content"
@@ -70,18 +70,6 @@
             <router-link :to="{ name: 'ExamManagementQuUpdate', params:{ id: scope.row.id}}">
               {{ scope.row.content }}
             </router-link>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="更新时间"
-          align="center"
-          prop="update_time"
-          width="180px"
-          sortable="custom"
-          :sort-orders="['ascending','descending']"
-        >
-          <template slot-scope="scope">
-            {{ scope.row.updateTime }}
           </template>
         </el-table-column>
         <el-table-column
@@ -102,6 +90,18 @@
         >
           <template slot-scope="scope">
             {{ getDicDetailValue(states, scope.row.state) }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="更新时间"
+          align="center"
+          prop="update_time"
+          width="160px"
+          sortable="custom"
+          :sort-orders="['ascending','descending']"
+        >
+          <template slot-scope="scope">
+            {{ scope.row.updateTime }}
           </template>
         </el-table-column>
       </template>
