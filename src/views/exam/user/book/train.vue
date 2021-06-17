@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-card style="margin-top: 20px">
+    <el-card v-if="!resultShow" style="margin-top: 20px">
       <div class="qu-content">
         <el-input
           ref="quContent"
@@ -41,9 +41,26 @@
       </div>
       <!--      <p v-if="analysisCount === 0">暂无选项解析</p>-->
     </el-card>
+    <el-card v-if="resultShow" style="margin-top: 20px;">
+      <el-form label-width="120px">
+        <el-form-item label="总数量：">
+          <el-tag>{{ rightCount + wrongCount }}</el-tag>
+        </el-form-item>
+        <el-form-item label="正确数量：">
+          <el-tag type="success">{{ rightCount }}</el-tag>
+        </el-form-item>
+        <el-form-item label="错误数量：">
+          <el-tag type="danger">{{ wrongCount }}</el-tag>
+        </el-form-item>
+        <el-form-item label="正确率：">
+          <el-tag type="warning">{{ rightCount / (rightCount + wrongCount) * 100 }}%</el-tag>
+        </el-form-item>
+      </el-form>
+    </el-card>
     <div style="padding-top: 30px">
-      <el-button type="success" @click="fetchNextQu">跳过这题</el-button>
-      <el-button type="primary" style="margin-left: 50px" @click="handNext">继续下一题</el-button>
+      <el-button v-if="!resultShow" type="success" @click="fetchNextQu(1)">跳过这题</el-button>
+      <el-button v-if="!resultShow" type="primary" style="margin-left: 50px" @click="handNext">继续下一题</el-button>
+      <el-button v-if="resultShow" type="primary" style="margin-left: 50px" @click="handleRestart">再测一次</el-button>
       <el-button type="info" style="float: right" @click="onCancel">返回</el-button>
     </div>
   </div>
@@ -67,7 +84,10 @@ export default {
       answerValues: [],
       rightValues: [],
       rightTags: [],
-      quTypes: []
+      quTypes: [],
+      resultShow: false,
+      wrongCount: 0,
+      rightCount: 0
     }
   },
   created() {
@@ -78,7 +98,6 @@ export default {
     })
   },
   methods: {
-
     // 清理值
     clearValues() {
       this.answerValues = []
@@ -86,13 +105,11 @@ export default {
       this.analysisShow = false
       this.rightTags = []
     },
-
     // 查找试卷详情
     fetchQuDetail(id) {
       // 当前赋值
       this.quId = id
       this.clearValues()
-
       fetchDetail(id).then(response => {
         // 试题信息
         this.quData = response.data
@@ -100,7 +117,6 @@ export default {
         // 保存正确答案
         this.quData.answerList.forEach((an, index) => {
           an.abc = this.tags[index]
-
           // 正确答案
           if (an.isRight) {
             this.rightValues.push(an.id)
@@ -117,27 +133,41 @@ export default {
         })
       })
     },
-
-    fetchNextQu() {
+    handleRestart() {
+      this.rightCount = 0
+      this.wrongCount = 0
+      this.resultShow = false
+      this.quId = ''
+      this.clearValues()
+      this.fetchNextQu(2)
+    },
+    fetchNextQu(type) {
+      if (type === 1) {
+        this.wrongCount++
+      }
       // 查找下一个
       nextQu(this.examId, this.quId).then(response => {
-        this.fetchQuDetail(response.data.id)
+        const id = response.data.id
+        if (id) {
+          this.fetchQuDetail(response.data.id)
+        } else {
+          this.resultShow = true
+        }
       })
     },
     onCancel() {
       this.$store.dispatch('closeAndPushToView', { name: 'ExamOnlineResultsRecords' })
     },
-
     handNext() {
       // 直接判断正确性
       this.answerValues.sort()
       if (this.rightValues.join(',') === this.answerValues.join(',')) {
         // 正确显示下一个
-        this.fetchNextQu()
+        this.rightCount++
+        this.fetchNextQu(2)
       } else {
         // 错误显示解析
         this.analysisShow = true
-
         this.$message({
           message: '做错了，请参考解析重试！',
           type: 'error'
