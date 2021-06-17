@@ -203,6 +203,7 @@ export default {
         listUrl: 'gateway/platform/v1/role/paging',
         pageSizes: [5, 10, 25, 50, 100],
         search: {
+          input: '',
           cols: ['name', 'value'],
           placeholder: this.$t('anan_role.searchText')
         },

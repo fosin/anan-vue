@@ -325,6 +325,7 @@ export default {
         listUrl: 'gateway/platform/v1/user/paging',
         pageSizes: [5, 10, 25, 50, 100],
         search: {
+          input: '',
           cols: ['usercode', 'username', 'phone', 'email'],
           placeholder: this.$t('anan_user.searchText')
         },

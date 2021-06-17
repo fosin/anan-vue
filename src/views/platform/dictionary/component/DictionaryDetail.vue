@@ -141,6 +141,7 @@ export default {
         listUrl: 'gateway/platform/v1/dictionarydetail/paging',
         pageSizes: [5, 10, 25, 50, 100],
         search: {
+          input: '',
           cols: ['value'],
           placeholder: this.$t('anan_dictionary_detail.searchText')
         },

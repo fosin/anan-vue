@@ -24,6 +24,7 @@
           :placeholder="listQuery.search.placeholder"
           style="width: 250px;"
           class="filter-item"
+          clearable
           @keyup.enter.native="getList"
         />
         <el-button

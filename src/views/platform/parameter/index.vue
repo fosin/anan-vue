@@ -212,6 +212,7 @@ export default {
         listUrl: 'gateway/platform/v1/parameter/paging',
         pageSizes: [5, 10, 25, 50, 100],
         search: {
+          input: '',
           cols: ['name', 'value', 'defaultValue', 'description'],
           placeholder: this.$t('anan_parameter.searchText')
         },

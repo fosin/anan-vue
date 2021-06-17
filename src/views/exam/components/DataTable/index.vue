@@ -22,7 +22,19 @@
         </el-col>
         <el-col :span="options.addRoute ? 8 : 6">
           <div>
+            <el-input
+              v-if="listQuery.search.column"
+              v-model="listQuery.search.input"
+              :placeholder="listQuery.search.placeholder"
+              style="width: 200px;"
+              class="filter-item"
+              clearable
+              @keyup.enter.native="getList"
+            />
             <el-button-group style="vertical-align: top;">
+              <el-button v-waves round type="primary" icon="el-icon-search" @click="getList">
+                {{ $t('table.search') }}
+              </el-button>
               <el-button
                 v-if="options.addRoute"
                 v-waves
@@ -33,18 +45,7 @@
                 @click="handleAdd"
               >{{ $t('table.add') }}
               </el-button>
-              <el-button v-waves round type="primary" icon="el-icon-search" @click="getList">
-                {{ $t('table.refresh') }}
-              </el-button>
             </el-button-group>
-            <el-input
-              v-if="listQuery.search.column"
-              v-model="listQuery.search.input"
-              :placeholder="listQuery.search.placeholder"
-              style="width: 200px;"
-              class="filter-item"
-              @keyup.enter.native="getList"
-            />
           </div>
         </el-col>
         <el-col :span="options.addRoute ? 13 : 15">
