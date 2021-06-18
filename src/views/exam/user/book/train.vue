@@ -28,12 +28,12 @@
         </div>-->
       </div>
     </el-card>
-    <el-card v-if="analysisShow" class="qu-analysis" style="margin-top: 20px">
+    <el-card v-if="!resultShow && analysisShow" class="qu-analysis" style="margin-top: 20px">
       整题解析：
       <el-input v-model="quData.analysis" type="textarea" autosize readonly />
       <p v-if="!quData.analysis">暂无解析内容！</p>
     </el-card>
-    <el-card v-if="analysisShow" class="qu-analysis" style="margin-top: 20px;">
+    <el-card v-if="!resultShow && analysisShow" class="qu-analysis" style="margin-top: 20px;">
       选项解析：
       <div v-for="an in quData.answerList" :key="an.id" class="qu-analysis-line">
         <p v-if="an.analysis" style="color: #555;">{{ an.content }}：</p>
