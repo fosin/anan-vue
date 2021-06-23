@@ -81,7 +81,7 @@ export default {
     fetchData(id) {
       fetchDetail(id).then(response => {
         this.quData = response.data
-        this.quData.quContent = '【' + this.getDicDetailValue(this.quTypes, this.quData.quType) + '】' + this.quData.content
+        this.quData.quContent = '【' + this.getAnanDicValue(this.quTypes, this.quData.quType) + '】' + this.quData.content
         this.quData.answerList.forEach((an) => {
           // 解析数量
           if (an.analysis) {

@@ -28,7 +28,7 @@
         sortable
       >
         <template slot-scope="scope">
-          {{ getDicDetailValue(quTypes, scope.row.quType) }}
+          {{ getAnanDicValue(quTypes, scope.row.quType) }}
         </template>
       </el-table-column>
       <el-table-column
@@ -39,7 +39,7 @@
         sortable
       >
         <template slot-scope="scope">
-          {{ getDicDetailValue(levels, scope.row.level) }}
+          {{ getAnanDicValue(levels, scope.row.level) }}
         </template>
       </el-table-column>
       <el-table-column
@@ -148,7 +148,7 @@
           sortable="custom"
         >
           <template slot-scope="scope">
-            {{ getDicDetailValue(quTypes, scope.row.quType) }}
+            {{ getAnanDicValue(quTypes, scope.row.quType) }}
           </template>
         </el-table-column>
         <el-table-column
@@ -158,7 +158,7 @@
           sortable="custom"
         >
           <template slot-scope="scope">
-            {{ getDicDetailValue(levels, scope.row.level) }}
+            {{ getAnanDicValue(levels, scope.row.level) }}
           </template>
         </el-table-column>
         <el-table-column

@@ -16,13 +16,12 @@
           prop="name"
           width="120px"
         />
-        <el-table-column :label="$t('anan_dictionary_detail.value.label')" align="center" sortable prop="value" />
         <el-table-column
-          :label="$t('anan_dictionary_detail.scode.label')"
+          :label="$t('anan_dictionary_detail.value.label')"
           align="center"
           sortable
-          prop="scode"
-          width="120px"
+          prop="value"
+          width="150px"
         />
         <el-table-column
           :label="$t('anan_dictionary_detail.sort.label')"
@@ -42,7 +41,33 @@
             <span>{{ getStatusValue(scope.row.status) }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('table.actions')" align="center" width="80px">
+        <el-table-column
+          :label="$t('anan_dictionary_detail.scope.label')"
+          align="center"
+          sortable
+          prop="scope"
+          width="120px"
+        />
+        <el-table-column
+          :label="$t('anan_dictionary_detail.scode.label')"
+          align="center"
+          sortable
+          prop="scode"
+          width="120px"
+        />
+        <el-table-column
+          :label="$t('table.updateBy.label')"
+          align="center"
+          sortable
+          prop="updateBy"
+          width="100px"
+        >
+          <template slot-scope="scope">
+            <span>{{ getDicValue(organizTopUsers,"id",scope.row.updateBy,"username") }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('table.updateTime.label')" width="160px" align="center" sortable prop="updateTime" />
+        <el-table-column :label="$t('table.actions')" align="center" width="80px" fixed="right">
           <template slot-scope="scope">
             <el-tooltip class="item" effect="dark" :content="$t('table.edit')" placement="top">
               <el-button
@@ -127,6 +152,7 @@ import {
   putDictionaryDetail
 } from '../dictionary'
 import DataTable from '@/components/DataTable'
+import { listUserByTopId } from '@/views/platform/user/user'
 
 export default {
   name: 'DictionaryDetail',
@@ -136,6 +162,7 @@ export default {
   data() {
     return {
       selectedDictionary: {},
+      organizTopUsers: [],
       DefaultDictionaryDetailNameAndSort: 1,
       listQuery: {
         listUrl: 'gateway/platform/v1/dictionarydetail/paging',
@@ -247,6 +274,16 @@ export default {
     })
     this.loadOrganizParameterValue('DefaultDictionaryDetailNameAndSort', '1', '新增字典明细时是否按当前数据总量自动生成字典key和字典Sort，0=不自动 1=自动，默认为自动').then(res => {
       this.DefaultDictionaryDetailNameAndSort = res
+    })
+    listUserByTopId().then(response => {
+      this.organizTopUsers = response.data
+    }).catch(reason => {
+      this.$notify({
+        title: '获取所有用户失败',
+        message: reason.message,
+        type: 'error',
+        duration: 5000
+      })
     })
   },
   methods: {

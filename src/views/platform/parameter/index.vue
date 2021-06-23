@@ -57,25 +57,25 @@
         />
         <el-table-column :label="$t('anan_parameter.applyBy.label')" align="center" sortable prop="applyBy" width="100px">
           <template slot-scope="scope">
-            <span>{{ getUserName(scope.row.applyBy) }}</span>
+            <span>{{ getDicValue(organizTopUsers,"id",scope.row.applyBy,"username") }}</span>
           </template>
         </el-table-column>
         <el-table-column
-          :label="$t('anan_parameter.updateTime.label')"
+          :label="$t('table.updateTime.label')"
           align="center"
           sortable
           prop="updateTime"
           width="160px"
         />
         <el-table-column
-          :label="$t('anan_parameter.updateBy.label')"
+          :label="$t('table.updateBy.label')"
           align="center"
           sortable
           prop="updateBy"
           width="100px"
         >
           <template slot-scope="scope">
-            <span>{{ getUserName(scope.row.updateBy) }}</span>
+            <span>{{ getDicValue(organizTopUsers,"id",scope.row.updateBy,"username") }}</span>
           </template>
         </el-table-column>
         <el-table-column fixed="right" :label="$t('table.actions')" align="center" width="120px">
@@ -197,7 +197,7 @@ import {
   applyParameter,
   applysParameter
 } from './parameter'
-import { listOrganizUser } from '../user/user'
+import { listUserByTopId } from '../user/user'
 import { listOrganizAllChild } from '../organization/organization'
 import { mapGetters } from 'vuex'
 import DataTable from '@/components/DataTable'
@@ -337,7 +337,7 @@ export default {
       typeScopeOptions: {},
       scopeOptions: [],
       oraganizOptions: [],
-      organizUserOptions: []
+      organizTopUsers: []
     }
   },
   computed: {
@@ -347,7 +347,27 @@ export default {
     this.loadDictionaryById(10).then(res => {
       this.typeOptions = res.details
     })
-    this.listOrganizUser(this.ananUserInfo.organizId)
+    listUserByTopId().then(response => {
+      this.organizTopUsers = response.data
+      const scopeOptions = []
+      for (let i = 0; i < this.organizTopUsers.length; i++) {
+        const user = this.organizTopUsers[i]
+        const scope = {
+          name: user.id + '',
+          code: user.usercode,
+          value: user.username
+        }
+        scopeOptions.push(scope)
+      }
+      this.typeScopeOptions[2] = scopeOptions
+    }).catch(reason => {
+      this.$notify({
+        title: '获取所有用户失败',
+        message: reason.message,
+        type: 'error',
+        duration: 5000
+      })
+    })
     this.listOrganizAllChild(this.ananUserInfo.organizId)
     this.getServiceScopes()
   },
@@ -383,29 +403,6 @@ export default {
         })
       })
     },
-    listOrganizUser(organizId) {
-      listOrganizUser(organizId).then(response => {
-        this.organizUserOptions = response.data
-        const scopeOptions = []
-        for (let i = 0; i < this.organizUserOptions.length; i++) {
-          const user = this.organizUserOptions[i]
-          const scope = {
-            name: user.id + '',
-            code: user.usercode,
-            value: user.username
-          }
-          scopeOptions.push(scope)
-        }
-        this.typeScopeOptions[2] = scopeOptions
-      }).catch(reason => {
-        this.$notify({
-          title: '获取所有用户失败',
-          message: reason.message,
-          type: 'error',
-          duration: 5000
-        })
-      })
-    },
     listOrganizAllChild(organizId) {
       listOrganizAllChild(organizId).then(response => {
         this.oraganizOptions = response.data || []
@@ -434,12 +431,6 @@ export default {
         return value.name === type
       })
       return typeOption.length > 0 ? typeOption[0].value : type
-    },
-    getUserName(userid) {
-      const userOption = this.organizUserOptions.filter(value => {
-        return value.id === userid
-      })
-      return userOption.length > 0 ? userOption[0].username : userid
     },
     getScopeName(type, scope) {
       const scopeOptions = this.typeScopeOptions[type]

@@ -14,7 +14,7 @@
         <el-col :span="20">
           <el-form-item label="" prop="sex">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
-              <span @click="handleItemClick('sex',form.sex)">{{ getDicDetailValue(sexOptions, form.sex) }}</span>
+              <span @click="handleItemClick('sex',form.sex)">{{ getAnanDicValue(sexOptions, form.sex) }}</span>
             </el-tooltip>
           </el-form-item>
         </el-col>
@@ -23,7 +23,7 @@
         <el-col :span="20">
           <el-form-item label="" prop="nation">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
-              <span @click="handleItemClick('nation',form.nation)">{{ getDicDetailValue(nationOptions, form.nation) }}</span>
+              <span @click="handleItemClick('nation',form.nation)">{{ getAnanDicValue(nationOptions, form.nation) }}</span>
             </el-tooltip>
           </el-form-item>
         </el-col>
@@ -51,7 +51,7 @@
         <el-col :span="20">
           <el-form-item label="" prop="nationality">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
-              <span @click="handleItemClick('nationality',form.nationality)">{{ getDicDetailValue(nationalityOptions, form.nationality) }}</span>
+              <span @click="handleItemClick('nationality',form.nationality)">{{ getAnanDicValue(nationalityOptions, form.nationality) }}</span>
             </el-tooltip>
           </el-form-item>
         </el-col>
@@ -79,7 +79,7 @@
         <el-col :span="20">
           <el-form-item label="" prop="bloodtype">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
-              <span @click="handleItemClick('bloodtype',form.bloodtype)">{{ getDicDetailValue(bloodtypeOptions, form.bloodtype) }}</span>
+              <span @click="handleItemClick('bloodtype',form.bloodtype)">{{ getAnanDicValue(bloodtypeOptions, form.bloodtype) }}</span>
             </el-tooltip>
           </el-form-item>
         </el-col>
@@ -88,7 +88,7 @@
         <el-col :span="20">
           <el-form-item label="" prop="rhblood">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
-              <span @click="handleItemClick('rhblood',form.rhblood)">{{ getDicDetailValue(rhbloodOptions, form.rhblood) }}</span>
+              <span @click="handleItemClick('rhblood',form.rhblood)">{{ getAnanDicValue(rhbloodOptions, form.rhblood) }}</span>
             </el-tooltip>
           </el-form-item>
         </el-col>
@@ -97,7 +97,7 @@
         <el-col :span="20">
           <el-form-item label="" prop="marital">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
-              <span @click="handleItemClick('marital',form.marital)">{{ getDicDetailValue(maritalOptions, form.marital) }}</span>
+              <span @click="handleItemClick('marital',form.marital)">{{ getAnanDicValue(maritalOptions, form.marital) }}</span>
             </el-tooltip>
           </el-form-item>
         </el-col>
@@ -106,7 +106,7 @@
         <el-col :span="20">
           <el-form-item label="" prop="death">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
-              <span @click="handleItemClick('death',form.death)">{{ getDicDetailValue(deathOptions, form.death) }}</span>
+              <span @click="handleItemClick('death',form.death)">{{ getAnanDicValue(deathOptions, form.death) }}</span>
             </el-tooltip>
           </el-form-item>
         </el-col>
@@ -114,7 +114,7 @@
       <el-row>
         <el-col :span="20">
           <el-form-item label="" prop="workType">
-            <span @click="handleItemClick('workType',form.workType)">{{ getDicDetailValue(workTypeOptions, form.workType) }}</span>
+            <span @click="handleItemClick('workType',form.workType)">{{ getAnanDicValue(workTypeOptions, form.workType) }}</span>
           </el-form-item>
         </el-col>
       </el-row>
@@ -122,7 +122,7 @@
         <el-col :span="20">
           <el-form-item label="" prop="education">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
-              <span @click="handleItemClick('education',form.education)">{{ getDicDetailValue(educationOptions, form.education) }}</span>
+              <span @click="handleItemClick('education',form.education)">{{ getAnanDicValue(educationOptions, form.education) }}</span>
             </el-tooltip>
           </el-form-item>
         </el-col>
@@ -131,7 +131,7 @@
         <el-col :span="20">
           <el-form-item label="" prop="insurance">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
-              <span @click="handleItemClick('insurance',form.insurance)">{{ form.insurance === null?'':getDicDetailValue(insuranceOptions, form.insurance) }}</span>
+              <span @click="handleItemClick('insurance',form.insurance)">{{ form.insurance === null?'':getAnanDicValue(insuranceOptions, form.insurance) }}</span>
             </el-tooltip>
           </el-form-item>
         </el-col>
@@ -140,7 +140,7 @@
         <el-col :span="20">
           <el-form-item label="" prop="insurancetype">
             <el-tooltip class="item" effect="dark" content="双击合并" placement="top-start">
-              <span @click="handleItemClick('insurancetype',form.insurancetype)">'{{ form.insurancetype === null?'':getDicDetailValue(insurancetypeOptions, form.insurancetype) }}</span>
+              <span @click="handleItemClick('insurancetype',form.insurancetype)">'{{ form.insurancetype === null?'':getAnanDicValue(insurancetypeOptions, form.insurancetype) }}</span>
             </el-tooltip>
           </el-form-item>
         </el-col>

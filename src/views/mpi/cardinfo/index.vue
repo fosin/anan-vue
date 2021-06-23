@@ -56,13 +56,13 @@
     >
       <el-table-column align="center" label="卡类型" sortable prop="cardType">
         <template slot-scope="scope">
-          <span>{{ getDicDetailValue(cardTypeOptions, scope.row.cardType) }}</span>
+          <span>{{ getAnanDicValue(cardTypeOptions, scope.row.cardType) }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="卡号" sortable prop="cardNo" />
       <el-table-column align="center" label="卡状态" sortable prop="status">
         <template slot-scope="scope">
-          <span>{{ getDicDetailValue(statusOptions, scope.row.status) }}</span>
+          <span>{{ getAnanDicValue(statusOptions, scope.row.status) }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="有效期" sortable prop="validtime" width="140px" />

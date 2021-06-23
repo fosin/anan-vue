@@ -26,7 +26,7 @@
           align="center"
         >
           <template slot-scope="scope">
-            <span :style="{ color: rankColor[scope.row.rank] }">{{ getDicDetailValue(rankDics, scope.row.rank) }}</span>
+            <span :style="{ color: rankColor[scope.row.rank] }">{{ getAnanDicValue(rankDics, scope.row.rank) }}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -95,24 +95,11 @@ export default {
   },
   created() {
     this.listQuery.params.examId = this.$route.params.examId
-    // this.postRequest('gateway/platform/v1/user/childList/organizId/' + this.ananUserInfo.organizId).then(res => {
-    //   this.organizUsers = res.data
-    // })
     this.loadDictionaryById(148).then(res => {
       this.rankDics = res.details
     })
   },
   methods: {
-    // getUserName(userId) {
-    //   if (this.organizUsers) {
-    //     for (let i = 0; i < this.organizUsers.length; i++) {
-    //       const user = this.organizUsers[i]
-    //       if (user.id === userId) {
-    //         return user.username
-    //       }
-    //     }
-    //   }
-    // },
     // 开始考试
     handleExamDetail(examId, userId) {
       this.examId = examId

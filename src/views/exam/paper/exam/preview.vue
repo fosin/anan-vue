@@ -52,7 +52,7 @@
               <div><strong>试卷总分：</strong>{{ detailData.totalScore }}分</div>
               <div><strong>合格分数：</strong>{{ detailData.qualifyScore }}分</div>
               <div><strong>考试描述：</strong>{{ detailData.content }}</div>
-              <div><strong>开放类型：</strong> {{ getDicDetailValue(openTypes, detailData.openType) }}</div>
+              <div><strong>开放类型：</strong> {{ getAnanDicValue(openTypes, detailData.openType) }}</div>
               <div v-if="detailData.allowTimes > 0"><strong>已考次数/限考次数：</strong>{{ tryCount }}/{{ detailData.allowTimes }}
               </div>
             </el-col>

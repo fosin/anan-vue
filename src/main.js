@@ -24,12 +24,14 @@ import permission from './directive/permission/index.js' // 权限判断指令
 import waves from './directive/waves/index.js' // 水波效果
 import './views/vhr/utils/filter_utils'
 import { getRequest, postRequest, deleteRequest, putRequest, allRequest } from './utils/request'
-
+import { getDicData, getDicValue } from '@/utils/dic'
 Vue.prototype.getRequest = getRequest
 Vue.prototype.postRequest = postRequest
 Vue.prototype.deleteRequest = deleteRequest
 Vue.prototype.putRequest = putRequest
 Vue.prototype.allRequest = allRequest
+Vue.prototype.getDicData = getDicData
+Vue.prototype.getDicValue = getDicValue
 
 require('es6-promise').polyfill()
 Vue.use(permission)

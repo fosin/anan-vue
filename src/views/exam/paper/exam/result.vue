@@ -75,7 +75,7 @@
               {{ paperData.userTime }}分钟
             </el-form-item>
             <el-form-item label="状态" prop="">
-              {{ getDicDetailValue(paperStates, paperData.state) }}
+              {{ getAnanDicValue(paperStates, paperData.state) }}
             </el-form-item>
             <el-form-item label="得分" prop="">
               {{ paperData.userScore }}
@@ -87,7 +87,7 @@
               {{ paperData.totalScore }} / 合格分：{{ paperData.qualifyScore }}
             </el-form-item>
             <el-form-item label="评级" prop="">
-              <span :style="{ color: rankColor[paperData.rank] }">{{ getDicDetailValue(rankDics, paperData.rank) }}</span>
+              <span :style="{ color: rankColor[paperData.rank] }">{{ getAnanDicValue(rankDics, paperData.rank) }}</span>
             </el-form-item>
             <el-form-item label="时间" prop="">
               {{ paperData.createTime }}

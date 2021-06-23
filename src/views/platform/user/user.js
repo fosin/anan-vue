@@ -57,12 +57,26 @@ export function listUser() {
 }
 
 // 根据机构ID查询该机构及子机构的所有用户
-export function listOrganizUser(organizId, status) {
+export function listByOrganizId(organizId, status) {
   if (status === null || status === undefined) {
     status = -1
   }
   return request({
-    url: 'gateway/platform/v1/user/childList/organizId/' + organizId + '/' + status,
+    url: 'gateway/platform/v1/user/list/organizId/' + organizId + '/' + status,
+    method: 'post'
+  })
+}
+
+// 根据顶级机构ID查询其下所有用户
+export function listUserByTopId(topId, status) {
+  if (topId === null || topId === undefined) {
+    topId = 0
+  }
+  if (status === null || status === undefined) {
+    status = -1
+  }
+  return request({
+    url: 'gateway/platform/v1/user/list/topId/' + topId + '/' + status,
     method: 'post'
   })
 }

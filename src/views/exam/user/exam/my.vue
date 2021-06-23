@@ -30,7 +30,7 @@
           width="100px"
         >
           <template slot-scope="scope">
-            <span :style="{ color: rankColor[scope.row.rank] }">{{ getDicDetailValue(rankDics, scope.row.rank) }}</span>
+            <span :style="{ color: rankColor[scope.row.rank] }">{{ getAnanDicValue(rankDics, scope.row.rank) }}</span>
           </template>
         </el-table-column>
         <el-table-column

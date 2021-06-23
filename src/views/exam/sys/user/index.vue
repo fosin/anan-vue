@@ -61,7 +61,7 @@
         >
 
           <template slot-scope="scope">
-            {{ getDicDetailValue(onStates, scope.row.state) }}
+            {{ getAnanDicValue(onStates, scope.row.state) }}
           </template>
         </el-table-column>
 

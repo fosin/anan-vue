@@ -22,22 +22,23 @@
         />
         <!--      <el-table-column  :label="$t('anan_role.tips.label')" align="center" sortable prop="tips">
               </el-table-column>-->
-
-        <el-table-column :label="$t('anan_role.createTime.label')" align="center" sortable prop="createTime">
-          <template slot-scope="scope">
-            <span>{{ scope.row.createTime | dateFormatFilter('yyyy-MM-dd HH:mm:ss') }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column :label="$t('anan_role.updateTime.label')" align="center" sortable prop="updateTime">
-          <template slot-scope="scope">
-            <span>{{ scope.row.updateTime | dateFormatFilter('yyyy-MM-dd HH:mm:ss') }}</span>
-          </template>
-        </el-table-column>
         <el-table-column :label="$t('anan_role.status.label')" align="center" class-name="status-col" width="80" sortable prop="status">
           <template slot-scope="scope">
             <el-tag>{{ scope.row.status | statusFilter }}</el-tag>
           </template>
         </el-table-column>
+        <el-table-column
+          :label="$t('table.updateBy.label')"
+          align="center"
+          sortable
+          prop="updateBy"
+          width="100px"
+        >
+          <template slot-scope="scope">
+            <span>{{ getDicValue(organizTopUsers,"id",scope.row.updateBy,"username") }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('table.updateTime.label')" width="160px" align="center" sortable prop="updateTime" />
         <el-table-column :label="$t('table.actions')" align="center" width="200">
           <template slot-scope="scope">
             <el-tooltip class="item" effect="dark" :content="$t('table.edit')" placement="top">
@@ -131,7 +132,7 @@
           label: 'username'
         }"
         :titles="['未拥有用户', '已拥有用户']"
-        :data="allUsers"
+        :data="OrganUsers"
         filterable
       />
       <div slot="footer" class="dialog-footer">
@@ -157,7 +158,7 @@ import {
   listRoleUsers,
   putRoleUsers
 } from './role'
-import { listOrganizUser } from '../user/user'
+import { listByOrganizId, listUserByTopId } from '../user/user'
 import { formatDate } from '@/utils/date'
 import { listOrganizAllChild } from '../organization/organization'
 import { mapGetters } from 'vuex'
@@ -188,7 +189,8 @@ export default {
       oraganizOptions: [],
       organizList: [],
       roleUsers: [],
-      allUsers: [],
+      OrganUsers: [],
+      organizTopUsers: [],
       versionId: -1,
       topId: -1,
       checkedKeys: [],
@@ -340,6 +342,16 @@ export default {
     if (!this.organizList || this.organizList.length < 1) {
       this.loadOrganizAllChild(this.ananUserInfo.organizId)
     }
+    listUserByTopId().then(response => {
+      this.organizTopUsers = response.data
+    }).catch(reason => {
+      this.$notify({
+        title: '获取所有用户失败',
+        message: reason.message,
+        type: 'error',
+        duration: 5000
+      })
+    })
     this.listQuery.pageModule.params.organizId = this.ananUserInfo.organizId
   },
   methods: {
@@ -461,24 +473,21 @@ export default {
         })
       })
     },
-    listOrganizUser() {
-      listOrganizUser(this.form.organizId).then(response => {
-        this.allUsers = response.data
-      }).catch(reason => {
-        this.$notify({
-          title: '获取所有用户失败',
-          message: reason.message,
-          type: 'error',
-          duration: 5000
-        })
-      })
-    },
     handleRoleUser(row) {
       listRoleUsers(row.id).then(response => {
         this.dialogStatus = 'user'
         this.dialogRoleUserVisible = true
         this.form = row
-        this.listOrganizUser()
+        listByOrganizId(this.form.organizId).then(response => {
+          this.OrganUsers = response.data
+        }).catch(reason => {
+          this.$notify({
+            title: '获取所有用户失败',
+            message: reason.message,
+            type: 'error',
+            duration: 5000
+          })
+        })
         const roleUsers = response.data
         this.roleUsers = []
         for (let i = 0; i < roleUsers.length; i++) {

@@ -26,7 +26,7 @@
       </el-table-column>
       <el-table-column align="center" label="性别" sortable prop="sex">
         <template slot-scope="scope">
-          <span>{{ getDicDetailValue(sexOptions, scope.row.sex) }}</span>
+          <span>{{ getAnanDicValue(sexOptions, scope.row.sex) }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="就诊卡号" sortable prop="cardno" />

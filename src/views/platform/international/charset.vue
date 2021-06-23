@@ -39,23 +39,34 @@
       @sort-change="sortChange"
       @row-click="rowClick"
     >
-      <el-table-column label="所属语言" align="center" sortable prop="internationalId">
+      <el-table-column label="所属语言" align="center" sortable prop="internationalId" width="150px">
         <template slot-scope="scope">
           <el-tag>{{ internationalFilter(scope.row.internationalId) }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="所属服务" align="center" sortable prop="serviceId">
+      <el-table-column label="所属服务" align="center" sortable prop="serviceId" width="200px">
         <template slot-scope="scope">
           <el-tag>{{ serviceIdFilter(scope.row.serviceId) }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="更新时间" align="center" sortable prop="updateTime" width="160px" />
       <el-table-column label="状态码" align="center" class-name="status-col" width="100px" sortable prop="status">
         <template slot-scope="scope">
           <el-tag>{{ scope.row.status | statusFilter }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.actions')" align="center">
+      <el-table-column
+        :label="$t('table.updateBy.label')"
+        align="center"
+        sortable
+        prop="updateBy"
+        width="100px"
+      >
+        <template slot-scope="scope">
+          <span>{{ getDicValue(organizTopUsers,"id",scope.row.updateBy,"username") }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.updateTime.label')" width="160px" align="center" sortable prop="updateTime" />
+      <el-table-column :label="$t('table.actions')" align="center" fixed="right" width="120px">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" :content="$t('table.edit')" placement="top">
             <el-button
@@ -171,6 +182,7 @@ import { formatDate } from '@/utils/date'
 import { listService } from '@/views/platform/service/service'
 import { listInternational } from '@/views/platform/international/international'
 import JsonEditor from '@/components/JsonEditor/index'
+import { listUserByTopId } from '@/views/platform/user/user'
 
 export default {
   name: 'AnanInternationalCharset',
@@ -211,6 +223,7 @@ export default {
       rules: {},
       statusOptions: [0, 1],
       allServices: [],
+      organizTopUsers: [],
       allInternationals: [],
       selectedInternational: {},
       dialogFormVisible: false,
@@ -230,6 +243,16 @@ export default {
       for (let i = 0; i < temp.length; i++) {
         this.pageSizes[i] = parseInt(temp[i])
       }
+    })
+    listUserByTopId().then(response => {
+      this.organizTopUsers = response.data
+    }).catch(reason => {
+      this.$notify({
+        title: '获取所有用户失败',
+        message: reason.message,
+        type: 'error',
+        duration: 5000
+      })
     })
     listService().then(response => {
       this.allServices = response.data

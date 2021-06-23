@@ -47,23 +47,35 @@
       @sort-change="sortChange"
       @row-click="rowClick"
     >
-      <el-table-column label="图标/标识" align="center" prop="icon">
+      <el-table-column label="图标/标识" align="center" prop="icon" width="150px">
         <template slot-scope="scope">
           <svg-icon :icon-class="scope.row.icon" style="width: 40px; height: 30px; background: #fff; color: #40c9c6;" />
           {{ scope.row.code }}
         </template>
       </el-table-column>
-      <el-table-column label="名称" align="center" sortable prop="name">
+      <el-table-column label="名称" align="center" sortable prop="name" width="150px">
         <template slot-scope="scope">
           {{ scope.row.name }}<el-tag v-if="scope.row.defaultFlag===1">{{ scope.row.defaultFlag | defaultFilter }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="状态" align="center" class-name="status-col" sortable prop="status">
+      <el-table-column label="状态" align="center" class-name="status-col" sortable prop="status" width="100px">
         <template slot-scope="scope">
           <el-tag>{{ scope.row.status | statusFilter }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.actions')" align="center">
+      <el-table-column
+        :label="$t('table.updateBy.label')"
+        align="center"
+        sortable
+        prop="updateBy"
+        width="100px"
+      >
+        <template slot-scope="scope">
+          <span>{{ getDicValue(organizTopUsers,"id",scope.row.updateBy,"username") }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.updateTime.label')" width="160px" align="center" sortable prop="updateTime" />
+      <el-table-column :label="$t('table.actions')" align="center" fixed="right" width="120px">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" :content="$t('table.edit')" placement="top">
             <el-button
@@ -174,6 +186,7 @@ import {
 } from './international'
 import waves from '@/directive/waves/index.js'
 import { formatDate } from '@/utils/date'
+import { listUserByTopId } from '@/views/platform/user/user'
 
 export default {
   name: 'AnanInternational',
@@ -233,6 +246,7 @@ export default {
       form: {},
       rules: {},
       statusOptions: [0, 1],
+      organizTopUsers: [],
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
@@ -250,6 +264,16 @@ export default {
       for (let i = 0; i < temp.length; i++) {
         this.pageSizes[i] = parseInt(temp[i])
       }
+    })
+    listUserByTopId().then(response => {
+      this.organizTopUsers = response.data
+    }).catch(reason => {
+      this.$notify({
+        title: '获取所有用户失败',
+        message: reason.message,
+        type: 'error',
+        duration: 5000
+      })
     })
     this.getList()
   },

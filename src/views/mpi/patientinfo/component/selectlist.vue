@@ -22,7 +22,7 @@
       <el-table-column align="center" label="姓名简码" sortable prop="pycode" />
       <el-table-column align="center" label="性别" width="100" sortable prop="sex">
         <template slot-scope="scope">
-          <span>{{ getDicDetailValue(sexOptions, scope.row.sex) }}</span>
+          <span>{{ getAnanDicValue(sexOptions, scope.row.sex) }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="出生日期" sortable prop="birthday" width="100">
@@ -37,64 +37,64 @@
       <el-table-column align="center" label="户口" sortable prop="household" />
       <el-table-column align="center" label="国籍" sortable prop="nationality">
         <template slot-scope="scope">
-          <span>{{ getDicDetailValue(nationalityOptions, scope.row.nationality) }}</span>
+          <span>{{ getAnanDicValue(nationalityOptions, scope.row.nationality) }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="民族" sortable prop="nation">
         <template slot-scope="scope">
-          <span>{{ getDicDetailValue(nationOptions, scope.row.nation) }}</span>
+          <span>{{ getAnanDicValue(nationOptions, scope.row.nation) }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="血型" sortable prop="bloodtype">
         <template slot-scope="scope">
-          <span>{{ getDicDetailValue(bloodtypeOptions, scope.row.bloodtype) }}</span>
+          <span>{{ getAnanDicValue(bloodtypeOptions, scope.row.bloodtype) }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="RH血型" sortable prop="rhblood">
         <template slot-scope="scope">
-          <span>{{ getDicDetailValue(rhbloodOptions, scope.row.rhblood) }}</span>
+          <span>{{ getAnanDicValue(rhbloodOptions, scope.row.rhblood) }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="婚姻" sortable prop="marital">
         <template slot-scope="scope">
-          <span>{{ getDicDetailValue(maritalOptions, scope.row.marital) }}</span>
+          <span>{{ getAnanDicValue(maritalOptions, scope.row.marital) }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="参加工作时间" sortable prop="workDate" />
       <el-table-column align="center" label="职业类别" sortable prop="workType">
         <template slot-scope="scope">
-          <span>{{ getDicDetailValue(workTypeOptions, scope.row.workType) }}</span>
+          <span>{{ getAnanDicValue(workTypeOptions, scope.row.workType) }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="文化程度" sortable prop="education">
         <template slot-scope="scope">
-          <span>{{ getDicDetailValue(nationalityOptions, scope.row.nationality) }}</span>
+          <span>{{ getAnanDicValue(nationalityOptions, scope.row.nationality) }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="参保类型" sortable prop="insurance">
         <template slot-scope="scope">
-          <span>{{ getDicDetailValue(insuranceOptions, scope.row.insurance) }}</span>
+          <span>{{ getAnanDicValue(insuranceOptions, scope.row.insurance) }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="保险类型" sortable prop="insurancetype">
         <template slot-scope="scope">
-          <span>{{ getDicDetailValue(insurancetypeOptions, scope.row.insurancetype) }}</span>
+          <span>{{ getAnanDicValue(insurancetypeOptions, scope.row.insurancetype) }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="工作单位" sortable prop="workplace" />
       <!-- <el-table-column align="center" label="档案状态" sortable prop="status">
         <template slot-scope="scope">
-          <span>{{getDicDetailValue(statusOptions, scope.row.status)}}</span>
+          <span>{{getAnanDicValue(statusOptions, scope.row.status)}}</span>
         </template>
       </el-table-column>-->
       <el-table-column align="center" label="是否死亡" sortable prop="death">
         <template slot-scope="scope">
-          <span>{{ getDicDetailValue(deathOptions, scope.row.death) }}</span>
+          <span>{{ getAnanDicValue(deathOptions, scope.row.death) }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="信息来源" sortable prop="infoFrom">
         <template slot-scope="scope">
-          <span>{{ getDicDetailValue(infoFromOptions, scope.row.infoFrom) }}</span>
+          <span>{{ getAnanDicValue(infoFromOptions, scope.row.infoFrom) }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="版本号" sortable prop="version" />

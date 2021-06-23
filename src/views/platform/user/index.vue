@@ -38,17 +38,23 @@
           show-overflow-tooltip
           sortable
         />
-        <!-- <el-table-column align="center" :label="$t('anan_user.createTime.label')" sortable prop="createTime">
-          <template slot-scope="scope">
-            <span>{{scope.row.createTime | dateFormatFilter('yyyy-MM-dd HH:mm:ss')}}</span>
-          </template>
-        </el-table-column>-->
         <el-table-column :label="$t('anan_user.status.label')" align="center" class-name="status-col" width="80" sortable prop="status">
           <template slot-scope="scope">
             <el-tag>{{ scope.row.status | statusFilter }}</el-tag>
           </template>
         </el-table-column>
-
+        <el-table-column
+          :label="$t('table.updateBy.label')"
+          align="center"
+          sortable
+          prop="updateBy"
+          width="100px"
+        >
+          <template slot-scope="scope">
+            <span>{{ getDicValue(organizTopUsers,"id",scope.row.updateBy,"username") }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('table.updateTime.label')" width="160px" align="center" sortable prop="updateTime" />
         <el-table-column :label="$t('table.actions')" align="center" width="240">
           <template slot-scope="scope">
             <el-tooltip class="item" effect="dark" :content="$t('table.edit')" placement="top">
@@ -272,10 +278,12 @@
 </template>
 
 <script>
-import { getUser, postUser, putUser, resetPassword,
+import {
+  getUser, postUser, putUser, resetPassword,
   putUserPermissions,
   listUserPermissions,
-  listUserRoles, putUserRoles } from './user'
+  listUserRoles, putUserRoles, listUserByTopId
+} from './user'
 import { formatDate } from '@/utils/date'
 import { listOrganizRole } from '../role/role'
 import { listOrganizAllChild, treeAllChildOrganiz, getOrganiz, getOrganizAuth } from '../organization/organization'
@@ -557,6 +565,7 @@ export default {
       sexOptions: [],
       rolesOptions: [],
       oraganizOptions: [],
+      organizTopUsers: [],
       organizList: [],
       dialogFormVisible: false,
       dialogUserRoleVisible: false,
@@ -594,6 +603,16 @@ export default {
     })
     this.loadOrganizParameterValue('UserDefaultPassword', '123456', '用户的默认密码').then(res => {
       this.defaultPass = res
+    })
+    listUserByTopId().then(response => {
+      this.organizTopUsers = response.data
+    }).catch(reason => {
+      this.$notify({
+        title: '获取所有用户失败',
+        message: reason.message,
+        type: 'error',
+        duration: 5000
+      })
     })
     this.$refs.iconsSelect.init(this.setAvatar)
     this.resetTemp()

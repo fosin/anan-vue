@@ -31,7 +31,7 @@
     >
       <el-table-column align="center" label="地址类型" sortable prop="addressType">
         <template slot-scope="scope">
-          <span>{{ getDicDetailValue(addressTypeOptions, scope.row.addressType) }}</span>
+          <span>{{ getAnanDicValue(addressTypeOptions, scope.row.addressType) }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="地址" sortable prop="address" width="150px" />

@@ -49,7 +49,7 @@
         align="center"
       >
         <template slot-scope="scope">
-          {{ getDicDetailValue(openTypes, scope.row.openType) }}
+          {{ getAnanDicValue(openTypes, scope.row.openType) }}
         </template>
       </el-table-column>
       <el-table-column
@@ -109,7 +109,7 @@
         align="center"
       >
         <template slot-scope="scope">
-          {{ getDicDetailValue(examStates, scope.row.state) }}
+          {{ getAnanDicValue(examStates, scope.row.state) }}
         </template>
       </el-table-column>
       <el-table-column
@@ -187,6 +187,12 @@
           >{{ scope.row.photoFrequency }}秒</el-tag>
         </template>
       </el-table-column>
+      <el-table-column :label="$t('table.updateBy.label')" align="center" prop="updateBy" width="100px">
+        <template slot-scope="scope">
+          <span>{{ getDicValue(organizTopUsers,"id",scope.row.updateBy,"username") }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.updateTime.label')" width="160px" align="center" sortable prop="updateTime" />
       <el-table-column
         fixed="right"
         label="操作"
@@ -204,6 +210,7 @@
 
 <script>
 import DataTable from '@/views/exam/components/DataTable'
+import { listUserByTopId } from '@/views/platform/user/user'
 
 export default {
   name: 'ExamManagementExam',
@@ -212,6 +219,7 @@ export default {
     return {
       openTypes: [],
       examStates: [],
+      organizTopUsers: [],
       listQuery: {
         current: 1,
         size: 10,
@@ -252,6 +260,16 @@ export default {
     }
   },
   created() {
+    listUserByTopId().then(response => {
+      this.organizTopUsers = response.data
+    }).catch(reason => {
+      this.$notify({
+        title: '获取所有用户失败',
+        message: reason.message,
+        type: 'error',
+        duration: 5000
+      })
+    })
     this.loadDictionaryById(144).then(res => {
       this.openTypes = res.details
     })

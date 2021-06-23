@@ -47,6 +47,7 @@ export default dictionary
 
 import Vue from 'vue'
 import vuex from '@/store'
+import { getDicValue } from '@/utils/dic'
 Vue.prototype.loadDictionaryById = function(dicId) {
   return new Promise((resolve, reject) => {
     vuex.dispatch('getDictionaryById', dicId).then(res => {
@@ -62,30 +63,10 @@ Vue.prototype.loadDictionaryById = function(dicId) {
     })
   })
 }
-Vue.prototype.getDicDetailValue = function(dicDetails, dicName) {
-  const dic = getDicDetail(dicDetails, dicName)
-  if (typeof dic === 'object') {
-    return dic.value
-  } else {
-    return dic
-  }
+Vue.prototype.getAnanDicValue = function(dicDetails, value) {
+  return getDicValue(dicDetails, 'name', value, 'value')
 }
-Vue.prototype.getDicDetailDescription = function(dicDetails, dicName) {
-  const dic = getDicDetail(dicDetails, dicName)
-  if (typeof dic === 'object') {
-    return dic.description
-  } else {
-    return dic
-  }
+Vue.prototype.getAnanDicDescription = function(dicDetails, dicName) {
+  return getDicValue(dicDetails, 'name', dicName, 'description')
 }
 
-function getDicDetail(dicDetails, dicName) {
-  if (dicDetails && dicDetails.length > 0) {
-    for (const dicDetail of dicDetails) {
-      if (dicDetail.name === dicName) {
-        return dicDetail
-      }
-    }
-  }
-  return dicName
-}

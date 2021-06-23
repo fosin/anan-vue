@@ -67,7 +67,7 @@
             <span v-if="scope.row.state===1">待阅卷</span>
             <span v-else-if="scope.row.state===0">待交卷</span>
             <span v-else>
-              <span :style="{ color: rankColor[scope.row.rank] }">{{ getDicDetailValue(rankDics, scope.row.rank) }}</span>
+              <span :style="{ color: rankColor[scope.row.rank] }">{{ getAnanDicValue(rankDics, scope.row.rank) }}</span>
             </span>
           </template>
         </el-table-column>
@@ -77,7 +77,7 @@
           width="90px"
         >
           <template slot-scope="scope">
-            {{ getDicDetailValue(paperStates, scope.row.state) }}
+            {{ getAnanDicValue(paperStates, scope.row.state) }}
           </template>
         </el-table-column>
         <el-table-column

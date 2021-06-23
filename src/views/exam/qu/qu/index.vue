@@ -44,7 +44,7 @@
           :sort-orders="['ascending','descending']"
         >
           <template slot-scope="scope">
-            {{ getDicDetailValue(quTypes, scope.row.quType) }}
+            {{ getAnanDicValue(quTypes, scope.row.quType) }}
           </template>
         </el-table-column>
         <el-table-column
@@ -56,7 +56,7 @@
           width="80px"
         >
           <template slot-scope="scope">
-            {{ getDicDetailValue(levels, scope.row.level) }}
+            {{ getAnanDicValue(levels, scope.row.level) }}
           </template>
         </el-table-column>
         <el-table-column
@@ -89,11 +89,16 @@
           :sort-orders="['ascending','descending']"
         >
           <template slot-scope="scope">
-            {{ getDicDetailValue(states, scope.row.state) }}
+            {{ getAnanDicValue(states, scope.row.state) }}
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('table.updateBy.label')" align="center" sortable prop="updateBy" width="100px">
+          <template slot-scope="scope">
+            <span>{{ getDicValue(organizTopUsers,"id",scope.row.updateBy,"username") }}</span>
           </template>
         </el-table-column>
         <el-table-column
-          label="更新时间"
+          :label="$t('table.updateTime.label')"
           align="center"
           prop="update_time"
           width="160px"
@@ -141,6 +146,7 @@ import { batchAction } from '@/views/exam/qu/repo/repo'
 import RepoTreeSelect from '@/views/exam/components/RepoTreeSelect'
 import { exportExcel, importExcel, importTemplate } from '@/views/exam/qu/qu/qu'
 import { mapGetters } from 'vuex'
+import { listUserByTopId } from '@/views/platform/user/user'
 
 export default {
   name: 'ExamManagementQu',
@@ -152,6 +158,7 @@ export default {
       importVisible: false,
       dialogRepo: '',
       dialogQuIds: [],
+      organizTopUsers: [],
       dialogFlag: false,
       listQuery: {
         current: 1,
@@ -222,6 +229,16 @@ export default {
     })
     this.loadDictionaryById(11).then(res => {
       this.states = res.details
+    })
+    listUserByTopId().then(response => {
+      this.organizTopUsers = response.data
+    }).catch(reason => {
+      this.$notify({
+        title: '获取所有用户失败',
+        message: reason.message,
+        type: 'error',
+        duration: 5000
+      })
     })
   },
   methods: {

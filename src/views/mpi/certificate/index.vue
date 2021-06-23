@@ -31,7 +31,7 @@
     >
       <el-table-column align="center" label="证件类型" sortable prop="certificateType">
         <template slot-scope="scope">
-          <span>{{ getDicDetailValue(certificateTypeOptions, scope.row.certificateType) }}</span>
+          <span>{{ getAnanDicValue(certificateTypeOptions, scope.row.certificateType) }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="证件号" sortable prop="certificateNo" />

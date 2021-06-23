@@ -39,13 +39,23 @@
       <el-table-column label="唯一标识" align="center" sortable prop="id" />
       <el-table-column label="服务标识" align="center" sortable prop="code" />
       <el-table-column label="服务名称" align="center" sortable prop="name" />
-      <el-table-column label="创建时间" align="center" sortable prop="createTime" />
-      <el-table-column label="更新时间" align="center" sortable prop="updateTime" />
       <el-table-column label="状态码" align="center" class-name="status-col" sortable prop="status">
         <template slot-scope="scope">
           <el-tag>{{ scope.row.status | statusFilter }}</el-tag>
         </template>
       </el-table-column>
+      <el-table-column
+        :label="$t('table.updateBy.label')"
+        align="center"
+        sortable
+        prop="updateBy"
+        width="100px"
+      >
+        <template slot-scope="scope">
+          <span>{{ getDicValue(organizTopUsers,"id",scope.row.updateBy,"username") }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.updateTime.label')" width="160px" align="center" sortable prop="updateTime" />
       <el-table-column :label="$t('table.actions')" align="center">
         <template slot-scope="scope">
           <el-button-group>
@@ -134,7 +144,8 @@
 import { getService, postService, putService, deleteService, listServicePage } from './service'
 import { loadServiceNames } from '@/api/application'
 import waves from '@/directive/waves/index.js'
-import { formatDate } from '@/utils/date' // 水波纹指令
+import { formatDate } from '@/utils/date'
+import { listUserByTopId } from '@/views/platform/user/user' // 水波纹指令
 export default {
   name: 'AnanService',
   directives: {
@@ -187,6 +198,7 @@ export default {
       rules: {},
       statusOptions: [0, 1],
       onlineServices: [],
+      organizTopUsers: [],
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
@@ -210,6 +222,16 @@ export default {
     }).catch(reason => {
       this.$notify({
         title: '获取在线服务列表失败',
+        message: reason.message,
+        type: 'error',
+        duration: 5000
+      })
+    })
+    listUserByTopId().then(response => {
+      this.organizTopUsers = response.data
+    }).catch(reason => {
+      this.$notify({
+        title: '获取所有用户失败',
         message: reason.message,
         type: 'error',
         duration: 5000

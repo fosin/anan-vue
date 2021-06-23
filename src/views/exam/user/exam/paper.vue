@@ -9,7 +9,7 @@
           考试用时：{{ item.userTime }}分钟
         </el-col>
         <el-col :span="6">
-          考试状态：{{ getDicDetailValue(paperStates, item.state) }}
+          考试状态：{{ getAnanDicValue(paperStates, item.state) }}
         </el-col>
         <el-col :span="6">
           考试时间：{{ item.createTime }}
@@ -18,7 +18,7 @@
           得分/正确率：{{ item.userScore }} / {{ item.accuracy }}%
         </el-col>
         <el-col v-if="item.state ===2 || item.state ===3" :span="6">
-          考试评级：<span :style="{ color: rankColor[item.rank] }">{{ getDicDetailValue(rankDics, item.rank) }}</span>
+          考试评级：<span :style="{ color: rankColor[item.rank] }">{{ getAnanDicValue(rankDics, item.rank) }}</span>
         </el-col>
         <el-col v-if="item.showPaper" :span="6">
           <el-button type="primary" size="mini" icon="el-icon-user" @click="handleExamResult(item.id)">考试详情</el-button>

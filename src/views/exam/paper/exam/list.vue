@@ -29,7 +29,7 @@
         align="center"
       >
         <template slot-scope="scope">
-          {{ getDicDetailValue(openTypes, scope.row.openType) }}
+          {{ getAnanDicValue(openTypes, scope.row.openType) }}
         </template>
       </el-table-column>
       <el-table-column

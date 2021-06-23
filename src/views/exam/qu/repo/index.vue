@@ -16,28 +16,6 @@
         >
           {{ $t('table.add') }}
         </el-button>
-        <el-button
-          v-waves
-          round
-          type="success"
-          class="filter-item"
-          style="margin-left: 5px;"
-          icon="el-icon-edit"
-          @click="handleEdit()"
-        >
-          {{ $t('table.edit') }}
-        </el-button>
-        <el-button
-          v-waves
-          round
-          type="danger"
-          class="filter-item"
-          style="margin-left: 5px;"
-          icon="el-icon-delete"
-          @click="handleDelete()"
-        >
-          {{ $t('table.delete') }}
-        </el-button>
       </el-button-group>
     </div>
     <el-table
@@ -51,11 +29,11 @@
       :load="loadRepoChild"
       :data="repoData"
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
-      @row-click="rowClick"
     >
       <el-table-column
         label="题库名称"
         prop="title"
+        width="400px"
       />
       <el-table-column
         label="题库编号"
@@ -63,36 +41,67 @@
         align="center"
         width="180px"
       />
+      <el-table-column label="总题数" align="center" prop="" width="90px">
+        <template slot-scope="scope">
+          <span>{{ scope.row.radioCount + scope.row.multiCount + scope.row.judgeCount + scope.row.saqCount }}</span>
+        </template>
+      </el-table-column>
       <el-table-column
-        label="单选题数量"
+        label="单选数量"
         prop="radioCount"
         align="center"
-        width="120px"
+        width="100px"
       />
       <el-table-column
-        label="多选题数量"
+        label="多选数量"
         prop="multiCount"
         align="center"
-        width="120px"
+        width="100px"
       />
       <el-table-column
-        label="判断题数量"
+        label="判断数量"
         prop="judgeCount"
         align="center"
-        width="120px"
+        width="100px"
       />
       <el-table-column
-        label="简答题数量"
+        label="简答数量"
         prop="saqCount"
         align="center"
-        width="120px"
+        width="100px"
       />
-      <el-table-column
-        label="创建时间"
-        align="center"
-        width="180px"
-        prop="createTime"
-      />
+      <el-table-column :label="$t('table.updateBy.label')" align="center" prop="updateBy" width="100px">
+        <template slot-scope="scope">
+          <span>{{ getDicValue(organizTopUsers,"id",scope.row.updateBy,"username") }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.updateTime.label')" width="160px" align="center" sortable prop="updateTime" />
+      <el-table-column :label="$t('table.actions')" align="center" width="120" fixed="right">
+        <template slot-scope="scope">
+          <el-tooltip class="item" effect="dark" :content="$t('table.edit')" placement="top">
+            <el-button
+              v-waves
+              round
+              size="mini"
+              class="filter-item"
+              type="success"
+              icon="el-icon-edit"
+              @click="handleEdit(scope.row)"
+            />
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" :content="$t('table.delete')" placement="top">
+            <el-button
+              v-waves
+              round
+              size="mini"
+              class="filter-item"
+              icon="el-icon-delete"
+              type="danger"
+              @click="handleDelete(scope.row)"
+            />
+          </el-tooltip>
+        </template>
+      </el-table-column>
     </el-table>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px" @closed="onDialogClosed">
       <exam-management-repo-add v-if="dialogFormVisible" :repo-id="repoId" @submit="handleFormSubmit" @cancel="handleFormCancel" />
@@ -103,6 +112,7 @@
 <script>
 import { deleteRepos, fetchRepoChild } from '@/views/exam/qu/repo/repo'
 import ExamManagementRepoAdd from '@/views/exam/qu/repo/form'
+import { listUserByTopId } from '@/views/platform/user/user'
 
 export default {
   name: 'ExamManagementRepo',
@@ -114,6 +124,7 @@ export default {
       dataChanged: false,
       dialogFormVisible: false,
       repoForm: {},
+      organizTopUsers: [],
       repoId: '',
       textMap: {
         update: '编辑',
@@ -128,6 +139,16 @@ export default {
     }
   },
   created() {
+    listUserByTopId().then(response => {
+      this.organizTopUsers = response.data
+    }).catch(reason => {
+      this.$notify({
+        title: '获取所有用户失败',
+        message: reason.message,
+        type: 'error',
+        duration: 5000
+      })
+    })
     this.handleSearch()
   },
   methods: {
@@ -176,7 +197,8 @@ export default {
         this.handleSearch()
       }
     },
-    handleEdit() {
+    handleEdit(row) {
+      this.repoForm = row
       if (!this.repoForm || !this.repoForm.id) {
         this.$message({
           message: '操作前请先选择一条数据!'
@@ -186,7 +208,8 @@ export default {
       this.repoId = this.repoForm.id
       this.dialogStatus = 'edit'
     },
-    handleDelete() {
+    handleDelete(row) {
+      this.repoForm = row
       if (!this.repoForm || !this.repoForm.id || !this.repoForm.title) {
         this.$message({
           message: '操作前请先选择一条数据!'
@@ -228,9 +251,6 @@ export default {
         })
       }).catch(() => {
       })
-    },
-    rowClick(row, event, column) {
-      this.repoForm = row
     },
     loadRepoChild(row, treeNode, resolve) {
       let repoData = []

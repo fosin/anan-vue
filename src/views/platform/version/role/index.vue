@@ -49,29 +49,6 @@
         show-overflow-tooltip
         sortable
       />
-
-      <el-table-column
-        :label="$t('anan_version_role.createTime.label')"
-        align="center"
-        sortable
-        prop="createTime"
-        width="160"
-      >
-        <template slot-scope="scope">
-          <span>{{ scope.row.createTime | dateFormatFilter('yyyy-MM-dd HH:mm:ss') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        :label="$t('anan_version_role.updateTime.label')"
-        align="center"
-        sortable
-        prop="updateTime"
-        width="160"
-      >
-        <template slot-scope="scope">
-          <span>{{ scope.row.updateTime | dateFormatFilter('yyyy-MM-dd HH:mm:ss') }}</span>
-        </template>
-      </el-table-column>
       <el-table-column
         :label="$t('anan_version_role.status.label')"
         align="center"
@@ -84,9 +61,28 @@
           <el-tag>{{ scope.row.status | statusFilter }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.actions')" align="center" width="280">
+      <el-table-column
+        :label="$t('table.updateBy.label')"
+        align="center"
+        sortable
+        prop="updateBy"
+        width="100px"
+      >
         <template slot-scope="scope">
-          <el-button-group>
+          <span>{{ getDicValue(organizTopUsers,"id",scope.row.updateBy,"username") }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.updateTime.label')" width="160px" align="center" sortable prop="updateTime" />
+      <el-table-column
+        :label="$t('table.createTime.label')"
+        align="center"
+        sortable
+        prop="createTime"
+        width="160"
+      />
+      <el-table-column :label="$t('table.actions')" align="center" width="200px" fixed="right">
+        <template slot-scope="scope">
+          <el-tooltip class="item" effect="dark" :content="$t('table.edit')" placement="top">
             <el-button
               v-waves
               v-permission="'122'"
@@ -96,9 +92,9 @@
               class="filter-item"
               icon="el-icon-edit"
               @click="handleEdit(scope.row)"
-            >
-              {{ $t('table.edit') }}
-            </el-button>
+            />
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" :content="$t('table.permission')" placement="top">
             <el-button
               round
               size="mini"
@@ -106,9 +102,9 @@
               style="margin-left: 5px;"
               icon="el-icon-menu"
               @click="handleVersionRolePermission(scope.row)"
-            >
-              {{ $t('table.permission') }}
-            </el-button>
+            />
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" :content="$t('table.delete')" placement="top">
             <el-button
               v-waves
               v-permission="'123'"
@@ -119,10 +115,8 @@
               style="margin-left: 5px;"
               icon="el-icon-delete"
               @click="handleDelete(scope.row)"
-            >
-              {{ $t('table.delete') }}
-            </el-button>
-          </el-button-group>
+            />
+          </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
@@ -217,6 +211,7 @@ import { listVersion, listVersionChildPermissions } from '../version'
 
 import { mapGetters } from 'vuex'
 import grantPermission from '../../permission/grantPermission'
+import { listUserByTopId } from '@/views/platform/user/user'
 
 export default {
   name: 'DevelopmentVersionRole',
@@ -314,6 +309,7 @@ export default {
         ]
       },
       statusOptions: [0, 1],
+      organizTopUsers: [],
       rolesOptions: undefined,
       dialogFormVisible: false,
       dialogStatus: '',
@@ -343,6 +339,16 @@ export default {
       for (let i = 0; i < temp.length; i++) {
         this.pageSizes[i] = parseInt(temp[i])
       }
+    })
+    listUserByTopId().then(response => {
+      this.organizTopUsers = response.data
+    }).catch(reason => {
+      this.$notify({
+        title: '获取所有用户失败',
+        message: reason.message,
+        type: 'error',
+        duration: 5000
+      })
     })
     this.getList()
   },

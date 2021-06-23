@@ -113,7 +113,7 @@ export default {
       fetchDetail(id).then(response => {
         // 试题信息
         this.quData = response.data
-        this.quData.quContent = '【' + this.getDicDetailValue(this.quTypes, this.quData.quType) + '】' + this.quData.content
+        this.quData.quContent = '【' + this.getAnanDicValue(this.quTypes, this.quData.quType) + '】' + this.quData.content
         // 保存正确答案
         this.quData.answerList.forEach((an, index) => {
           an.abc = this.tags[index]

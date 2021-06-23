@@ -31,7 +31,7 @@
     >
       <el-table-column align="center" label="联系类型" sortable prop="contactType">
         <template slot-scope="scope">
-          <span>{{ getDicDetailValue(contactTypeOptions, scope.row.contactType) }}</span>
+          <span>{{ getAnanDicValue(contactTypeOptions, scope.row.contactType) }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="联系号码" sortable prop="contactPhone" />

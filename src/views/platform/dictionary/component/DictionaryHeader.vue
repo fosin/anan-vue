@@ -46,15 +46,27 @@
       @sort-change="sortChange"
       @row-click="rowClick"
     >
-      <el-table-column :label="$t('anan_dictionary.id.label')" align="center" sortable prop="id" />
-      <el-table-column :label="$t('anan_dictionary.name.label')" align="center" sortable prop="name" />
-      <el-table-column :label="$t('anan_dictionary.type.label')" align="center" sortable prop="type">
+      <el-table-column :label="$t('anan_dictionary.id.label')" align="center" sortable prop="id" width="70px" />
+      <el-table-column :label="$t('anan_dictionary.name.label')" align="center" sortable prop="name" width="120px" />
+      <el-table-column :label="$t('anan_dictionary.type.label')" align="center" sortable prop="type" width="150px">
         <template slot-scope="scope">
           <span>{{ getTypeName(scope.row.type) }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('anan_dictionary.scope.label')" align="center" sortable prop="scope" />
-      <el-table-column :label="$t('table.actions')" align="center" width="120px">
+      <el-table-column :label="$t('anan_dictionary.scope.label')" align="center" sortable prop="scope" width="120px" />
+      <el-table-column
+        :label="$t('table.updateBy.label')"
+        align="center"
+        sortable
+        prop="updateBy"
+        width="100px"
+      >
+        <template slot-scope="scope">
+          <span>{{ getDicValue(organizTopUsers,"id",scope.row.updateBy,"username") }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.updateTime.label')" width="160px" align="center" sortable prop="updateTime" />
+      <el-table-column :label="$t('table.actions')" align="center" width="120px" fixed="right">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" :content="$t('table.edit')" placement="top">
             <el-button
@@ -155,6 +167,7 @@ import {
   deleteDictionary,
   listDictionaryPage
 } from '../dictionary'
+import { listUserByTopId } from '@/views/platform/user/user'
 
 export default {
   name: 'DictionaryHeader',
@@ -201,6 +214,7 @@ export default {
         ]
       },
       typeOptions: [],
+      organizTopUsers: [],
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
@@ -222,6 +236,16 @@ export default {
       for (let i = 0; i < temp.length; i++) {
         this.pageSizes[i] = parseInt(temp[i])
       }
+    })
+    listUserByTopId().then(response => {
+      this.organizTopUsers = response.data
+    }).catch(reason => {
+      this.$notify({
+        title: '获取所有用户失败',
+        message: reason.message,
+        type: 'error',
+        duration: 5000
+      })
     })
     this.getList()
   },

@@ -37,29 +37,40 @@
       @sort-change="sortChange"
       @row-click="rowClick"
     >
-      <el-table-column :label="$t('anan_version.name.label')" align="center" sortable prop="name" />
-      <el-table-column :label="$t('anan_version.type.label')" align="center" sortable prop="type">
+      <el-table-column :label="$t('anan_version.name.label')" align="center" sortable prop="name" width="180px" />
+      <el-table-column :label="$t('anan_version.type.label')" align="center" sortable prop="type" width="120px">
         <template slot-scope="scope">
-          <el-tag>{{ getDicDetailValue(typeOptions,scope.row.type) }}</el-tag>
+          <el-tag>{{ getAnanDicValue(typeOptions,scope.row.type) }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('anan_version.price.label')" align="center" sortable prop="price" />
-      <el-table-column :label="$t('anan_version.validity.label')" align="center" sortable prop="validity" />
-      <el-table-column :label="$t('anan_version.tryoutDays.label')" align="center" sortable prop="tryoutDays" />
-      <el-table-column :label="$t('anan_version.protectDays.label')" align="center" sortable prop="protectDays" />
+      <el-table-column :label="$t('anan_version.price.label')" align="center" sortable prop="price" width="120px" />
+      <el-table-column :label="$t('anan_version.validity.label')" align="center" sortable prop="validity" width="100px" />
+      <el-table-column :label="$t('anan_version.tryoutDays.label')" align="center" sortable prop="tryoutDays" width="110px" />
+      <el-table-column :label="$t('anan_version.protectDays.label')" align="center" sortable prop="protectDays" width="100px" />
       <el-table-column :label="$t('anan_version.maxOrganizs.label')" align="center" sortable prop="maxOrganizs" width="140px" />
       <el-table-column :label="$t('anan_version.maxUsers.label')" align="center" sortable prop="maxUsers" width="120px" />
       <!--<el-table-column align="center" :label="$t('anan_version.beginTime.label')" sortable prop="beginTime" width="160"></el-table-column>
       <el-table-column align="center" :label="$t('anan_version.endTime.label')" sortable prop="endTime" width="160"></el-table-column>-->
-      <el-table-column :label="$t('anan_version.status.label')" align="center" sortable prop="status">
+      <el-table-column :label="$t('anan_version.status.label')" align="center" sortable prop="status" width="110px">
         <template slot-scope="scope">
-          <el-tag>{{ getDicDetailValue(statusOptions,scope.row.status) }}</el-tag>
+          <el-tag>{{ getAnanDicValue(statusOptions,scope.row.status) }}</el-tag>
         </template>
       </el-table-column>
-
-      <el-table-column :label="$t('table.actions')" align="center" width="280">
+      <el-table-column
+        :label="$t('table.updateBy.label')"
+        align="center"
+        sortable
+        prop="updateBy"
+        width="100px"
+      >
         <template slot-scope="scope">
-          <el-button-group>
+          <span>{{ getDicValue(organizTopUsers,"id",scope.row.updateBy,"username") }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.updateTime.label')" width="160px" align="center" sortable prop="updateTime" />
+      <el-table-column :label="$t('table.actions')" align="center" width="200" fixed="right">
+        <template slot-scope="scope">
+          <el-tooltip class="item" effect="dark" :content="$t('table.edit')" placement="top">
             <el-button
               v-waves
               v-permission="'113'"
@@ -69,9 +80,9 @@
               class="filter-item"
               icon="el-icon-edit"
               @click="handleEdit(scope.row)"
-            >
-              {{ $t('table.edit') }}
-            </el-button>
+            />
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" :content="$t('table.permission')" placement="top">
             <el-button
               round
               size="mini"
@@ -79,9 +90,9 @@
               icon="el-icon-menu"
               style="margin-left: 5px;"
               @click="handlePermission(scope.row)"
-            >
-              {{ $t('table.permission') }}
-            </el-button>
+            />
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" :content="$t('table.delete')" placement="top">
             <el-button
               v-waves
               v-permission="'114'"
@@ -92,10 +103,9 @@
               style="margin-left: 5px;"
               icon="el-icon-delete"
               @click="handleDelete(scope.row)"
-            >
-              {{ $t('table.delete') }}
-            </el-button>
-          </el-button-group></template>
+            />
+          </el-tooltip>
+        </template>
       </el-table-column>
     </el-table>
 
@@ -219,6 +229,7 @@ import { listChildPermissions } from '../permission/permission'
 
 import { formatDate } from '@/utils/date'
 import grantPermission from '../permission/grantPermission'
+import { listUserByTopId } from '@/views/platform/user/user'
 export default {
   name: 'DevelopmentVersion',
   components: {
@@ -260,6 +271,7 @@ export default {
       pageSizes: [],
       typeOptions: [],
       statusOptions: [],
+      organizTopUsers: [],
       form: {},
       rules: {
         name: [
@@ -390,6 +402,16 @@ export default {
       for (let i = 0; i < temp.length; i++) {
         this.pageSizes[i] = parseInt(temp[i])
       }
+    })
+    listUserByTopId().then(response => {
+      this.organizTopUsers = response.data
+    }).catch(reason => {
+      this.$notify({
+        title: '获取所有用户失败',
+        message: reason.message,
+        type: 'error',
+        duration: 5000
+      })
     })
     this.getList()
   },
