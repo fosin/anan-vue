@@ -10,7 +10,7 @@
       <template slot="filter-content" />
       <template slot="data-columns">
         <el-table-column :label="$t('anan_user.usercode.label')" align="center" width="110px" sortable prop="usercode" />
-        <el-table-column :label="$t('anan_user.username.label')" align="center" sortable prop="username" width="140">
+        <el-table-column :label="$t('anan_user.username.label')" align="center" sortable prop="username" width="120">
           <template slot-scope="scope">
             <span>
               <svg-icon v-if="scope.row.avatar" :icon-class="scope.row.avatar" style="width: 20px; height: 20px; border-radius: 50%; margin-left: 20px; background: #fff;" />
@@ -28,16 +28,17 @@
             <span>{{ scope.row.birthday | dateFormatFilter('yyyy-MM-dd') }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('anan_user.phone.label')" align="center" sortable prop="phone" width="130" />
-        <el-table-column :label="$t('anan_user.email.label')" align="center" sortable prop="email" width="150" />
         <el-table-column
           :label="$t('anan_user.organizId.label')"
           :formatter="getOrganizName"
           prop="organizId"
           align="center"
+          width="200px"
           show-overflow-tooltip
           sortable
         />
+        <el-table-column :label="$t('anan_user.phone.label')" align="center" sortable prop="phone" width="130" />
+        <el-table-column :label="$t('anan_user.email.label')" align="center" sortable prop="email" width="150" />
         <el-table-column :label="$t('anan_user.status.label')" align="center" class-name="status-col" width="80" sortable prop="status">
           <template slot-scope="scope">
             <el-tag>{{ scope.row.status | statusFilter }}</el-tag>
@@ -55,7 +56,7 @@
           </template>
         </el-table-column>
         <el-table-column :label="$t('table.updateTime.label')" width="160px" align="center" sortable prop="updateTime" />
-        <el-table-column :label="$t('table.actions')" align="center" width="240">
+        <el-table-column :label="$t('table.actions')" align="center" width="240" fixed="right">
           <template slot-scope="scope">
             <el-tooltip class="item" effect="dark" :content="$t('table.edit')" placement="top">
               <el-button

@@ -42,6 +42,7 @@
       <el-table-column
         label="考试名称"
         prop="title"
+        sortable="true"
         width="250px"
       />
       <el-table-column
@@ -192,7 +193,11 @@
           <span>{{ getDicValue(organizTopUsers,"id",scope.row.updateBy,"username") }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.updateTime.label')" width="160px" align="center" sortable prop="updateTime" />
+      <el-table-column :label="$t('table.updateTime.label')" width="160px" align="center" prop="update_time" sortable="true">
+        <template slot-scope="scope">
+          {{ scope.row.updateTime }}
+        </template>
+      </el-table-column>
       <el-table-column
         fixed="right"
         label="操作"
@@ -225,6 +230,10 @@ export default {
         size: 10,
         params: {
           title: ''
+        },
+        sort: {
+          sortOrder: 'ASC',
+          sortName: 'title'
         },
         search: {
           column: 'title',

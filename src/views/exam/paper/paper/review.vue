@@ -134,36 +134,72 @@
       </el-col>
       <el-col :span="5">
         <el-card style="height: 84vh;margin-top: 10px">
+          <div align="center">
+            <el-button
+              type="primary"
+              icon="el-icon-check"
+              :loading="loading"
+              style="margin-bottom: 5px"
+              @click="reviewResult()"
+            >
+              {{ $t('table.commit') }}
+            </el-button>
+          </div>
+          <br>
           {{ paperData.title }}
           <el-form :model="paperData" label-position="left" label-width="55px" style="margin-top: 10px">
-            <el-form-item label="姓名" prop="">
+            <el-form-item label="姓名">
               {{ userInfo.username }}
             </el-form-item>
-            <el-form-item label="得分" prop="">
+            <el-form-item label="得分">
               {{ paperData.userScore }}={{ paperData.objScore }}(客观)+{{ paperData.subjScore }}(主观)
             </el-form-item>
-            <el-form-item label="总分" prop="">
+            <el-form-item label="总分">
               {{ paperData.totalScore }}
             </el-form-item>
-            <el-form-item label="合格分" prop="">
+            <el-form-item label="合格分">
               {{ paperData.qualifyScore }}
             </el-form-item>
-            <el-form-item label="时间" prop="">
+            <el-form-item label="时间">
               {{ paperData.createTime }}
             </el-form-item>
-            <el-form-item label="用时" prop="">
-              {{ paperData.userTime }}分钟
-            </el-form-item>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="用时">
+                  {{ paperData.userTime }}分钟
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="切屏次数" label-width="80px">
+                  {{ paperData.issCount }}次
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="查看对错" label-width="80px">
+                  <el-checkbox v-model="paperData.showResult" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="查看答案" label-width="80px">
+                  <el-checkbox v-model="paperData.showAnswer" />
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="查看试卷" label-width="80px">
+                  <el-checkbox v-model="paperData.showPaper" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="复制试卷" label-width="80px">
+                  <el-checkbox v-model="paperData.paperCopy" />
+                </el-form-item>
+              </el-col>
+            </el-row>
           </el-form>
-          <el-button
-            type="primary"
-            icon="el-icon-check"
-            :loading="loading"
-            style="margin-bottom: 10px"
-            @click="reviewResult()"
-          >
-            提交阅卷
-          </el-button>
         </el-card>
       </el-col>
     </el-row>
@@ -249,7 +285,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.loading = true
-        reviewPaper(this.paperData).then(response => {
+        reviewPaper(this.paperData).then(() => {
           this.loading = false
           this.$message({
             message: '提交阅卷完成！',
@@ -368,6 +404,9 @@ export default {
   .card-line span {
     cursor: pointer;
     margin: 2px;
+  }
+  .el-form-item{
+    margin-bottom: 10px;
   }
 </style>
 
