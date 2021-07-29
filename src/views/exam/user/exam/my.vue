@@ -10,24 +10,35 @@
         <el-table-column
           label="考试名称"
           prop="title"
+          sortable="true"
           align="center"
         />
         <el-table-column
           label="考试次数"
-          prop="tryCount"
+          prop="try_count"
           align="center"
           width="100px"
-        />
+        >
+          <template slot-scope="scope">
+            {{ scope.row.tryCount }}
+          </template>
+        </el-table-column>
         <el-table-column
           label="最高分"
-          prop="maxScore"
+          prop="max_score"
           align="center"
           width="100px"
-        />
+        >
+          <template slot-scope="scope">
+            {{ scope.row.maxScore }}
+          </template>
+        </el-table-column>
         <el-table-column
           label="最高评级"
           align="center"
-          width="100px"
+          prop="rank"
+          sortable="true"
+          width="120px"
         >
           <template slot-scope="scope">
             <span :style="{ color: rankColor[scope.row.rank] }">{{ getAnanDicValue(rankDics, scope.row.rank) }}</span>
@@ -35,10 +46,15 @@
         </el-table-column>
         <el-table-column
           label="最后考试时间"
-          prop="updateTime"
+          prop="update_time"
           align="center"
+          sortable="true"
           width="180px"
-        />
+        >
+          <template slot-scope="scope">
+            {{ scope.row.updateTime }}
+          </template>
+        </el-table-column>
         <el-table-column
           label="操作"
           align="center"
@@ -98,6 +114,10 @@ export default {
         size: 10,
         params: {
           title: ''
+        },
+        sort: {
+          sortOrder: 'ASC',
+          sortName: 'title'
         },
         search: {
           column: 'title',

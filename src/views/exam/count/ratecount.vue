@@ -28,23 +28,24 @@
           label="考试名称"
           prop="title"
           align="center"
-          width="250px"
         />
         <el-table-column
           label="考试人数"
           align="center"
           prop="userCount"
-          width="170px"
+          width="140px"
         />
         <el-table-column
           label="通过人数"
           prop="userPassCount"
           align="center"
+          width="140px"
         />
         <el-table-column
           label="人数通过率"
           prop="userPassRate"
           align="center"
+          width="140px"
         >
           <template slot-scope="scope">
             <el-tag
@@ -58,16 +59,19 @@
           label="总人次"
           prop="paperCount"
           align="center"
+          width="140px"
         />
         <el-table-column
           label="通过人次"
           prop="paperPassCount"
           align="center"
+          width="140px"
         />
         <el-table-column
           label="人次通过率"
           prop="paperPassRate"
           align="center"
+          width="140px"
         >
           <template slot-scope="scope">
             <el-tag

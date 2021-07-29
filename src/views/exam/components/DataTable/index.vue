@@ -61,6 +61,7 @@
       fit
       style="width: 100%"
       highlight-current-row
+      :default-sort="defaultSort"
       @sort-change="sortChange"
       @selection-change="handleSelection"
     >
@@ -139,6 +140,7 @@ export default {
       dataList: {
         total: 0
       },
+      defaultSort: {},
       // 数据加载标识
       listLoading: false,
       // 选定和批量操作
@@ -153,6 +155,12 @@ export default {
     }
   },
   created() {
+    if (this.listQuery.sort) {
+      this.defaultSort = {
+        prop: this.listQuery.sort.sortName,
+        order: this.listQuery.sort.sortOrder === 'ASC' ? 'ascending' : 'descending'
+      }
+    }
     this.loadOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数').then(res => {
       this.listQuery.size = parseInt(res)
     })

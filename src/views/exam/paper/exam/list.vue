@@ -16,16 +16,18 @@
       </el-select>
     </template>
     <template slot="data-columns">
-
       <el-table-column
         label="考试名称"
         prop="title"
         align="center"
         show-overflow-tooltip
+        sortable="true"
         width="250px"
       />
       <el-table-column
         label="考试类型"
+        prop="open_type"
+        sortable="true"
         align="center"
       >
         <template slot-scope="scope">
@@ -35,6 +37,8 @@
       <el-table-column
         label="考试时间"
         width="170px"
+        prop="start_time"
+        sortable="true"
         align="center"
       >
         <template slot-scope="scope">
@@ -46,6 +50,8 @@
       </el-table-column>
       <el-table-column
         label="考试时长"
+        prop="total_time"
+        sortable="true"
         align="center"
       >
         <template slot-scope="scope">
@@ -54,17 +60,28 @@
       </el-table-column>
       <el-table-column
         label="考试总分"
-        prop="totalScore"
+        prop="total_score"
+        sortable="true"
         align="center"
-      />
+      >
+        <template slot-scope="scope">
+          {{ scope.row.totalScore }}
+        </template>
+      </el-table-column>
       <el-table-column
         label="合格分"
-        prop="qualifyScore"
+        prop="qualify_score"
+        sortable="true"
         align="center"
-      />
+      >
+        <template slot-scope="scope">
+          {{ scope.row.qualifyScore }}
+        </template>
+      </el-table-column>
       <el-table-column
         label="考试次数"
-        prop="allowTimes"
+        prop="allow_times"
+        sortable="true"
         align="center"
       >
         <template slot-scope="scope">
@@ -102,6 +119,10 @@ export default {
         current: 1,
         size: 10,
         params: {
+        },
+        sort: {
+          sortOrder: 'ASC',
+          sortName: 'title'
         },
         search: {
           column: 'title',

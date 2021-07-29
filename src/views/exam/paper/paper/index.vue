@@ -16,22 +16,44 @@
         </el-radio-group>
       </template>
       <template slot="data-columns">
-        <el-table-column label="考试名称" align="center" prop="title" />
+        <el-table-column
+          label="考试名称"
+          align="center"
+          prop="title"
+          sortable="custom"
+          :sort-orders="['ascending','descending']"
+        />
         <el-table-column
           label="部门"
           align="center"
-          prop="departName"
-        />
+          width="180px"
+          prop="depart_id"
+          sortable="custom"
+          :sort-orders="['ascending','descending']"
+        >
+          <template slot-scope="scope">
+            {{ scope.row.departName }}
+          </template>
+        </el-table-column>
         <el-table-column
           label="人员"
           align="center"
-          prop="realName"
-          width="100px"
-        />
+          width="110px"
+          prop="user_id"
+          sortable="custom"
+          :sort-orders="['ascending','descending']"
+        >
+          <template slot-scope="scope">
+            {{ scope.row.realName }}
+          </template>
+        </el-table-column>
         <el-table-column
           label="用时/时长"
           align="center"
-          width="100px"
+          width="120px"
+          prop="user_time"
+          sortable="custom"
+          :sort-orders="['ascending','descending']"
         >
           <template slot-scope="scope">
             {{ scope.row.userTime }} / {{ scope.row.totalTime }}分钟
@@ -40,7 +62,10 @@
         <el-table-column
           label="得分/总分"
           align="center"
-          width="100px"
+          width="120px"
+          prop="user_score"
+          sortable="custom"
+          :sort-orders="['ascending','descending']"
         >
           <template slot-scope="scope">
             {{ scope.row.userScore }} / {{ scope.row.totalScore }}分
@@ -49,8 +74,8 @@
         <el-table-column
           label="考试时间"
           align="center"
-          prop="create_time"
           width="160px"
+          prop="create_time"
           sortable="custom"
           :sort-orders="['ascending','descending']"
         >
@@ -59,9 +84,12 @@
           </template>
         </el-table-column>
         <el-table-column
-          label="考试评级"
+          label="评级"
           align="center"
           width="90px"
+          prop="rank"
+          sortable="custom"
+          :sort-orders="['ascending','descending']"
         >
           <template slot-scope="scope">
             <span v-if="scope.row.state===1">待阅卷</span>
@@ -72,9 +100,12 @@
           </template>
         </el-table-column>
         <el-table-column
-          label="考试状态"
+          label="状态"
           align="center"
           width="90px"
+          prop="state"
+          sortable="custom"
+          :sort-orders="['ascending','descending']"
         >
           <template slot-scope="scope">
             {{ getAnanDicValue(paperStates, scope.row.state) }}

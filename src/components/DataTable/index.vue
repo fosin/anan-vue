@@ -59,6 +59,7 @@
       style="width: 100%"
       highlight-current-row
       :row-class-name="tableRowClassName"
+      :default-sort="defaultSort"
       @sort-change="sortChange"
       @selection-change="handleSelection"
     >
@@ -175,6 +176,7 @@ export default {
       dataList: {
         total: 0
       },
+      defaultSort: {},
       // 数据加载标识
       listLoading: false,
       // 选定和批量操作
@@ -189,6 +191,16 @@ export default {
     }
   },
   created() {
+    const sortRules = this.listQuery.pageModule.params.sortRules
+    if (sortRules && sortRules.length > 0) {
+      const sortRule = sortRules[0]
+      if (sortRule.sortName) {
+        this.defaultSort = {
+          prop: sortRule.sortName,
+          order: sortRule.sortOrder === 'ASC' ? 'ascending' : 'descending'
+        }
+      }
+    }
     this.loadOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数').then(res => {
       this.listQuery.pageModule.pageSize = parseInt(res)
     })
