@@ -603,7 +603,7 @@ export default {
       this.sexOptions = res.details
     })
     this.loadOrganizParameterValue('UserDefaultPassword', '123456', '用户的默认密码').then(res => {
-      this.defaultPass = res
+      this.defaultPass = res + ''
     })
     listUserByTopId().then(response => {
       this.organizTopUsers = response.data
