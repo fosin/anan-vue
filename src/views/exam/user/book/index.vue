@@ -20,6 +20,9 @@
     <template slot="data-columns">
       <el-table-column
         label="试题内容"
+        prop="title"
+        sortable="custom"
+        :sort-orders="['ascending','descending']"
         show-overflow-tooltip
       >
         <template slot-scope="scope">
@@ -30,16 +33,28 @@
       </el-table-column>
       <el-table-column
         label="错误次数"
-        prop="wrongCount"
+        prop="wrong_count"
+        sortable="custom"
+        :sort-orders="['ascending','descending']"
         align="center"
-        width="100px"
-      />
+        width="120px"
+      >
+        <template slot-scope="scope">
+          {{ scope.row.wrongCount }}
+        </template>
+      </el-table-column>
       <el-table-column
         label="更新时间"
         align="center"
-        prop="updateTime"
-        width="180px"
-      />
+        prop="update_time"
+        sortable="custom"
+        :sort-orders="['ascending','descending']"
+        width="160px"
+      >
+        <template slot-scope="scope">
+          {{ scope.row.updateTime }}
+        </template>
+      </el-table-column>
     </template>
   </data-table>
 </template>
@@ -59,6 +74,10 @@ export default {
         params: {
           title: '',
           examId: ''
+        },
+        sort: {
+          sortOrder: 'DESC',
+          sortName: 'update_time'
         },
         search: {
           column: 'title',

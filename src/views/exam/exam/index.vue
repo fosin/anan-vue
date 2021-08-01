@@ -119,7 +119,7 @@
         align="center"
       >
         <template slot-scope="scope">
-          <el-checkbox v-model=" scope.row.wrongTrain" />
+          <el-checkbox v-model="scope.row.wrongTrain" />
         </template>
       </el-table-column>
       <el-table-column
@@ -128,7 +128,7 @@
         align="center"
       >
         <template slot-scope="scope">
-          <el-checkbox v-model=" scope.row.showPaper" />
+          <el-checkbox v-model="scope.row.showPaper" />
         </template>
       </el-table-column>
       <el-table-column
@@ -137,7 +137,7 @@
         align="center"
       >
         <template slot-scope="scope">
-          <el-checkbox v-model=" scope.row.showResult" />
+          <el-checkbox v-model="scope.row.showResult" />
         </template>
       </el-table-column>
       <el-table-column
@@ -146,7 +146,7 @@
         align="center"
       >
         <template slot-scope="scope">
-          <el-checkbox v-model=" scope.row.showAnswer" />
+          <el-checkbox v-model="scope.row.showAnswer" />
         </template>
       </el-table-column>
       <el-table-column
@@ -155,7 +155,7 @@
         align="center"
       >
         <template slot-scope="scope">
-          <el-checkbox v-model=" scope.row.paperCopy" />
+          <el-checkbox v-model="scope.row.paperCopy" />
         </template>
       </el-table-column>
       <el-table-column
