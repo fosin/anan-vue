@@ -133,6 +133,7 @@
         fit
         highlight-current-row
         style="width: 100%"
+        :default-sort="defaultSort"
         @selection-change="handleTableCheckChange"
         @sort-change="sortChange"
       >
@@ -145,7 +146,9 @@
           label="试题类型"
           align="center"
           width="100px"
+          prop="qu_type"
           sortable="custom"
+          :sort-orders="['ascending','descending']"
         >
           <template slot-scope="scope">
             {{ getAnanDicValue(quTypes, scope.row.quType) }}
@@ -155,7 +158,9 @@
           label="试题难度"
           align="center"
           width="100px"
+          prop="level"
           sortable="custom"
+          :sort-orders="['ascending','descending']"
         >
           <template slot-scope="scope">
             {{ getAnanDicValue(levels, scope.row.level) }}
@@ -163,9 +168,10 @@
         </el-table-column>
         <el-table-column
           label="试题内容"
-          prop="content"
           align="center"
+          prop="content"
           sortable="custom"
+          :sort-orders="['ascending','descending']"
           show-overflow-tooltip
         >
           <template slot-scope="scope">
@@ -210,6 +216,10 @@ export default {
       // 数据加载标识
       listLoading: false,
       selecttionScore: 2,
+      defaultSort: {
+        prop: 'qu_type',
+        order: 'ascending'
+      },
       quTypes: [],
       levels: [],
       SelectionQus: [],
@@ -225,8 +235,8 @@ export default {
           repoIds: []
         },
         sort: {
-          sortOrder: 'DESC',
-          sortName: ''
+          sortOrder: 'ASC',
+          sortName: 'qu_type'
         },
         search: {
           column: 'content',
@@ -305,10 +315,15 @@ export default {
       if (this.SelectionQuList) {
         for (let i = 0; i < this.SelectionQuList.length; i++) {
           const qu = this.SelectionQuList[i]
-          this.quList = this.quList.reduce((total, current) => {
-            current.quId !== qu.quId && total.push(current)
-            return total
-          }, [])
+          let index = -1
+          for (let j = 0; j < this.quList.length; j++) {
+            if (this.quList[j].quId === qu.quId) {
+              index = j
+            }
+          }
+          if (index > -1) {
+            this.removeItem(index, this.quList)
+          }
         }
       }
     },
@@ -330,6 +345,7 @@ export default {
             this.quList.push(qu)
           }
         }
+        this.quList.sort(function(a, b) { return a.quType - b.quType })
       }
       this.$refs.pagingTable.clearSelection()
       this.dialogFormVisible = false

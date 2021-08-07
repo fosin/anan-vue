@@ -13,3 +13,5 @@ yarn-error.log*
 *.njsproj
 *.sln
 yarn.lock
+.env.development
+target/

@@ -695,7 +695,6 @@ export default {
     },
     fetchData(id) {
       const that = this
-
       fetchDetail(id).then(response => {
         this.isSaved = true
         this.postForm = response.data
@@ -704,19 +703,10 @@ export default {
         this.dateValues[1] = this.postForm.endTime
 
         // 填充题库清单
-        if (this.postForm.joinType === 1) {
-          that.repoList = that.postForm.repoList
-          that.repoList.forEach(value => {
-            this.setRepoLimit(value)
-          })
-        }
-        // 按分组填充试题
-        if (this.postForm.joinType === 2) {
-          this.postForm.quList.forEach(function(item) {
-            // const index = item.quType - 1
-            // that.quList[index].push(item)
-          })
-        }
+        that.repoList = this.postForm.repoList || []
+        that.repoList.forEach(value => {
+          this.setRepoLimit(value)
+        })
       }).catch((reason) => {
         this.$notify({
           title: '获取考试数据失败',
@@ -730,7 +720,6 @@ export default {
     submitForm() {
     // 校验和处理数据
       this.postForm.repoList = this.repoList
-
       saveData(this.postForm).then(() => {
         this.isSaved = true
         this.$notify({
