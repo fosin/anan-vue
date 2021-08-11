@@ -44,7 +44,7 @@
           style="margin-left: 5px;"
           type="primary"
           icon="el-icon-circle-plus"
-          @click="handleAdd"
+          @click="handleAdd()"
         >{{ $t('table.add') }}
         </el-button>
         <slot name="filter-content" />

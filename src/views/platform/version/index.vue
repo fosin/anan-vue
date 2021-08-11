@@ -6,10 +6,10 @@
         :placeholder="$t('anan_version.searchText')"
         style="width: 200px;"
         class="filter-item"
-        @keyup.enter.native="handleSearch"
+        @keyup.enter.native="handleSearch()"
       />
       <el-button-group>
-        <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" round @click="handleSearch">
+        <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" round @click="handleSearch()">
           {{ $t('table.search') }}
         </el-button>
         <el-button
@@ -20,7 +20,7 @@
           type="primary"
           icon="el-icon-circle-plus"
           round
-          @click="handleAdd"
+          @click="handleAdd()"
         >
           {{ $t('table.add') }}
         </el-button>

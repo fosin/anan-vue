@@ -6,10 +6,10 @@
         style="width: 400px;"
         class="filter-item"
         placeholder="支持姓名、卡号、手机号码、身份证号、MPIID查找"
-        @keyup.enter.native="handleSearch"
+        @keyup.enter.native="handleSearch()"
       />
       <el-button-group>
-        <el-button v-waves round class="filter-item" type="primary" icon="el-icon-search" @click="handleSearch">
+        <el-button v-waves round class="filter-item" type="primary" icon="el-icon-search" @click="handleSearch()">
           {{ $t('table.search') }}
         </el-button>
         <el-button

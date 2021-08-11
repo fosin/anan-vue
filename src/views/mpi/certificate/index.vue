@@ -5,7 +5,7 @@
         <el-button v-waves v-permission="'1'" round type="primary" class="filter-item" style="margin-left: 5px;" icon="el-icon-circle-plus" size="mini" @click="getList">
           {{ $t('table.refresh') }}
         </el-button>
-        <el-button v-waves v-permission="'1'" :disabled="disabled" round size="mini" class="filter-item" style="margin-left: 5px;" type="primary" icon="el-icon-circle-plus" @click="handleAdd">
+        <el-button v-waves v-permission="'1'" :disabled="disabled" round size="mini" class="filter-item" style="margin-left: 5px;" type="primary" icon="el-icon-circle-plus" @click="handleAdd()">
           {{ $t('table.add') }}
         </el-button>
         <el-button v-waves v-permission="'1'" :disabled="disabled" round size="mini" type="success" class="filter-item" style="margin-left: 5px;" icon="el-icon-edit" @click="handleEdit()">

@@ -2,7 +2,7 @@
   <div class="app-container calendar-list-container">
     <div class="filter-container">
       <el-button-group>
-        <el-button v-waves round class="filter-item" type="primary" icon="el-icon-search" @click="handleSearch">
+        <el-button v-waves round class="filter-item" type="primary" icon="el-icon-search" @click="handleSearch()">
           {{ $t('table.refresh') }}
         </el-button>
         <el-button
@@ -12,7 +12,7 @@
           style="margin-left: 5px;"
           type="primary"
           icon="el-icon-circle-plus"
-          @click="handleAdd"
+          @click="handleAdd()"
         >
           {{ $t('table.add') }}
         </el-button>

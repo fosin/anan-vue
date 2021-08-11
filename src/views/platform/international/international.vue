@@ -6,7 +6,7 @@
         style="width: 200px;"
         class="filter-item"
         placeholder="支持语言标识、语言名称查找"
-        @keyup.enter.native="handleSearch"
+        @keyup.enter.native="handleSearch()"
       />
       <el-button-group>
         <el-button
@@ -17,7 +17,7 @@
           type="primary"
           size="small"
           icon="el-icon-search"
-          @click="handleSearch"
+          @click="handleSearch()"
         >
           {{ $t('table.search') }}
         </el-button>
@@ -30,7 +30,7 @@
           size="small"
           type="primary"
           icon="el-icon-circle-plus"
-          @click="handleAdd"
+          @click="handleAdd()"
         >{{ $t('table.add') }}
         </el-button>
       </el-button-group>

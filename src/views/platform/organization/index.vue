@@ -9,7 +9,7 @@
           type="primary"
           class="filter-item"
           icon="el-icon-refresh"
-          @click="handlerRefresh"
+          @click="handleRefresh()"
         >
           {{ $t('table.refresh') }}
         </el-button>
@@ -21,7 +21,7 @@
           class="filter-item"
           icon="el-icon-circle-plus"
           style="margin-left: 5px;"
-          @click="handlerAdd"
+          @click="handleAdd()"
         >
           {{ $t('table.add') }}
         </el-button>
@@ -33,7 +33,7 @@
           class="filter-item"
           icon="el-icon-edit"
           style="margin-left: 5px;"
-          @click="handlerUpdate"
+          @click="handleUpdate()"
         >
           {{ $t('table.edit') }}
         </el-button>
@@ -45,7 +45,7 @@
           class="filter-item"
           icon="el-icon-delete"
           style="margin-left: 5px;"
-          @click="handleDelete"
+          @click="handleDelete()"
         >
           {{ $t('table.delete') }}
         </el-button>
@@ -323,14 +323,14 @@ export default {
         this.formUpdate = true
       }
     },
-    handlerRefresh() {
+    handleRefresh() {
       this.hackReset = false
       this.$nextTick(() => {
         this.hackReset = true
       })
       this.resetForm()
     },
-    handlerUpdate() {
+    handleUpdate() {
       const pNode = this.$refs.organizTree.getNode(this.form.pid)
       if (!pNode) {
         this.$message({
@@ -343,7 +343,7 @@ export default {
         this.formStatus = 'update'
       }
     },
-    handlerAdd() {
+    handleAdd() {
       if (this.form.type === 0) {
         this.$message({
           message: '按钮下不能再新增子节点'

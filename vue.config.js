@@ -58,7 +58,8 @@ module.exports = {
     // provide the app's title in webpack's name field, so that
     // it can be accessed in index.html to inject the correct title.
     name: name,
-    devtool: 'souce-map',
+    // devtool: 'cheap-module-eval-source-map',
+    devtool: 'source-map',
     resolve: {
       alias: {
         '@': resolve('src')

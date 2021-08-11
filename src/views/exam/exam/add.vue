@@ -133,7 +133,7 @@
       <el-tab-pane label="题库组卷" name="1">
         <el-row>
           <el-col :span="5">
-            <el-button class="filter-item" size="small" type="primary" icon="el-icon-plus" @click="handleAdd">
+            <el-button class="filter-item" size="small" type="primary" icon="el-icon-plus" @click="handleAdd()">
               添加题库
             </el-button>
             <el-button v-if="isSaved" class="filter-item" size="small" type="primary" icon="el-icon-sell" @click="handlePreQus">

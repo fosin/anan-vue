@@ -2,16 +2,16 @@
   <div class="app-container calendar-list-container">
     <div class="filter-container">
       <el-button-group>
-        <el-button v-waves v-permission="'84'" round type="primary" class="filter-item" icon="el-icon-refresh" @click="handlerRefresh">
+        <el-button v-waves v-permission="'84'" round type="primary" class="filter-item" icon="el-icon-refresh" @click="handleRefresh()">
           {{ $t('table.refresh') }}
         </el-button>
-        <el-button v-waves v-permission="'8'" round type="primary" class="filter-item" icon="el-icon-circle-plus" style="margin-left: 5px;" @click="handlerAdd">
+        <el-button v-waves v-permission="'8'" round type="primary" class="filter-item" icon="el-icon-circle-plus" style="margin-left: 5px;" @click="handleAdd()">
           {{ $t('table.add') }}
         </el-button>
-        <el-button v-waves v-permission="'9'" round type="success" class="filter-item" icon="el-icon-edit" style="margin-left: 5px;" @click="handlerUpdate">
+        <el-button v-waves v-permission="'9'" round type="success" class="filter-item" icon="el-icon-edit" style="margin-left: 5px;" @click="handleUpdate()">
           {{ $t('table.edit') }}
         </el-button>
-        <el-button v-waves v-permission="'10'" round type="danger" class="filter-item" icon="el-icon-delete" style="margin-left: 5px;" @click="handleDelete">
+        <el-button v-waves v-permission="'10'" round type="danger" class="filter-item" icon="el-icon-delete" style="margin-left: 5px;" @click="handleDelete()">
           {{ $t('table.delete') }}
         </el-button>
       </el-button-group>
@@ -343,7 +343,7 @@ export default {
         this.formUpdate = true
       }
     },
-    handlerUpdate() {
+    handleUpdate() {
       const pNode = this.$refs.permissionTree.getNode(this.form.pid)
       if (!pNode) {
         this.$message({
@@ -356,13 +356,13 @@ export default {
         this.formStatus = 'update'
       }
     },
-    handlerRefresh() {
+    handleRefresh() {
       this.hackReset = false
       this.$nextTick(() => {
         this.hackReset = true
       })
     },
-    handlerAdd() {
+    handleAdd() {
       this.parent = this.form
       if (!this.parent.id) {
         this.$message({

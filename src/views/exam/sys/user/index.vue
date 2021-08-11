@@ -14,7 +14,7 @@
         <el-input v-model="listQuery.params.userName" style="width: 200px" placeholder="搜索登录名" class="filter-item" />
         <el-input v-model="listQuery.params.realName" style="width: 200px" placeholder="搜索姓名" class="filter-item" />
 
-        <el-button class="filter-item" type="primary" icon="el-icon-plus" @click="handleAdd">
+        <el-button class="filter-item" type="primary" icon="el-icon-plus" @click="handleAdd()">
           添加
         </el-button>
 

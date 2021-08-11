@@ -1,11 +1,11 @@
 <template>
   <div class="app-container calendar-list-container">
     <div class="filter-container">
-      <el-input v-model="pageModule.searchText" style="width: 200px;" class="filter-item" placeholder="支持XXX查找" @keyup.enter.native="handleSearch" />
-      <el-button v-waves round class="filter-item" type="primary" icon="el-icon-search" @click="handleSearch">
+      <el-input v-model="pageModule.searchText" style="width: 200px;" class="filter-item" placeholder="支持XXX查找" @keyup.enter.native="handleSearch()" />
+      <el-button v-waves round class="filter-item" type="primary" icon="el-icon-search" @click="handleSearch()">
         {{ $t('table.search') }}
       </el-button>
-      <el-button v-waves v-permission="'1'" round class="filter-item" style="margin-left: 5px;" type="primary" icon="el-icon-circle-plus" @click="handleAdd">
+      <el-button v-waves v-permission="'1'" round class="filter-item" style="margin-left: 5px;" type="primary" icon="el-icon-circle-plus" @click="handleAdd()">
         {{ $t('table.add') }}
       </el-button>
       <el-button v-waves v-permission="'1'" round type="success" class="filter-item" style="margin-left: 5px;" icon="el-icon-edit" @click="handleEdit()">

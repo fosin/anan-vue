@@ -6,13 +6,13 @@
         :placeholder="$t('oauth_client_details.searchText')"
         style="width: 200px;"
         class="filter-item"
-        @keyup.enter.native="handleSearch"
+        @keyup.enter.native="handleSearch()"
       />
       <el-button-group>
-        <el-button v-waves round class="filter-item" type="primary" icon="el-icon-search" @click="handleSearch">
+        <el-button v-waves round class="filter-item" type="primary" icon="el-icon-search" @click="handleSearch()">
           {{ $t('table.search') }}
         </el-button>
-        <el-button v-waves v-permission="'50'" round class="filter-item" style="margin-left: 5px;" type="primary" icon="el-icon-circle-plus" @click="handleAdd">
+        <el-button v-waves v-permission="'50'" round class="filter-item" style="margin-left: 5px;" type="primary" icon="el-icon-circle-plus" @click="handleAdd()">
           {{ $t('table.add') }}
         </el-button>
       </el-button-group>

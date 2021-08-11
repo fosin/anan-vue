@@ -10,7 +10,7 @@
           size="small"
           type="primary"
           icon="el-icon-refresh"
-          @click="handleSearch"
+          @click="handleSearch()"
         >
           {{ $t('table.refresh') }}
         </el-button>
@@ -23,7 +23,7 @@
           size="small"
           type="primary"
           icon="el-icon-circle-plus"
-          @click="handleAdd"
+          @click="handleAdd()"
         >{{ $t('table.add') }}
         </el-button>
       </el-button-group>

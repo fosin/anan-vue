@@ -6,10 +6,10 @@
         style="width: 200px;"
         class="filter-item"
         placeholder="支持服务标识、服务名称查找"
-        @keyup.enter.native="handleSearch"
+        @keyup.enter.native="handleSearch()"
       />
       <el-button-group>
-        <el-button v-waves round class="filter-item" style="margin-left: 5px;" type="primary" icon="el-icon-search" @click="handleSearch">
+        <el-button v-waves round class="filter-item" style="margin-left: 5px;" type="primary" icon="el-icon-search" @click="handleSearch()">
           {{ $t('table.search') }}
         </el-button>
         <el-button
@@ -20,7 +20,7 @@
           style="margin-left: 10px;"
           type="primary"
           icon="el-icon-circle-plus"
-          @click="handleAdd"
+          @click="handleAdd()"
         >{{ $t('table.add') }}
         </el-button>
       </el-button-group>

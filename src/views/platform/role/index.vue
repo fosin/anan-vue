@@ -5,7 +5,7 @@
       :options="options"
       :list-query="listQuery"
       style="width: 100%"
-      @handle-add="handleAdd"
+      @handle-add="handleAdd()"
     >
       <template slot="filter-content" />
       <template slot="data-columns">

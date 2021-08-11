@@ -60,27 +60,39 @@
           </template>
         </el-table-column>
         <el-table-column
-          label="得分/总分"
+          label="正确率"
           align="center"
-          width="120px"
+          width="90px"
+          prop="accuracy"
+          sortable="custom"
+          :sort-orders="['ascending','descending']"
+        >
+          <template slot-scope="scope">
+            <span :style="{ color: getAccuracyColor(scope.row) }">{{ scope.row.accuracy }}%</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="得分"
+          align="center"
+          width="80px"
           prop="user_score"
           sortable="custom"
           :sort-orders="['ascending','descending']"
         >
           <template slot-scope="scope">
-            {{ scope.row.userScore }} / {{ scope.row.totalScore }}分
+            {{ scope.row.userScore }}分
           </template>
         </el-table-column>
         <el-table-column
-          label="考试时间"
+          label="总分"
           align="center"
-          width="160px"
-          prop="create_time"
+          width="80px"
+          prop="total_score"
           sortable="custom"
           :sort-orders="['ascending','descending']"
         >
           <template slot-scope="scope">
-            {{ scope.row.createTime }}
+            {{ scope.row.totalScore }}分
           </template>
         </el-table-column>
         <el-table-column
@@ -109,6 +121,18 @@
         >
           <template slot-scope="scope">
             {{ getAnanDicValue(paperStates, scope.row.state) }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="考试时间"
+          align="center"
+          width="160px"
+          prop="create_time"
+          sortable="custom"
+          :sort-orders="['ascending','descending']"
+        >
+          <template slot-scope="scope">
+            {{ scope.row.createTime }}
           </template>
         </el-table-column>
         <el-table-column
@@ -222,6 +246,14 @@ export default {
     })
   },
   methods: {
+    getAccuracyColor(data) {
+      const qualifyAcc = data.qualifyScore / data.totalScore * 100
+      if (qualifyAcc > data.accuracy) {
+        return this.rankColor[0]
+      } else {
+        return '#000000'
+      }
+    },
     stateChanged(selected) {
       this.$refs.pagingTable.getList()
     },

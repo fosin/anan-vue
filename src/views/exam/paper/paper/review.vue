@@ -154,12 +154,18 @@
             <el-form-item label="得分">
               {{ paperData.userScore }}={{ paperData.objScore }}(客观)+{{ paperData.subjScore }}(主观)
             </el-form-item>
-            <el-form-item label="总分">
-              {{ paperData.totalScore }}
-            </el-form-item>
-            <el-form-item label="合格分">
-              {{ paperData.qualifyScore }}
-            </el-form-item>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="总分">
+                  {{ paperData.totalScore }}
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="合格分">
+                  {{ paperData.qualifyScore }}
+                </el-form-item>
+              </el-col>
+            </el-row>
             <el-form-item label="时间">
               {{ paperData.createTime }}
             </el-form-item>
