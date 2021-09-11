@@ -368,7 +368,7 @@ export default {
               ]
             },
             sortRules: [{
-              sortName: 'usercode',
+              sortName: 'updateTime',
               sortOrder: 'DESC' }
             ]
           }
