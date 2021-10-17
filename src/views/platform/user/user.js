@@ -28,9 +28,9 @@ export function putUserRoles(id, obj) {
 }
 
 // 获取用户的所有权限列表
-export function listUserPermissions(id) {
+export function listUserPermissions(id, organizId) {
   return request({
-    url: 'gateway/platform/v1/user/permissions/' + id,
+    url: 'gateway/platform/v1/user/permissions/' + id + '?organizId=' + organizId,
     method: 'post'
   })
 }

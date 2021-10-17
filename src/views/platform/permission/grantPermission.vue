@@ -17,9 +17,12 @@
       highlight-current
       show-checkbox
       lazy
-      check-strictly
+      :check-strictly="!checkStrictly"
     />
     <div slot="footer" class="dialog-footer">
+      <div style="float: left">
+        <el-checkbox v-model="checkStrictly">级联选择</el-checkbox>
+      </div>
       <el-button round icon="el-icon-circle-close" @click="cancel()">
         {{ $t('table.cancel') }}
       </el-button>
@@ -39,6 +42,7 @@ export default {
   name: 'GrantPermission',
   data() {
     return {
+      checkStrictly: false,
       parent: {},
       form: {},
       title: '分配权限',

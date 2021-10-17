@@ -240,7 +240,7 @@
             highlight-current
             show-checkbox
             lazy
-            check-strictly
+            :check-strictly="!checkStrictly"
           />
         </el-tab-pane>
         <el-tab-pane label="减少权限">
@@ -261,11 +261,14 @@
             highlight-current
             show-checkbox
             lazy
-            check-strictly
+            :check-strictly="!checkStrictly"
           />
         </el-tab-pane>
       </el-tabs>
       <div slot="footer" class="dialog-footer">
+        <div style="float: left">
+          <el-checkbox v-model="checkStrictly">级联选择</el-checkbox>
+        </div>
         <el-button v-permission="'42'" round type="primary" icon="el-icon-circle-check" @click="updateUserPermession()">
           {{ $t('table.update') }}
         </el-button>
@@ -316,6 +319,7 @@ export default {
   },
   data() {
     return {
+      checkStrictly: false,
       defaultPass: '',
       filterAddPermissionText: '',
       filterSubPermissionText: '',
@@ -813,7 +817,7 @@ export default {
             })
             this.versionId = versionId
           }
-          listUserPermissions(row.id).then(response => {
+          listUserPermissions(row.id, row.organizId).then(response => {
             this.addCheckedKeys = this.getCheckedKeys(1, response.data)
             this.subCheckedKeys = this.getCheckedKeys(2, response.data)
             this.dialogStatus = 'permission'
