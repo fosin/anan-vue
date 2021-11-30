@@ -1,28 +1,53 @@
 # 介绍
-该项目是anan-cloud项目的Web前端项目，基于Vue-element-admin改造而来，使用vue-cli@4构建项目。
-主要技术选型：Vue2.x、vuex、axios、Element2.x、vue-i18n等。
-anan-cloud项目地址：<https://github.com/fosin/anan-cloud>
+
+该项目是 anan-cloud 项目的 Web 前端项目，基于 Vue-element-admin 改造而来，使用 vue-cli@4 构建项目。
+主要技术选型：Vue2.x、vuex、axios、Element2.x、vue-i18n 等。
+anan-cloud 项目地址：<https://github.com/fosin/anan-cloud>
 
 ## 构建环境
 
-### Github的raw文件读取地址遭受DNS污染，导致文件下载困难
+### Github 的 raw 文件读取地址遭受 DNS 污染，导致文件下载困难
+
     199.232.68.133 raw.githubusercontent.com
 
-### 开发环境
-    设置.env.development中的VUE_APP_BASE_API为开发环境后台API地址。
+### 下载源码
 
-### 生产环境
-    设置.env.production中的VUE_APP_BASE_API为后台API地址。
-    如果部署在nginx或者使用docker部署，则一般不需要修改。
+    git clone https://github.com/fosin/anan-vue
 
-## 使用npm构建命令
+### 安装 nodejs
+
+    自行百度安装
+
+## 开发指引
+### 使用vscode开发（推荐）
+    安装插件：
+    Vue VS Code Extension Pack
+    Auto Rename Tag
+    Auto Close Tag
+    vscode-element-helper
+    ESLint
+    npm Intellisense
+    Live Server
+    JavaScript (ES6) code snippets
+    Bracket Pair Colorizer 2
+### 使用idea开发
+    安装插件：
+    vue.js、element、ignore
+
+### chrome调试插件
+    vue-devtools
+
+### 使用npm跑源码
+    开发环境：
+    设置.env.development文件中的VUE_APP_BASE_API为开发环境后台API地址。
+
 ```shell script
-
 #修改npm源为国内源，加快依赖下载速度
 npm config set registry https://registry.npm.taobao.org --global
 npm config set disturl https://npm.taobao.org/dist --global
 
 # 安装vue/cli
+# 安装之后可以使用 vue --version 或者vue -V来检查版本是否安装正确
 npm install -g @vue/cli
 
 #安装babel-plugin-dynamic-import-node插件
@@ -33,44 +58,32 @@ npm install
 
 # 启动开发调试 localhost:9528
 npm run dev
+```
 
+### 源码介绍
+
+### 相关资料
+    vue官网：https://vuejs.org/
+    vue指引文档：https://vuejs.org/v2/guide/index.html
+    vue-cli：https://cli.vuejs.org/
+    vue-router组件：https://router.vuejs.org/
+    vuex组件：https://vuex.vuejs.org/
+    axios组件：http://www.axios-js.com/zh-cn/docs/vue-axios.html
+    element-ui官网：https://element.eleme.cn/#/zh-CN/component/installation
+
+## 生产发布
+    设置.env.production文件中的VUE_APP_BASE_API为后台API地址。
+    如果部署在nginx或者使用docker部署，则一般不需要修改，默认为/即可。
+```shell script
 # 构建生产环境部署包
 npm run build:prod
 
 # 构建生产环境报告
 npm run build:prod --report
-```
-## 使用yarn构建命令
-```shell script
-#Github的raw文件读取地址遭受DNS污染，导致文件下载困难
-199.232.68.133 raw.githubusercontent.com
 
-#yarn cache和global目录位置的修改
-#PS: 如果输入yarn提示没有找到该命令，关闭命令终端，再开一次(linux系统 source一下即可)。
-yarn config set cache-folder E:\Tools\OpenSource\Node\node-v12\yarn_cache
-yarn config set global-folder E:\Tools\OpenSource\Node\node-v12\yarn_global
-#源更换
-yarn config set registry https://registry.npm.taobao.org
+# 发布方案1：使用docker发布
+  docker build . -t anan-vue:3.4.0 -f ./Dockerfile
+  
+# 发布方案2：将目录下生成dist文件内容复制到nginx发布目录
 
-#配置环境变量,在命令行输入 
-#将得到的路径添加到环境变量，这样，通过yarn安装的依赖或命令才能在命令行中有效
-yarn global bin
-
-# 安装vue/cli
-yarn global add @vue/cli
-
-#安装babel-plugin-dynamic-import-node插件
-yarn add babel-plugin-dynamic-import-node -S -D
-
-# 安装依赖包
-yarn install
-
-# 启动开发调试 localhost:9528
-yarn run dev
-
-# 构建生产环境部署包
-yarn run build:prod
-
-# 构建生产环境报告
-yarn run build:prod --report
 ```
