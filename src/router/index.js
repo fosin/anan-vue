@@ -1,12 +1,11 @@
+import Page404 from '@/views/platform/errorPage/404'
+/* Layout */
+import Layout from '@/views/platform/layout/Layout'
+import { Notification } from 'element-ui'
 import Vue from 'vue'
 import Router from 'vue-router'
 
 Vue.use(Router)
-import { Notification } from 'element-ui'
-
-/* Layout */
-import Layout from '@/views/platform/layout/Layout'
-import Page404 from '@/views/platform/errorPage/404'
 
 /**
  //当设置 true 的时候该路由不会再侧边栏出现 如401，login等页面，或者如一些编辑页面/edit/1
@@ -130,25 +129,6 @@ export function dynamicAddAsyncRouter(ananPermissionTree) {
             children: isEmpty(children) ? [] : dynamicAddAsyncRouter(children)
           }
           break
-        // 子组件
-        case 6:
-          singelRouter = {
-            name: code,
-            path: rroute,
-            component: resolve => require(['@/' + nUrl + '.vue'], resolve).catch(error => {
-              Notification.error({
-                title: '获取组件失败',
-                message: error.message
-              })
-            }),
-            meta: {
-              title: code,
-              icon: icon
-            },
-            hidden: true,
-            children: isEmpty(children) ? [] : dynamicAddAsyncRouter(children)
-          }
-          break
         // 直接链接菜单
         case 2:
           singelRouter = {
@@ -163,25 +143,6 @@ export function dynamicAddAsyncRouter(ananPermissionTree) {
             props: (route) => ({ src: route.query.src }),
             meta: {
               src: url,
-              title: code,
-              icon: icon
-            },
-            children: isEmpty(children) ? [] : dynamicAddAsyncRouter(children)
-          }
-          break
-        // 间接链接菜单
-        case 4:
-          singelRouter = {
-            name: code,
-            path: rroute,
-            component: resolve => require(['@/views/platform/layout/Iframe.vue'], resolve).catch(error => {
-              Notification.error({
-                title: '获取组件失败',
-                message: error.message
-              })
-            }),
-            meta: {
-              url: url,
               title: code,
               icon: icon
             },
@@ -205,6 +166,62 @@ export function dynamicAddAsyncRouter(ananPermissionTree) {
             },
             redirect: 'noredirect',
             children: isEmpty(children) ? [] : dynamicAddAsyncRouter(children)
+          }
+          break
+        // 间接链接菜单
+        case 4:
+          singelRouter = {
+            name: code,
+            path: rroute,
+            component: resolve => require(['@/views/platform/layout/Iframe.vue'], resolve).catch(error => {
+              Notification.error({
+                title: '获取组件失败',
+                message: error.message
+              })
+            }),
+            meta: {
+              url: url,
+              title: code,
+              icon: icon
+            },
+            children: isEmpty(children) ? [] : dynamicAddAsyncRouter(children)
+          }
+          break
+        // 子组件
+        case 6:
+          singelRouter = {
+            name: code,
+            path: rroute,
+            component: resolve => require(['@/' + nUrl + '.vue'], resolve).catch(error => {
+              Notification.error({
+                title: '获取组件失败',
+                message: error.message
+              })
+            }),
+            meta: {
+              title: code,
+              icon: icon
+            },
+            hidden: true,
+            children: isEmpty(children) ? [] : dynamicAddAsyncRouter(children)
+          }
+          break
+        // 外部链接菜单
+        case 7:
+          var realUrl = url
+          if (!url.startsWith('http') && process.env.VUE_APP_BASE_API !== '/') {
+            realUrl = process.env.VUE_APP_BASE_API + url
+          }
+          singelRouter = {
+            name: code,
+            component: Layout,
+            path: realUrl,
+            meta: {
+              url: realUrl,
+              title: code,
+              icon: icon
+            },
+            children: []
           }
           break
         // 只遍历菜单类型

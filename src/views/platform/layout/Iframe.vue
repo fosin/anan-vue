@@ -46,22 +46,17 @@ export default {
     },
     /**
        * 该处设计了三种获取方式，三种方式各有优缺点，目前没有完美的角色方案，只能按需设置了
-       * 1、直接链接：通过this.$route.query.src带access_token参数请求
+       * 1、直接链接：通过this.$route.query.src
        * 2、间接链接： 通过向后台请求动态获取http请求地址
        *    a、如果有Basic认证信息，则通过headers向后台请求页面html，然后动态写入iframe中，这种方式不能很好角色有内联html的页面
        *    b、如果没有Basic认证信息，则通过后台返回url带access_token参数请求，这种方式必须设置oauth2 token认证
        */
     geturl: function() {
       if (this.$route.query.src) {
-        // debugger
-        if (this.$route.query.src.startsWith('http')) {
-          this.src = this.$route.query.src + '?access_token=' + store.getters.ananToken.access_token
+        if (!this.$route.query.src.startsWith('http') && process.env.VUE_APP_BASE_API !== '/') {
+          this.src = process.env.VUE_APP_BASE_API + this.$route.query.src
         } else {
-          if (process.env.VUE_APP_BASE_API && process.env.VUE_APP_BASE_API !== '/') {
-            this.src = process.env.VUE_APP_BASE_API + this.$route.query.src + '?access_token=' + store.getters.ananToken.access_token
-          } else {
-            this.src = this.$route.query.src + '?access_token=' + store.getters.ananToken.access_token
-          }
+          this.src = this.$route.query.src
         }
       }
       if (this.$route.query.url) {

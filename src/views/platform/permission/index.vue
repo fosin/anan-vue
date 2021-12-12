@@ -513,6 +513,14 @@ export default {
         case 5:
           icon = 'service'
           break
+          // 子组件
+        case 6:
+          icon = 'component'
+          break
+          // 外部链接菜单
+        case 7:
+          icon = 'external-link'
+          break
       }
       this.form = {
         code: code,

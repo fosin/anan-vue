@@ -14,7 +14,7 @@ anan-cloud 项目地址：<https://github.com/fosin/anan-cloud>
 
     git clone https://github.com/fosin/anan-vue
 
-### 安装 nodejs
+### 安装 nodejs（版本<=14）
 
     自行百度安装
 
