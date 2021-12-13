@@ -209,9 +209,14 @@ export function dynamicAddAsyncRouter(ananPermissionTree) {
         // 外部链接菜单
         case 7:
           var realUrl = url
-          if (!url.startsWith('http') && process.env.VUE_APP_BASE_API !== '/') {
-            realUrl = process.env.VUE_APP_BASE_API + url
+          if (!url.startsWith('http')) {
+            if (process.env.VUE_APP_BASE_API === '/') {
+              realUrl = window.location.protocol + '//' + window.location.host + url
+            } else {
+              realUrl = process.env.VUE_APP_BASE_API + url
+            }
           }
+
           singelRouter = {
             name: code,
             component: Layout,
