@@ -8,7 +8,7 @@ anan-cloud 项目地址：<https://github.com/fosin/anan-cloud>
 
 ### Github 的 raw 文件读取地址遭受 DNS 污染，导致文件下载困难
 
-    199.232.68.133 raw.githubusercontent.com
+    185.199.110.133 raw.githubusercontent.com
 
 ### 下载源码
 
@@ -100,9 +100,9 @@ npm run build:prod
 # 构建生产环境报告
 npm run build:prod --report
 
-# 发布方案1：使用docker发布
-docker build . -t anan-vue:3.4.0 -f ./Dockerfile
+# 发布方案1：使用docker nginx发布
+docker build . -t registry.cn-hongkong.aliyuncs.com/fosin/anan-vue:3.5.0 -f ./Dockerfile
 
-# 发布方案2：将目录下生成dist文件内容复制到nginx发布目录
-
+# 发布方案2：使用docker ingress-nginx-controller发布
+docker build . -t registry.cn-hongkong.aliyuncs.com/fosin/nginx-ingress-controller:3.5.0 -f ./ingress-nginx-controller.Dockerfile
 ```
