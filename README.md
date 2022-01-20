@@ -101,8 +101,12 @@ npm run build:prod
 npm run build:prod --report
 
 # 发布方案1：使用docker nginx发布
-docker build . -t registry.cn-hongkong.aliyuncs.com/fosin/anan-vue:3.5.0 -f ./Dockerfile
+docker build . -t registry.cn-hongkong.aliyuncs.com/fosin/anan-vue:3.5.0 -f deploy/Dockerfile
 
-# 发布方案2：使用docker ingress-nginx-controller发布
-docker build . -t registry.cn-hongkong.aliyuncs.com/fosin/nginx-ingress-controller:3.5.0 -f ./ingress-nginx-controller.Dockerfile
+# 发布方案2：使用docker nginx-ingress-controller发布(nginx官方controller)
+docker build . -t registry.cn-hongkong.aliyuncs.com/fosin/nginx-ingress-controller:3.5.0 -f deploy/ingress-nginx-controller.Dockerfile
+
+# 发布方案3：使用docker ingress-nginx-controller发布（k8s官方的controller）
+docker build . -t registry.cn-hongkong.aliyuncs.com/fosin/ingress-nginx-controller:3.5.0 -f deploy/nginx-ingress-controller.Dockerfile
+
 ```
