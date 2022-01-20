@@ -38,27 +38,27 @@ jobs:
 
       - name: Docker build and push image Nginx
         env:
-          MODULE_PATH: deploy
           MODULE_NAME: anan-vue
         run: |
           docker login --username=${{ secrets.alidocker_username }} --password=${{ secrets.alidocker_secrect }} ${{ env.DOCKER_MIRROR_SERVER }}
-          docker build $MODULE_PATH -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION -f $MODULE_PATH/Dockerfile
+          docker build . -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS
+          }}/$MODULE_NAME:$MODULE_VERSION -f deploy/Dockerfile
           docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
 
       - name: Docker build and push image Nginx Ingress Controller
         env:
-          MODULE_PATH: deploy
           MODULE_NAME: ingress-nginx-controller
         run: |
-          docker build $MODULE_PATH -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION -f $MODULE_PATH/ingress-nginx-controller.Dockerfile
+          docker build . -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
+          -f deploy/ingress-nginx-controller.Dockerfile
           docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
           docker logout
 
       - name: Docker build and push image Ingress Nginx Controller
         env:
-          MODULE_PATH: deploy
           MODULE_NAME: nginx-ingress-controller
         run: |
-          docker build $MODULE_PATH -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION -f $MODULE_PATH/nginx-ingress-controller.Dockerfile
+          docker build . -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
+          -f deploy/nginx-ingress-controller.Dockerfile
           docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
           docker logout
