@@ -1,8 +1,8 @@
 import axios from 'axios'
 import { MessageBox } from 'element-ui'
-import store from '../store'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'
+import store from '../store'
 // import { cacheAdapterEnhancer } from '@/utils/cache'
 
 // progress bar style
@@ -51,7 +51,7 @@ service.interceptors.response.use(response => {
   NProgress.done()
   // 我们可以在这里对异常状态作统一处理
   // 尝试刷新access_toekn续用登录状态
-  if (!reLogin && (!error.response || error.response.status === 401)) {
+  if (!reLogin && (error.response.status === 401)) {
     reLogin = true
     MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
       confirmButtonText: '重新登录',
@@ -162,9 +162,16 @@ export const getRequest = (url, notify = true) => {
   return allRequest({ url: url, data: null, method: 'get' }, notify)
 }
 
-export const uploadFileRequest = (url, params, notify) => {
+/**
+ * 上传文件（FormData数据格式）
+ * @param {string} url 请求地址
+ * @param {formData} formData formdata
+ * @param {boolean} notify 失败后是否自动提示
+ * @returns promise
+ */
+export const uploadFormRequest = (url, formData, notify) => {
   return allRequest({ url: url,
-    data: params,
+    data: formData,
     methods: 'post',
     timeout: 120000,
     headers: { 'Content-Type': 'multipart/form-data' }
@@ -172,59 +179,53 @@ export const uploadFileRequest = (url, params, notify) => {
 }
 
 /**
- * 上传
+ * 上传文件
  * @param url
  * @param data
  */
-export function upload(url, file) {
+export function uploadFileRequest(url, file) {
   const formData = new FormData()
   formData.append('file', file)
 
-  return new Promise((resolve, reject) => {
-    service({
-      url: url,
-      method: 'post',
-      data: formData,
-      timeout: 120000
-    }).then(response => {
-      console.log(response)
-      resolve(response.data)
-    }).catch(err => {
-      reject(err)
-    })
+  return uploadFormRequest(url, formData)
+}
+
+export function downloadFileRequest(url, data) {
+  return allRequest({ url: url,
+    data: data,
+    methods: 'post',
+    timeout: 120000,
+    responseType: 'blob'
   })
 }
 
 /**
- * 下载
- * @param url
- * @param data
+ * 导出Excel文件
+ * @param url 请求地址
+ * @param data 请求数据
  */
-export function download(url, data) {
-  return new Promise((resolve, reject) => {
-    service({
-      url: url,
-      method: 'get',
-      data: data,
-      timeout: 120000,
-      responseType: 'blob'
-    }).then(res => {
-      // 文件下载
-      debugger
-      const blob = new Blob([res], {
-        type: 'application/vnd.ms-excel'
-      })
+export function exportExcelRequest(url, data) {
+  downloadFileRequest(url, data).then(res => {
+    // 文件下载
+    debugger
+    const blob = new Blob([res.data], {
+      type: 'application/vnd.ms-excel'
+    })
 
-      // 获得文件名称
-      const fileName = '导出的数据.xlsx'
-      let link = document.createElement('a')
-      link.href = URL.createObjectURL(blob)
-      link.setAttribute('download', fileName)
-      link.click()
-      link = null
-      MessageBox.success('导出成功!')
-    }).catch(err => {
-      reject(err)
+    // 获得文件名称
+    const fileName = '导出的数据.xlsx'
+    let link = document.createElement('a')
+    link.href = URL.createObjectURL(blob)
+    link.setAttribute('download', fileName)
+    link.click()
+    link = null
+    MessageBox.success('导出成功!')
+  }).catch(reason => {
+    Notification.error({
+      title: '导出Excel文件失败',
+      message: process.env.NODE_ENV === 'development' ? url + ':' + reason.message : reason.message,
+      type: 'error',
+      duration: 5000
     })
   })
 }

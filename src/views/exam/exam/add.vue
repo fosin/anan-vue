@@ -85,7 +85,7 @@
           </el-col>
           <el-col :span="5">
             <el-form-item label="拍照频率" label-width="80px">
-              <el-input-number v-model="postForm.photoFrequency" :min="0" />秒
+              <el-input-number v-model="postForm.photoFrequency" :min="0" />分钟
             </el-form-item>
           </el-col>
           <el-col :span="5">

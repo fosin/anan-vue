@@ -126,7 +126,7 @@ export default {
           }).catch((reason) => {
             this.cameraReady = false
             this.$notify({
-              title: '该考试需要开启摄像头，请检查摄像头是否可用！',
+              title: '该考试需要开启摄像头，请检查摄像头是否可用后重进！',
               message: reason.message,
               type: 'error',
               duration: 5000

@@ -118,22 +118,18 @@
           <el-button v-if="showNext" type="warning" @click="handNext()">
             下一题 <i class="el-icon-arrow-right el-icon--right" />
           </el-button>
+          <video ref="videoCamera" :width="videoWidth" :height="videoHeight" autoplay style="float: right" />
+          <canvas ref="canvasCamera" style="display:none;" :width="canvas.width" :height="canvas.height" />
         </div>
-      </el-col>
-    </el-row>
-    <el-row :gutter="24">
-      <el-col :span="24">
-        <video ref="videoCamera" :width="videoWidth" :height="videoHeight" autoplay style="float: right" />
-        <canvas ref="canvasCamera" style="display:none;" width="640" height="480" />
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
-import { paperDetail, quDetail, handExam, fillAnswer } from './exam'
+import { paperDetail, quDetail, handExam, fillAnswer, uploadPhotoFromCamera } from './exam'
 import { Loading } from 'element-ui'
-import { callCamera, closeCamera } from '@/utils/videoCamera'
+import { callCamera, closeCamera, photograph } from '@/utils/videoCamera'
 import { controlCopy } from '@/utils/documentUtil'
 
 export default {
@@ -174,8 +170,8 @@ export default {
       sec: '00',
       videoWidth: 160,
       videoHeight: 120,
-      cancasctx2d: {},
-      cancasCamera: {},
+      canvas: { camera: {}, width: 400, height: 300, encoderOptions: 0.5, imageType: 'image/jpeg' },
+      interval: {},
       videoCamera: {}
     }
   },
@@ -195,6 +191,9 @@ export default {
     }
     // 关闭摄像头
     if (this.paperData.photoFrequency > 0 && this.videoCamera) {
+      if (this.interval) {
+        clearInterval(this.interval)
+      }
       closeCamera(this.videoCamera).then(() => {
       }).catch((reason) => {
         this.$notify({
@@ -291,7 +290,7 @@ export default {
           message: '试卷提交成功，即将进入考试结果！',
           type: 'success'
         })
-        this.$router.push({ name: 'ExamOnlineDoResult', params: { id: this.paperId + ',0' }})
+        this.photographFrequency('last')
       }).catch((reason) => {
         this.$notify({
           title: '交卷失败失败',
@@ -421,6 +420,33 @@ export default {
         })
       })
     },
+    photographFrequency(type) {
+      photograph(this.videoCamera, this.canvas).then((res) => {
+        res.paperId = this.paperData.id
+        if (type && res.name) {
+          res.name = res.name.replace('.', type + '.')
+        }
+        uploadPhotoFromCamera(res).then(() => {
+          if (type === 'last') {
+            this.$router.push({ name: 'ExamOnlineDoResult', params: { id: this.paperId + ',0' }})
+          }
+        }).catch((reason) => {
+          this.$notify({
+            title: '上传拍照失败！',
+            message: reason.message,
+            type: 'warning',
+            duration: 5000
+          })
+        })
+      }).catch((reason) => {
+        this.$notify({
+          title: '拍照失败！',
+          message: reason.message,
+          type: 'warning',
+          duration: 5000
+        })
+      })
+    },
     // 试卷详情
     fetchData(id) {
       const params = { id: id }
@@ -451,8 +477,17 @@ export default {
         if (this.paperData.photoFrequency > 0) {
           this.videoCamera = this.$refs['videoCamera']
           callCamera(this.videoCamera).then(value => {
-            this.cancasCamera = this.$refs['canvasCamera']
-            this.cancasctx2d = this.cancasCamera.getContext('2d')
+            this.canvas.camera = this.$refs['canvasCamera']
+            // 才开始先拍照一次
+            setTimeout(() => {
+              this.photographFrequency('first')
+            }, 5000)
+            // 然后定时随机拍照
+            this.interval = setInterval(() => {
+              setTimeout(() => {
+                this.photographFrequency()
+              }, Math.random() * this.paperData.photoFrequency * 60000)
+            }, this.paperData.photoFrequency * 60000)
           }).catch((reason) => {
             this.$notify({
               title: '摄像头开启失败，请检查摄像头是否可用！',

@@ -128,6 +128,31 @@
                   </el-row>
                 </div>
               </div>
+              <div v-if="paperData.photoFrequency > 0" class="demo-image__lazy">
+                <el-row>
+                  <i>考生拍照：</i>
+                </el-row>
+                <el-row>
+                  <div v-for="(photo, index) in photoUrls" :key="photo.name">
+                    <el-row v-if="index % 2 === 0">
+                      <el-col :span="12">
+                        <i>{{ index + 1 }}、文件名：{{ photoUrls[index].name }} 时间：{{ photoUrls[index].createTime }}</i>
+                      </el-col>
+                      <el-col v-if="index + 1 < photoUrls.length" :span="12">
+                        <i>{{ index + 2 }}、文件名：{{ photoUrls[index+1].name }} 时间：{{ photoUrls[index+1].createTime }}</i>
+                      </el-col>
+                    </el-row>
+                    <el-row v-if="index % 2 === 0">
+                      <el-col :span="12">
+                        <el-image :src="photoUrls[index].url" lazy />
+                      </el-col>
+                      <el-col v-if="index + 1 < photoUrls.length" :span="12">
+                        <el-image :src="photoUrls[index+1].url" lazy />
+                      </el-col>
+                    </el-row>
+                  </div>
+                </el-row>
+              </div>
             </el-card>
           </el-scrollbar>
         </div>
@@ -166,8 +191,14 @@
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-form-item label="时间">
+            <el-form-item label="开始">
               {{ paperData.createTime }}
+            </el-form-item>
+            <el-form-item label="结束">
+              {{ paperData.updateTime }}
+            </el-form-item>
+            <el-form-item label="到期">
+              {{ paperData.limitTime }}
             </el-form-item>
             <el-row>
               <el-col :span="12">
@@ -214,7 +245,7 @@
 
 <script>
 
-import { paperResult } from '@/views/exam/paper/exam/exam'
+import { paperResult, listPhotoByPaperId, downloadPhoto } from '@/views/exam/paper/exam/exam'
 import { getUser } from '@/views/platform/user/user'
 import { controlCopy } from '@/utils/documentUtil'
 import { reviewPaper } from '@/views/exam/paper/paper/paper'
@@ -237,7 +268,8 @@ export default {
       radioRights: {},
       multiRights: {},
       myRadio: {},
-      myMulti: {}
+      myMulti: {},
+      photoUrls: []
     }
   },
   computed: {
@@ -317,6 +349,22 @@ export default {
         getUser(this.paperData.userId).then(res => {
           this.userInfo = res.data
         })
+        // 如果该试卷需要拍照，则下载拍照图片
+        if (this.paperData.photoFrequency > 0) {
+          listPhotoByPaperId(this.paperData.id).then(res => {
+            const photoList = res.data
+            photoList.forEach((item) => {
+              const photoReq = {
+                id: item.id,
+                type: item.type
+              }
+              downloadPhoto(photoReq).then((res) => {
+                item.url = URL.createObjectURL(res.data)
+                this.photoUrls.push(item)
+              })
+            })
+          })
+        }
         // 禁止复制试卷内容
         if (!this.paperData.paperCopy) {
           this.dynamicStyle = {
