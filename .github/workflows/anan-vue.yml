@@ -28,6 +28,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
+          git config --global url."https://".insteadOf git://
           npm install @vue/cli@4.5.17
           npm install
 
