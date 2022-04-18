@@ -1,4 +1,4 @@
-import { postRequest, upload, download } from '@/utils/request'
+import { exportExcelRequest, postRequest, uploadFileRequest } from '@/utils/request'
 
 /**
  * 题库详情
@@ -21,7 +21,7 @@ export function saveData(data) {
  * @param data
  */
 export function exportExcel(data) {
-  return download('gateway/exam/api/qu/qu/export', data)
+  return exportExcelRequest('gateway/exam/api/qu/qu/export', data)
 }
 
 /**
@@ -29,7 +29,7 @@ export function exportExcel(data) {
  * @param data
  */
 export function importTemplate() {
-  return download('gateway/exam/api/qu/qu/import/template')
+  return exportExcelRequest('gateway/exam/api/qu/qu/import/template')
 }
 
 /**
@@ -37,6 +37,6 @@ export function importTemplate() {
  * @param data
  */
 export function importExcel(file) {
-  return upload('gateway/exam/api/qu/qu/import', file)
+  return uploadFileRequest('gateway/exam/api/qu/qu/import', file)
 }
 

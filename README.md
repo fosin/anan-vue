@@ -52,11 +52,15 @@ anan-cloud 项目地址：<https://github.com/fosin/anan-cloud>
 npm config set registry https://registry.npm.taobao.org --global
 npm config set disturl https://npm.taobao.org/dist --global
 
+
 # 安装vue/cli 4.x
 # 安装之后可以使用 vue --version 或者vue -V来检查版本是否安装正确
-npm install -g @vue/cli
+npm install -g @vue/cli@4.5.17
 
 # 安装依赖包
+#如果报错The unauthenticated git protocol on port 9418 is no longer supported.，则需要设置git
+#git config --global url."https://".insteadOf git://
+
 npm install
 
 # 启动开发调试 http://localhost:9528/anan-vue/
