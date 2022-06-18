@@ -4,10 +4,11 @@
     :options="options"
     :list-query="listQuery"
     style="width: 100%"
+    @handle-add="handleAdd()"
   >
     <template slot="filter-content">
       <el-select
-        v-model="listQuery.params.openType"
+        v-model="listQuery.pageModule.params.openType"
         class="filter-item"
         placeholder="开放类型"
         clearable
@@ -22,7 +23,7 @@
         />
       </el-select>
       <el-date-picker
-        v-model="listQuery.params.startTime"
+        v-model="listQuery.pageModule.params.startTime"
         class="filter-item"
         value-format="yyyy-MM-dd"
         type="date"
@@ -30,7 +31,7 @@
         style="width: 150px"
       />
       <el-date-picker
-        v-model="listQuery.params.endTime"
+        v-model="listQuery.pageModule.params.endTime"
         class="filter-item"
         value-format="yyyy-MM-dd"
         type="date"
@@ -193,11 +194,7 @@
           <span>{{ getDicValue(organizTopUsers,"id",scope.row.updateBy,"username") }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.updateTime.label')" width="160px" align="center" prop="update_time" sortable="true">
-        <template slot-scope="scope">
-          {{ scope.row.updateTime }}
-        </template>
-      </el-table-column>
+      <el-table-column :label="$t('table.updateTime.label')" width="160px" align="center" prop="updateTime" sortable="true" />
       <el-table-column
         fixed="right"
         label="操作"
@@ -214,7 +211,7 @@
 </template>
 
 <script>
-import DataTable from '@/views/exam/components/DataTable'
+import DataTable from '@/components/DataTable'
 import { listUserByTopId } from '@/views/platform/user/user'
 
 export default {
@@ -226,19 +223,48 @@ export default {
       examStates: [],
       organizTopUsers: [],
       listQuery: {
-        current: 1,
-        size: 10,
-        params: {
-          title: ''
-        },
-        sort: {
-          sortOrder: 'ASC',
-          sortName: 'title'
-        },
+        listUrl: 'gateway/exam/api/exam/exam/paging',
+        pageSizes: [5, 10, 25, 50, 100],
         search: {
-          column: 'title',
-          input: '',
+          input: null,
+          cols: ['title'],
           placeholder: '搜索考试名称'
+        },
+        pageModule: {
+          pageNumber: 1,
+          pageSize: 10,
+          params: {
+            title: null,
+            openType: null,
+            startTime: null,
+            endTime: null,
+            queryRule: {
+              logiOperator: 'and',
+              relaRules: [
+                {
+                  fieldName: 'title',
+                  relaOperator: 'like'
+                },
+                {
+                  fieldName: 'openType',
+                  relaOperator: 'eq'
+                },
+                {
+                  fieldName: 'startTime',
+                  relaOperator: 'ge'
+                },
+                {
+                  fieldName: 'endTime',
+                  relaOperator: 'le'
+                }
+              ]
+            },
+            sortRules: [{
+              sortName: 'title',
+              sortOrder: 'ASC'
+            }
+            ]
+          }
         }
       },
       options: {
@@ -248,29 +274,49 @@ export default {
         multiActions: [
           {
             value: 'delete',
-            label: this.$t('table.delete')
-          }, {
-            value: 'enable',
-            label: this.$t('table.enable')
+            label: this.$t('table.delete'),
+            url: 'gateway/exam/api/exam/exam/ids',
+            method: 'delete',
+            permissionId: '0',
+            confirm: true
           },
           {
             value: 'disable',
-            label: this.$t('table.disable')
+            label: this.$t('table.disable'),
+            url: 'gateway/exam/api/exam/exam/field/state/1',
+            method: 'post',
+            permissionId: '0',
+            confirm: true
+          },
+          {
+            value: 'enable',
+            label: this.$t('table.enable'),
+            url: 'gateway/exam/api/exam/exam/field/state/0',
+            method: 'post',
+            permissionId: '0',
+            confirm: false
           }
         ],
-        // 列表请求URL
-        listUrl: 'gateway/exam/api/exam/exam/paging',
-        // 删除请求URL
-        deleteUrl: 'gateway/exam/api/exam/exam/delete',
-        // 删除请求URL
-        stateUrl: 'gateway/exam/api/exam/exam/field/state',
-        addRoute: 'ExamManagementExamAdd'
+        addAction: {
+          enable: true,
+          route: 'ExamManagementExamAdd',
+          permissionId: '0'
+        },
+        tableRowClass: {
+          column: 'state',
+          data: [
+            {
+              key: 1,
+              value: 'info-row'
+            }
+          ]
+        }
       }
     }
   },
   created() {
     listUserByTopId().then(response => {
-      this.organizTopUsers = response.data
+      this.organizTopUsers = response.data.data
     }).catch(reason => {
       this.$notify({
         title: '获取所有用户失败',

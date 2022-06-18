@@ -1,6 +1,6 @@
 <template>
   <div class="app-container calendar-list-container">
-    <div class="filter-container">
+    <!-- <div class="filter-container">
       <el-input
         v-model="pageModule.params.name"
         :placeholder="$t('anan_version.searchText')"
@@ -25,94 +25,75 @@
           {{ $t('table.add') }}
         </el-button>
       </el-button-group>
-    </div>
-    <el-table
-      v-loading="listLoading"
-      :data="list"
-      element-loading-text="努力加载中"
-      border
-      fit
-      highlight-current-row
+    </div> -->
+    <data-table
+      ref="pagingTable"
+      :options="options"
+      :list-query="listQuery"
       style="width: 100%"
-      @sort-change="sortChange"
-      @row-click="rowClick"
+      @handle-add="handleAdd()"
     >
-      <el-table-column :label="$t('anan_version.name.label')" align="center" sortable prop="name" width="180px" />
-      <el-table-column :label="$t('anan_version.type.label')" align="center" sortable prop="type" width="120px">
-        <template slot-scope="scope">
-          <el-tag>{{ getAnanDicValue(typeOptions,scope.row.type) }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('anan_version.price.label')" align="center" sortable prop="price" width="120px" />
-      <el-table-column :label="$t('anan_version.validity.label')" align="center" sortable prop="validity" width="100px" />
-      <el-table-column :label="$t('anan_version.tryoutDays.label')" align="center" sortable prop="tryoutDays" width="110px" />
-      <el-table-column :label="$t('anan_version.protectDays.label')" align="center" sortable prop="protectDays" width="100px" />
-      <el-table-column :label="$t('anan_version.maxOrganizs.label')" align="center" sortable prop="maxOrganizs" width="140px" />
-      <el-table-column :label="$t('anan_version.maxUsers.label')" align="center" sortable prop="maxUsers" width="120px" />
-      <!--<el-table-column align="center" :label="$t('anan_version.beginTime.label')" sortable prop="beginTime" width="160"></el-table-column>
+      <template slot="filter-content" />
+      <template slot="data-columns">
+        <el-table-column :label="$t('anan_version.name.label')" align="center" sortable prop="name" width="180px" />
+        <el-table-column :label="$t('anan_version.type.label')" align="center" sortable prop="type" width="120px">
+          <template slot-scope="scope">
+            <el-tag>{{ getAnanDicValue(typeOptions,scope.row.type) }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('anan_version.price.label')" align="center" sortable prop="price" width="120px" />
+        <el-table-column :label="$t('anan_version.validity.label')" align="center" sortable prop="validity" width="100px" />
+        <el-table-column :label="$t('anan_version.tryoutDays.label')" align="center" sortable prop="tryoutDays" width="110px" />
+        <el-table-column :label="$t('anan_version.protectDays.label')" align="center" sortable prop="protectDays" width="100px" />
+        <el-table-column :label="$t('anan_version.maxOrganizs.label')" align="center" sortable prop="maxOrganizs" width="140px" />
+        <el-table-column :label="$t('anan_version.maxUsers.label')" align="center" sortable prop="maxUsers" width="120px" />
+        <!--<el-table-column align="center" :label="$t('anan_version.beginTime.label')" sortable prop="beginTime" width="160"></el-table-column>
       <el-table-column align="center" :label="$t('anan_version.endTime.label')" sortable prop="endTime" width="160"></el-table-column>-->
-      <el-table-column :label="$t('anan_version.status.label')" align="center" sortable prop="status" width="110px">
-        <template slot-scope="scope">
-          <el-tag>{{ getAnanDicValue(statusOptions,scope.row.status) }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column
-        :label="$t('table.updateBy.label')"
-        align="center"
-        sortable
-        prop="updateBy"
-        width="100px"
-      >
-        <template slot-scope="scope">
-          <span>{{ getDicValue(organizTopUsers,"id",scope.row.updateBy,"username") }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('table.updateTime.label')" width="160px" align="center" sortable prop="updateTime" />
-      <el-table-column :label="$t('table.actions')" align="center" width="200" fixed="right">
-        <template slot-scope="scope">
-          <el-tooltip class="item" effect="dark" :content="$t('table.edit')" placement="top">
-            <el-button
-              v-waves
-              v-permission="'113'"
-              round
-              size="mini"
-              type="success"
-              class="filter-item"
-              icon="el-icon-edit"
-              @click="handleEdit(scope.row)"
-            />
-          </el-tooltip>
-          <el-tooltip class="item" effect="dark" :content="$t('table.permission')" placement="top">
-            <el-button
-              round
-              size="mini"
-              type="warning"
-              icon="el-icon-menu"
-              style="margin-left: 5px;"
-              @click="handlePermission(scope.row)"
-            />
-          </el-tooltip>
-          <el-tooltip class="item" effect="dark" :content="$t('table.delete')" placement="top">
-            <el-button
-              v-waves
-              v-permission="'114'"
-              round
-              size="mini"
-              type="danger"
-              class="filter-item"
-              style="margin-left: 5px;"
-              icon="el-icon-delete"
-              @click="handleDelete(scope.row)"
-            />
-          </el-tooltip>
-        </template>
-      </el-table-column>
-    </el-table>
-
-    <div v-show="!listLoading" class="pagination-container">
-      <el-pagination :current-page.sync="pageModule.pageNumber" :page-sizes="pageSizes" :page-size="pageModule.pageSize" :total="total" layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
-    </div>
-
+        <el-table-column :label="$t('anan_version.status.label')" align="center" sortable prop="status" width="110px">
+          <template slot-scope="scope">
+            <el-tag>{{ getAnanDicValue(statusOptions,scope.row.status) }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="$t('table.updateBy.label')"
+          align="center"
+          sortable
+          prop="updateBy"
+          width="100px"
+        >
+          <template slot-scope="scope">
+            <span>{{ getDicValue(organizTopUsers,"id",scope.row.updateBy,"username") }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('table.updateTime.label')" width="160px" align="center" sortable prop="updateTime" />
+        <el-table-column :label="$t('table.actions')" align="center" width="120px" fixed="right">
+          <template slot-scope="scope">
+            <el-tooltip class="item" effect="dark" :content="$t('table.edit')" placement="top">
+              <el-button
+                v-waves
+                v-permission="'113'"
+                round
+                size="mini"
+                type="success"
+                class="filter-item"
+                icon="el-icon-edit"
+                @click="handleEdit(scope.row)"
+              />
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" :content="$t('table.permission')" placement="top">
+              <el-button
+                round
+                size="mini"
+                type="warning"
+                icon="el-icon-menu"
+                style="margin-left: 5px;"
+                @click="handlePermission(scope.row)"
+              />
+            </el-tooltip>
+          </template>
+        </el-table-column>
+      </template>
+    </data-table>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="700px">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-row>
@@ -224,16 +205,19 @@
   </div>
 </template>
 <script>
-import { getVersion, postVersion, putVersion, deleteVersion, listVersionPage, listVersionPermissions, putVersionPermissions } from './version'
-import { listChildPermissions } from '../permission/permission'
-
+import DataTable from '@/components/DataTable'
 import { formatDate } from '@/utils/date'
-import grantPermission from '../permission/grantPermission'
+
 import { listUserByTopId } from '@/views/platform/user/user'
+import grantPermission from '../permission/grantPermission'
+import { listChildPermissions } from '../permission/permission'
+import { getVersion, listVersionPermissions, postVersion, putVersion, putVersionPermissions } from './version'
+
 export default {
   name: 'DevelopmentVersion',
   components: {
-    grantPermission
+    grantPermission,
+    DataTable
   },
   filters: {
     dateFormatFilter(date, pattern) {
@@ -242,32 +226,65 @@ export default {
   },
   data() {
     return {
-      list: null,
-      total: null,
-      listLoading: false,
-      tryout: false,
-      pageModule: {
-        pageNumber: 1,
-        pageSize: 10,
-        params: {
-          name: '',
-          queryRule: {
-            logiOperator: 'or',
-            relaRules: [
-              {
-                fieldName: 'name',
-                relaOperator: 'like'
-              }
-            ]
-          },
-          sortRules: [
-            {
-              sortName: 'name',
+      listQuery: {
+        listUrl: 'gateway/platform/v1/version/paging',
+        pageSizes: [5, 10, 25, 50, 100],
+        search: {
+          input: null,
+          cols: ['name'],
+          placeholder: this.$t('anan_version.searchText')
+        },
+        pageModule: {
+          pageNumber: 1,
+          pageSize: 10,
+          params: {
+            name: null,
+            queryRule: {
+              logiOperator: 'or',
+              relaRules: [
+                {
+                  fieldName: 'name',
+                  relaOperator: 'like'
+                }
+              ]
+            },
+            sortRules: [{
+              sortName: 'id',
               sortOrder: 'ASC'
+            }]
+          }
+        }
+      },
+      options: {
+        // 可批量操作
+        multi: true,
+        // 批量操作列表
+        multiActions: [
+          {
+            value: 'delete',
+            label: this.$t('table.delete'),
+            url: 'gateway/platform/v1/version/ids',
+            method: 'delete',
+            permissionId: '114',
+            confirm: true
+          }
+        ],
+        addAction: {
+          enable: true,
+          route: '',
+          permissionId: '112'
+        },
+        tableRowClass: {
+          column: 'status',
+          data: [
+            {
+              key: 1,
+              value: 'info-row'
             }
           ]
         }
       },
+      tryout: false,
       pageSizes: [],
       typeOptions: [],
       statusOptions: [],
@@ -394,7 +411,7 @@ export default {
       this.statusOptions = res.details
     })
     this.loadOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数').then(res => {
-      this.pageModule.pageSize = parseInt(res)
+      this.listQuery.pageModule.pageSize = parseInt(res)
     })
     this.loadOrganizParameterValue('DefaultPageSizes', '5,10,25,50,100', '表格默认每页记录数可选择项').then(res => {
       const temp = res.split(',')
@@ -404,7 +421,7 @@ export default {
       }
     })
     listUserByTopId().then(response => {
-      this.organizTopUsers = response.data
+      this.organizTopUsers = response.data.data
     }).catch(reason => {
       this.$notify({
         title: '获取所有用户失败',
@@ -413,36 +430,8 @@ export default {
         duration: 5000
       })
     })
-    this.getList()
   },
   methods: {
-    getList() {
-      this.listLoading = true
-      listVersionPage(this.pageModule).then(response => {
-        this.list = response.data.rows
-        this.total = response.data.total
-        this.listLoading = false
-      }).catch(reason => {
-        this.$notify({
-          title: '获取列表失败',
-          message: reason.message,
-          type: 'error',
-          duration: 5000
-        })
-      })
-    },
-    handleSearch() {
-      this.pageModule.pageNumber = 1
-      this.getList()
-    },
-    handleSizeChange(val) {
-      this.pageModule.pageSize = val
-      this.getList()
-    },
-    handleCurrentChange(val) {
-      this.pageModule.pageNumber = val
-      this.getList()
-    },
     handleAdd() {
       this.resetForm()
       this.dialogStatus = 'create'
@@ -450,7 +439,7 @@ export default {
     },
     handleEdit(row) {
       getVersion(row['id']).then(response => {
-        this.form = response.data
+        this.form = response.data.data
         this.form.status = this.form.status + ''
         this.tryout = this.form.tryout === 1
         this.dialogFormVisible = true
@@ -464,35 +453,6 @@ export default {
         })
       })
     },
-    handleDelete(row) {
-      this.$confirm(
-        '此操作将永久删除版本[' + row.name + '], 是否继续?',
-        '提示',
-        {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }
-      ).then(() => {
-        deleteVersion(row['id']).then(response => {
-          this.dialogFormVisible = false
-          this.getList()
-          this.$notify({
-            title: '成功',
-            message: '删除成功!',
-            type: 'success',
-            duration: 2000
-          })
-        }).catch(reason => {
-          this.$notify({
-            title: '删除失败',
-            message: reason.message,
-            type: 'error',
-            duration: 5000
-          })
-        })
-      })
-    },
     create(formName) {
       const set = this.$refs
       set[formName].validate(valid => {
@@ -500,7 +460,7 @@ export default {
           this.form.tryout = this.tryout ? 1 : 0
           postVersion(this.form).then(() => {
             this.dialogFormVisible = false
-            this.getList()
+            this.$refs.pagingTable.getList()
             this.$notify({
               title: '成功',
               message: '创建成功',
@@ -524,7 +484,7 @@ export default {
       listVersionPermissions(row.id)
         .then(response => {
           this.form = row
-          this.$refs.grantPermission.initData(this, this.form, response.data, '125')
+          this.$refs.grantPermission.initData(this, this.form, response.data.data, '125')
         }).catch(reason => {
           this.$notify({
             title: '获取版本权限失败',
@@ -576,7 +536,7 @@ export default {
           this.form.tryout = this.tryout ? 1 : 0
           putVersion(this.form).then(() => {
             this.dialogFormVisible = false
-            this.getList()
+            this.$refs.pagingTable.getList()
             this.$notify({
               title: '成功',
               message: '修改成功',
@@ -610,20 +570,6 @@ export default {
         maxUsers: 300,
         status: '0'
       }
-    },
-    sortChange(column) {
-      const sortRule = {
-        sortOrder: (column.order && column.order === 'descending') ? 'DESC' : 'ASC',
-        sortName: column.prop
-      }
-      this.pageModule.params.sortRules = []
-      this.pageModule.params.sortRules.push(sortRule)
-      if (column.prop) {
-        this.getList()
-      }
-    },
-    rowClick(row, event, column) {
-      this.form = row
     }
   }
 }

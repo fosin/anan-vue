@@ -1,4 +1,4 @@
-import { allRequest, deleteRequest, postRequest, putRequest } from '@/utils/request'
+import request, { deleteRequest, postRequest, putRequest } from '@/utils/request'
 
 // 获取系统服务表数据分页列表
 export function listServicePage(page) {
@@ -6,7 +6,7 @@ export function listServicePage(page) {
 }
 
 // 获取系统服务表所有数据列表
-export function listService(data) {
+export function listService(data = {}) {
   return postRequest('gateway/platform/v1/service/list', data)
 }
 
@@ -18,7 +18,7 @@ export function postService(obj) {
 // 根据主键ID获取系统服务表数据
 export function getService(id, method) {
   if (method) {
-    return allRequest('gateway/platform/v1/service/' + id, method)
+    return request({ url: 'gateway/platform/v1/service/' + id, method: method })
   }
   return postRequest('gateway/platform/v1/service/' + id)
 }
@@ -37,5 +37,4 @@ export function putService(obj) {
 export function getServiceByStatus(status) {
   if (!status) status = 0
   return listService({ status: status })
-  // return getRequest('gateway/platform/v1/service/status/' + status)
 }

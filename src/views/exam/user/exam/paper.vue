@@ -5,19 +5,19 @@
         <el-col :span="6">
           合格分/总分：{{ item.qualifyScore }} / {{ item.totalScore }}
         </el-col>
-        <el-col :span="6">
+        <el-col :span="5">
           考试用时：{{ item.userTime }}分钟
         </el-col>
         <el-col :span="6">
           考试状态：{{ getAnanDicValue(paperStates, item.state) }}
         </el-col>
-        <el-col :span="6">
+        <el-col :span="7">
           考试时间：{{ item.createTime }}
         </el-col>
         <el-col v-if="item.state ===2 || item.state ===3" :span="6">
           得分/正确率：{{ item.userScore }} / {{ item.accuracy }}%
         </el-col>
-        <el-col v-if="item.state ===2 || item.state ===3" :span="6">
+        <el-col v-if="item.state ===2 || item.state ===3" :span="5">
           考试评级：<span :style="{ color: rankColor[item.rank] }">{{ getAnanDicValue(rankDics, item.rank) }}</span>
         </el-col>
         <el-col v-if="item.showPaper" :span="6">
@@ -92,7 +92,7 @@ export default {
   methods: {
     fetchPaperList() {
       listPaper(this.userId, this.examId).then(response => {
-        this.paperList = response.data.records
+        this.paperList = response.data.data
       }).catch((reason) => {
         this.$notify({
           title: '获取试卷数据失败',

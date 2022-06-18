@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { MessageBox } from 'element-ui'
-import NProgress from 'nprogress' // progress bar
+import { MessageBox, Notification } from 'element-ui'
+import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import store from '../store'
 // import { cacheAdapterEnhancer } from '@/utils/cache'
@@ -17,7 +17,7 @@ NProgress.configure({ showSpinner: false })// NProgress Configuration
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 
 // create an axios instance
-const service = axios.create({
+const request = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // api的base_url
   timeout: 30000, // request timeout
   // adapter: cacheAdapterEnhancer(axios.defaults.adapter, {
@@ -27,13 +27,17 @@ const service = axios.create({
   withCredentials: true // 跨域请求，允许保存cookie
 })
 let reLogin = false
+let errorStatus = false
 
 // request interceptor
-service.interceptors.request.use(config => {
+request.interceptors.request.use(config => {
   NProgress.start() // start progress bar
+  if (errorStatus) {
+    return Promise.reject('系统崩溃了，请重新登陆系统，再尝试！')
+  }
   if (store.getters.ananToken.access_token && store.getters.ananUserInfo) {
     // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
-    config.headers['Authorization'] = WordCap(store.getters.ananToken.token_type) + ' ' + store.getters.ananToken.access_token
+    config.headers['Authorization'] = wordCap(store.getters.ananToken.token_type) + ' ' + store.getters.ananToken.access_token
   }
   return config
 }, error => {
@@ -42,46 +46,64 @@ service.interceptors.request.use(config => {
 })
 
 // respone interceptor
-service.interceptors.response.use(response => {
+request.interceptors.response.use(response => {
   NProgress.done()
   // 如果返回的状态码为200，说明接口请求成功，可以正常拿到数据
   // 否则的话抛出错误
+  const data = response.data
+  if (data && data.code > 8) {
+    return Promise.reject(getRealError(2, response))
+  }
   return Promise.resolve(response)
 }, error => {
   NProgress.done()
   // 我们可以在这里对异常状态作统一处理
   // 尝试刷新access_toekn续用登录状态
-  if (!reLogin && (error.response.status === 401)) {
-    reLogin = true
-    MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
-      confirmButtonText: '重新登录',
-      cancelButtonText: '取消',
-      type: 'error'
-    }).then(() => {
+  const status = error.response.status
+  switch (status) {
+    case 401:
+      directReLogin()
+      break
+    case 403:
       store.dispatch('RefreshAccessToken').then(() => {
         reLogin = false
         return Promise.resolve()
       }).catch(() => {
-        store.dispatch('FedLogOut').then(() => {
-          location.reload() // 为了重新实例化vue-router对象 避免bug
-        })
+        directReLogin()
         reLogin = false
       })
-    }).catch(() => {
-      store.dispatch('FedLogOut').then(() => {
-        location.reload() // 为了重新实例化vue-router对象 避免bug
-      })
-      reLogin = false
-    })
+      break
+    default:
+      break
   }
   return Promise.reject(getRealError(1, error))
 })
+/**
+ * 重新登陆
+ */
+function directReLogin() {
+  if (!reLogin) {
+    reLogin = true
+    MessageBox.confirm('无效的登陆信息，取消继续留在该页面或者重新登录', '确定登出', {
+      confirmButtonText: '重新登录',
+      cancelButtonText: '取消',
+      type: 'error'
+    }).then(() => {
+      store.dispatch('FedLogOut').then(() => {
+        location.reload() // 为了重新实例化vue-router对象 避免bug
+      })
+    }).catch(() => {
+      reLogin = false
+      errorStatus = true
+    })
+  }
+}
 
 /**
  * 首字母大写
  * @return {string}
  */
-function WordCap(s) {
+function wordCap(s) {
   return s.toLowerCase().replace(/\b([\w|']+)\b/g, function(word) {
     return word.replace(word.charAt(0), word.charAt(0).toUpperCase())
   })
@@ -89,12 +111,12 @@ function WordCap(s) {
 function getRealError(from, error) {
   switch (from) {
     case 1:
-      if (error.response && error.response.data) {
-        error.message = error.response.data
+      if (error.response && error.response.data.data) {
+        error.message = error.response.data.data
       }
       break
     case 2:
-      error.message = '(' + error.data.code + ')' + error.data.msg
+      error.message = error.data.msg + '(错误号：' + error.data.code + ')'
       break
     case 3:
       error.message = '(' + error.status + ')' + error.message || '(' + error.data.code + ')' + error.data.msg
@@ -107,59 +129,22 @@ function getRealError(from, error) {
   }
   return error
 }
-export default service
+export default request
 
-export const allRequest = ({ url = '',
-  baseURL = process.env.VUE_APP_BASE_API,
-  withCredentials = true,
-  data = {},
-  params = {},
-  method = 'post',
-  header = {},
-  responseType = '',
-  timeout = 30000
-}, notify = true) => {
-  return new Promise((resolve, reject) => {
-    service({
-      method: method,
-      url: url,
-      data: data,
-      header: header,
-      timeout: timeout,
-      baseURL: baseURL,
-      withCredentials: withCredentials,
-      params: params,
-      responseType: responseType
-    }).then(value => {
-      resolve(value)
-    }).catch(reason => {
-      // if (notify) {
-      //   Notification.error({
-      //     title: '请求数据失败',
-      //     message: process.env.NODE_ENV === 'development' ? url + ':' + reason.message : reason.message,
-      //     type: 'error',
-      //     duration: 5000
-      //   })
-      // }
-      reject(reason)
-    })
-  })
-}
-
-export const postRequest = (url, data, notify = true) => {
-  return allRequest({ url: url, data: data, method: 'post' }, notify)
+export const postRequest = (url, data, params, notify = true) => {
+  return request({ url: url, data: data, params: params, method: 'post' })
 }
 
 export const putRequest = (url, data, notify = true) => {
-  return allRequest({ url: url, data: data, method: 'put' }, notify)
+  return request({ url: url, data: data, method: 'put' })
 }
 
 export const deleteRequest = (url, data, notify = true) => {
-  return allRequest({ url: url, data: data, method: 'delete' }, notify)
+  return request({ url: url, data: data, method: 'delete' })
 }
 
-export const getRequest = (url, notify = true) => {
-  return allRequest({ url: url, data: null, method: 'get' }, notify)
+export const getRequest = (url, params, notify = true) => {
+  return request({ url: url, params: params, method: 'get' })
 }
 
 /**
@@ -169,13 +154,13 @@ export const getRequest = (url, notify = true) => {
  * @param {boolean} notify 失败后是否自动提示
  * @returns promise
  */
-export const uploadFormRequest = (url, formData, notify) => {
-  return allRequest({ url: url,
+export const uploadFormRequest = (url, formData) => {
+  return request({ url: url,
     data: formData,
-    methods: 'post',
+    method: 'post',
     timeout: 120000,
     headers: { 'Content-Type': 'multipart/form-data' }
-  }, notify)
+  })
 }
 
 /**
@@ -191,9 +176,9 @@ export function uploadFileRequest(url, file) {
 }
 
 export function downloadFileRequest(url, data) {
-  return allRequest({ url: url,
+  return request({ url: url,
     data: data,
-    methods: 'post',
+    method: 'post',
     timeout: 120000,
     responseType: 'blob'
   })
@@ -207,8 +192,7 @@ export function downloadFileRequest(url, data) {
 export function exportExcelRequest(url, data) {
   downloadFileRequest(url, data).then(res => {
     // 文件下载
-    debugger
-    const blob = new Blob([res.data], {
+    const blob = new Blob([res.data.data], {
       type: 'application/vnd.ms-excel'
     })
 

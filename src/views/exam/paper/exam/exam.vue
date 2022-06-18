@@ -15,17 +15,28 @@
           </el-button>
         </el-card>
       </el-col>
-      <el-col :span="6" :xs="24" style="margin-bottom: 10px">
+      <el-col
+        :span="6"
+        :xs="24"
+        style="margin-bottom: 10px"
+      >
         <el-card>
           <p class="card-title">答题卡</p>
-          <el-row :gutter="24" class="card-line" style="padding-left: 10px">
+          <el-row
+            :gutter="24"
+            class="card-line"
+            style="padding-left: 10px"
+          >
             <el-tag type="info">未作答</el-tag>
             <el-tag type="success">已作答</el-tag>
             <el-tag type="warning">当前题</el-tag>
           </el-row>
           <div v-if="paperData.radioList!==undefined && paperData.radioList.length > 0">
             <p class="card-title">单选题</p>
-            <el-row :gutter="24" class="card-line">
+            <el-row
+              :gutter="24"
+              class="card-line"
+            >
               <el-tag
                 v-for="item in paperData.radioList"
                 :key="item.id"
@@ -37,7 +48,10 @@
           </div>
           <div v-if="paperData.multiList!==undefined && paperData.multiList.length > 0">
             <p class="card-title">多选题</p>
-            <el-row :gutter="24" class="card-line">
+            <el-row
+              :gutter="24"
+              class="card-line"
+            >
               <el-tag
                 v-for="item in paperData.multiList"
                 :key="item.id"
@@ -49,7 +63,10 @@
           </div>
           <div v-if="paperData.judgeList!==undefined && paperData.judgeList.length > 0">
             <p class="card-title">判断题</p>
-            <el-row :gutter="24" class="card-line">
+            <el-row
+              :gutter="24"
+              class="card-line"
+            >
               <el-tag
                 v-for="item in paperData.judgeList"
                 :key="item.id"
@@ -61,7 +78,10 @@
           </div>
           <div v-if="paperData.saqList!==undefined && paperData.saqList.length > 0">
             <p class="card-title">简答题</p>
-            <el-row :gutter="24" class="card-line">
+            <el-row
+              :gutter="24"
+              class="card-line"
+            >
               <el-tag
                 v-for="item in paperData.saqList"
                 :key="item.id"
@@ -73,7 +93,10 @@
           </div>
         </el-card>
       </el-col>
-      <el-col :span="18" :xs="24">
+      <el-col
+        :span="18"
+        :xs="24"
+      >
         <el-card class="qu-content">
           <el-row>
             <el-col :span="1">
@@ -92,34 +115,73 @@
           </el-row>
           <div v-if="quData.quType === 1 || quData.quType===3">
             <el-radio-group v-model="radioValue">
-              <el-radio v-for="item in quData.answerList" :key="item.id" :label="item.id" @change="handNext()">
+              <el-radio
+                v-for="item in quData.answerList"
+                :key="item.id"
+                :label="item.id"
+                @change="handNext()"
+              >
                 {{ item.quContent }}
-                <div v-if="item.image" style="clear: both" />
+                <div
+                  v-if="item.image"
+                  style="clear: both"
+                />
               </el-radio>
             </el-radio-group>
           </div>
           <div v-if="quData.quType === 2">
             <el-checkbox-group v-model="multiValue">
-              <el-checkbox v-for="item in quData.answerList" :key="item.id" :label="item.id">
+              <el-checkbox
+                v-for="item in quData.answerList"
+                :key="item.id"
+                :label="item.id"
+              >
                 {{ item.quContent }}
-                <div v-if="item.image" style="clear: both" />
+                <div
+                  v-if="item.image"
+                  style="clear: both"
+                />
               </el-checkbox>
             </el-checkbox-group>
           </div>
           <div v-if="quData.quType === 4">
             <el-tag type="primary">答题：</el-tag>
-            <el-input v-model="quData.answer" :autosize="{ minRows: 12, maxRows: 99}" type="textarea" />
+            <el-input
+              v-model="quData.answer"
+              :autosize="{ minRows: 12, maxRows: 99}"
+              type="textarea"
+            />
           </div>
         </el-card>
         <div style="margin-top: 20px">
-          <el-button v-if="showPrevious" type="primary" icon="el-icon-arrow-left" @click="handPrevious()">
+          <el-button
+            v-if="showPrevious"
+            type="primary"
+            icon="el-icon-arrow-left"
+            @click="handPrevious()"
+          >
             上一题
           </el-button>
-          <el-button v-if="showNext" type="warning" @click="handNext()">
+          <el-button
+            v-if="showNext"
+            type="warning"
+            @click="handNext()"
+          >
             下一题 <i class="el-icon-arrow-right el-icon--right" />
           </el-button>
-          <video ref="videoCamera" :width="videoWidth" :height="videoHeight" autoplay style="float: right" />
-          <canvas ref="canvasCamera" style="display:none;" :width="canvas.width" :height="canvas.height" />
+          <video
+            ref="videoCamera"
+            :width="videoWidth"
+            :height="videoHeight"
+            autoplay
+            style="float: right"
+          />
+          <canvas
+            ref="canvasCamera"
+            style="display:none;"
+            :width="canvas.width"
+            :height="canvas.height"
+          />
         </div>
       </el-col>
     </el-row>
@@ -127,10 +189,10 @@
 </template>
 
 <script>
-import { paperDetail, quDetail, handExam, fillAnswer, uploadPhotoFromCamera } from './exam'
-import { Loading } from 'element-ui'
-import { callCamera, closeCamera, photograph } from '@/utils/videoCamera'
 import { controlCopy } from '@/utils/documentUtil'
+import { callCamera, closeCamera, photograph } from '@/utils/videoCamera'
+import { Loading } from 'element-ui'
+import { fillAnswer, handExam, paperDetail, quDetail, uploadPhotoFromCamera } from './exam'
 
 export default {
   name: 'ExamOnlineDoExam',
@@ -284,13 +346,14 @@ export default {
     doHandler() {
       this.handleText = '正在交卷，请等待...'
       this.loading = true
-      const params = { id: this.paperId }
-      handExam(params).then(() => {
+      handExam(this.paperId).then(() => {
         this.$message({
           message: '试卷提交成功，即将进入考试结果！',
           type: 'success'
         })
-        this.photographFrequency('last')
+        if (this.paperData.photoFrequency > 0) {
+          this.photographFrequency('last')
+        }
       }).catch((reason) => {
         this.$notify({
           title: '交卷失败失败',
@@ -395,7 +458,7 @@ export default {
       // 查找下个详情
       const params = { paperId: this.paperId, quId: item.quId }
       quDetail(params).then(response => {
-        this.quData = response.data
+        this.quData = response.data.data
         this.quData.quTitle = (this.quData.sort + 1) + '、' + this.quData.content
         this.radioValue = ''
         this.multiValue = []
@@ -449,10 +512,9 @@ export default {
     },
     // 试卷详情
     fetchData(id) {
-      const params = { id: id }
-      paperDetail(params).then(response => {
+      paperDetail(id).then(response => {
         // 试卷内容
-        this.paperData = response.data
+        this.paperData = response.data.data
 
         const that = this
         this.paperData.radioList.forEach(function(item) {
@@ -501,7 +563,7 @@ export default {
         if (this.paperData.ssCount > 0) {
           window.onblur = () => {
             this.postRequest('gateway/exam/api/paper/paper/issCount/' + this.paperId).then(res => {
-              const value = res.data
+              const value = res.data.data
               if (value <= this.paperData.ssCount) {
                 this.$notify({
                   title: '切屏警告',
@@ -550,7 +612,8 @@ export default {
   line-height: 30px;
 }
 
-.el-checkbox-group label, .el-radio-group label {
+.el-checkbox-group label,
+.el-radio-group label {
   width: 100%;
 }
 
@@ -562,7 +625,7 @@ export default {
 }
 
 .card-line {
-  padding-left: 10px
+  padding-left: 10px;
 }
 
 .card-line span {
@@ -570,8 +633,8 @@ export default {
   margin: 2px;
 }
 
-/deep/
-.el-radio, .el-checkbox {
+/deep/ .el-radio,
+.el-checkbox {
   padding: 9px 20px 9px 10px;
   border-radius: 4px;
   border: 1px solid #dcdfe6;
@@ -582,29 +645,26 @@ export default {
   border: #409eff 1px solid;
 }
 
-.el-radio img, .el-checkbox img {
+.el-radio img,
+.el-checkbox img {
   max-width: 200px;
   max-height: 200px;
   border: #dcdfe6 1px dotted;
 }
 
-/deep/
-.el-checkbox__inner {
+/deep/ .el-checkbox__inner {
   display: none;
 }
 
-/deep/
-.el-radio__inner {
+/deep/ .el-radio__inner {
   display: none;
 }
 
-/deep/
-.el-checkbox__label {
+/deep/ .el-checkbox__label {
   line-height: 30px;
 }
 
-/deep/
-.el-radio__label {
+/deep/ .el-radio__label {
   line-height: 30px;
 }
 

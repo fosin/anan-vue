@@ -124,7 +124,7 @@
           lazy
           show-checkbox
           check-strictly
-          :default-checked-keys="postForm.departIds"
+          :default-checked-keys="departIds"
           @check-change="handleCheckChange"
         />
       </div>
@@ -304,11 +304,11 @@
 </template>
 
 <script>
-import { fetchDetail, saveData, prepareQus } from '@/views/exam/exam/exam'
+import RepoTreeSelect from '@/views/exam/components/RepoTreeSelect'
+import { createOrUpdate, fetchDetail, prepareQus } from '@/views/exam/exam/exam'
+import { fetchRepoList } from '@/views/exam/qu/repo/repo'
 import { getOrganiz, listOrganizChild } from '@/views/platform/organization/organization'
 import { mapGetters } from 'vuex'
-import RepoTreeSelect from '@/views/exam/components/RepoTreeSelect'
-import { fetchRepoList } from '@/views/exam/qu/repo/repo'
 import Qupaper from './qupaper'
 
 export default {
@@ -336,6 +336,7 @@ export default {
       // 题库
       repoList: [],
       reposData: [],
+      departIds: [],
       quEnable: [false, false, false, false],
       postForm: {
         // 总分数
@@ -346,12 +347,12 @@ export default {
         repoList: [],
         // 试题列表
         quList: [],
+        // 部门列表
+        departList: [],
         // 组题方式
         joinType: 1,
         // 开放类型
         openType: 1,
-        // 考试班级列表
-        departIds: [],
         // 难度
         level: 0,
         // 查看对错
@@ -451,8 +452,8 @@ export default {
       this.levels = res.details
     })
     const that = this
-    fetchRepoList({}).then(response => {
-      this.reposData = response.data
+    fetchRepoList().then(response => {
+      this.reposData = response.data.data
       if (typeof id !== 'undefined') {
         that.fetchData(id)
       }
@@ -496,8 +497,8 @@ export default {
         const organizId = this.ananUserInfo.organizId
         if (organizId === 0) {
           listOrganizChild(organizId).then(response => {
-            this.defaultExpandedKeys[0] = response.data[0].id
-            return resolve(response.data || [])
+            this.defaultExpandedKeys[0] = response.data.data[0].id
+            return resolve(response.data.data || [])
           }).catch(reason => {
             this.$notify({
               title: '加载子节点失败',
@@ -509,7 +510,7 @@ export default {
         } else {
           getOrganiz(organizId).then((response2) => {
             const organizs = []
-            organizs.push(response2.data)
+            organizs.push(response2.data.data)
             this.defaultExpandedKeys[0] = organizId
             return resolve(organizs || [])
           }).catch(reason => {
@@ -523,7 +524,7 @@ export default {
         }
       } else {
         listOrganizChild(node.data.id).then(response => {
-          return resolve(response.data || [])
+          return resolve(response.data.data || [])
         }).catch(reason => {
           this.$notify({
             title: '加载子节点失败',
@@ -619,11 +620,11 @@ export default {
     handleCheckChange() {
       const that = this
       // 置空
-      this.postForm.departIds = []
+      this.postForm.departList = []
 
       const nodes = this.$refs.tree.getCheckedNodes()
       nodes.forEach(function(item) {
-        that.postForm.departIds.push(item.id)
+        that.postForm.departList.push({ departId: item.id })
       })
     },
     // 添加子项
@@ -649,7 +650,7 @@ export default {
           level: this.postForm.level
         }
         prepareQus(data).then(response => {
-          this.postForm.quList = response.data
+          this.postForm.quList = response.data.data
           this.sjoinType = '2'
         }).catch(reason => {
           this.$notify({
@@ -697,15 +698,22 @@ export default {
       const that = this
       fetchDetail(id).then(response => {
         this.isSaved = true
-        this.postForm = response.data
+        this.postForm = response.data.data
         this.sjoinType = this.postForm.joinType.toString()
         this.dateValues[0] = this.postForm.startTime
         this.dateValues[1] = this.postForm.endTime
 
         // 填充题库清单
         that.repoList = this.postForm.repoList || []
-        that.repoList.forEach(value => {
-          this.setRepoLimit(value)
+        that.repoList.forEach(repo => {
+          this.setRepoLimit(repo)
+        })
+
+        // 填充默认部门清单
+        that.departIds = []
+        const departList = this.postForm.departList || []
+        departList.forEach(depart => {
+          that.departIds.push(depart.departId)
         })
       }).catch((reason) => {
         this.$notify({
@@ -720,7 +728,7 @@ export default {
     submitForm() {
     // 校验和处理数据
       this.postForm.repoList = this.repoList
-      saveData(this.postForm).then(() => {
+      createOrUpdate(this.postForm).then(() => {
         this.isSaved = true
         this.$notify({
           title: '成功',

@@ -9,8 +9,8 @@ export function listAddressPage(page) {
   })
 }
 // 获取地址信息表所有数据列表
-export function listAddress() {
-  return postRequest('gateway/platform/v1/address/list')
+export function listAddress(data = {}) {
+  return postRequest('gateway/platform/v1/address/list', data)
 }
 // 获取地址信息表所有数据列表
 export function listAddressByEmpId(id, page) {

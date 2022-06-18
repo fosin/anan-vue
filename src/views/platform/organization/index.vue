@@ -151,8 +151,8 @@
 </template>
 
 <script>
-import { listOrganizChild, getOrganiz, postOrganiz, deleteOrganiz, putOrganiz } from './organization'
 import { mapGetters } from 'vuex'
+import { deleteOrganiz, getOrganiz, listOrganizChild, postOrganiz, putOrganiz } from './organization'
 
 export default {
   name: 'SystemOrganiz',
@@ -243,8 +243,8 @@ export default {
         const organizId = this.ananUserInfo.organizId
         if (organizId === 0) {
           listOrganizChild(organizId).then(response => {
-            this.defaultExpandedKeys[0] = response.data[0].id
-            return resolve(response.data || [])
+            this.defaultExpandedKeys[0] = response.data.data[0].id
+            return resolve(response.data.data || [])
           }).catch(reason => {
             this.$notify({
               title: '加载子节点失败',
@@ -256,7 +256,7 @@ export default {
         } else {
           getOrganiz(organizId).then((response2) => {
             const organizs = []
-            organizs.push(response2.data)
+            organizs.push(response2.data.data)
             this.defaultExpandedKeys[0] = organizId
             return resolve(organizs || [])
           }).catch(reason => {
@@ -270,7 +270,7 @@ export default {
         }
       } else {
         listOrganizChild(node.data.id).then(response => {
-          return resolve(response.data || [])
+          return resolve(response.data.data || [])
         }).catch(reason => {
           this.$notify({
             title: '加载子节点失败',
@@ -304,7 +304,7 @@ export default {
         this.formStatus = 'update'
       }
       getOrganiz(data.id).then(response => {
-        this.form = response.data
+        this.form = response.data.data
         this.form.status = this.form.status + ''
       }).catch(reason => {
         this.$notify({
@@ -421,7 +421,7 @@ export default {
         if (valid) {
           postOrganiz(this.form).then(response => {
             const pNode = this.$refs.organizTree.getNode(this.form.pid)
-            this.$refs.organizTree.append(response.data, pNode)
+            this.$refs.organizTree.append(response.data.data, pNode)
             // TODO 以下代码启用后可以解决tree控件bug(会导致原有子节点丢失问题)
             pNode.data.children = null
 

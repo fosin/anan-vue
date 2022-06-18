@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import DataTable from '@/views/exam/components/DataTable'
+import DataTable from '@/components/DataTable'
 import MyPaperList from './paper'
 
 export default {
@@ -73,28 +73,62 @@ export default {
       examId: '',
       userId: '',
       listQuery: {
-        current: 1,
-        size: 10,
-        params: {
-          examId: '',
-          realName: ''
-        },
+        listUrl: 'gateway/exam/api/user/exam/paging',
+        pageSizes: [5, 10, 25, 50, 100],
         search: {
-          column: 'realName',
-          input: '',
+          input: null,
+          cols: ['realName'],
           placeholder: '根据用户姓名查找'
+        },
+        pageModule: {
+          pageNumber: 1,
+          pageSize: 10,
+          params: {
+            realName: null,
+            examId: null,
+            queryRule: {
+              logiOperator: 'and',
+              relaRules: [
+                {
+                  fieldName: 'examId',
+                  relaOperator: 'eq'
+                },
+                {
+                  fieldName: 'realName',
+                  relaOperator: 'like'
+                }
+              ]
+            },
+            sortRules: [{
+              sortName: 'title',
+              sortOrder: 'ASC'
+            }
+            ]
+          }
         }
       },
       options: {
         // 可批量操作
         multi: false,
-        // 列表请求URL
-        listUrl: 'gateway/exam/api/user/exam/paging'
+        // 批量操作列表
+        multiActions: [],
+        addAction: {
+          enable: false
+        },
+        tableRowClass: {
+          column: 'state',
+          data: [
+            {
+              key: 1,
+              value: 'info-row'
+            }
+          ]
+        }
       }
     }
   },
   created() {
-    this.listQuery.params.examId = this.$route.params.examId
+    this.listQuery.pageModule.params.examId = this.$route.params.examId
     this.loadDictionaryById(148).then(res => {
       this.rankDics = res.details
     })

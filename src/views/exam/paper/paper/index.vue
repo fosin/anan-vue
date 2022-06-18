@@ -6,7 +6,7 @@
       :list-query="listQuery"
     >
       <template slot="filter-content">
-        <el-radio-group v-model="listQuery.params.state" style="margin-top: 10px" @change="stateChanged()">
+        <el-radio-group v-model="listQuery.pageModule.params.state" style="margin-left: 20px;margin-top: 5px;" @change="stateChanged()">
           <el-radio
             v-for="item in paperStates"
             :key="item.name"
@@ -20,13 +20,14 @@
           label="考试名称"
           align="center"
           prop="title"
+          width="250px"
           sortable="custom"
           :sort-orders="['ascending','descending']"
         />
         <el-table-column
           label="部门"
           align="center"
-          width="180px"
+          width="150px"
           prop="depart_id"
           sortable="custom"
           :sort-orders="['ascending','descending']"
@@ -48,9 +49,9 @@
           </template>
         </el-table-column>
         <el-table-column
-          label="用时/时长"
+          label="用时"
           align="center"
-          width="120px"
+          width="100px"
           prop="user_time"
           sortable="custom"
           :sort-orders="['ascending','descending']"
@@ -74,25 +75,13 @@
         <el-table-column
           label="得分"
           align="center"
-          width="80px"
+          width="95px"
           prop="user_score"
           sortable="custom"
           :sort-orders="['ascending','descending']"
         >
           <template slot-scope="scope">
-            {{ scope.row.userScore }}分
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="总分"
-          align="center"
-          width="80px"
-          prop="total_score"
-          sortable="custom"
-          :sort-orders="['ascending','descending']"
-        >
-          <template slot-scope="scope">
-            {{ scope.row.totalScore }}分
+            {{ scope.row.userScore }} / {{ scope.row.totalScore }}分
           </template>
         </el-table-column>
         <el-table-column
@@ -127,17 +116,22 @@
           label="考试时间"
           align="center"
           width="160px"
-          prop="create_time"
+          prop="createTime"
           sortable="custom"
           :sort-orders="['ascending','descending']"
-        >
-          <template slot-scope="scope">
-            {{ scope.row.createTime }}
-          </template>
-        </el-table-column>
+        />
+        <el-table-column
+          label="阅卷时间"
+          align="center"
+          width="160px"
+          prop="reviewTime"
+          sortable="custom"
+          :sort-orders="['ascending','descending']"
+        />
         <el-table-column
           label="操作"
           align="center"
+          fixed="right"
           width="90px"
         >
           <template slot-scope="scope">
@@ -167,9 +161,9 @@
 </template>
 
 <script>
-import DataTable from '@/views/exam/components/DataTable'
-import { mapGetters } from 'vuex'
+import DataTable from '@/components/DataTable'
 import { treeAllChildOrganiz } from '@/views/platform/organization/organization'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'ExamManagementReview',
@@ -199,28 +193,68 @@ export default {
         isLeaf: 'leaf'
       },
       listQuery: {
-        current: 1,
-        size: 10,
-        params: {
-          title: '',
-          state: null,
-          departId: 0
-        },
-        sort: {
-          sortOrder: 'DESC',
-          sortName: 'create_time'
-        },
+        listUrl: 'gateway/exam/api/paper/paper/paging',
+        pageSizes: [5, 10, 25, 50, 100],
         search: {
-          column: 'title',
-          input: '',
+          input: null,
+          cols: ['title'],
           placeholder: '搜索考试名称'
+        },
+        pageModule: {
+          pageNumber: 1,
+          pageSize: 10,
+          params: {
+            title: null,
+            state: null,
+            queryRule: {
+              logiOperator: 'and',
+              relaRules: [
+                {
+                  fieldName: 'title',
+                  relaOperator: 'like'
+                },
+                {
+                  fieldName: 'state',
+                  relaOperator: 'eq'
+                }
+              ]
+            },
+            sortRules: [{
+              sortName: 'createTime',
+              sortOrder: 'DESC'
+            }
+            ]
+          }
         }
       },
       options: {
         // 可批量操作
         multi: false,
-        // 列表请求URL
-        listUrl: 'gateway/exam/api/paper/paper/paging'
+        // 批量操作列表
+        multiActions: [
+          {
+            value: 'delete',
+            label: this.$t('table.delete'),
+            url: 'gateway/exam/api/paper/paper/ids',
+            method: 'delete',
+            permissionId: '0',
+            confirm: true
+          }
+        ],
+        addAction: {
+          enable: false,
+          route: '',
+          permissionId: '0'
+        },
+        tableRowClass: {
+          column: 'state',
+          data: [
+            {
+              key: 1,
+              value: 'warning-row'
+            }
+          ]
+        }
       }
     }
   },
@@ -235,7 +269,7 @@ export default {
       this.rankDics = res.details
     })
     treeAllChildOrganiz(this.ananUserInfo.organizId).then(response => {
-      this.treeData[0] = response.data || []
+      this.treeData = response.data.data || []
     }).catch((reason) => {
       this.$notify({
         title: '获取部门数失败',
@@ -270,7 +304,7 @@ export default {
     handleCapture(paperId) {
       // this.dialogVisible = true
       // listCaptures(paperId).then(res => {
-      //   this.captureList = res.data
+      //   this.captureList = res.data.data
       // })
     }
   }

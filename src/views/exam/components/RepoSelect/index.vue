@@ -62,8 +62,16 @@ export default {
   },
   methods: {
     fetchData() {
-      fetchRepoList({}).then(response => {
-        this.dataList = response.data
+      const data = {
+        'sortRules': [
+          {
+            'sortName': 'code',
+            'sortOrder': 'ASC'
+          }
+        ]
+      }
+      fetchRepoList(data).then(response => {
+        this.dataList = response.data.data
       }).catch((reason) => {
         this.$notify({
           title: '获取题库数据失败',

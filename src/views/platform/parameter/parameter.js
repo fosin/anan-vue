@@ -9,8 +9,8 @@ export function listParameterPage(page) {
   })
 }
 // 获取所有数据列表
-export function listParameter() {
-  return postRequest('gateway/platform/v1/parameter/list')
+export function listParameter(data = {}) {
+  return postRequest('gateway/platform/v1/parameter/list', data)
 }
 
 export function postParameter(obj) {

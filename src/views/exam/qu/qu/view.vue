@@ -43,8 +43,8 @@
 </template>
 
 <script>
-import { fetchDetail } from '@/views/exam/qu/qu/qu'
 import { controlCopy } from '@/utils/documentUtil'
+import { fetchDetail } from '@/views/exam/qu/qu/qu'
 
 export default {
   name: 'ExamOnlineViewQu',
@@ -80,7 +80,7 @@ export default {
     },
     fetchData(id) {
       fetchDetail(id).then(response => {
-        this.quData = response.data
+        this.quData = response.data.data
         this.quData.quContent = '【' + this.getAnanDicValue(this.quTypes, this.quData.quType) + '】' + this.quData.content
         this.quData.answerList.forEach((an) => {
           // 解析数量

@@ -8,7 +8,7 @@ export function fetchDetail(url, id) {
   return postRequest(url, { 'id': id })
 }
 
-export function saveData(url, data) {
+export function createOrUpdate(url, data) {
   return postRequest(url, data)
 }
 

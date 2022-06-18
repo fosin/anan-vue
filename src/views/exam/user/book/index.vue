@@ -33,7 +33,7 @@
       </el-table-column>
       <el-table-column
         label="错误次数"
-        prop="wrong_count"
+        prop="wrongCount"
         sortable="custom"
         :sort-orders="['ascending','descending']"
         align="center"
@@ -46,21 +46,17 @@
       <el-table-column
         label="更新时间"
         align="center"
-        prop="update_time"
+        prop="updateTime"
         sortable="custom"
         :sort-orders="['ascending','descending']"
         width="160px"
-      >
-        <template slot-scope="scope">
-          {{ scope.row.updateTime }}
-        </template>
-      </el-table-column>
+      />
     </template>
   </data-table>
 </template>
 
 <script>
-import DataTable from '@/views/exam/components/DataTable'
+import DataTable from '@/components/DataTable'
 import { fetchDetail } from '@/views/exam/exam/exam'
 
 export default {
@@ -68,24 +64,42 @@ export default {
   components: { DataTable },
   data() {
     return {
+      examData: {},
       listQuery: {
-        current: 1,
-        size: 10,
-        params: {
-          title: '',
-          examId: ''
-        },
-        sort: {
-          sortOrder: 'DESC',
-          sortName: 'update_time'
-        },
+        listUrl: 'gateway/exam/api/user/wrong-book/paging',
+        pageSizes: [5, 10, 25, 50, 100],
         search: {
-          column: 'title',
-          input: '',
-          placeholder: '搜索题库名称'
+          input: null,
+          cols: ['title'],
+          placeholder: '搜索考试名称'
+        },
+        pageModule: {
+          pageNumber: 1,
+          pageSize: 10,
+          params: {
+            title: null,
+            examId: null,
+            queryRule: {
+              logiOperator: 'and',
+              relaRules: [
+                {
+                  fieldName: 'title',
+                  relaOperator: 'like'
+                },
+                {
+                  fieldName: 'examId',
+                  relaOperator: 'eq'
+                }
+              ]
+            },
+            sortRules: [{
+              sortName: 'updateTime',
+              sortOrder: 'DESC'
+            }
+            ]
+          }
         }
       },
-      examData: {},
       options: {
         // 可批量操作
         multi: true,
@@ -93,30 +107,42 @@ export default {
         multiActions: [
           {
             value: 'delete',
-            label: this.$t('table.delete')
+            label: this.$t('table.delete'),
+            url: 'gateway/exam/api/user/wrong-book/ids',
+            method: 'delete',
+            permissionId: '0',
+            confirm: true
           }
         ],
-        // 列表请求URL
-        listUrl: 'gateway/exam/api/user/wrong-book/paging',
-        // 删除请求URL
-        deleteUrl: 'gateway/exam/api/user/wrong-book/delete'
+        addAction: {
+          enable: false
+        },
+        tableRowClass: {
+          column: 'state',
+          data: [
+            {
+              key: 1,
+              value: 'info-row'
+            }
+          ]
+        }
       }
     }
   },
   created() {
     const id = this.$route.params.examId
     if (typeof id !== 'undefined') {
-      this.listQuery.params.examId = id
+      this.listQuery.pageModule.params.examId = id
       this.fetchExamData(id)
     }
   },
   methods: {
     startTrain() {
-      this.$store.dispatch('closeAndPushToView', { name: 'ExamOnlineResultsTraining', params: { examId: this.listQuery.params.examId }})
+      this.$store.dispatch('closeAndPushToView', { name: 'ExamOnlineResultsTraining', params: { examId: this.listQuery.pageModule.params.examId }})
     },
     fetchExamData(id) {
-      fetchDetail(id).then(response => {
-        this.examData = response.data
+      fetchDetail(id, '0').then(response => {
+        this.examData = response.data.data
       }).catch((reason) => {
         this.$notify({
           title: '获取考试数据失败',

@@ -149,23 +149,14 @@
 </template>
 
 <script>
-import {
-  getRole,
-  postRole,
-  putRole,
-  putRolePermissions,
-  listRolePermissions,
-  listRoleUsers,
-  putRoleUsers
-} from './role'
-import { listByOrganizId, listUserByTopId } from '../user/user'
-import { formatDate } from '@/utils/date'
-import { listOrganizAllChild } from '../organization/organization'
-import { mapGetters } from 'vuex'
-import grantPermission from '../permission/grantPermission'
-import { listVersionChildPermissions } from '../version/version'
-import { getOrganiz, getOrganizAuth } from '../organization/organization'
 import DataTable from '@/components/DataTable'
+import { formatDate } from '@/utils/date'
+import { mapGetters } from 'vuex'
+import { getOrganiz, getOrganizAuth, listOrganizAllChild } from '../organization/organization'
+import grantPermission from '../permission/grantPermission'
+import { listByOrganizId, listUserByTopId } from '../user/user'
+import { listVersionChildPermissions } from '../version/version'
+import { getRole, listRolePermissions, listRoleUsers, postRole, putRole, putRolePermissions, putRoleUsers } from './role'
 export default {
   name: 'SystemRole',
   components: {
@@ -205,7 +196,7 @@ export default {
         listUrl: 'gateway/platform/v1/role/paging',
         pageSizes: [5, 10, 25, 50, 100],
         search: {
-          input: '',
+          input: null,
           cols: ['name', 'value'],
           placeholder: this.$t('anan_role.searchText')
         },
@@ -213,9 +204,8 @@ export default {
           pageNumber: 1,
           pageSize: 10,
           params: {
-            organizId: 0,
-            name: '',
-            value: '',
+            name: null,
+            value: null,
             queryRule: {
               relaRules: [
                 {
@@ -343,7 +333,7 @@ export default {
       this.loadOrganizAllChild(this.ananUserInfo.organizId)
     }
     listUserByTopId().then(response => {
-      this.organizTopUsers = response.data
+      this.organizTopUsers = response.data.data
     }).catch(reason => {
       this.$notify({
         title: '获取所有用户失败',
@@ -352,7 +342,6 @@ export default {
         duration: 5000
       })
     })
-    this.listQuery.pageModule.params.organizId = this.ananUserInfo.organizId
   },
   methods: {
     roleUserfilterMethod(query, item) {
@@ -360,7 +349,7 @@ export default {
     },
     loadOrganizAllChild(pid) {
       listOrganizAllChild(pid).then(response => {
-        this.organizList = response.data || []
+        this.organizList = response.data.data || []
         this.oraganizOptions = this.organizList
       }).catch(reason => {
         this.$notify({
@@ -392,14 +381,14 @@ export default {
     },
     handleEdit(row) {
       getRole(row.id).then(response => {
-        const form = response.data
+        const form = response.data.data
         if (form && form.builtIn === 1) {
           this.$message({
             message: '系统内置角色不能修改!'
           })
           return
         }
-        this.form = response.data
+        this.form = response.data.data
         this.dialogFormVisible = true
         this.dialogStatus = 'update'
       }).catch(reason => {
@@ -414,11 +403,11 @@ export default {
     handleRolePermission(row) {
       listRolePermissions(row.id).then(response1 => {
         getOrganiz(row.organizId).then((response2) => {
-          this.topId = response2.data.topId
+          this.topId = response2.data.data.topId
           this.form = row
           getOrganizAuth(this.topId).then((response3) => {
-            const versionId = response3.data.versionId
-            this.$refs.grantPermission.initData(this, this.form, response1.data, '43', versionId !== this.versionId)
+            const versionId = response3.data.data.versionId
+            this.$refs.grantPermission.initData(this, this.form, response1.data.data, '43', versionId !== this.versionId)
             this.versionId = versionId
           }).catch(reason => {
             this.$notify({
@@ -479,7 +468,7 @@ export default {
         this.dialogRoleUserVisible = true
         this.form = row
         listByOrganizId(this.form.organizId).then(response => {
-          this.OrganUsers = response.data
+          this.OrganUsers = response.data.data
         }).catch(reason => {
           this.$notify({
             title: '获取所有用户失败',
@@ -488,7 +477,7 @@ export default {
             duration: 5000
           })
         })
-        const roleUsers = response.data
+        const roleUsers = response.data.data
         this.roleUsers = []
         for (let i = 0; i < roleUsers.length; i++) {
           const user = roleUsers[i].id

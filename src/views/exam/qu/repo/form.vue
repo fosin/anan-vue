@@ -2,8 +2,8 @@
   <div class="app-container">
     <el-form ref="repoForm" :model="repoForm" :rules="rules" label-position="left">
       <el-card>
-        <el-form-item label="上级题库" prop="pId" label-width="80px">
-          <repo-tree-select ref="repoTree" v-model="repoForm.pId" :width="400" @nodeClick="nodeClick" />
+        <el-form-item label="上级题库" prop="pid" label-width="80px">
+          <repo-tree-select ref="repoTree" v-model="repoForm.pid" :user-id="ananUserInfo.id" :width="400" @nodeClick="nodeClick" />
         </el-form-item>
         <el-form-item label="题库编码" prop="code" label-width="80px">
           <el-input v-model="repoForm.code" />
@@ -28,9 +28,9 @@
 
 <script>
 
-import { fetchDetail, saveData } from '@/views/exam/qu/repo/repo'
-import RepoTreeSelect from '@/views/exam/components/RepoTreeSelect'
 import OrganizUserSelect from '@/components/OrganizUserSelect'
+import RepoTreeSelect from '@/views/exam/components/RepoTreeSelect'
+import { createOrUpdate, fetchDetail } from '@/views/exam/qu/repo/repo'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -105,24 +105,26 @@ export default {
       }
     },
     fetchData(id) {
-      const params = { id: id }
-      fetchDetail(params).then(response => {
-        this.repoForm = response.data
+      fetchDetail(id).then(response => {
+        this.repoForm = response.data.data
         if (this.repoForm.userList && this.repoForm.userList.length > 0) {
           for (let i = 0; i < this.repoForm.userList.length; i++) {
             this.userIds.push(this.repoForm.userList[i].userId)
           }
         }
-        fetchDetail({ id: this.repoForm.pId }).then(response => {
-          this.repoParentForm = response.data
-        }).catch((reason) => {
-          this.$notify({
-            title: '父题库数据失败',
-            message: reason.message,
-            type: 'error',
-            duration: 5000
+        this.repoParentForm = {}
+        if (this.repoForm.pid && this.repoForm.pid !== '0') {
+          fetchDetail(this.repoForm.pid).then(response => {
+            this.repoParentForm = response.data.data
+          }).catch((reason) => {
+            this.$notify({
+              title: '父题库数据失败',
+              message: reason.message,
+              type: 'error',
+              duration: 5000
+            })
           })
-        })
+        }
       }).catch((reason) => {
         this.$notify({
           title: '获取题库数据失败',
@@ -147,14 +149,13 @@ export default {
             this.repoForm.userList.push(repouser)
           }
         }
-        saveData(this.repoForm).then(() => {
+        createOrUpdate(this.repoForm).then(() => {
           this.$notify({
             title: '成功',
             message: '题库保存成功！',
             type: 'success',
             duration: 2000
           })
-          debugger
           if (this.repoParentForm.children) {
             this.repoParentForm.children.push(this.repoForm)
           }
@@ -176,14 +177,14 @@ export default {
     },
     initForm() {
       let newCode = ''
-      let pId = ''
+      let pid = ''
       if (this.repoParentForm.id) {
         newCode = this.repoParentForm.code + String((this.repoParentForm.children ? this.repoParentForm.children.length : 0) + 1).padStart(2, '0')
-        pId = this.repoParentForm.id
+        pid = this.repoParentForm.id
       }
       this.repoForm = {
         id: '',
-        pId: pId,
+        pid: pid,
         code: newCode,
         title: '',
         remark: '',

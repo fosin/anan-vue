@@ -148,15 +148,9 @@
 </template>
 
 <script>
-import {
-  listChildPermissions,
-  getPermission,
-  postPermission,
-  deletePermission,
-  putPermission, getPermissionVname
-} from './permission'
-import { getServiceByStatus } from '@/views/platform/service/service'
 import IconsSelect from '@/components/IconsSelect/index'
+import { getServiceByStatus } from '@/views/platform/service/service'
+import { deletePermission, getPermission, getPermissionVname, listChildPermissions, postPermission, putPermission } from './permission'
 
 export default {
   name: 'DevelopmentPermission',
@@ -242,7 +236,7 @@ export default {
       this.methodOptions = res.details
     })
     getServiceByStatus().then(response => {
-      this.validServices = response.data
+      this.validServices = response.data.data
     }).catch(reason => {
       this.$notify({
         title: '加载服务列表失败',
@@ -283,16 +277,16 @@ export default {
         pid = node.data.id
       }
       listChildPermissions(pid).then(response => {
+        const permissions = response.data.data || []
         if (pid === 0) {
-          this.defaultExpandedKeys[0] = response.data[0].id
+          this.defaultExpandedKeys[0] = permissions[0].id
         }
-        const permissions = response.data
         if (permissions && permissions.length > 0) {
           for (let i = 0; i < permissions.length; i++) {
             permissions[i].vname = getPermissionVname(this.validServices, this.typeOptions, permissions[i])
           }
         }
-        return resolve(response.data || [])
+        return resolve(permissions)
       }).catch(reason => {
         this.$notify({
           title: '加载子节点失败',
@@ -315,7 +309,7 @@ export default {
         this.formStatus = 'update'
       }
       getPermission(data.id).then(response => {
-        this.form = response.data
+        this.form = response.data.data
         this.form.status = this.form.status + ''
         this.form.methodArray = []
         if (this.form.method) {
@@ -446,8 +440,8 @@ export default {
       this.form.method = this.form.methodArray.join(',')
       postPermission(this.form).then(response => {
         const pNode = this.$refs.permissionTree.getNode(this.form.pid)
-        response.data.vname = getPermissionVname(this.validServices, this.typeOptions, response.data)
-        this.$refs.permissionTree.append(response.data, pNode)
+        response.data.data.vname = getPermissionVname(this.validServices, this.typeOptions, response.data.data)
+        this.$refs.permissionTree.append(response.data.data, pNode)
         // TODO 以下代码启用后可以解决tree控件bug(会导致原有子节点丢失问题)
         pNode.data.children = null
         this.resetForm()

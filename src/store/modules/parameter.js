@@ -1,4 +1,7 @@
+import vuex from '@/store'
 import { postRequest } from '@/utils/request'
+import { Notification } from 'element-ui'
+import Vue from 'vue'
 
 const parameter = {
   state: {
@@ -28,10 +31,10 @@ const parameter = {
           return
         }
         postRequest('gateway/platform/v1/parameter/value', paras, false).then(response => {
-          if (!response.data) {
+          if (!response.data.data) {
             reject('error')
           }
-          pValue = response.data
+          pValue = response.data.data
           state.parameterData[paras.name] = pValue
           commit('SET_PARAMETER_DATA', state.parameterData)
           resolve(pValue)
@@ -44,10 +47,6 @@ const parameter = {
 }
 
 export default parameter
-
-import Vue from 'vue'
-import vuex from '@/store'
-import { Notification } from 'element-ui'
 
 Vue.prototype.loadOrganizParameterValue = function(name, defaultValue, description) {
   return Vue.prototype.loadAllParameterValue(1, name, defaultValue, description)

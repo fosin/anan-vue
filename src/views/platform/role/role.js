@@ -51,8 +51,8 @@ export function putRolePermissions(id, rolePermissions) {
   })
 }
 // 获取所有角色列表
-export function listRole() {
-  return postRequest('gateway/platform/v1/role/list')
+export function listRole(data = {}) {
+  return postRequest('gateway/platform/v1/role/list', data)
 }
 
 // 根据机构ID查询该机构及子机构的所有角色

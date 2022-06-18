@@ -34,9 +34,9 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import { getServiceByStatus } from '@/views/platform/service/service'
 import { getPermissionVname } from '@/views/platform/permission/permission'
+import { getServiceByStatus } from '@/views/platform/service/service'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'GrantPermission',
@@ -75,7 +75,7 @@ export default {
       this.typeOptions = res.details
     })
     getServiceByStatus().then(res => {
-      this.validServices = res.data
+      this.validServices = res.data.data
     })
   },
   methods: {
@@ -176,7 +176,7 @@ export default {
         pid = node.data.id
       }
       this.parent.listChildPermissions(pid).then(response => {
-        const childPermissions = response.data || []
+        const childPermissions = response.data.data || []
         // 记录所有被展开过的节点ID，用于保存时比较数据
         for (let i = 0; i < childPermissions.length; i++) {
           const permission = childPermissions[i]

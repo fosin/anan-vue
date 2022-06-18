@@ -70,7 +70,7 @@
   </div>
 </template>
 <script>
-import { getCertificate, postCertificate, putCertificate, deleteCertificate, listCertificateByEmpId } from './certificate'
+import { deleteCertificate, getCertificate, listCertificateByEmpId, postCertificate, putCertificate } from './certificate'
 
 export default {
   name: 'MpiCertificate',
@@ -147,7 +147,7 @@ export default {
       if (this.mpiId) {
         this.listLoading = true
         listCertificateByEmpId(this.mpiId, this.pageModule).then(response => {
-          this.list = response.data.rows
+          this.list = response.data.data
           this.total = response.data.total
           this.listLoading = false
         }).catch(reason => {
@@ -185,7 +185,7 @@ export default {
         return
       }
       getCertificate(this.form['certificateId']).then(response => {
-        this.form = response.data
+        this.form = response.data.data
         this.dialogFormVisible = true
         this.dialogStatus = 'update'
       }).catch(reason => {

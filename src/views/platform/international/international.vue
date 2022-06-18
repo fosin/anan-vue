@@ -1,122 +1,61 @@
 <template>
   <div class="app-container calendar-list-container">
-    <div class="filter-container">
-      <el-input
-        v-model="pageModule.params.name"
-        style="width: 200px;"
-        class="filter-item"
-        placeholder="支持语言标识、语言名称查找"
-        @keyup.enter.native="handleSearch()"
-      />
-      <el-button-group>
-        <el-button
-          v-waves
-          round
-          class="filter-item"
-          style="margin-left: 5px;"
-          type="primary"
-          size="small"
-          icon="el-icon-search"
-          @click="handleSearch()"
-        >
-          {{ $t('table.search') }}
-        </el-button>
-        <el-button
-          v-waves
-          v-permission="'177'"
-          round
-          class="filter-item"
-          style="margin-left: 10px;"
-          size="small"
-          type="primary"
-          icon="el-icon-circle-plus"
-          @click="handleAdd()"
-        >{{ $t('table.add') }}
-        </el-button>
-      </el-button-group>
-    </div>
-    <el-table
-      ref="headerTable"
-      v-loading="listLoading"
-      :data="list"
-      element-loading-text="努力加载中"
-      border
-      fit
-      highlight-current-row
+    <data-table
+      ref="pagingTable"
+      :options="options"
+      :list-query="listQuery"
       style="width: 100%"
-      @sort-change="sortChange"
-      @row-click="rowClick"
+      @handle-add="handleAdd()"
+      @handle-row-click="handleRowClick"
     >
-      <el-table-column label="图标/标识" align="center" prop="icon" width="150px">
-        <template slot-scope="scope">
-          <svg-icon :icon-class="scope.row.icon" style="width: 40px; height: 30px; background: #fff; color: #40c9c6;" />
-          {{ scope.row.code }}
-        </template>
-      </el-table-column>
-      <el-table-column label="名称" align="center" sortable prop="name" width="150px">
-        <template slot-scope="scope">
-          {{ scope.row.name }}<el-tag v-if="scope.row.defaultFlag===1">{{ scope.row.defaultFlag | defaultFilter }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column label="状态" align="center" class-name="status-col" sortable prop="status" width="100px">
-        <template slot-scope="scope">
-          <el-tag>{{ scope.row.status | statusFilter }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column
-        :label="$t('table.updateBy.label')"
-        align="center"
-        sortable
-        prop="updateBy"
-        width="100px"
-      >
-        <template slot-scope="scope">
-          <span>{{ getDicValue(organizTopUsers,"id",scope.row.updateBy,"username") }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('table.updateTime.label')" width="160px" align="center" sortable prop="updateTime" />
-      <el-table-column :label="$t('table.actions')" align="center" fixed="right" width="120px">
-        <template slot-scope="scope">
-          <el-tooltip class="item" effect="dark" :content="$t('table.edit')" placement="top">
-            <el-button
-              v-waves
-              v-permission="'178'"
-              round
-              size="mini"
-              type="success"
-              class="filter-item"
-              icon="el-icon-edit"
-              @click="handleEdit(scope.row)"
-            />
-          </el-tooltip>
-          <el-tooltip class="item" effect="dark" :content="$t('table.delete')" placement="top">
-            <el-button
-              v-waves
-              v-permission="'179'"
-              round
-              size="mini"
-              type="danger"
-              class="filter-item"
-              style="margin-left: 5px;"
-              icon="el-icon-delete"
-              @click="handleDelete(scope.row)"
-            />
-          </el-tooltip>
-        </template>
-      </el-table-column>
-    </el-table>
-
-    <div v-show="!listLoading" class="pagination-container">
-      <el-pagination
-        :current-page.sync="pageModule.pageNumber"
-        :page-sizes="pageSizes"
-        :page-size="pageModule.pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
-    </div>
+      <template slot="filter-content" />
+      <template slot="data-columns">
+        <el-table-column label="图标/标识" align="center" prop="icon" width="150px">
+          <template slot-scope="scope">
+            <svg-icon :icon-class="scope.row.icon" style="width: 40px; height: 30px; background: #fff; color: #40c9c6;" />
+            {{ scope.row.code }}
+          </template>
+        </el-table-column>
+        <el-table-column label="名称" align="center" sortable prop="name" width="150px">
+          <template slot-scope="scope">
+            {{ scope.row.name }}<el-tag v-if="scope.row.defaultFlag===1">{{ scope.row.defaultFlag | defaultFilter }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="状态" align="center" class-name="status-col" sortable prop="status" width="100px">
+          <template slot-scope="scope">
+            <el-tag>{{ scope.row.status | statusFilter }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="$t('table.updateBy.label')"
+          align="center"
+          sortable
+          prop="updateBy"
+          width="100px"
+        >
+          <template slot-scope="scope">
+            <span>{{ getDicValue(organizTopUsers,"id",scope.row.updateBy,"username") }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('table.updateTime.label')" width="160px" align="center" sortable prop="updateTime" />
+        <el-table-column :label="$t('table.actions')" align="center" fixed="right" width="80px">
+          <template slot-scope="scope">
+            <el-tooltip class="item" effect="dark" :content="$t('table.edit')" placement="top">
+              <el-button
+                v-waves
+                v-permission="'178'"
+                round
+                size="mini"
+                type="success"
+                class="filter-item"
+                icon="el-icon-edit"
+                @click="handleEdit(scope.row)"
+              />
+            </el-tooltip>
+          </template>
+        </el-table-column>
+      </template>
+    </data-table>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
@@ -177,19 +116,18 @@
   </div>
 </template>
 <script>
-import {
-  deleteInternational,
-  getInternational,
-  listInternationalPage,
-  postInternational,
-  putInternational
-} from './international'
+import DataTable from '@/components/DataTable'
+
 import waves from '@/directive/waves/index.js'
 import { formatDate } from '@/utils/date'
 import { listUserByTopId } from '@/views/platform/user/user'
+import { getInternational, postInternational, putInternational } from './international'
 
 export default {
   name: 'AnanInternational',
+  components: {
+    DataTable
+  },
   directives: {
     waves
   },
@@ -214,32 +152,84 @@ export default {
   },
   data() {
     return {
-      list: null,
-      total: null,
-      listLoading: false,
-      pageModule: {
-        pageNumber: 1,
-        pageSize: 10,
-        params: {
-          code: '',
-          name: '',
-          queryRule: {
-            logiOperator: 'or',
-            relaRules: [
-              {
-                relaOperator: 'like',
-                fieldName: 'code'
-              },
-              {
-                relaOperator: 'like',
-                fieldName: 'name'
-              }
-            ]
+      listQuery: {
+        listUrl: 'gateway/platform/v1/international/paging',
+        pageSizes: [5, 10, 25, 50, 100],
+        search: {
+          colSpan: 12,
+          input: null,
+          cols: ['name', 'code'],
+          placeholder: '支持语言标识、语言名称查找'
+        },
+        pageModule: {
+          pageNumber: 1,
+          pageSize: 10,
+          params: {
+            code: null,
+            name: null,
+            queryRule: {
+              logiOperator: 'or',
+              relaRules: [
+                {
+                  relaOperator: 'like',
+                  fieldName: 'code'
+                },
+                {
+                  relaOperator: 'like',
+                  fieldName: 'name'
+                }
+              ]
+            }
           },
           sortRules: [{
             sortName: 'defaultFlag',
             sortOrder: 'DESC'
           }]
+        }
+      },
+      options: {
+        // 可批量操作
+        multi: true,
+        // 批量操作列表
+        multiActions: [
+          {
+            value: 'delete',
+            label: this.$t('table.delete'),
+            url: 'gateway/platform/v1/international/ids',
+            method: 'delete',
+            permissionId: '179',
+            confirm: true
+          },
+          {
+            value: 'disable',
+            label: this.$t('table.disable'),
+            url: 'gateway/platform/v1/international/field/status/1',
+            method: 'post',
+            permissionId: '178',
+            confirm: false
+          },
+          {
+            value: 'enable',
+            label: this.$t('table.enable'),
+            url: 'gateway/platform/v1/international/field/status/0',
+            method: 'post',
+            permissionId: '178',
+            confirm: false
+          }
+        ],
+        addAction: {
+          enable: true,
+          route: '',
+          permissionId: '177'
+        },
+        tableRowClass: {
+          column: 'status',
+          data: [
+            {
+              key: 1,
+              value: 'info-row'
+            }
+          ]
         }
       },
       pageSizes: [5, 10, 25, 50, 100],
@@ -257,7 +247,7 @@ export default {
   },
   created() {
     this.loadOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数').then(res => {
-      this.pageModule.pageSize = parseInt(res)
+      this.listQuery.pageModule.pageSize = parseInt(res)
     })
     this.loadOrganizParameterValue('DefaultPageSizes', '5,10,25,50,100', '表格默认每页记录数可选择项').then(res => {
       const temp = res.split(',')
@@ -266,7 +256,7 @@ export default {
       }
     })
     listUserByTopId().then(response => {
-      this.organizTopUsers = response.data
+      this.organizTopUsers = response.data.data
     }).catch(reason => {
       this.$notify({
         title: '获取所有用户失败',
@@ -275,41 +265,8 @@ export default {
         duration: 5000
       })
     })
-    this.getList()
   },
   methods: {
-    getList() {
-      this.listLoading = true
-      this.pageModule.params.code = this.pageModule.params.name
-      listInternationalPage(this.pageModule).then(response => {
-        this.list = response.data.rows
-        this.total = response.data.total
-        this.listLoading = false
-        if (this.list && this.list.length > 0) {
-          // TODO 该方法无法触发，存在问题
-          this.$refs.headerTable.setCurrentRow(this.list[0])
-        }
-      }).catch(reason => {
-        this.$notify({
-          title: '获取列表失败',
-          message: reason.message,
-          type: 'error',
-          duration: 5000
-        })
-      })
-    },
-    handleSearch() {
-      this.pageModule.pageNumber = 1
-      this.getList()
-    },
-    handleSizeChange(val) {
-      this.pageModule.pageSize = val
-      this.getList()
-    },
-    handleCurrentChange(val) {
-      this.pageModule.pageNumber = val
-      this.getList()
-    },
     handleAdd() {
       this.resetForm()
       this.dialogStatus = 'create'
@@ -317,7 +274,7 @@ export default {
     },
     handleEdit(row) {
       getInternational(row['id']).then(response => {
-        this.form = response.data
+        this.form = response.data.data
         this.dialogFormVisible = true
         this.dialogStatus = 'update'
       }).catch(reason => {
@@ -329,42 +286,13 @@ export default {
         })
       })
     },
-    handleDelete(row) {
-      this.$confirm(
-        '此操作将永久删除相关数据, 是否继续?',
-        '提示',
-        {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }
-      ).then(() => {
-        deleteInternational(row['id']).then(() => {
-          this.dialogFormVisible = false
-          this.getList()
-          this.$notify({
-            title: '成功',
-            message: '删除成功!',
-            type: 'success',
-            duration: 2000
-          })
-        }).catch(reason => {
-          this.$notify({
-            title: '删除失败',
-            message: reason.message,
-            type: 'error',
-            duration: 5000
-          })
-        })
-      })
-    },
     create(formName) {
       const set = this.$refs
       set[formName].validate(valid => {
         if (valid) {
           postInternational(this.form).then(() => {
             this.dialogFormVisible = false
-            this.getList()
+            this.$refs.pagingTable.getList()
             this.$notify({
               title: '成功',
               message: '创建成功',
@@ -397,7 +325,7 @@ export default {
           this.dialogFormVisible = false
           putInternational(this.form).then(() => {
             this.dialogFormVisible = false
-            this.getList()
+            this.$refs.pagingTable.getList()
             this.$notify({
               title: '成功',
               message: '修改成功',
@@ -423,18 +351,7 @@ export default {
         defaultFlag: 0
       }
     },
-    sortChange(column) {
-      const sortRule = {
-        sortOrder: (column.order && column.order === 'descending') ? 'DESC' : 'ASC',
-        sortName: column.prop
-      }
-      this.pageModule.params.sortRules = []
-      this.pageModule.params.sortRules.push(sortRule)
-      if (column.prop) {
-        this.getList()
-      }
-    },
-    rowClick(row, event, column) {
+    handleRowClick(row, event, column) {
       if (!this.form || this.form.id !== row.id) {
         this.form = row
         this.$emit('dic-row-click', row, event, column)

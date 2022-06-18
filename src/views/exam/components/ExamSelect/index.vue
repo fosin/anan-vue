@@ -62,7 +62,7 @@ export default {
 
     fetchData() {
       fetchList().then(response => {
-        this.dataList = response.data.records
+        this.dataList = response.data.data
       }).catch((reason) => {
         this.$notify({
           title: '获取考试数据失败',
@@ -73,8 +73,6 @@ export default {
       })
     },
     handlerChange(e) {
-      console.log(e)
-
       this.$emit('change', e)
       this.$emit('input', e)
     }

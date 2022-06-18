@@ -1,4 +1,4 @@
-import { allRequest, deleteRequest, getRequest, postRequest, putRequest } from '@/utils/request'
+import request, { deleteRequest, getRequest, postRequest, putRequest } from '@/utils/request'
 
 // 获取国际化语言集数据分页列表
 export function listInternationalPage(page) {
@@ -6,7 +6,7 @@ export function listInternationalPage(page) {
 }
 
 // 获取国际化语言集所有数据列表
-export function listInternational(data) {
+export function listInternational(data = {}) {
   return postRequest('gateway/platform/v1/international/list', data)
 }
 
@@ -18,7 +18,7 @@ export function postInternational(obj) {
 // 根据主键ID获取国际化语言集数据
 export function getInternational(id, method) {
   if (method) {
-    return allRequest('gateway/platform/v1/international/' + id, method)
+    return request({ url: 'gateway/platform/v1/international/' + id, method: method })
   }
   return postRequest('gateway/platform/v1/international/' + id)
 }

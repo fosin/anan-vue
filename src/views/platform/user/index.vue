@@ -282,20 +282,15 @@
 </template>
 
 <script>
-import {
-  getUser, postUser, putUser, resetPassword,
-  putUserPermissions,
-  listUserPermissions,
-  listUserRoles, putUserRoles, listUserByTopId
-} from './user'
-import { formatDate } from '@/utils/date'
-import { listOrganizRole } from '../role/role'
-import { listOrganizAllChild, treeAllChildOrganiz, getOrganiz, getOrganizAuth } from '../organization/organization'
-import { listVersionChildPermissions } from '../version/version'
-import { mapGetters } from 'vuex'
-import ElOption from 'element-ui/packages/select/src/option'
-import IconsSelect from '@/components/IconsSelect/index'
 import DataTable from '@/components/DataTable'
+import IconsSelect from '@/components/IconsSelect/index'
+import { formatDate } from '@/utils/date'
+import ElOption from 'element-ui/packages/select/src/option'
+import { mapGetters } from 'vuex'
+import { getOrganiz, getOrganizAuth, listOrganizAllChild, treeAllChildOrganiz } from '../organization/organization'
+import { listOrganizRole } from '../role/role'
+import { listVersionChildPermissions } from '../version/version'
+import { getUser, listUserByTopId, listUserPermissions, listUserRoles, postUser, putUser, putUserPermissions, putUserRoles, resetPassword } from './user'
 
 export default {
   name: 'SystemUser',
@@ -338,7 +333,7 @@ export default {
         listUrl: 'gateway/platform/v1/user/paging',
         pageSizes: [5, 10, 25, 50, 100],
         search: {
-          input: '',
+          input: null,
           cols: ['usercode', 'username', 'phone', 'email'],
           placeholder: this.$t('anan_user.searchText')
         },
@@ -346,10 +341,10 @@ export default {
           pageNumber: 1,
           pageSize: 10,
           params: {
-            usercode: '',
-            username: '',
-            phone: '',
-            email: '',
+            usercode: null,
+            username: null,
+            phone: null,
+            email: null,
             queryRule: {
               logiOperator: 'or',
               relaRules: [
@@ -610,7 +605,7 @@ export default {
       this.defaultPass = res + ''
     })
     listUserByTopId().then(response => {
-      this.organizTopUsers = response.data
+      this.organizTopUsers = response.data.data
     }).catch(reason => {
       this.$notify({
         title: '获取所有用户失败',
@@ -640,7 +635,7 @@ export default {
     },
     loadOrganizAllChild(pid) {
       listOrganizAllChild(pid).then(response => {
-        this.organizList = response.data || []
+        this.organizList = response.data.data || []
       }).catch(reason => {
         this.$notify({
           title: '查询后代机构信息失败',
@@ -654,9 +649,9 @@ export default {
     loadOrganizTree() {
       if (!this.organizTree || this.organizTree.length < 1) {
         getOrganiz(this.ananUserInfo.organizId).then(response => {
-          const topId = response.data.topId
+          const topId = response.data.data.topId
           treeAllChildOrganiz(topId).then(response => {
-            this.organizTree[0] = response.data || []
+            this.organizTree = response.data.data || []
           }).catch(reason => {
             this.$notify({
               title: '查询机构信息失败',
@@ -691,7 +686,7 @@ export default {
     },
     loadRoles() {
       listOrganizRole(this.form.organizId).then(response => {
-        this.rolesOptions = response.data || []
+        this.rolesOptions = response.data.data || []
       }).catch(reason => {
         this.$notify({
           title: '获取所有角色失败',
@@ -708,7 +703,7 @@ export default {
     },
     handleEdit(row) {
       getUser(row.id).then(response => {
-        this.form = response.data
+        this.form = response.data.data
         this.dialogFormVisible = true
         this.dialogStatus = 'update'
         this.selectedRoles = []
@@ -742,7 +737,7 @@ export default {
           .then((response) => {
             this.$notify({
               title: '重置密码成功',
-              message: '用户[' + row.username + ']当前密码是:' + response.data,
+              message: '用户[' + row.username + ']当前密码是:' + response.data.data,
               type: 'success',
               duration: 0
             })
@@ -767,7 +762,7 @@ export default {
         pid = node.data.id
       }
       listVersionChildPermissions(pid, this.versionId).then((response) => {
-        const childPermissions = response.data || []
+        const childPermissions = response.data.data || []
         // 记录所有被展开过的节点ID，用于保存时比较数据
         for (let i = 0; i < childPermissions.length; i++) {
           const id = childPermissions[i].id
@@ -789,7 +784,7 @@ export default {
         pid = node.data.id
       }
       listVersionChildPermissions(pid, this.versionId).then((response) => {
-        const childPermissions = response.data || []
+        const childPermissions = response.data.data || []
         // 记录所有被展开过的节点ID，用于保存时比较数据
         for (let i = 0; i < childPermissions.length; i++) {
           const id = childPermissions[i].id
@@ -807,9 +802,9 @@ export default {
     },
     handleUserPermission(row) {
       getOrganiz(row.organizId).then((response) => {
-        const topId = response.data.topId
+        const topId = response.data.data.topId
         getOrganizAuth(topId).then((response) => {
-          const versionId = response.data.versionId
+          const versionId = response.data.data.versionId
           if (versionId !== this.versionId) {
             this.hackReset = false
             this.$nextTick(() => {
@@ -818,8 +813,8 @@ export default {
             this.versionId = versionId
           }
           listUserPermissions(row.id, row.organizId).then(response => {
-            this.addCheckedKeys = this.getCheckedKeys(1, response.data)
-            this.subCheckedKeys = this.getCheckedKeys(2, response.data)
+            this.addCheckedKeys = this.getCheckedKeys(1, response.data.data)
+            this.subCheckedKeys = this.getCheckedKeys(2, response.data.data)
             this.dialogStatus = 'permission'
             this.dialogUserPermissionVisible = true
             this.form = row
@@ -967,7 +962,7 @@ export default {
         this.dialogUserRoleVisible = true
         this.form = row
         this.loadRoles()
-        const userRoles = response.data
+        const userRoles = response.data.data
         this.userRoles = []
         for (let i = 0; i < userRoles.length; i++) {
           const role = userRoles[i].id
@@ -1028,7 +1023,7 @@ export default {
             this.$refs.pagingTable.getList()
             this.$notify({
               title: '创建成功,用户[' + this.form.username + ']密码是:',
-              message: response.data.password,
+              message: response.data.data.password,
               type: 'success',
               duration: 0
             })

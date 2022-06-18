@@ -9,8 +9,8 @@ export function listContactinfoPage(page) {
   })
 }
 // 获取联系方式所有数据列表
-export function listContactinfo() {
-  return postRequest('gateway/platform/v1/contactinfo/list')
+export function listContactinfo(data = {}) {
+  return postRequest('gateway/platform/v1/contactinfo/list', data)
 }
 // 根据病人主索引ID查找该病人所有联系人
 export function listContactinfoByEmpId(id, page) {

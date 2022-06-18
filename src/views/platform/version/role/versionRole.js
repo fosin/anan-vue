@@ -35,8 +35,8 @@ export function putVersionRolePermissions(id, rolePermissions) {
   })
 }
 // 获取所有版本角色列表
-export function listVersionRole() {
-  return postRequest('gateway/platform/v1/version/role/list')
+export function listVersionRole(data = {}) {
+  return postRequest('gateway/platform/v1/version/role/list', data)
 }
 
 export function postVersionRole(obj) {

@@ -94,7 +94,7 @@
   </div>
 </template>
 <script>
-import { getPicture, postPicture, putPicture, deletePicture, listPicturePage } from './picture'
+import { deletePicture, getPicture, listPicturePage, postPicture, putPicture } from './picture'
 
 export default {
   name: 'MpiPicture',
@@ -144,7 +144,7 @@ export default {
       if (this.mpiId) {
         this.listLoading = true
         listPicturePage(this.pageModule).then(response => {
-          this.list = response.data.rows
+          this.list = response.data.data
           this.total = response.data.total
           this.listLoading = false
         }).catch(reason => {
@@ -182,7 +182,7 @@ export default {
         return
       }
       getPicture(this.form['mpiId']).then(response => {
-        this.form = response.data
+        this.form = response.data.data
         this.dialogFormVisible = true
         this.dialogStatus = 'update'
       }).catch(reason => {

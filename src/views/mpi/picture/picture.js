@@ -9,8 +9,8 @@ export function listPicturePage(page) {
   })
 }
 // 获取半身照所有数据列表
-export function listPicture() {
-  return postRequest('gateway/platform/v1/picture/list')
+export function listPicture(data = {}) {
+  return postRequest('gateway/platform/v1/picture/list', data)
 }
 // 新建半身照
 export function postPicture(obj) {

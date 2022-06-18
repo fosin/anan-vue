@@ -7,31 +7,26 @@
       @multi-actions="handleMultiAction"
     >
       <template slot="filter-content">
-        <el-row>
-          <el-col :span="4">
-            <el-select
-              v-model="listQuery.params.quType"
-              placeholder="选择题型"
-              class="filter-item"
-              clearable
-            >
-              <el-option
-                v-for="item in quTypes"
-                :key="item.name"
-                :label="item.value"
-                :value="item.name"
-                :disabled="item.status === 1"
-              />
-            </el-select>
-          </el-col>
-          <el-col :span="4" class="filter-item">
-            <repo-tree-select :user-id="ananUserInfo.id" :width="300" @nodeClick="onNodeClick" />
-            <!--            <el-button-group class="filter-item" style="float:  right">
+        <el-select
+          v-model="listQuery.pageModule.params.quType"
+          placeholder="选择题型"
+          clearable
+          class="filter-item"
+          style="margin-left: 5px;"
+        >
+          <el-option
+            v-for="item in quTypes"
+            :key="item.name"
+            :label="item.value"
+            :value="item.name"
+            :disabled="item.status === 1"
+          />
+        </el-select>
+        <repo-tree-select class="filter-item" :user-id="ananUserInfo.id" :width="300" style="margin-left: 5px;" @nodeClick="onNodeClick" />
+        <!--<el-button-group class="filter-item" style="float:  right">
               <el-button size="mini" icon="el-icon-upload2" @click="showImport">导入</el-button>
               <el-button size="mini" icon="el-icon-download" @click="exportExcel">导出</el-button>
             </el-button-group>-->
-          </el-col>
-        </el-row>
       </template>
 
       <template slot="data-columns">
@@ -39,7 +34,7 @@
           label="题型"
           align="center"
           width="80px"
-          prop="qu_type"
+          prop="quType"
           sortable="custom"
           :sort-orders="['ascending','descending']"
         >
@@ -100,15 +95,11 @@
         <el-table-column
           :label="$t('table.updateTime.label')"
           align="center"
-          prop="update_time"
+          prop="updateTime"
           width="160px"
           sortable="custom"
           :sort-orders="['ascending','descending']"
-        >
-          <template slot-scope="scope">
-            {{ scope.row.updateTime }}
-          </template>
-        </el-table-column>
+        />
       </template>
     </data-table>
     <el-dialog
@@ -141,12 +132,12 @@
 </template>
 
 <script>
-import DataTable from '@/views/exam/components/DataTable'
-import { batchAction } from '@/views/exam/qu/repo/repo'
+import DataTable from '@/components/DataTable'
 import RepoTreeSelect from '@/views/exam/components/RepoTreeSelect'
 import { exportExcel, importExcel, importTemplate } from '@/views/exam/qu/qu/qu'
-import { mapGetters } from 'vuex'
+import { batchAction } from '@/views/exam/qu/repo/repo'
 import { listUserByTopId } from '@/views/platform/user/user'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'ExamManagementQu',
@@ -161,26 +152,28 @@ export default {
       organizTopUsers: [],
       dialogFlag: false,
       listQuery: {
-        current: 1,
-        size: 10,
-        params: {
-          content: '',
-          quType: '',
-          code: ''
-        },
-        sort: {
-          sortOrder: 'DESC',
-          sortName: 'update_time'
-        },
+        listUrl: 'gateway/exam/api/qu/qu/paging',
+        pageSizes: [5, 10, 25, 50, 100],
         search: {
-          column: 'content',
-          input: '',
+          input: null,
+          cols: ['content'],
           placeholder: '搜索试题名称'
+        },
+        pageModule: {
+          pageNumber: 1,
+          pageSize: 10,
+          params: {
+            content: null,
+            quType: null,
+            code: null,
+            sortRules: [{
+              sortName: 'updateTime',
+              sortOrder: 'DESC'
+            }
+            ]
+          }
         }
       },
-      quTypes: [],
-      levels: [],
-      states: [],
       options: {
         // 可批量操作
         multi: true,
@@ -188,33 +181,57 @@ export default {
         multiActions: [
           {
             value: 'delete',
-            label: this.$t('table.delete')
-          }, {
-            value: 'enable',
-            label: this.$t('table.enable')
+            label: this.$t('table.delete'),
+            url: 'gateway/exam/api/qu/qu/ids',
+            method: 'delete',
+            permissionId: '0',
+            confirm: true
           },
           {
             value: 'disable',
-            label: this.$t('table.disable')
+            label: this.$t('table.disable'),
+            url: 'gateway/exam/api/qu/qu/field/state/1',
+            method: 'post',
+            permissionId: '0',
+            confirm: true
+          },
+          {
+            value: 'enable',
+            label: this.$t('table.enable'),
+            url: 'gateway/exam/api/qu/qu/field/state/0',
+            method: 'post',
+            permissionId: '0',
+            confirm: false
           },
           {
             value: 'add-repo',
-            label: '加入题库..'
+            label: '加入题库',
+            permissionId: '0'
           },
           {
             value: 'remove-repo',
-            label: '从..题库移除'
+            label: '从题库移除',
+            permissionId: '0'
           }
         ],
-        // 列表请求URL
-        listUrl: 'gateway/exam/api/qu/qu/paging',
-        // 删除请求URL
-        deleteUrl: 'gateway/exam/api/qu/qu/delete',
-        // 启用禁用
-        stateUrl: 'gateway/exam/api/qu/qu/field/state',
-        // 添加数据路由
-        addRoute: 'ExamManagementQuAdd'
-      }
+        addAction: {
+          enable: true,
+          route: 'ExamManagementQuAdd',
+          permissionId: '0'
+        },
+        tableRowClass: {
+          column: 'state',
+          data: [
+            {
+              key: 1,
+              value: 'info-row'
+            }
+          ]
+        }
+      },
+      quTypes: [],
+      levels: [],
+      states: []
     }
   },
   computed: {
@@ -231,7 +248,7 @@ export default {
       this.states = res.details
     })
     listUserByTopId().then(response => {
-      this.organizTopUsers = response.data
+      this.organizTopUsers = response.data.data
     }).catch(reason => {
       this.$notify({
         title: '获取所有用户失败',
@@ -243,19 +260,19 @@ export default {
   },
   methods: {
     onNodeClick(node) {
-      this.listQuery.params.code = node ? node.code : ''
+      this.listQuery.pageModule.params.code = node ? node.code : ''
     },
     handleMultiAction(obj) {
-      if (obj.opt === 'add-repo') {
+      if (obj.opt.value === 'add-repo') {
         this.dialogTitle = '加入题库'
         this.dialogFlag = false
+        this.dialogVisible = true
       }
-      if (obj.opt === 'remove-repo') {
+      if (obj.opt.value === 'remove-repo') {
         this.dialogTitle = '从题库移除'
         this.dialogFlag = true
+        this.dialogVisible = true
       }
-
-      this.dialogVisible = true
       this.dialogQuIds = obj.ids
     },
     handlerRepoAction() {
@@ -282,7 +299,7 @@ export default {
     },
     exportExcel() {
       // 导出当前查询的数据
-      exportExcel(this.listQuery.params)
+      exportExcel(this.listQuery.pageModule.params)
     },
     downloadTemplate() {
       importTemplate()
@@ -297,8 +314,8 @@ export default {
     doImport(e) {
       const file = e.target.files[0]
       importExcel(file).then(res => {
-        if (res.data.code !== 0) {
-          this.$alert(res.data.msg, '导入信息', {
+        if (res.data.data.code !== 0) {
+          this.$alert(res.data.data.msg, '导入信息', {
             dangerouslyUseHTMLString: true
           })
         } else {

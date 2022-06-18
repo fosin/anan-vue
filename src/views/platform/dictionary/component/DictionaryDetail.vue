@@ -146,12 +146,8 @@
 </template>
 
 <script>
-import {
-  getDictionaryDetail,
-  postDictionaryDetail,
-  putDictionaryDetail
-} from '../dictionary'
 import DataTable from '@/components/DataTable'
+import { getDictionaryDetail, postDictionaryDetail, putDictionaryDetail } from '@/utils/dic'
 import { listUserByTopId } from '@/views/platform/user/user'
 
 export default {
@@ -168,7 +164,8 @@ export default {
         listUrl: 'gateway/platform/v1/dictionarydetail/paging',
         pageSizes: [5, 10, 25, 50, 100],
         search: {
-          input: '',
+          colSpan: 12,
+          input: null,
           cols: ['value'],
           placeholder: this.$t('anan_dictionary_detail.searchText')
         },
@@ -177,7 +174,7 @@ export default {
           pageSize: 10,
           params: {
             dictionaryId: 0,
-            value: '',
+            value: null,
             queryRule: {
               relaRules: [
                 {
@@ -186,7 +183,7 @@ export default {
                 },
                 {
                   fieldName: 'dictionaryId',
-                  relaOperator: 'equal'
+                  relaOperator: 'eq'
                 }
               ]
             },
@@ -276,7 +273,7 @@ export default {
       this.DefaultDictionaryDetailNameAndSort = res
     })
     listUserByTopId().then(response => {
-      this.organizTopUsers = response.data
+      this.organizTopUsers = response.data.data
     }).catch(reason => {
       this.$notify({
         title: '获取所有用户失败',
@@ -287,6 +284,12 @@ export default {
     })
   },
   methods: {
+    getList(row) {
+      if (row && row.id) {
+        this.listQuery.pageModule.params.dictionaryId = row.id
+        this.$refs.pagingTable.getList()
+      }
+    },
     getStatusValue(status) {
       if (this.statusOptions && this.statusOptions.length > 0) {
         const statusOption = this.statusOptions.filter(value => {
@@ -295,17 +298,6 @@ export default {
         return statusOption.length > 0 ? statusOption[0].value : status
       }
       return status
-    },
-    getList(row) {
-      if (row && row.id) {
-        this.selectedDictionary = row
-      } else {
-        if (!this.selectedDictionary.id) {
-          return
-        }
-      }
-      this.listQuery.pageModule.params.dictionaryId = this.selectedDictionary.id
-      this.$refs.pagingTable.getList()
     },
     handleAdd() {
       if (!this.selectedDictionary || !this.selectedDictionary.id) {
@@ -320,7 +312,7 @@ export default {
     },
     handleEdit(row) {
       getDictionaryDetail(row.id).then(response => {
-        this.form = response.data
+        this.form = response.data.data
         this.form.status = this.form.status + ''
         this.dialogFormVisible = true
         this.dialogStatus = 'update'
@@ -339,7 +331,7 @@ export default {
         if (valid) {
           postDictionaryDetail(this.form).then(() => {
             this.dialogFormVisible = false
-            this.getList()
+            this.$refs.pagingTable.getList()
             this.$notify({
               title: '成功',
               message: '创建成功',
@@ -372,7 +364,7 @@ export default {
           this.dialogFormVisible = false
           putDictionaryDetail(this.form).then(() => {
             this.dialogFormVisible = false
-            this.getList()
+            this.$refs.pagingTable.getList()
             this.$notify({
               title: '成功',
               message: '修改成功',

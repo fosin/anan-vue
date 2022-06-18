@@ -1,113 +1,59 @@
 <template>
   <div class="app-container calendar-list-container">
-    <div class="filter-container">
-      <el-button-group>
-        <el-button
-          v-waves
-          round
-          class="filter-item"
-          style="margin-left: 5px;"
-          size="small"
-          type="primary"
-          icon="el-icon-refresh"
-          @click="handleSearch()"
-        >
-          {{ $t('table.refresh') }}
-        </el-button>
-        <el-button
-          v-waves
-          v-permission="'182'"
-          round
-          class="filter-item"
-          style="margin-left: 10px;"
-          size="small"
-          type="primary"
-          icon="el-icon-circle-plus"
-          @click="handleAdd()"
-        >{{ $t('table.add') }}
-        </el-button>
-      </el-button-group>
-    </div>
-    <el-table
-      v-loading="listLoading"
-      :data="list"
-      element-loading-text="努力加载中"
-      border
-      fit
-      highlight-current-row
+    <data-table
+      ref="pagingTable"
+      :options="options"
+      :list-query="listQuery"
       style="width: 100%"
-      @sort-change="sortChange"
-      @row-click="rowClick"
+      @handle-add="handleAdd()"
     >
-      <el-table-column label="所属语言" align="center" sortable prop="internationalId" width="150px">
-        <template slot-scope="scope">
-          <el-tag>{{ internationalFilter(scope.row.internationalId) }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column label="所属服务" align="center" sortable prop="serviceId" width="200px">
-        <template slot-scope="scope">
-          <el-tag>{{ serviceIdFilter(scope.row.serviceId) }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column label="状态码" align="center" class-name="status-col" width="100px" sortable prop="status">
-        <template slot-scope="scope">
-          <el-tag>{{ scope.row.status | statusFilter }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column
-        :label="$t('table.updateBy.label')"
-        align="center"
-        sortable
-        prop="updateBy"
-        width="100px"
-      >
-        <template slot-scope="scope">
-          <span>{{ getDicValue(organizTopUsers,"id",scope.row.updateBy,"username") }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('table.updateTime.label')" width="160px" align="center" sortable prop="updateTime" />
-      <el-table-column :label="$t('table.actions')" align="center" fixed="right" width="120px">
-        <template slot-scope="scope">
-          <el-tooltip class="item" effect="dark" :content="$t('table.edit')" placement="top">
-            <el-button
-              v-waves
-              v-permission="'183'"
-              round
-              size="mini"
-              type="success"
-              class="filter-item"
-              icon="el-icon-edit"
-              @click="handleEdit(scope.row)"
-            />
-          </el-tooltip>
-          <el-tooltip class="item" effect="dark" :content="$t('table.delete')" placement="top">
-            <el-button
-              v-waves
-              v-permission="'184'"
-              round
-              size="mini"
-              type="danger"
-              class="filter-item"
-              style="margin-left: 5px;"
-              icon="el-icon-delete"
-              @click="handleDelete(scope.row)"
-            />
-          </el-tooltip>
-        </template>
-      </el-table-column>
-    </el-table>
-
-    <div v-show="!listLoading" class="pagination-container">
-      <el-pagination
-        :current-page.sync="pageModule.pageNumber"
-        :page-sizes="pageSizes"
-        :page-size="pageModule.pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
-    </div>
+      <template slot="filter-content" />
+      <template slot="data-columns">
+        <el-table-column label="所属语言" align="center" sortable prop="internationalId" width="150px">
+          <template slot-scope="scope">
+            <el-tag>{{ internationalFilter(scope.row.internationalId) }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="所属服务" align="center" sortable prop="serviceId" width="200px">
+          <template slot-scope="scope">
+            <el-tag>{{ serviceIdFilter(scope.row.serviceId) }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="状态码" align="center" class-name="status-col" width="100px" sortable prop="status">
+          <template slot-scope="scope">
+            <el-tag>{{ scope.row.status | statusFilter }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="$t('table.updateBy.label')"
+          align="center"
+          sortable
+          prop="updateBy"
+          width="100px"
+        >
+          <template slot-scope="scope">
+            <span>{{ getDicValue(organizTopUsers,"id",scope.row.updateBy,"username") }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('table.updateTime.label')" width="160px" align="center" sortable prop="updateTime" />
+        <el-table-column :label="$t('table.actions')" align="center" fixed="right" width="80px">
+          <template slot-scope="scope">
+            <el-tooltip class="item" effect="dark" :content="$t('table.edit')" placement="top">
+              <el-button
+                v-waves
+                v-permission="'183'"
+                round
+                size="mini"
+                type="success"
+                class="filter-item"
+                icon="el-icon-edit"
+                @click="handleEdit(scope.row)"
+              />
+            </el-tooltip>
+          </template>
+        </el-table-column>
+      </template>
+    </data-table>
 
     <el-dialog
       :title="textMap[dialogStatus]"
@@ -176,20 +122,24 @@
   </div>
 </template>
 <script>
-import { deleteCharset, getCharset, listCharsetPage, postCharset, putCharset } from './charset'
-import waves from '@/directive/waves/index.js' // 水波纹指令
-import { formatDate } from '@/utils/date'
-import { listService } from '@/views/platform/service/service'
-import { listInternational } from '@/views/platform/international/international'
+import DataTable from '@/components/DataTable'
 import JsonEditor from '@/components/JsonEditor/index'
+import waves from '@/directive/waves/index.js'
+import { formatDate } from '@/utils/date'
+import { listInternational } from '@/views/platform/international/international'
+import { listService } from '@/views/platform/service/service'
 import { listUserByTopId } from '@/views/platform/user/user'
+import { getCharset, postCharset, putCharset } from './charset'
 
 export default {
   name: 'AnanInternationalCharset',
+  components: {
+    JsonEditor,
+    DataTable
+  },
   directives: {
     waves
   },
-  components: { JsonEditor },
   filters: {
     statusFilter(status) {
       const statusMap = {
@@ -204,18 +154,80 @@ export default {
   },
   data() {
     return {
-      list: null,
-      total: null,
-      listLoading: false,
-      pageModule: {
-        pageNumber: 1,
-        pageSize: 10,
-        params: {
-          internationalId: 0,
-          sortRules: [{
-            sortName: 'id',
-            sortOrder: 'ASC'
-          }]
+      listQuery: {
+        listUrl: 'gateway/platform/v1/international/charset/paging',
+        pageSizes: [5, 10, 25, 50, 100],
+        search: {
+          colSpan: 12,
+          input: null,
+          cols: ['charset'],
+          placeholder: this.$t('anan_dictionary_detail.searchText')
+        },
+        pageModule: {
+          pageNumber: 1,
+          pageSize: 10,
+          params: {
+            internationalId: 0,
+            charset: null,
+            queryRule: {
+              logiOperator: 'and',
+              relaRules: [
+                {
+                  fieldName: 'charset',
+                  relaOperator: 'like'
+                }
+              ]
+            },
+            sortRules: [{
+              sortName: 'id',
+              sortOrder: 'ASC'
+            }]
+          }
+        }
+      },
+      options: {
+        // 可批量操作
+        multi: true,
+        // 批量操作列表
+        multiActions: [
+          {
+            value: 'delete',
+            label: this.$t('table.delete'),
+            url: 'gateway/platform/v1/international/charset/ids',
+            method: 'delete',
+            permissionId: '184',
+            confirm: true
+          },
+          {
+            value: 'disable',
+            label: this.$t('table.disable'),
+            url: 'gateway/platform/v1/international/charset/field/status/1',
+            method: 'post',
+            permissionId: '183',
+            confirm: false
+          },
+          {
+            value: 'enable',
+            label: this.$t('table.enable'),
+            url: 'gateway/platform/v1/international/charset/field/status/0',
+            method: 'post',
+            permissionId: '183',
+            confirm: false
+          }
+        ],
+        addAction: {
+          enable: true,
+          route: '',
+          permissionId: '182'
+        },
+        tableRowClass: {
+          column: 'status',
+          data: [
+            {
+              key: 1,
+              value: 'info-row'
+            }
+          ]
         }
       },
       pageSizes: [5, 10, 25, 50, 100],
@@ -236,7 +248,7 @@ export default {
   },
   created() {
     this.loadOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数').then(res => {
-      this.pageModule.pageSize = parseInt(res)
+      this.listQuery.pageModule.pageSize = parseInt(res)
     })
     this.loadOrganizParameterValue('DefaultPageSizes', '5,10,25,50,100', '表格默认每页记录数可选择项').then(res => {
       const temp = res.split(',')
@@ -245,7 +257,7 @@ export default {
       }
     })
     listUserByTopId().then(response => {
-      this.organizTopUsers = response.data
+      this.organizTopUsers = response.data.data
     }).catch(reason => {
       this.$notify({
         title: '获取所有用户失败',
@@ -255,7 +267,7 @@ export default {
       })
     })
     listService().then(response => {
-      this.allServices = response.data
+      this.allServices = response.data.data
     }).catch(reason => {
       this.$notify({
         title: '加载服务列表失败',
@@ -265,7 +277,7 @@ export default {
       })
     })
     listInternational().then(response => {
-      this.allInternationals = response.data
+      this.allInternationals = response.data.data
     }).catch(reason => {
       this.$notify({
         title: '加载语言列表失败',
@@ -276,6 +288,12 @@ export default {
     })
   },
   methods: {
+    getList(row) {
+      if (row && row.id) {
+        this.listQuery.pageModule.params.internationalId = row.id
+        this.$refs.pagingTable.getList()
+      }
+    },
     internationalFilter(id) {
       const data = this.allInternationals
       for (let i = 0; i < data.length; i++) {
@@ -300,41 +318,6 @@ export default {
         }
       }
     },
-    getList(row) {
-      if (row && row.id) {
-        this.selectedInternational = row
-      } else {
-        if (!this.selectedInternational || !this.selectedInternational.id) {
-          return
-        }
-      }
-      this.listLoading = true
-      this.pageModule.params.internationalId = this.selectedInternational.id
-      listCharsetPage(this.pageModule).then(response => {
-        this.list = response.data.rows
-        this.total = response.data.total
-        this.listLoading = false
-      }).catch(reason => {
-        this.$notify({
-          title: '获取字典明细项列表失败',
-          message: reason.message,
-          type: 'error',
-          duration: 5000
-        })
-      })
-    },
-    handleSearch() {
-      this.pageModule.pageNumber = 1
-      this.getList()
-    },
-    handleSizeChange(val) {
-      this.pageModule.pageSize = val
-      this.getList()
-    },
-    handleCurrentChange(val) {
-      this.pageModule.pageNumber = val
-      this.getList()
-    },
     handleAdd() {
       this.resetForm()
       if (!this.form.internationalId) {
@@ -348,7 +331,7 @@ export default {
     },
     handleEdit(row) {
       getCharset(row['id']).then(response => {
-        const data = response.data
+        const data = response.data.data
         data.charset = JSON.parse(data.charset)
         this.form = data
         this.dialogFormVisible = true
@@ -362,43 +345,13 @@ export default {
         })
       })
     },
-    handleDelete(row) {
-      this.$confirm(
-        '此操作将永久删除相关数据, 是否继续?',
-        '提示',
-        {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }
-      ).then(() => {
-        deleteCharset(row['id']).then(response => {
-          this.dialogFormVisible = false
-          this.getList()
-          this.$notify({
-            title: '成功',
-            message: '删除成功!',
-            type: 'success',
-            duration: 2000
-          })
-        }).catch(reason => {
-          this.$notify({
-            title: '删除失败',
-            message: reason.message,
-            type: 'error',
-            duration: 5000
-          })
-        })
-      }).catch(reason => {
-      })
-    },
     create(formName) {
       const set = this.$refs
       set[formName].validate(valid => {
         if (valid) {
           postCharset(this.form).then(() => {
             this.dialogFormVisible = false
-            this.getList()
+            this.$refs.pagingTable.getList()
             this.$notify({
               title: '成功',
               message: '创建成功',
@@ -431,7 +384,7 @@ export default {
           this.dialogFormVisible = false
           putCharset(this.form).then(() => {
             this.dialogFormVisible = false
-            this.getList()
+            this.$refs.pagingTable.getList()
             this.$notify({
               title: '成功',
               message: '修改成功',
@@ -457,20 +410,6 @@ export default {
         charset: {},
         internationalId: this.selectedInternational.id
       }
-    },
-    sortChange(column) {
-      const sortRule = {
-        sortOrder: (column.order && column.order === 'descending') ? 'DESC' : 'ASC',
-        sortName: column.prop
-      }
-      this.pageModule.params.sortRules = []
-      this.pageModule.params.sortRules.push(sortRule)
-      if (column.prop) {
-        this.getList()
-      }
-    },
-    rowClick(row, event, column) {
-      this.form = row
     }
   }
 }

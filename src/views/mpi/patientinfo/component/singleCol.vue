@@ -392,7 +392,7 @@ export default {
       }
       this.resetForm()
       getPatientinfo(this.mpiId).then(response => {
-        this.form = response.data
+        this.form = response.data.data
         this.dialogStatus = 'view'
         this.dialogFormVisible = true
         this.activeName = 'tabPanePatientinfo'
@@ -422,7 +422,7 @@ export default {
       }
       this.resetForm()
       getPatientinfo(this.mpiId).then(response => {
-        this.form = response.data
+        this.form = response.data.data
         this.dialogFormVisible = true
         this.dialogStatus = 'update'
         return response

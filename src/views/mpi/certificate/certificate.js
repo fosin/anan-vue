@@ -9,8 +9,8 @@ export function listCertificatePage(page) {
   })
 }
 // 获取相关证件信息所有数据列表
-export function listCertificate() {
-  return postRequest('gateway/platform/v1/certificate/list')
+export function listCertificate(data = {}) {
+  return postRequest('gateway/platform/v1/certificate/list', data)
 }
 // 根据病人主索引ID查找该病人所有证件信息
 export function listCertificateByEmpId(id, page) {

@@ -2,49 +2,43 @@ import { postRequest } from '@/utils/request'
 
 /**
  * 题库详情
- * @param data
  */
-export function fetchDetail(data) {
-  return postRequest('gateway/exam/api/repo/detail', data)
+export function fetchDetail(id, refs = '1') {
+  return postRequest('gateway/exam/api/repo/' + id, { refs: refs })
 }
 
 /**
  * 保存题库
- * @param data
  */
-export function saveData(data) {
-  return postRequest('gateway/exam/api/repo/save', data)
+export function createOrUpdate(data) {
+  return postRequest('gateway/exam/api/repo/createOrUpdate', data)
 }
 
 /**
  * 题库列表
- * @param data
  */
-export function fetchRepoList(data) {
+export function fetchRepoList(data = {}) {
   return postRequest('gateway/exam/api/repo/list', data)
 }
 
 /**
  * 题库批量操作
- * @param data
  */
 export function batchAction(data) {
   return postRequest('gateway/exam/api/repo/batch-action', data)
 }
 /**
  * 题库批量删除操作
- * @param data
  */
-export function deleteRepos(data) {
-  return postRequest('gateway/exam/api/repo/delete', data)
+export function deleteRepoById(id) {
+  return postRequest('gateway/exam/api/repo/delete/' + id)
 }
 
 /**
  * 题库批量操作
- * @param pId
  */
-export function fetchRepoChild(pId) {
-  return postRequest('gateway/exam/api/repo/child/' + pId)
+export function fetchRepoChild(data) {
+  return postRequest('gateway/exam/api/repo/listChild', data)
 }
 /**
  * 题库树型数据结构

@@ -115,7 +115,7 @@ export default {
   methods: {
     fetchData() {
       fetchRepoTree(this.userId).then(response => {
-        this.treedata = response.data
+        this.treedata = response.data.data
         // 检测输入框原有值并显示对应 label
         if (this.value) {
           this.labelModel = this.getRepoData(this.value)

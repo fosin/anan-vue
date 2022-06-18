@@ -1,34 +1,20 @@
-import request, { postRequest } from '@/utils/request'
+import request, { getRequest, postRequest } from '@/utils/request'
 
-export function treeAllChildOrganiz(id) {
-  return request({
-    url: 'gateway/platform/v1/organiz/treeAllChild/' + id,
-    method: 'post',
-    data: {}
-  })
+export function treeAllChildOrganiz(pid) {
+  return getRequest('gateway/platform/v1/organiz/treeAllChild/' + pid)
 }
 
 export function listOrganizChild(pid) {
-  return request({
-    url: 'gateway/platform/v1/organiz/listChild/' + pid,
-    method: 'post'
-  })
+  return getRequest('gateway/platform/v1/organiz/listChild/' + pid)
 }
 export function listOrganizAllChild(pid) {
-  return request({
-    url: 'gateway/platform/v1/organiz/listAllChild/' + pid,
-    method: 'post'
-  })
+  return getRequest('gateway/platform/v1/organiz/listAllChild/' + pid)
 }
-export function listOrganiz() {
-  return postRequest('gateway/platform/v1/organiz/list')
+export function listOrganiz(data = {}) {
+  return postRequest('gateway/platform/v1/organiz/list', data)
 }
 export function postOrganiz(obj) {
-  return request({
-    url: 'gateway/platform/v1/organiz/',
-    method: 'post',
-    data: obj
-  })
+  return postRequest('gateway/platform/v1/organiz/', obj)
 }
 
 export function getOrganiz(id, method) {
@@ -55,10 +41,7 @@ export function putOrganiz(obj) {
 
 // 获取机构的所有权限列表
 export function listOrganizPermissions(id) {
-  return request({
-    url: 'gateway/platform/v1/organiz/permissions/' + id,
-    method: 'post'
-  })
+  return postRequest('gateway/platform/v1/organiz/permissions/' + id)
 }
 
 // 更新机构权限

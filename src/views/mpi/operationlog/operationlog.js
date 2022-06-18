@@ -9,8 +9,8 @@ export function listOperationlogPage(page) {
   })
 }
 // 获取操作日志所有数据列表
-export function listOperationlog() {
-  return postRequest('gateway/platform/v1/operationlog/list')
+export function listOperationlog(data = {}) {
+  return postRequest('gateway/platform/v1/operationlog/list', data)
 }
 // 根据病人主索引ID查找该病人所有操作记录
 export function listOperationlogByEmpId(id, page) {

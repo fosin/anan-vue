@@ -9,8 +9,8 @@ export function listCardinfoPage(page) {
   })
 }
 // 获取卡信息所有数据列表
-export function listCardinfo() {
-  return postRequest('gateway/platform/v1/cardinfo/list')
+export function listCardinfo(data = {}) {
+  return postRequest('gateway/platform/v1/cardinfo/list', data)
 }
 // 根据病人主索引ID查找该病人所有卡
 export function listCardinfoByEmpId(id, page) {

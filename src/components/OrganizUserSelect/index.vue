@@ -21,8 +21,8 @@
 </template>
 <script>
 
-import { mapGetters } from 'vuex'
 import { listByOrganizId } from '@/views/platform/user/user'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'OrganizUserSelect',
@@ -78,7 +78,7 @@ export default {
   methods: {
     fetchData() {
       listByOrganizId(this.ananUserInfo.organizId, this.status).then(response => {
-        this.dataList = response.data
+        this.dataList = response.data.data
         if (!this.showAll) {
           this.dataList = this.dataList.filter(value => value.status === 0)
         }

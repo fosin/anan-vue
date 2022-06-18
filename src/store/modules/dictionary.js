@@ -1,5 +1,7 @@
-import { postRequest } from '@/utils/request'
+import vuex from '@/store'
+import { getDictionary, getDicValue, listDictionaryDetailsByDicId } from '@/utils/dic'
 import { Notification } from 'element-ui'
+import Vue from 'vue'
 
 const dictionary = {
   state: {
@@ -19,16 +21,16 @@ const dictionary = {
           resolve(dics[dicId])
           return
         }
-        postRequest('gateway/platform/v1/dictionary/' + dicId).then(response => {
-          if (!response.data) {
+        getDictionary(dicId).then(response => {
+          if (!response.data.data) {
             reject('error')
           }
-          const data = response.data
-          postRequest('gateway/platform/v1/dictionarydetail/byCode/' + dicId).then(response => {
-            if (!response.data) {
+          const data = response.data.data
+          listDictionaryDetailsByDicId(dicId).then(response => {
+            if (!response.data.data) {
               reject('error')
             }
-            data['details'] = response.data
+            data['details'] = response.data.data
             state.dictionaryData[dicId] = data
             commit('SET_DIACTIONARY_DATA', state.dictionaryData)
             resolve(data)
@@ -45,9 +47,6 @@ const dictionary = {
 
 export default dictionary
 
-import Vue from 'vue'
-import vuex from '@/store'
-import { getDicValue } from '@/utils/dic'
 Vue.prototype.loadDictionaryById = function(dicId) {
   return new Promise((resolve, reject) => {
     vuex.dispatch('getDictionaryById', dicId).then(res => {

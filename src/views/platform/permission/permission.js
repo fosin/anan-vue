@@ -1,17 +1,18 @@
 import request, { postRequest } from '@/utils/request'
 
-export function listPermissions(data) {
+export function listPermissions(data = {}) {
   return postRequest('gateway/platform/v1/permission/list', data)
 }
 
 export function listChildPermissions(pid) {
-  return listPermissions({
+  const data = {
     pid: pid,
     sortRules: [{
       sortName: 'sort',
       sortOrder: 'ASC'
     }]
-  })
+  }
+  return postRequest('gateway/platform/v1/permission/listChild', data)
 }
 
 export function treePermissions(type) {

@@ -6,11 +6,20 @@ import { postRequest } from '@/utils/request'
  * @param examId
  */
 export function listPaper(userId, examId) {
-  return postRequest('gateway/exam/api/paper/paper/paging', {
-    current: 1,
-    size: 99,
-    params: { userId: userId, examId: examId }
-  })
+  const pageModule = {
+    pageNumber: 1,
+    pageSize: 10,
+    params: {
+      userId: userId,
+      examId: examId,
+      sortRules: [{
+        sortName: 'createTime',
+        sortOrder: 'DESC'
+      }
+      ]
+    }
+  }
+  return postRequest('gateway/exam/api/paper/paper/paging', pageModule)
 }
 
 /**

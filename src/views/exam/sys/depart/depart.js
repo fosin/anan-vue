@@ -8,9 +8,8 @@ export function fetchTree(data) {
   return postRequest('gateway/exam/api/sys/depart/tree', data)
 }
 
-export function fetchDetail(id) {
-  const data = { id: id }
-  return postRequest('gateway/exam/api/sys/depart/detail', data)
+export function fetchDetail(id, refs = '1') {
+  return postRequest('gateway/exam/api/sys/depart/' + id, { refs: refs })
 }
 
 export function deleteData(ids) {
@@ -18,8 +17,8 @@ export function deleteData(ids) {
   return postRequest('gateway/exam/api/sys/depart/delete', data)
 }
 
-export function saveData(data) {
-  return postRequest('gateway/exam/api/sys/depart/save', data)
+export function createOrUpdate(data) {
+  return postRequest('gateway/exam/api/sys/depart/createOrUpdate', data)
 }
 
 export function sortData(id, sort) {

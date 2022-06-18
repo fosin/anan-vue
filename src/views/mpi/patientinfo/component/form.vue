@@ -240,13 +240,13 @@
   </el-dialog>
 </template>
 <script>
-import { getPatientinfo, postPatientinfo, putPatientinfo, statusPatientinfo } from './patientinfo'
-
 import Address from '../../address'
 import Cardinfo from '../../cardinfo'
 import Certificate from '../../certificate'
 import Contactinfo from '../../contactinfo'
 import Operationlog from '../../operationlog'
+import { getPatientinfo, postPatientinfo, putPatientinfo, statusPatientinfo } from './patientinfo'
+
 export default {
   name: 'MpiPatientinfoForm',
 
@@ -479,7 +479,7 @@ export default {
       }
       this.resetForm()
       getPatientinfo(this.mpiId).then(response => {
-        this.form = response.data
+        this.form = response.data.data
         this.dialogStatus = 'view'
         this.dialogFormVisible = true
         this.activeName = 'tabPanePatientinfo'
@@ -509,7 +509,7 @@ export default {
       }
       this.resetForm()
       getPatientinfo(this.mpiId).then(response => {
-        this.form = response.data
+        this.form = response.data.data
         this.dialogFormVisible = true
         this.dialogStatus = 'update'
         return response

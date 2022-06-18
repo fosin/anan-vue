@@ -64,8 +64,8 @@
 </template>
 
 <script>
-import { pagingTree, fetchDetail, deleteData, saveData, sortData } from '@/views/exam/sys/depart/depart'
 import Pagination from '@/views/exam/components/Pagination'
+import { createOrUpdate, deleteData, fetchDetail, pagingTree, sortData } from '@/views/exam/sys/depart/depart'
 
 export default {
   name: 'Depart',
@@ -125,7 +125,7 @@ export default {
       // 如果是修改
       if (currentId != null) {
         fetchDetail(currentId).then(response => {
-          this.postForm = response.data
+          this.postForm = response.data.data
         })
       }
 
@@ -135,7 +135,7 @@ export default {
     getList() {
       this.listLoading = true
       pagingTree(this.listQuery).then(response => {
-        this.tableData = response.data
+        this.tableData = response.data.data
         this.listLoading = false
       })
     },
@@ -159,7 +159,7 @@ export default {
           return
         }
 
-        saveData(this.postForm).then(() => {
+        createOrUpdate(this.postForm).then(() => {
           this.$notify({
             title: '成功',
             message: '分类保存成功！',

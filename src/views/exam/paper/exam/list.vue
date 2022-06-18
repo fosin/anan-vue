@@ -5,7 +5,7 @@
     :list-query="listQuery"
   >
     <template slot="filter-content">
-      <el-select v-model="listQuery.params.openType" class="filter-item" placeholder="开放类型" clearable>
+      <el-select v-model="listQuery.pageModule.params.openType" class="filter-item" placeholder="开放类型" clearable>
         <el-option
           v-for="item in openTypes"
           :key="item.name"
@@ -107,7 +107,7 @@
 </template>
 
 <script>
-import DataTable from '@/views/exam/components/DataTable'
+import DataTable from '@/components/DataTable'
 
 export default {
   name: 'ExamOnlineDo',
@@ -116,25 +116,63 @@ export default {
     return {
       openTypes: [],
       listQuery: {
-        current: 1,
-        size: 10,
-        params: {
-        },
-        sort: {
-          sortOrder: 'ASC',
-          sortName: 'title'
-        },
+        listUrl: 'gateway/exam/api/exam/exam/online-paging',
+        pageSizes: [5, 10, 25, 50, 100],
         search: {
-          column: 'title',
-          input: '',
+          input: null,
+          cols: ['title'],
           placeholder: '搜索考试名称'
+        },
+        pageModule: {
+          pageNumber: 1,
+          pageSize: 10,
+          params: {
+            title: null,
+            openType: null,
+            queryRule: {
+              logiOperator: 'and',
+              relaRules: [
+                {
+                  fieldName: 'title',
+                  relaOperator: 'like'
+                },
+                {
+                  fieldName: 'openType',
+                  relaOperator: 'eq'
+                }
+              ]
+            },
+            sortRules: [{
+              sortName: 'title',
+              sortOrder: 'ASC'
+            }
+            ]
+          }
         }
       },
       options: {
         // 可批量操作
         multi: false,
-        // 列表请求URL
-        listUrl: 'gateway/exam/api/exam/exam/online-paging'
+        // 批量操作列表
+        multiActions: [],
+        addAction: {
+          enable: false,
+          route: '',
+          permissionId: '0'
+        },
+        tableRowClass: {
+          column: 'status',
+          data: [
+            {
+              key: 1,
+              value: 'info-row'
+            },
+            {
+              key: 9,
+              value: 'info-row'
+            }
+          ]
+        }
       }
     }
   },

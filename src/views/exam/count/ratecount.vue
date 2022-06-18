@@ -7,7 +7,7 @@
     >
       <template slot="filter-content">
         <el-date-picker
-          v-model="listQuery.params.beginCreateTime"
+          v-model="listQuery.pageModule.params.beginCreateTime"
           style="width: 150px;margin-left: 5px;"
           class="filter-item"
           value-format="yyyy-MM-dd"
@@ -15,7 +15,7 @@
           placeholder="考试开始时间"
         />
         <el-date-picker
-          v-model="listQuery.params.endCreateTime"
+          v-model="listQuery.pageModule.params.endCreateTime"
           style="width: 150px;margin-left: 5px;"
           class="filter-item"
           value-format="yyyy-MM-dd"
@@ -88,7 +88,7 @@
 
 <script>
 
-import DataTable from '@/views/exam/components/DataTable'
+import DataTable from '@/components/DataTable'
 
 export default {
   name: 'ExamQueryPaperRate',
@@ -97,36 +97,63 @@ export default {
     return {
       // 试题列表
       listQuery: {
-        current: 1,
-        size: 10,
-        params: {
-          title: '',
-          beginCreateTime: null,
-          endCreateTime: null
-          // relaRules:  [{
-          //   'propertity': 'beginCreateTime',
-          //   'operator': 'greaterThanOrEqualTo'
-          // },
-          // {
-          //   'propertity': 'endCreateTime',
-          //   'operator': 'lessThanOrEqualTo'
-          // }]
-        },
-        sort: {
-          sortOrder: 'ASC',
-          sortName: 'title'
-        },
+        listUrl: 'gateway/exam/api/paper/paper/rateCount',
+        pageSizes: [5, 10, 25, 50, 100],
         search: {
-          column: 'title',
-          input: '',
-          placeholder: '搜索考试名称'
+          input: null,
+          cols: ['title'],
+          placeholder: '搜索试题名称'
+        },
+        pageModule: {
+          pageNumber: 1,
+          pageSize: 10,
+          params: {
+            title: null,
+            beginCreateTime: null,
+            endCreateTime: null,
+            queryRule: {
+              logiOperator: 'and',
+              relaRules: [
+                {
+                  'propertity': 'title',
+                  'operator': 'like'
+                },
+                {
+                  'propertity': 'beginCreateTime',
+                  'operator': 'ge'
+                },
+                {
+                  'propertity': 'endCreateTime',
+                  'operator': 'le'
+                }]
+            },
+            sortRules: [{
+              sortName: 'title',
+              sortOrder: 'ASC'
+            }
+            ]
+          }
         }
       },
       options: {
         // 可批量操作
         multi: false,
-        // 列表请求URL
-        listUrl: 'gateway/exam/api/paper/paper/rateCount'
+        // 批量操作列表
+        multiActions: [],
+        addAction: {
+          enable: false,
+          route: '',
+          permissionId: '0'
+        },
+        tableRowClass: {
+          column: 'state',
+          data: [
+            {
+              key: 1,
+              value: 'info-row'
+            }
+          ]
+        }
       },
       openTypes: []
     }

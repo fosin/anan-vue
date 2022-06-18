@@ -1,101 +1,64 @@
 <template>
   <div class="app-container calendar-list-container">
-    <div class="filter-container">
-      <el-input
-        v-model="pageModule.params.clientId"
-        :placeholder="$t('oauth_client_details.searchText')"
-        style="width: 200px;"
-        class="filter-item"
-        @keyup.enter.native="handleSearch()"
-      />
-      <el-button-group>
-        <el-button v-waves round class="filter-item" type="primary" icon="el-icon-search" @click="handleSearch()">
-          {{ $t('table.search') }}
-        </el-button>
-        <el-button v-waves v-permission="'50'" round class="filter-item" style="margin-left: 5px;" type="primary" icon="el-icon-circle-plus" @click="handleAdd()">
-          {{ $t('table.add') }}
-        </el-button>
-      </el-button-group>
-    </div>
-    <el-table
-      v-loading="listLoading"
-      :data="list"
-      element-loading-text="努力加载中"
-      border
-      fit
-      highlight-current-row
+    <data-table
+      ref="pagingTable"
+      :options="options"
+      :list-query="listQuery"
       style="width: 100%"
-      @sort-change="sortChange"
-      @row-click="rowClick"
+      @handle-add="handleAdd()"
     >
-      <el-table-column :label="$t('oauth_client_details.clientId.label')" align="center" sortable prop="clientId" />
+      <template slot="filter-content" />
+      <template slot="data-columns">
+        <el-table-column :label="$t('oauth_client_details.clientId.label')" align="center" sortable prop="clientId" />
 
-      <!--  <el-table-column align="center" :label="$t('oauth_client_details.clientSecret.label')" sortable prop="clientSecret"></el-table-column>
+        <!--  <el-table-column align="center" :label="$t('oauth_client_details.clientSecret.label')" sortable prop="clientSecret"></el-table-column>
           <el-table-column align="center" :label="$t('oauth_client_details.webServerRedirectUri.label')" sortable prop="webServerRedirectUri" width="250px"></el-table-column>
 
 -->
-      <el-table-column :label="$t('oauth_client_details.scope.label')" align="center" sortable prop="scope" />
+        <el-table-column :label="$t('oauth_client_details.scope.label')" align="center" sortable prop="scope" />
 
-      <el-table-column :label="$t('oauth_client_details.authorizedGrantTypes.label')" align="center" sortable prop="authorizedGrantTypes" width="250px" />
+        <el-table-column :label="$t('oauth_client_details.authorizedGrantTypes.label')" align="center" sortable prop="authorizedGrantTypes" width="250px" />
 
-      <el-table-column :label="$t('oauth_client_details.accessTokenValidity.label')" align="center" sortable prop="accessTokenValidity" />
-      <el-table-column :label="$t('oauth_client_details.refreshTokenValidity.label')" align="center" sortable prop="refreshTokenValidity" />
-      <!--
+        <el-table-column :label="$t('oauth_client_details.accessTokenValidity.label')" align="center" sortable prop="accessTokenValidity" />
+        <el-table-column :label="$t('oauth_client_details.refreshTokenValidity.label')" align="center" sortable prop="refreshTokenValidity" />
+        <!--
       <el-table-column align="center" class-name="status-col" :label="$t('oauth_client_details.resourceIds.label')" sortable prop="resourceIds">
       </el-table-column>
       <el-table-column align="center" class-name="status-col" :label="$t('oauth_client_details.authorities.label')" sortable prop="authorities">
       </el-table-column>
      <el-table-column align="center" class-name="status-col" :label="$t('oauth_client_details.additionalInformation.label')" sortable prop="additionalInformation">
       </el-table-column>-->
-      <el-table-column :label="$t('oauth_client_details.autoapprove.label')" align="center" sortable prop="autoapprove" />
-      <el-table-column :label="$t('table.actions')" align="center" width="280">
-        <template slot-scope="scope">
-          <el-button-group>
-            <el-button
-              v-waves
-              v-permission="'51'"
-              round
-              size="mini"
-              type="success"
-              class="filter-item"
-              icon="el-icon-edit"
-              @click="handleEdit(scope.row)"
-            >
-              {{ $t('table.edit') }}
-            </el-button>
-            <el-button
-              v-waves
-              v-permission="'133'"
-              round
-              size="mini"
-              type="warning"
-              style="margin-left: 5px;"
-              icon="el-icon-menu"
-              @click="handlePermission(scope.row)"
-            >
-              {{ $t('table.permission') }}
-            </el-button>
-            <el-button
-              v-waves
-              v-permission="'52'"
-              round
-              size="mini"
-              type="danger"
-              class="filter-item"
-              style="margin-left: 5px;"
-              icon="el-icon-delete"
-              @click="handleDelete(scope.row)"
-            >
-              {{ $t('table.delete') }}
-            </el-button>
-          </el-button-group>
-        </template>
-      </el-table-column>
-    </el-table>
-
-    <div v-show="!listLoading" class="pagination-container">
-      <el-pagination :current-page.sync="pageModule.pageNumber" :page-sizes="pageSizes" :page-size="pageModule.pageSize" :total="total" layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
-    </div>
+        <el-table-column :label="$t('oauth_client_details.autoapprove.label')" align="center" sortable prop="autoapprove" />
+        <el-table-column :label="$t('table.actions')" align="center" width="120px">
+          <template slot-scope="scope">
+            <el-tooltip class="item" effect="dark" :content="$t('table.edit')" placement="top">
+              <el-button
+                v-waves
+                v-permission="'51'"
+                round
+                size="mini"
+                type="success"
+                class="filter-item"
+                icon="el-icon-edit"
+                @click="handleEdit(scope.row)"
+              />
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" :content="$t('table.permission')" placement="top">
+              <el-button
+                v-waves
+                v-permission="'133'"
+                round
+                size="mini"
+                type="warning"
+                style="margin-left: 5px;"
+                icon="el-icon-menu"
+                @click="handlePermission(scope.row)"
+              />
+            </el-tooltip>
+          </template>
+        </el-table-column>
+      </template>
+    </data-table>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
       <el-form ref="form" :model="form" :rules="rules" label-width="150px">
         <el-row>
@@ -177,43 +140,79 @@
   </div>
 </template>
 <script>
-import { getClient, postClient, putClient, deleteClient, listClientPage } from './oauthclient.js'
-
-import { listChildPermissions } from '../permission/permission'
+import DataTable from '@/components/DataTable'
 import grantPermission from '../permission/grantPermission'
+import { listChildPermissions } from '../permission/permission'
+import { getClient, postClient, putClient } from './oauthclient.js'
 
 export default {
   name: 'DevelopmentAuthClient',
   components: {
-    grantPermission
+    grantPermission,
+    DataTable
   },
   data() {
     return {
-      list: null,
-      total: null,
-      listLoading: false,
-      pageModule: {
-        pageNumber: 1,
-        pageSize: 10,
-        params: {
-          clientId: '',
-          additionalInformation: '',
-          queryRule: {
-            logiOperator: 'or',
-            relaRules: [
-              {
-                fieldName: 'clientId',
-                relaOperator: 'like'
-              },
-              {
-                fieldName: 'additionalInformation',
-                relaOperator: 'like'
-              }
+      listQuery: {
+        listUrl: 'gateway/platform/v1/oauthclient/paging',
+        pageSizes: [5, 10, 25, 50, 100],
+        search: {
+          input: null,
+          cols: ['clientId', 'code'],
+          placeholder: this.$t('oauth_client_details.searchText')
+        },
+        pageModule: {
+          pageNumber: 1,
+          pageSize: 10,
+          params: {
+            clientId: null,
+            additionalInformation: null,
+            queryRule: {
+              logiOperator: 'or',
+              relaRules: [
+                {
+                  fieldName: 'clientId',
+                  relaOperator: 'like'
+                },
+                {
+                  fieldName: 'additionalInformation',
+                  relaOperator: 'like'
+                }
+              ]
+            },
+            sortRules: [{
+              sortName: 'clientId',
+              sortOrder: 'ASC' }
             ]
-          },
-          sortRules: [{
-            sortName: 'clientId',
-            sortOrder: 'ASC' }
+          }
+        }
+      },
+      options: {
+        // 可批量操作
+        multi: true,
+        // 批量操作列表
+        multiActions: [
+          {
+            value: 'delete',
+            label: this.$t('table.delete'),
+            url: 'gateway/platform/v1/oauthclient/ids',
+            method: 'delete',
+            permissionId: '52',
+            confirm: true
+          }
+        ],
+        addAction: {
+          enable: true,
+          route: '',
+          permissionId: '50'
+        },
+        tableRowClass: {
+          column: 'status',
+          data: [
+            {
+              key: 1,
+              value: 'info-row'
+            }
           ]
         }
       },
@@ -282,7 +281,7 @@ export default {
       this.grantTypesOptions = res.details
     })
     this.loadOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数').then(res => {
-      this.pageModule.pageSize = parseInt(res)
+      this.listQuery.pageModule.pageSize = parseInt(res)
     })
     this.loadOrganizParameterValue('DefaultPageSizes', '5,10,25,50,100', '表格默认每页记录数可选择项').then(res => {
       const temp = res.split(',')
@@ -291,7 +290,6 @@ export default {
         this.pageSizes[i] = parseInt(temp[i])
       }
     })
-    this.getList()
   },
   methods: {
     handlePermission(row) {
@@ -336,34 +334,6 @@ export default {
       if (!value) return true
       return data.name.indexOf(value) !== -1
     },
-    getList() {
-      this.listLoading = true
-      this.pageModule.params.additionalInformation = this.pageModule.params.clientId
-      listClientPage(this.pageModule).then(response => {
-        this.list = response.data.rows
-        this.total = response.data.total
-        this.listLoading = false
-      }).catch(reason => {
-        this.$notify({
-          title: '获取客户端列表失败',
-          message: reason.message,
-          type: 'error',
-          duration: 5000
-        })
-      })
-    },
-    handleSearch() {
-      this.pageModule.pageNumber = 1
-      this.getList()
-    },
-    handleSizeChange(val) {
-      this.pageModule.pageSize = val
-      this.getList()
-    },
-    handleCurrentChange(val) {
-      this.pageModule.pageNumber = val
-      this.getList()
-    },
     handleAdd() {
       this.resetForm()
       this.dialogStatus = 'create'
@@ -371,7 +341,7 @@ export default {
     },
     handleEdit(row) {
       getClient(row.clientId).then(response => {
-        this.form = response.data
+        this.form = response.data.data
         this.form.authorizedGrantTypeArray = this.form.authorizedGrantTypes.split(',')
         this.dialogFormVisible = true
         this.dialogStatus = 'update'
@@ -384,35 +354,6 @@ export default {
         })
       })
     },
-    handleDelete(row) {
-      this.$confirm(
-        '此操作将永久删除客户端名( ' + row.clientId + ' )的相关数据, 是否继续?',
-        '提示',
-        {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }
-      ).then(() => {
-        deleteClient(row.clientId).then(response => {
-          this.dialogFormVisible = false
-          this.getList()
-          this.$notify({
-            title: '成功',
-            message: '删除客户端成功!',
-            type: 'success',
-            duration: 2000
-          })
-        }).catch(reason => {
-          this.$notify({
-            title: '删除客户端失败',
-            message: reason.message,
-            type: 'error',
-            duration: 5000
-          })
-        })
-      })
-    },
     create(formName) {
       const refs = this.$refs
       refs[formName].validate(valid => {
@@ -420,7 +361,7 @@ export default {
           this.form.authorizedGrantTypes = this.form.authorizedGrantTypeArray.join(',')
           postClient(this.form).then(() => {
             this.dialogFormVisible = false
-            this.getList()
+            this.$refs.pagingTable.getList()
             this.$notify({
               title: '成功',
               message: '创建成功',
@@ -454,7 +395,7 @@ export default {
           this.form.authorizedGrantTypes = this.form.authorizedGrantTypeArray.join(',')
           putClient(this.form).then(() => {
             this.dialogFormVisible = false
-            this.getList()
+            this.$refs.pagingTable.getList()
             this.$notify({
               title: '成功',
               message: '修改成功',
@@ -489,20 +430,6 @@ export default {
         additionalInformation: undefined,
         autoapprove: false
       }
-    },
-    sortChange(column) {
-      const sortRule = {
-        sortOrder: (column.order && column.order === 'descending') ? 'DESC' : 'ASC',
-        sortName: column.prop
-      }
-      this.pageModule.params.sortRules = []
-      this.pageModule.params.sortRules.push(sortRule)
-      if (column.prop) {
-        this.getList()
-      }
-    },
-    rowClick(row, event, column) {
-      this.form = row
     }
   }
 }

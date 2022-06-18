@@ -114,10 +114,10 @@
 
 <script>
 import DataTable from '@/views/exam/components/DataTable'
-import MeetRole from '@/views/exam/components/MeetRole'
-import { saveData } from '@/views/exam/sys/user/user'
 import DepartTreeSelect from '@/views/exam/components/DepartTreeSelect'
+import MeetRole from '@/views/exam/components/MeetRole'
 import { fetchTree } from '@/views/exam/sys/depart/depart'
+import { createOrUpdate } from '@/views/exam/sys/user/user'
 
 export default {
   name: 'SysUserList',
@@ -182,7 +182,7 @@ export default {
       this.onStates = res.details
     })
     fetchTree({}).then(response => {
-      this.treeData = response.data
+      this.treeData = response.data.data
     })
   },
 
@@ -190,7 +190,7 @@ export default {
 
     handleUploadSuccess(response) {
       // 上传图片赋值
-      this.formData.avatar = response.data.url
+      this.formData.avatar = response.data.data.url
     },
 
     handleAdd() {
@@ -211,7 +211,7 @@ export default {
       this.formData.departId = data.id
     },
     handleSave() {
-      saveData(this.formData).then(() => {
+      createOrUpdate(this.formData).then(() => {
         this.$message({
           type: 'success',
           message: '用户修改成功!'

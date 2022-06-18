@@ -1,137 +1,85 @@
 <template>
   <div class="app-container calendar-list-container">
-    <div class="filter-container">
-      <el-input
-        v-model="pageModule.params.name"
-        :placeholder="$t('anan_version_role.searchText')"
-        style="width: 200px;"
-        class="filter-item"
-        @keyup.enter.native="handleFilter"
-      />
-      <el-button-group>
-        <el-button v-waves round class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-          {{ $t('table.search') }}
-        </el-button>
-        <el-button
-          v-waves
-          v-permission="'121'"
-          round
-          class="filter-item"
-          style="margin-left: 5px;"
-          type="primary"
-          icon="el-icon-circle-plus"
-          @click="handleAdd()"
-        >
-          {{ $t('table.add') }}
-        </el-button>
-      </el-button-group>
-    </div>
-
-    <el-table
-      v-loading="listLoading"
-      :data="roleList"
-      element-loading-text="努力加载中"
-      border
-      fit
-      highlight-current-row
+    <data-table
+      ref="pagingTable"
+      :options="options"
+      :list-query="listQuery"
       style="width: 100%"
-      @sort-change="sortChange"
-      @row-click="rowClick"
+      @handle-add="handleAdd()"
     >
-      <el-table-column :label="$t('anan_version_role.value.label')" align="center" sortable prop="value" />
-
-      <el-table-column :label="$t('anan_version_role.name.label')" align="center" sortable prop="name" />
-      <el-table-column
-        :label="$t('anan_version_role.versionId.label')"
-        :formatter="getVersionName"
-        prop="versionId"
-        align="center"
-        show-overflow-tooltip
-        sortable
-      />
-      <el-table-column
-        :label="$t('anan_version_role.status.label')"
-        align="center"
-        class-name="status-col"
-        width="80"
-        sortable
-        prop="status"
-      >
-        <template slot-scope="scope">
-          <el-tag>{{ scope.row.status | statusFilter }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column
-        :label="$t('table.updateBy.label')"
-        align="center"
-        sortable
-        prop="updateBy"
-        width="100px"
-      >
-        <template slot-scope="scope">
-          <span>{{ getDicValue(organizTopUsers,"id",scope.row.updateBy,"username") }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('table.updateTime.label')" width="160px" align="center" sortable prop="updateTime" />
-      <el-table-column
-        :label="$t('table.createTime.label')"
-        align="center"
-        sortable
-        prop="createTime"
-        width="160"
-      />
-      <el-table-column :label="$t('table.actions')" align="center" width="200px" fixed="right">
-        <template slot-scope="scope">
-          <el-tooltip class="item" effect="dark" :content="$t('table.edit')" placement="top">
-            <el-button
-              v-waves
-              v-permission="'122'"
-              round
-              size="mini"
-              type="success"
-              class="filter-item"
-              icon="el-icon-edit"
-              @click="handleEdit(scope.row)"
-            />
-          </el-tooltip>
-          <el-tooltip class="item" effect="dark" :content="$t('table.permission')" placement="top">
-            <el-button
-              round
-              size="mini"
-              type="warning"
-              style="margin-left: 5px;"
-              icon="el-icon-menu"
-              @click="handleVersionRolePermission(scope.row)"
-            />
-          </el-tooltip>
-          <el-tooltip class="item" effect="dark" :content="$t('table.delete')" placement="top">
-            <el-button
-              v-waves
-              v-permission="'123'"
-              round
-              size="mini"
-              type="danger"
-              class="filter-item"
-              style="margin-left: 5px;"
-              icon="el-icon-delete"
-              @click="handleDelete(scope.row)"
-            />
-          </el-tooltip>
-        </template>
-      </el-table-column>
-    </el-table>
-
-    <div v-show="!listLoading" class="pagination-container">
-      <el-pagination
-        :current-page.sync="pageModule.pageNumber"
-        :page-sizes="pageSizes"
-        :page-size="pageModule.pageSize"
-        :total="total"
-        layout="total, sizes, prev, pager, next, jumper"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
-    </div>
+      <template slot="filter-content" />
+      <template slot="data-columns">
+        <el-table-column :label="$t('anan_version_role.value.label')" align="center" sortable prop="value" />
+        <el-table-column :label="$t('anan_version_role.name.label')" align="center" sortable prop="name" />
+        <el-table-column
+          :label="$t('anan_version_role.versionId.label')"
+          :formatter="getVersionName"
+          prop="versionId"
+          align="center"
+          show-overflow-tooltip
+          sortable
+        />
+        <el-table-column
+          :label="$t('anan_version_role.status.label')"
+          align="center"
+          class-name="status-col"
+          width="80"
+          sortable
+          prop="status"
+        >
+          <template slot-scope="scope">
+            <el-tag>{{ scope.row.status | statusFilter }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="$t('table.updateBy.label')"
+          align="center"
+          sortable
+          prop="updateBy"
+          width="100px"
+        >
+          <template slot-scope="scope">
+            <span>{{ getDicValue(organizTopUsers,"id",scope.row.updateBy,"username") }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('table.updateTime.label')" width="160px" align="center" sortable prop="updateTime" />
+        <el-table-column
+          :label="$t('table.createTime.label')"
+          align="center"
+          sortable
+          prop="createTime"
+          width="160"
+        />
+        <el-table-column :label="$t('table.actions')" align="center" width="120px" fixed="right">
+          <template slot-scope="scope">
+            <el-tooltip class="item" effect="dark" :content="$t('table.edit')" placement="top">
+              <el-button
+                v-waves
+                v-permission="'122'"
+                round
+                size="mini"
+                type="success"
+                class="filter-item"
+                icon="el-icon-edit"
+                @click="handleEdit(scope.row)"
+              />
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" :content="$t('table.permission')" placement="top">
+              <el-button
+                v-waves
+                v-permission="'126'"
+                round
+                size="mini"
+                type="warning"
+                style="margin-left: 5px;"
+                icon="el-icon-menu"
+                @click="handleVersionRolePermission(scope.row)"
+              />
+            </el-tooltip>
+          </template>
+        </el-table-column>
+      </template>
+    </data-table>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-form-item :label="$t('anan_version_role.value.label')" prop="value">
@@ -197,26 +145,19 @@
 </template>
 
 <script>
-import {
-  deleteVersionRole,
-  getVersionRole,
-  listVersionRolePage,
-  listVersionRolePermissions,
-  postVersionRole,
-  putVersionRole,
-  putVersionRolePermissions
-} from './versionRole'
+import DataTable from '@/components/DataTable'
 import { formatDate } from '@/utils/date'
-import { listVersion, listVersionChildPermissions } from '../version'
-
+import { listUserByTopId } from '@/views/platform/user/user'
 import { mapGetters } from 'vuex'
 import grantPermission from '../../permission/grantPermission'
-import { listUserByTopId } from '@/views/platform/user/user'
+import { listVersion, listVersionChildPermissions } from '../version'
+import { getVersionRole, listVersionRolePermissions, postVersionRole, putVersionRole, putVersionRolePermissions } from './versionRole'
 
 export default {
   name: 'DevelopmentVersionRole',
   components: {
-    grantPermission
+    grantPermission,
+    DataTable
   },
   filters: {
     statusFilter(status) {
@@ -241,32 +182,65 @@ export default {
         isLeaf: 'leaf',
         disabled: 'disabled'
       },
-      roleList: null,
-      total: null,
-      listLoading: false,
-      pageModule: {
-        pageNumber: 1,
-        pageSize: 10,
-        params: {
-          name: '',
-          value: '',
-          queryRule: {
-            logiOperator: 'or',
-            relaRules: [
-              {
-                fieldName: 'name',
-                relaOperator: 'like'
-              },
-              {
-                fieldName: 'value',
-                relaOperator: 'like'
-              }
+      listQuery: {
+        listUrl: 'gateway/platform/v1/version/role/paging',
+        pageSizes: [5, 10, 25, 50, 100],
+        search: {
+          input: null,
+          cols: ['name', 'code'],
+          placeholder: this.$t('anan_version_role.searchText')
+        },
+        pageModule: {
+          pageNumber: 1,
+          pageSize: 10,
+          params: {
+            name: null,
+            value: null,
+            queryRule: {
+              logiOperator: 'or',
+              relaRules: [
+                {
+                  fieldName: 'name',
+                  relaOperator: 'like'
+                },
+                {
+                  fieldName: 'value',
+                  relaOperator: 'like'
+                }
+              ]
+            },
+            sortRules: [{
+              sortName: 'id',
+              sortOrder: 'ASC' }
             ]
-          },
-          sortRules: [
+          }
+        }
+      },
+      options: {
+        // 可批量操作
+        multi: true,
+        // 批量操作列表
+        multiActions: [
+          {
+            value: 'delete',
+            label: this.$t('table.delete'),
+            url: 'gateway/platform/v1/version/role/ids',
+            method: 'delete',
+            permissionId: '123',
+            confirm: true
+          }
+        ],
+        addAction: {
+          enable: true,
+          route: '',
+          permissionId: '121'
+        },
+        tableRowClass: {
+          column: 'status',
+          data: [
             {
-              sortName: 'value',
-              sortOrder: 'DESC'
+              key: 1,
+              value: 'info-row'
             }
           ]
         }
@@ -331,7 +305,7 @@ export default {
   mounted() {
     this.loadVersionAll()
     this.loadOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数').then(res => {
-      this.pageModule.pageSize = parseInt(res)
+      this.listQuery.pageModule.pageSize = parseInt(res)
     })
     this.loadOrganizParameterValue('DefaultPageSizes', '5,10,25,50,100', '表格默认每页记录数可选择项').then(res => {
       const temp = res.split(',')
@@ -341,7 +315,7 @@ export default {
       }
     })
     listUserByTopId().then(response => {
-      this.organizTopUsers = response.data
+      this.organizTopUsers = response.data.data
     }).catch(reason => {
       this.$notify({
         title: '获取所有用户失败',
@@ -350,28 +324,11 @@ export default {
         duration: 5000
       })
     })
-    this.getList()
   },
   methods: {
-    getList() {
-      this.listLoading = true
-      this.pageModule.params.value = this.pageModule.params.name
-      listVersionRolePage(this.pageModule).then(response => {
-        this.roleList = response.data.rows
-        this.total = response.data.total
-        this.listLoading = false
-      }).catch(reason => {
-        this.$notify({
-          title: '获取版本角色列表失败',
-          message: reason.message,
-          type: 'error',
-          duration: 5000
-        })
-      })
-    },
     loadVersionAll() {
       listVersion().then(response => {
-        this.versionList = response.data || []
+        this.versionList = response.data.data || []
         this.versionOptions = this.versionList
       }).catch(reason => {
         this.$notify({
@@ -396,18 +353,6 @@ export default {
       }
       return version[0].name || row.versionId
     },
-    handleFilter() {
-      this.pageModule.pageNumber = 1
-      this.getList()
-    },
-    handleSizeChange(val) {
-      this.pageModule.pageSize = val
-      this.getList()
-    },
-    handleCurrentChange(val) {
-      this.pageModule.pageNumber = val
-      this.getList()
-    },
     handleAdd() {
       this.resetForm()
       this.dialogStatus = 'create'
@@ -415,7 +360,7 @@ export default {
     },
     handleEdit(row) {
       getVersionRole(row.id).then(response => {
-        this.form = response.data
+        this.form = response.data.data
         this.dialogFormVisible = true
         this.dialogStatus = 'update'
       }).catch(reason => {
@@ -430,7 +375,7 @@ export default {
 
     handleVersionRolePermission(row) {
       listVersionRolePermissions(row.id).then(response => {
-        this.$refs.grantPermission.initData(this, row, response.data, '126', row.versionId !== this.versionId)
+        this.$refs.grantPermission.initData(this, row, response.data.data, '126', row.versionId !== this.versionId)
         this.form = row
         this.versionId = row.versionId
       }).catch(reason => {
@@ -470,43 +415,13 @@ export default {
         })
       })
     },
-    handleDelete(row) {
-      this.$confirm(
-        '此操作将永久删除版本角色名( ' + row.name + ' )的相关数据, 是否继续?',
-        '提示',
-        {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }
-      ).then(() => {
-        deleteVersionRole(row.id).then(response => {
-          this.dialogFormVisible = false
-          this.getList()
-          this.$notify({
-            title: '成功',
-            message: '删除版本角色成功!',
-            type: 'success',
-            duration: 2000
-          })
-        }).catch(reason => {
-          this.$notify({
-            title: '删除版本角色失败',
-            message: reason.message,
-            type: 'error',
-            duration: 5000
-          })
-        })
-      }).catch(reason => {
-      })
-    },
     create(formName) {
       const set = this.$refs
       set[formName].validate(valid => {
         if (valid) {
           postVersionRole(this.form).then(() => {
             this.dialogFormVisible = false
-            this.getList()
+            this.$refs.pagingTable.getList()
             this.$notify({
               title: '成功',
               message: '创建成功',
@@ -539,7 +454,7 @@ export default {
           this.dialogFormVisible = false
           putVersionRole(this.form).then(() => {
             this.dialogFormVisible = false
-            this.getList()
+            this.$refs.pagingTable.getList()
             this.$notify({
               title: '成功',
               message: '修改成功',
@@ -568,20 +483,6 @@ export default {
         tips: undefined,
         status: 0
       }
-    },
-    sortChange(column) {
-      const sortRule = {
-        sortOrder: (column.order && column.order === 'descending') ? 'DESC' : 'ASC',
-        sortName: column.prop
-      }
-      this.pageModule.params.sortRules = []
-      this.pageModule.params.sortRules.push(sortRule)
-      if (column.prop) {
-        this.getList()
-      }
-    },
-    rowClick(row, event, column) {
-      this.form = row
     }
   }
 }

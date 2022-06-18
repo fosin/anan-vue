@@ -140,10 +140,10 @@ export default {
         //   progress(0);
         //   const token = this.$store.getters.token;
         //   getToken(token).then(response => {
-        //     const url = response.data.qiniu_url;
+        //     const url = response.data.data.qiniu_url;
         //     const formData = new FormData();
-        //     formData.append('token', response.data.qiniu_token);
-        //     formData.append('key', response.data.qiniu_key);
+        //     formData.append('token', response.data.data.qiniu_token);
+        //     formData.append('key', response.data.data.qiniu_key);
         //     formData.append('file', blobInfo.blob(), url);
         //     upload(formData).then(() => {
         //       success(url);

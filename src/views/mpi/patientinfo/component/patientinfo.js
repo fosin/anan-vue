@@ -17,8 +17,8 @@ export function listPatientinfoPageByStatus(page, status) {
   })
 }
 // 获取个人基本信息表所有数据列表
-export function listPatientinfo() {
-  return postRequest('gateway/platform/v1/patientinfo/list')
+export function listPatientinfo(data = {}) {
+  return postRequest('gateway/platform/v1/patientinfo/list', data)
 }
 // 新建个人基本信息表
 export function postPatientinfo(obj) {

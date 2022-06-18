@@ -4,8 +4,8 @@ export function updateData(data) {
   return postRequest('gateway/exam/api/sys/user/update', data)
 }
 
-export function saveData(data) {
-  return postRequest('gateway/exam/api/sys/user/save', data)
+export function createOrUpdate(data) {
+  return postRequest('gateway/exam/api/sys/user/createOrUpdate', data)
 }
 
 export function userReg(data) {

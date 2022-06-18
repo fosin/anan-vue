@@ -33,7 +33,7 @@
   </div>
 </template>
 <script>
-import { getOperationlog, postOperationlog, putOperationlog, deleteOperationlog, listOperationlogByEmpId } from './operationlog'
+import { deleteOperationlog, getOperationlog, listOperationlogByEmpId, postOperationlog, putOperationlog } from './operationlog'
 
 export default {
   name: 'MpiOperationlog',
@@ -80,7 +80,7 @@ export default {
       if (this.mpiId) {
         this.listLoading = true
         listOperationlogByEmpId(this.mpiId, this.pageModule).then(response => {
-          this.list = response.data.rows
+          this.list = response.data.data
           this.total = response.data.total
           this.listLoading = false
         }).catch(reason => {
@@ -118,7 +118,7 @@ export default {
         return
       }
       getOperationlog(this.form['id']).then(response => {
-        this.form = response.data
+        this.form = response.data.data
         this.dialogFormVisible = true
         this.dialogStatus = 'update'
       }).catch(reason => {

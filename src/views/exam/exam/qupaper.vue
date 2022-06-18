@@ -240,7 +240,7 @@ export default {
         },
         search: {
           column: 'content',
-          input: '',
+          input: null,
           placeholder: '搜索试题名称'
         }
       },
@@ -264,9 +264,9 @@ export default {
   },
   methods: {
     onNodeClick(node) {
-      this.listQuery.params.repoIds = []
+      this.listQuery.pageModule.params.repoIds = []
       if (node) {
-        this.listQuery.params.repoIds.push(node.id)
+        this.listQuery.pageModule.params.repoIds.push(node.id)
       }
     },
     /**
@@ -276,10 +276,10 @@ export default {
       this.listLoading = true
       this.listQuery.t = new Date().getTime()
       if (this.listQuery.search && this.listQuery.search.column) {
-        this.listQuery.params[this.listQuery.search.column] = this.listQuery.search.input
+        this.listQuery.pageModule.params[this.listQuery.search.column] = this.listQuery.search.input
       }
       this.postRequest(this.options.listUrl, this.listQuery).then(response => {
-        this.dataList = response.data
+        this.dataList = response.data.data
         this.listLoading = false
       }).catch((reason) => {
         this.$notify({

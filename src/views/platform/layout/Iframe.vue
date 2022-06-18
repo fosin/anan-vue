@@ -6,9 +6,9 @@
 </template>
 
 <script>
-import axios from 'axios'
 import { loadUIUrl } from '@/api/application'
 import store from '@/store'
+import axios from 'axios'
 export default {
   name: 'Myiframe' || this.$route.name, // TODO 这里的模块名称不能动态生成，导致无法页面缓存，待解决
   data: function() {
@@ -61,7 +61,7 @@ export default {
       }
       if (this.$route.query.url) {
         loadUIUrl(this.$route.query.url).then(response => {
-          const urlInfo = response.data
+          const urlInfo = response.data.data
           const url = urlInfo.url
           const headers = urlInfo.headers
           if (headers && headers.Authorization) {
@@ -75,7 +75,7 @@ export default {
               const iframe = this.$refs.iframe.contentWindow.document
               iframe.open('text/html', 'replace')
               const reg = new RegExp(/(href=|src=).+\.(css|png|js|jpg|icon)/g)
-              const page = this.replaceStr(reg, response.data, url)
+              const page = this.replaceStr(reg, response.data.data, url)
               iframe.write(page)
               iframe.close()
             }).catch(error => {

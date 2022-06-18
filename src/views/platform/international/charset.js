@@ -1,4 +1,4 @@
-import { allRequest, deleteRequest, getRequest, postRequest, putRequest } from '@/utils/request'
+import request, { deleteRequest, getRequest, postRequest, putRequest } from '@/utils/request'
 
 // 获取国际化语言字符集数据分页列表
 export function listCharsetPage(page) {
@@ -6,7 +6,7 @@ export function listCharsetPage(page) {
 }
 
 // 获取国际化语言字符集所有数据列表
-export function listCharset(data) {
+export function listCharset(data = {}) {
   return postRequest('gateway/platform/v1/international/charset/list', data)
 }
 
@@ -18,7 +18,7 @@ export function postCharset(obj) {
 // 根据主键ID获取国际化语言字符集数据
 export function getCharset(id, method) {
   if (method) {
-    return allRequest('gateway/platform/v1/international/charset/' + id, method)
+    return request({ url: 'gateway/platform/v1/international/charset/' + id, method: method })
   }
   return postRequest('gateway/platform/v1/international/charset/' + id)
 }

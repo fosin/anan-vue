@@ -70,7 +70,7 @@
   </div>
 </template>
 <script>
-import { getContactinfo, postContactinfo, putContactinfo, deleteContactinfo, listContactinfoByEmpId } from './contactinfo'
+import { deleteContactinfo, getContactinfo, listContactinfoByEmpId, postContactinfo, putContactinfo } from './contactinfo'
 
 export default {
   name: 'MpiContactinfo',
@@ -148,7 +148,7 @@ export default {
       this.listLoading = true
       if (this.mpiId) {
         listContactinfoByEmpId(this.mpiId, this.pageModule).then(response => {
-          this.list = response.data.rows
+          this.list = response.data.data
           this.total = response.data.total
           this.listLoading = false
         }).catch(reason => {
@@ -186,7 +186,7 @@ export default {
         return
       }
       getContactinfo(this.form['contactId']).then(response => {
-        this.form = response.data
+        this.form = response.data.data
         this.dialogFormVisible = true
         this.dialogStatus = 'update'
       }).catch(reason => {

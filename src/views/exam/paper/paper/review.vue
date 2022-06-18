@@ -245,10 +245,10 @@
 
 <script>
 
-import { paperResult, listPhotoByPaperId, downloadPhoto } from '@/views/exam/paper/exam/exam'
-import { getUser } from '@/views/platform/user/user'
 import { controlCopy } from '@/utils/documentUtil'
+import { downloadPhoto, listPhotoByPaperId, paperResult } from '@/views/exam/paper/exam/exam'
 import { reviewPaper } from '@/views/exam/paper/paper/paper'
+import { getUser } from '@/views/platform/user/user'
 
 export default {
   name: 'ExamManagementReviewPaper',
@@ -342,17 +342,16 @@ export default {
       })
     },
     fetchData(id) {
-      const params = { id: id }
-      paperResult(params).then(response => {
+      paperResult(id).then(response => {
         // 试卷内容
-        this.paperData = response.data
+        this.paperData = response.data.data
         getUser(this.paperData.userId).then(res => {
-          this.userInfo = res.data
+          this.userInfo = res.data.data
         })
         // 如果该试卷需要拍照，则下载拍照图片
         if (this.paperData.photoFrequency > 0) {
           listPhotoByPaperId(this.paperData.id).then(res => {
-            const photoList = res.data
+            const photoList = res.data.data
             photoList.forEach((item) => {
               const photoReq = {
                 id: item.id,

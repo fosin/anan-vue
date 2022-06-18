@@ -56,7 +56,7 @@
 
     <el-table
       v-loading="listLoading"
-      :data="dataList.records"
+      :data="dataList.data"
       border
       fit
       style="width: 100%"
@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import { deleteData, changeState } from '@/views/exam/common'
+import { changeState, deleteData } from '@/views/exam/common'
 
 export default {
   name: 'PagingTable',
@@ -127,7 +127,7 @@ export default {
           },
           search: {
             column: '',
-            input: '',
+            input: null,
             placeholder: ''
           }
         }
@@ -255,7 +255,7 @@ export default {
     handleState(state) {
       // 修改状态
       changeState(this.options.stateUrl, this.selectedIds, state).then(response => {
-        if (response.data > 0) {
+        if (response.data.data > 0) {
           this.$message({
             type: 'success',
             message: '状态修改成功!'

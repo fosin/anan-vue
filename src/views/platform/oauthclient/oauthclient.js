@@ -9,8 +9,8 @@ export function listClientPage(page) {
   })
 }
 // 获取所有客户端授权数据列表
-export function listClient() {
-  return postRequest('gateway/platform/v1/oauthclient/list')
+export function listClient(data = {}) {
+  return postRequest('gateway/platform/v1/oauthclient/list', data)
 }
 
 export function postClient(obj) {

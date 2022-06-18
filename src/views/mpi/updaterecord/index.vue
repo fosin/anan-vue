@@ -44,9 +44,9 @@
   </div>
 </template>
 <script>
-import { getUpdaterecord, postUpdaterecord, putUpdaterecord, deleteUpdaterecord, listUpdaterecordByEmpId } from './updaterecord'
-
 import { formatDate } from '@/utils/date'
+import { deleteUpdaterecord, getUpdaterecord, listUpdaterecordByEmpId, postUpdaterecord, putUpdaterecord } from './updaterecord'
+
 export default {
   name: 'MpiUpdaterecord',
   filters: {
@@ -120,7 +120,7 @@ export default {
       if (this.mpiId) {
         this.listLoading = true
         listUpdaterecordByEmpId(this.mpiId, this.pageModule).then(response => {
-          this.list = response.data.rows
+          this.list = response.data.data
           this.total = response.data.total
           this.listLoading = false
         }).catch(reason => {
@@ -158,7 +158,7 @@ export default {
         return
       }
       getUpdaterecord(this.form['id']).then(response => {
-        this.form = response.data
+        this.form = response.data.data
         this.dialogFormVisible = true
         this.dialogStatus = 'update'
       }).catch(reason => {

@@ -1,5 +1,5 @@
-import { getAccessToken, refreshAccessToken, logout, getUserInfo, getUserPermissionTree } from '@/api/login'
-import { getWebStore, setWebStore, removeWebStore } from '@/utils/webStorage'
+import { getAccessToken, getUserInfo, getUserPermissionTree, logout, refreshAccessToken } from '@/api/login'
+import { getWebStore, removeWebStore, setWebStore } from '@/utils/webStorage'
 
 const user = {
   state: {
@@ -91,14 +91,14 @@ const user = {
           resolve()
         } else {
           getAccessToken(loginForm).then(response => {
-            commit('SET_TOKEN', response.data)
+            commit('SET_TOKEN', response.data.data)
             // 根据服务器返回的失效时间定时刷新access_token
             setTimeout(function() {
               dispatch('RefreshAccessToken').then(res => { // 拉取user_info
               }).catch((error) => {
                 reject(error)
               })
-            }, ((response.data.expires_in || 7200) - 60) * 1000)
+            }, ((response.data.data.expires_in || 7200) - 60) * 1000)
             resolve()
           }).catch(error => {
             reject(error)
@@ -114,7 +114,7 @@ const user = {
           const access_token = state.ananToken.access_token
           state.ananToken.access_token = ''
           refreshAccessToken(refresh_token).then(response => {
-            commit('SET_TOKEN', response.data)
+            commit('SET_TOKEN', response.data.data)
             resolve()
           }).catch(error => {
             state.ananToken.access_token = access_token
@@ -127,10 +127,10 @@ const user = {
     GetUserInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
         getUserInfo().then(response => {
-          if (!response.data) {
+          if (!response.data.data) {
             reject('error')
           }
-          const data = response.data.claims
+          const data = response.data.data.claims
           if (!data.enabled || !data.accountNonExpired || !data.accountNonLocked || !data.credentialsNonExpired) { // 验证返回的user是否有效用户
             reject('getInfo: user is disabled!')
           }
@@ -145,10 +145,10 @@ const user = {
             commit('SET_PERMISSIONS', {})
           }
           getUserPermissionTree(data.user.id).then(response1 => {
-            if (!response1.data) {
+            if (!response1.data.data) {
               reject('error')
             }
-            response.ananPermissionTree = response1.data
+            response.ananPermissionTree = response1.data.data
             if (data) { // 验证返回的权限树
               commit('SET_PERMISSION_TREE', response.ananPermissionTree)
             } else {
@@ -169,8 +169,8 @@ const user = {
     //   return new Promise((resolve, reject) => {
     //     commit('SET_CODE', code)
     //     loginByThirdparty(state.status, state.email, state.code).then(response => {
-    //       commit('SET_ACCESS_TOKEN', response.data.token)
-    //       setToken(response.data.token)
+    //       commit('SET_ACCESS_TOKEN', response.data.data.token)
+    //       setToken(response.data.data.token)
     //       resolve()
     //     }).catch(error => {
     //       reject(error)
@@ -203,7 +203,7 @@ const user = {
         commit('SET_TOKEN', role)
         setWebStore(role)
         getUserInfo(role).then(response => {
-          const data = response.data
+          const data = response.data.data
           commit('SET_CURRENT_ROLE', data.roles)
           resolve()
         })

@@ -80,12 +80,12 @@
 </template>
 
 <script>
-import { Loading } from 'element-ui'
-import { fetchDetail } from '../../exam/exam'
-import { createPaper } from './exam'
 import { callCamera, closeCamera } from '@/utils/videoCamera'
 import { trycount } from '@/views/exam/paper/paper/paper'
+import { Loading } from 'element-ui'
 import { mapGetters } from 'vuex'
+import { fetchDetail } from '../../exam/exam'
+import { createPaper } from './exam'
 
 export default {
   name: 'ExamOnlineDoPrepare',
@@ -161,8 +161,8 @@ export default {
   },
   methods: {
     fetchData() {
-      fetchDetail(this.postForm.examId).then(response => {
-        this.detailData = response.data
+      fetchDetail(this.postForm.examId, '0').then(response => {
+        this.detailData = response.data.data
         this.ssCountAlert = '注意：本次考试切屏超过' + this.detailData.ssCount + '次后，系统将自动交卷！'
         if (this.detailData.allowTimes > 0) {
           const req = {
@@ -170,8 +170,8 @@ export default {
             userId: this.ananUserInfo.id
           }
           trycount(req).then(response => {
-            if (response.data) {
-              this.tryCount = response.data
+            if (response.data.data) {
+              this.tryCount = response.data.data
             }
             this.tryCountReady = this.detailData.allowTimes > this.tryCount
           }).catch((reason) => {
@@ -204,7 +204,7 @@ export default {
         background: 'rgba(0, 0, 0, 0.7)'
       })
       createPaper(this.postForm).then(response => {
-        const data = response.data
+        const paper = response.data.data
         this.$message({
           message: '试卷创建成功，即将进入考试！',
           type: 'success'
@@ -224,7 +224,7 @@ export default {
         setTimeout(function() {
           loading.close()
           that.dialogVisible = false
-          that.$router.push({ name: 'ExamOnlineDoExam', params: { id: data.id }})
+          that.$router.push({ name: 'ExamOnlineDoExam', params: { id: paper.id }})
         }, 1000)
       }).catch((reason) => {
         this.$notify({

@@ -1,5 +1,4 @@
 <template>
-
   <div>
     <data-table
       ref="pagingTable"
@@ -15,7 +14,7 @@
         />
         <el-table-column
           label="考试次数"
-          prop="try_count"
+          prop="tryCount"
           align="center"
           width="100px"
         >
@@ -25,7 +24,7 @@
         </el-table-column>
         <el-table-column
           label="最高分"
-          prop="max_score"
+          prop="maxScore"
           align="center"
           width="100px"
         >
@@ -45,16 +44,19 @@
           </template>
         </el-table-column>
         <el-table-column
-          label="最后考试时间"
-          prop="update_time"
+          label="初考时间"
+          prop="createTime"
           align="center"
           sortable="true"
-          width="180px"
-        >
-          <template slot-scope="scope">
-            {{ scope.row.updateTime }}
-          </template>
-        </el-table-column>
+          width="160px"
+        />
+        <el-table-column
+          label="最后考试时间"
+          prop="updateTime"
+          align="center"
+          sortable="true"
+          width="160px"
+        />
         <el-table-column
           label="操作"
           align="center"
@@ -90,9 +92,9 @@
 </template>
 
 <script>
-import DataTable from '@/views/exam/components/DataTable'
-import MyPaperList from './paper'
+import DataTable from '@/components/DataTable'
 import { mapGetters } from 'vuex'
+import MyPaperList from './paper'
 
 export default {
   name: 'ExamOnlineResults',
@@ -110,26 +112,61 @@ export default {
       dialogVisible: false,
       examId: '',
       listQuery: {
-        current: 1,
-        size: 10,
-        params: {
-          title: ''
-        },
-        sort: {
-          sortOrder: 'ASC',
-          sortName: 'title'
-        },
+        listUrl: 'gateway/exam/api/user/exam/paging',
+        pageSizes: [5, 10, 25, 50, 100],
         search: {
-          column: 'title',
-          input: '',
+          input: null,
+          cols: ['title'],
           placeholder: '搜索考试名称'
+        },
+        pageModule: {
+          pageNumber: 1,
+          pageSize: 10,
+          params: {
+            title: null,
+            userId: 0,
+            queryRule: {
+              logiOperator: 'and',
+              relaRules: [
+                {
+                  fieldName: 'title',
+                  relaOperator: 'like'
+                },
+                {
+                  fieldName: 'userId',
+                  relaOperator: 'eq'
+                }
+              ]
+            },
+            sortRules: [{
+              sortName: 'title',
+              sortOrder: 'ASC'
+            }
+            ]
+          }
         }
       },
       options: {
         // 可批量操作
         multi: false,
-        // 列表请求URL
-        listUrl: 'gateway/exam/api/user/exam/my-paging'
+        // 批量操作列表
+        multiActions: [],
+        addAction: {
+          enable: false
+        },
+        tableRowClass: {
+          column: 'status',
+          data: [
+            {
+              key: 1,
+              value: 'info-row'
+            },
+            {
+              key: 9,
+              value: 'info-row'
+            }
+          ]
+        }
       }
     }
   },
@@ -142,6 +179,7 @@ export default {
     this.loadDictionaryById(148).then(res => {
       this.rankDics = res.details
     })
+    this.listQuery.pageModule.params.userId = this.ananUserInfo.id
   },
   methods: {
     // 考试明细

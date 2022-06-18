@@ -49,7 +49,7 @@
 
 <script>
 // TODO config.js找不到，可能是开源版源码不完整原因导致
-import { fetchDetail, saveData } from '@/views/exam/common'
+import { createOrUpdate, fetchDetail } from '@/views/exam/common'
 
 export default {
   name: 'Config',
@@ -79,7 +79,7 @@ export default {
 
     fetchData() {
       fetchDetail().then(response => {
-        this.postForm = response.data
+        this.postForm = response.data.data
       })
     },
     submitForm() {
@@ -93,7 +93,7 @@ export default {
         this.loading = true
         this.postForm.id = '0'
 
-        saveData(this.postForm).then(() => {
+        createOrUpdate(this.postForm).then(() => {
           this.$notify({
             title: '成功',
             message: '配置保存成功！',

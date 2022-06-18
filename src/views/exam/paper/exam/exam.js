@@ -12,8 +12,8 @@ export function createPaper(data) {
  * 试卷详情
  * @param data
  */
-export function paperDetail(data) {
-  return postRequest('gateway/exam/api/paper/paper/paper-detail', data)
+export function paperDetail(paperId) {
+  return postRequest('gateway/exam/api/paper/paper/paper-detail/' + paperId)
 }
 
 /**
@@ -36,16 +36,16 @@ export function fillAnswer(data) {
  * 交卷
  * @param data
  */
-export function handExam(data) {
-  return postRequest('gateway/exam/api/paper/paper/hand-exam', data)
+export function handExam(paperId) {
+  return postRequest('gateway/exam/api/paper/paper/hand-exam/' + paperId)
 }
 
 /**
  * 试卷详情
  * @param data
  */
-export function paperResult(data) {
-  return postRequest('gateway/exam/api/paper/paper/paper-result', data)
+export function paperResult(paperId) {
+  return postRequest('gateway/exam/api/paper/paper/paper-result/' + paperId)
 }
 
 /**
@@ -80,14 +80,6 @@ function base64ToFile(urlData, fileName) {
     ia[n] = bytes.charCodeAt(n)
   }
   return new File([ia], fileName, { type: mime })
-}
-
-/**
- * 上传照片
- * @param data
- */
-export function uploadPhoto(data) {
-  return postRequest('gateway/exam/api/paper/paper/photo/upload', data)
 }
 
 /**

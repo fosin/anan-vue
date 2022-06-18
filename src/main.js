@@ -1,35 +1,37 @@
 /* import 'babel-polyfill'*/
-import Vue from 'vue'
-import Cookies from 'js-cookie'
-import 'normalize.css/normalize.css'// A modern alternative to CSS resets
+// global css
+import '@/styles/index.scss'
+import { getDicData, getDicValue } from '@/utils/dic'
 import Element from 'element-ui'
-import './styles/element-variables.scss'
 import 'element-ui/lib/theme-chalk/index.css'
-
-import '@/styles/index.scss' // global css
+import Cookies from 'js-cookie'
+// A modern alternative to CSS resets
+import 'normalize.css/normalize.css'
+import Vue from 'vue'
 import App from './App'
-import router from './router'
-import store from './store'
-
-import i18n from './lang' // Internationalization
-import './icons' // icon
-import './errorLog'// error log
-import './utils/permission' // permission control
-
+// 权限判断指令
+import permission from './directive/permission/index.js'
+// 水波效果
+import waves from './directive/waves/index.js'
+import './errorLog'
 // if (process.env.NODE_ENV === 'development') {
 //   import('./mock') // simulation data
 // }
-import * as filters from './filters' // global filters
-import permission from './directive/permission/index.js' // 权限判断指令
-import waves from './directive/waves/index.js' // 水波效果
+import * as filters from './filters'
+import './icons'
+import i18n from './lang'
+import router from './router'
+import store from './store'
+import './styles/element-variables.scss'
+import './utils/permission'
+import request, { deleteRequest, getRequest, postRequest, putRequest } from './utils/request'
 import './views/vhr/utils/filter_utils'
-import { getRequest, postRequest, deleteRequest, putRequest, allRequest } from './utils/request'
-import { getDicData, getDicValue } from '@/utils/dic'
+
 Vue.prototype.getRequest = getRequest
 Vue.prototype.postRequest = postRequest
 Vue.prototype.deleteRequest = deleteRequest
 Vue.prototype.putRequest = putRequest
-Vue.prototype.allRequest = allRequest
+Vue.prototype.allRequest = request
 Vue.prototype.getDicData = getDicData
 Vue.prototype.getDicValue = getDicValue
 

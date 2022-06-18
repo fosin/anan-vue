@@ -1,19 +1,19 @@
 import { postRequest } from '@/utils/request'
 
 /**
- * 题库详情
+ * 考试详情
  * @param data
  */
-export function fetchDetail(id) {
-  return postRequest('gateway/exam/api/exam/exam/detail', { id: id })
+export function fetchDetail(id, refs = '1') {
+  return postRequest('gateway/exam/api/exam/exam/' + id, { refs: refs })
 }
 
 /**
  * 保存题库
  * @param data
  */
-export function saveData(data) {
-  return postRequest('gateway/exam/api/exam/exam/save', data)
+export function createOrUpdate(data) {
+  return postRequest('gateway/exam/api/exam/exam/createOrUpdate', data)
 }
 
 /**
@@ -23,11 +23,10 @@ export function saveData(data) {
 export function prepareQus(data) {
   return postRequest('gateway/exam/api/exam/exam/prepareQus', data)
 }
-
 /**
  * 题库详情
  * @param data
  */
-export function fetchList() {
-  return postRequest('gateway/exam/api/exam/exam/paging', { current: 1, size: 100 })
+export function fetchList(data = {}) {
+  return postRequest('gateway/exam/api/exam/exam/list', data)
 }

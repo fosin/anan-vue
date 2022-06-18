@@ -101,9 +101,9 @@
 
 <script>
 
+import { controlCopy } from '@/utils/documentUtil'
 import { paperResult } from '@/views/exam/paper/exam/exam'
 import { getUser } from '@/views/platform/user/user'
-import { controlCopy } from '@/utils/documentUtil'
 
 export default {
   name: 'ExamOnlineDoResult',
@@ -158,14 +158,13 @@ export default {
   },
   methods: {
     fetchData(id) {
-      const params = { id: id }
-      paperResult(params).then(response => {
+      paperResult(id).then(response => {
         // 试卷内容
-        this.paperData = response.data
+        this.paperData = response.data.data
         this.showAnswer = this.paperData.showAnswer || this.showAll === '1'
         this.showResult = this.paperData.showResult || this.showAll === '1'
         getUser(this.paperData.userId).then(res => {
-          this.userInfo = res.data
+          this.userInfo = res.data.data
         })
         // 禁止复制试卷内容
         if (!this.paperData.paperCopy) {

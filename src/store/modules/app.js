@@ -1,7 +1,6 @@
-import Cookies from 'js-cookie'
-import { getLanguage } from '@/lang'
+import i18n, { getLanguage } from '@/lang'
 import { getInternationlCharsets } from '@/views/platform/international/charset'
-import i18n from '@/lang' // Internationalization
+import Cookies from 'js-cookie'
 
 const app = {
   state: {
@@ -64,7 +63,7 @@ const app = {
           resolve()
         } else {
           getInternationlCharsets(ananLanguage.id).then(response => {
-            const charsetsData = response.data
+            const charsetsData = response.data.data
             for (let i = 0; i < charsetsData.length; i++) {
               i18n.mergeLocaleMessage(code, JSON.parse(charsetsData[i].charset))
             }

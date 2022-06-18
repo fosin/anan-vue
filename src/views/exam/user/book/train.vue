@@ -112,7 +112,7 @@ export default {
       this.clearValues()
       fetchDetail(id).then(response => {
         // 试题信息
-        this.quData = response.data
+        this.quData = response.data.data
         this.quData.quContent = '【' + this.getAnanDicValue(this.quTypes, this.quData.quType) + '】' + this.quData.content
         // 保存正确答案
         this.quData.answerList.forEach((an, index) => {
@@ -147,9 +147,9 @@ export default {
       }
       // 查找下一个
       nextQu(this.examId, this.quId).then(response => {
-        const id = response.data.id
+        const id = response.data.data
         if (id) {
-          this.fetchQuDetail(response.data.id)
+          this.fetchQuDetail(id)
         } else {
           this.resultShow = true
         }

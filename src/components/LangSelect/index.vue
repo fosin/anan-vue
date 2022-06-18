@@ -37,7 +37,7 @@ export default {
   },
   created() {
     getInternationlsByStatus(0).then(response => {
-      this.validInternationals = response.data
+      this.validInternationals = response.data.data
       const lang = this.getLanguageByCode(this.ananLanguage)
       this.handleSetLanguage(lang, false)
     }).catch(reason => {

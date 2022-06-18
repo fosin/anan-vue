@@ -64,7 +64,7 @@ export default {
 
     fetchList() {
       fetchList().then(response => {
-        this.list = response.data
+        this.list = response.data.data
       })
     },
     handlerChange(e) {

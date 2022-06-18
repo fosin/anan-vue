@@ -114,7 +114,7 @@
   </div>
 </template>
 <script>
-import { getCardinfo, postCardinfo, putCardinfo, deleteCardinfo, listCardinfoByEmpId } from './cardinfo'
+import { deleteCardinfo, getCardinfo, listCardinfoByEmpId, postCardinfo, putCardinfo } from './cardinfo'
 
 export default {
   name: 'MpiCardinfo',
@@ -203,7 +203,7 @@ export default {
       if (this.mpiId) {
         this.listLoading = true
         listCardinfoByEmpId(this.mpiId, this.pageModule).then(response => {
-          this.list = response.data.rows
+          this.list = response.data.data
           this.total = response.data.total
           this.listLoading = false
         }).catch(reason => {
@@ -251,7 +251,7 @@ export default {
         return
       }
       getCardinfo(this.form['cardId']).then(response => {
-        this.form = response.data
+        this.form = response.data.data
         this.dialogFormVisible = true
         this.dialogStatus = 'update'
       }).catch(reason => {

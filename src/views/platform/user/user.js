@@ -1,5 +1,5 @@
-import request, { postRequest } from '@/utils/request'
 import { encrypt } from '@/utils/aesUtil'
+import request, { postRequest } from '@/utils/request'
 import CryptoJS from 'crypto-js'
 
 // 获取用户的所有角色列表
@@ -52,8 +52,8 @@ export function listUserPage(page) {
   })
 }
 
-export function listUser() {
-  return postRequest('gateway/platform/v1/user/list')
+export function listUser(data = {}) {
+  return postRequest('gateway/platform/v1/user/list', data)
 }
 
 // 根据机构ID查询该机构及子机构的所有用户

@@ -1,19 +1,19 @@
 import { exportExcelRequest, postRequest, uploadFileRequest } from '@/utils/request'
 
 /**
- * 题库详情
+ * 试题详情
  * @param data
  */
-export function fetchDetail(id) {
-  return postRequest('gateway/exam/api/qu/qu/detail', { id: id })
+export function fetchDetail(id, refs = '1') {
+  return postRequest('gateway/exam/api/qu/qu/' + id, { refs: refs })
 }
 
 /**
- * 保存题库
+ * 保存试题
  * @param data
  */
-export function saveData(data) {
-  return postRequest('gateway/exam/api/qu/qu/save', data)
+export function createOrUpdate(data) {
+  return postRequest('gateway/exam/api/qu/qu/createOrUpdate', data)
 }
 
 /**

@@ -10,8 +10,8 @@ export function listVersionPage(page) {
 }
 
 // 获取系统版本表所有数据列表
-export function listVersion() {
-  return postRequest('gateway/platform/v1/version/list')
+export function listVersion(data = {}) {
+  return postRequest('gateway/platform/v1/version/list', data)
 }
 
 // 新建系统版本表

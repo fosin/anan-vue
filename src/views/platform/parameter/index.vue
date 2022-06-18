@@ -190,18 +190,12 @@
 </template>
 
 <script>
-import {
-  getParameter,
-  postParameter,
-  putParameter,
-  applyParameter,
-  applysParameter
-} from './parameter'
-import { listUserByTopId } from '../user/user'
-import { listOrganizAllChild } from '../organization/organization'
-import { mapGetters } from 'vuex'
 import DataTable from '@/components/DataTable'
 import { listService } from '@/views/platform/service/service'
+import { mapGetters } from 'vuex'
+import { listOrganizAllChild } from '../organization/organization'
+import { listUserByTopId } from '../user/user'
+import { applyParameter, applysParameter, getParameter, postParameter, putParameter } from './parameter'
 
 export default {
   name: 'ConfigParameter',
@@ -212,7 +206,7 @@ export default {
         listUrl: 'gateway/platform/v1/parameter/paging',
         pageSizes: [5, 10, 25, 50, 100],
         search: {
-          input: '',
+          input: null,
           cols: ['name', 'value', 'defaultValue', 'description'],
           placeholder: this.$t('anan_parameter.searchText')
         },
@@ -220,10 +214,10 @@ export default {
           pageNumber: 1,
           pageSize: 10,
           params: {
-            name: '',
-            value: '',
-            defaultValue: '',
-            description: '',
+            name: null,
+            value: null,
+            defaultValue: null,
+            description: null,
             queryRule: {
               logiOperator: 'or',
               relaRules: [
@@ -348,7 +342,7 @@ export default {
       this.typeOptions = res.details
     })
     listUserByTopId().then(response => {
-      this.organizTopUsers = response.data
+      this.organizTopUsers = response.data.data
       const scopeOptions = []
       for (let i = 0; i < this.organizTopUsers.length; i++) {
         const user = this.organizTopUsers[i]
@@ -382,7 +376,7 @@ export default {
     },
     getServiceScopes() {
       listService().then(response => {
-        this.ServiceOptions = response.data
+        this.ServiceOptions = response.data.data
         const scopeOptions = []
         for (let i = 0; i < this.ServiceOptions.length; i++) {
           const service = this.ServiceOptions[i]
@@ -405,7 +399,7 @@ export default {
     },
     listOrganizAllChild(organizId) {
       listOrganizAllChild(organizId).then(response => {
-        this.oraganizOptions = response.data || []
+        this.oraganizOptions = response.data.data || []
         const scopeOptions = []
         for (let i = 0; i < this.oraganizOptions.length; i++) {
           const organiz = this.oraganizOptions[i]
@@ -449,7 +443,7 @@ export default {
     },
     handleEdit(row) {
       getParameter(row.id).then(response => {
-        this.form = response.data
+        this.form = response.data.data
         this.scopeOptions = this.typeScopeOptions[this.form.type]
         this.dialogFormVisible = true
         this.dialogStatus = 'update'

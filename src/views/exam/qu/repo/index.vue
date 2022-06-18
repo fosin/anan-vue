@@ -110,8 +110,8 @@
 </template>
 
 <script>
-import { deleteRepos, fetchRepoChild } from '@/views/exam/qu/repo/repo'
 import ExamManagementRepoAdd from '@/views/exam/qu/repo/form'
+import { deleteRepoById, fetchRepoChild } from '@/views/exam/qu/repo/repo'
 import { listUserByTopId } from '@/views/platform/user/user'
 
 export default {
@@ -140,7 +140,7 @@ export default {
   },
   created() {
     listUserByTopId().then(response => {
-      this.organizTopUsers = response.data
+      this.organizTopUsers = response.data.data
     }).catch(reason => {
       this.$notify({
         title: '获取所有用户失败',
@@ -158,10 +158,19 @@ export default {
     handleSearch() {
       this.listLoading = true
       this.repoData = undefined
-      fetchRepoChild(0).then(res => {
+      const data = {
+        'pid': '0',
+        'sortRules': [
+          {
+            'sortName': 'code',
+            'sortOrder': 'ASC'
+          }
+        ]
+      }
+      fetchRepoChild(data).then(res => {
         this.listLoading = false
-        if (res.data && res.data.length > 0) {
-          this.repoData = res.data
+        if (res.data.data && res.data.data.length > 0) {
+          this.repoData = res.data.data
           for (let i = 0; i < this.repoData.length; i++) {
             const repo = this.repoData[i]
             repo.hasChildren = !repo.leaf
@@ -231,10 +240,7 @@ export default {
           type: 'warning'
         }
       ).then(() => {
-        const data = {
-          ids: new Array(this.repoForm.id)
-        }
-        deleteRepos(data).then(() => {
+        deleteRepoById(this.repoForm.id).then(() => {
           this.$notify({
             title: '删除题库成功',
             type: 'success',
@@ -254,13 +260,24 @@ export default {
     },
     loadRepoChild(row, treeNode, resolve) {
       let repoData = []
-      fetchRepoChild(row.id).then(res => {
-        if (res.data && res.data.length > 0) {
-          repoData = res.data
+      const data = {
+        'pid': row.id,
+        'sortRules': [
+          {
+            'sortName': 'code',
+            'sortOrder': 'ASC'
+          }
+        ]
+      }
+      fetchRepoChild(data).then(res => {
+        if (res.data.data && res.data.data.length > 0) {
+          repoData = res.data.data
           for (let i = 0; i < repoData.length; i++) {
             const repo = repoData[i]
             repo.hasChildren = !repo.leaf
           }
+        } else {
+          row.hasChildren = false
         }
         resolve(repoData)
       }).catch((reason) => {

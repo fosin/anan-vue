@@ -55,14 +55,14 @@
   </el-dialog>
 </template>
 <script>
-import SingleCol from './singleCol'
-import SingleEdit from './singleEdit'
-import { getPatientinfo, postPatientinfo, putPatientinfo, statusPatientinfo, cancelPatients } from './patientinfo'
-
 import Address from '../../address'
 import Cardinfo from '../../cardinfo'
 import Certificate from '../../certificate'
 import Contactinfo from '../../contactinfo'
+import { cancelPatients, getPatientinfo, postPatientinfo, putPatientinfo, statusPatientinfo } from './patientinfo'
+import SingleCol from './singleCol'
+import SingleEdit from './singleEdit'
+
 export default {
   name: 'MpiPatientinfoMerge1',
 
@@ -274,7 +274,7 @@ export default {
       }
       this.refreshList()
       getPatientinfo(this.mpiId).then(response => {
-        this.form = response.data
+        this.form = response.data.data
         this.dialogStatus = 'merge'
         this.dialogFormVisible = true
         this.activeName = 'tabPanePatientinfo'
@@ -304,7 +304,7 @@ export default {
       }
       this.resetForm()
       getPatientinfo(this.mpiId).then(response => {
-        this.form = response.data
+        this.form = response.data.data
         this.dialogFormVisible = true
         this.dialogStatus = 'update'
         return response

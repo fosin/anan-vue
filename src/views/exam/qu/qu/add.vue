@@ -30,7 +30,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="归属题库" prop="repoIds" label-width="80px">
+            <el-form-item label="归属题库" prop="repoList" label-width="80px">
               <repo-tree-select v-model="repoId" :user-id="ananUserInfo.id" @nodeClick="onNodeClick" />
             </el-form-item>
           </el-col>
@@ -115,8 +115,8 @@
 </template>
 
 <script>
-import { fetchDetail, saveData } from '@/views/exam/qu/qu/qu'
 import RepoTreeSelect from '@/views/exam/components/RepoTreeSelect'
+import { createOrUpdate, fetchDetail } from '@/views/exam/qu/qu/qu'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -130,7 +130,7 @@ export default {
       levels: [],
       quTypes: [],
       postForm: {
-        repoIds: [],
+        repoList: [],
         tagList: [],
         answerList: [],
         quType: 1,
@@ -150,7 +150,7 @@ export default {
         level: [
           { required: true, message: '必须选择难度等级！' }
         ],
-        repoIds: [
+        repoList: [
           { required: true, message: '至少要选择一个题库！' }
         ],
         state: [
@@ -191,9 +191,13 @@ export default {
   },
   methods: {
     onNodeClick(node) {
-      this.postForm.repoIds = []
+      this.postForm.repoList = []
       if (node) {
-        this.postForm.repoIds.push(node.id)
+        this.postForm.repoList.push({
+          repoId: node.id,
+          quType: this.postForm.quType,
+          sort: 1
+        })
       }
     },
     initType(v) {
@@ -205,7 +209,9 @@ export default {
         this.allowAdd = false
         this.allowDel = false
       }
-      this.repoId = this.postForm.repoIds[0]
+      if (this.postForm && this.postForm.repoList && this.postForm.repoList.length > 0) {
+        this.repoId = this.postForm.repoList[0].repoId
+      }
     },
     handleTypeChange(v) {
       this.initType(v)
@@ -241,7 +247,7 @@ export default {
     },
     fetchData(id) {
       fetchDetail(id).then(response => {
-        this.postForm = response.data
+        this.postForm = response.data.data
         this.initType(this.postForm.quType)
       }).catch((reason) => {
         this.$notify({
@@ -290,7 +296,7 @@ export default {
         if (!valid) {
           return
         }
-        saveData(this.postForm).then(response => {
+        createOrUpdate(this.postForm).then(response => {
           this.$notify({
             title: '成功',
             message: '试题保存成功！',
@@ -316,7 +322,7 @@ export default {
       const form = {
         quType: this.postForm.quType,
         level: this.postForm.level,
-        repoIds: this.postForm.repoIds,
+        repoList: this.postForm.repoList,
         weight: 1,
         state: this.postForm.state
       }

@@ -1,77 +1,85 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <div>
-        <el-select
-          v-show="multiShow && options.multiActions"
-          v-model="multiNow"
-          :placeholder="selectedLabel"
-          class="filter-item"
-          style="width: 130px"
-          @change="handleAction"
-        >
-          <el-option
-            v-for="item in options.multiActions"
-            :key="item.value"
-            v-permission="item.permissionId"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-        <el-input
-          v-if="listQuery.pageModule.params.queryRule"
-          v-model="listQuery.search.input"
-          :placeholder="listQuery.search.placeholder"
-          style="width: 250px;"
-          class="filter-item"
-          clearable
-          @keyup.enter.native="getList"
-        />
-        <el-button
-          v-waves
-          round
-          type="primary"
-          style="margin-left: 5px;"
-          icon="el-icon-search"
-          @click="getList"
-        >
-          {{ $t('table.search') }}
-        </el-button>
-        <el-button
-          v-if="options.addAction.enable"
-          v-waves
-          round
-          style="margin-left: 5px;"
-          type="primary"
-          icon="el-icon-circle-plus"
-          @click="handleAdd()"
-        >{{ $t('table.add') }}
-        </el-button>
-        <slot name="filter-content" />
-      </div>
+      <el-row>
+        <el-col :span="multiShow && options.multiActions ? 3 : 0">
+          <el-select
+            v-show="multiShow && options.multiActions"
+            v-model="multiNow"
+            :placeholder="selectedLabel"
+            style="margin-right: 5px"
+            @change="handleAction"
+          >
+            <el-option
+              v-for="item in options.multiActions"
+              :key="item.value"
+              v-permission="item.permissionId"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </el-col>
+        <el-col :span="multiShow && options.multiActions ? 21 : 24">
+          <div>
+            <el-row>
+              <el-col :span="caclColSpan('search')">
+                <el-input
+                  v-if="listQuery.search.cols && listQuery.search.cols.length > 0"
+                  v-model="listQuery.search.input"
+                  :placeholder="listQuery.search.placeholder"
+                  clearable
+                  @keyup.enter.native="handleSearch()"
+                />
+              </el-col>
+              <el-col :span="caclColSpan('')">
+                <div>
+                  <slot name="filter-content" />
+                  <el-button
+                    round
+                    class="filter-item"
+                    style="margin-left: 5px"
+                    type="primary"
+                    icon="el-icon-search"
+                    @click="handleSearch()"
+                  >
+                    {{ $t('table.search') }}
+                  </el-button>
+                </div>
+              </el-col>
+              <el-col :span="caclColSpan('addButton')">
+                <el-button
+                  v-if="options.addAction.enable"
+                  round
+                  class="filter-item"
+                  style="float: right"
+                  type="primary"
+                  icon="el-icon-circle-plus"
+                  @click="handleAdd()"
+                >{{ $t('table.add') }}
+                </el-button>
+              </el-col>
+            </el-row>
+          </div>
+        </el-col>
+      </el-row>
     </div>
-
     <el-table
       v-loading="listLoading"
-      :data="dataList.rows"
+      :data="dataList.data"
       border
       fit
       style="width: 100%"
       highlight-current-row
       :row-class-name="tableRowClassName"
       :default-sort="defaultSort"
-      @sort-change="sortChange"
+      @sort-change="handleSortChange"
       @selection-change="handleSelection"
+      @row-click="handleRowClick"
     >
-      <el-table-column
-        v-if="options.multi"
-        align="center"
-        type="selection"
-        width="55"
-      />
+      <el-table-column v-if="options.multi" align="center" type="selection" width="40" />
       <slot name="data-columns" />
     </el-table>
-    <div v-show="!listLoading && dataList.total>0" class="pagination-container">
+    <div v-show="!listLoading && dataList.total > 0" class="pagination-container">
       <el-pagination
         :current-page.sync="listQuery.pageModule.pageNumber"
         :page-sizes="listQuery.pageSizes"
@@ -86,7 +94,6 @@
 </template>
 
 <script>
-import { allRequest } from '@/utils/request'
 
 export default {
   name: 'PagingDataTable',
@@ -147,12 +154,13 @@ export default {
           listUrl: '/exam/api',
           pageSizes: [5, 10, 25, 50, 100],
           search: {
+            colSpan: 5,
             placeholder: '输入查找内容后按回车进行查找',
-            input: '',
+            input: null,
             cols: []
           },
           pageModule: {
-            t: '',
+            t: null,
             pageNumber: 1,
             pageSize: 10,
             params: {
@@ -174,7 +182,8 @@ export default {
     return {
       // 接口数据返回
       dataList: {
-        total: 0
+        total: 0,
+        data: []
       },
       defaultSort: {},
       // 数据加载标识
@@ -187,7 +196,9 @@ export default {
       // 显示批量操作
       multiShow: false,
       // 批量操作的标识
-      multiNow: ''
+      multiNow: '',
+      // 当前选择行
+      selectedRow: {}
     }
   },
   created() {
@@ -212,10 +223,23 @@ export default {
       }
       this.listQuery.pageSizes = pageSizes
     })
-    this.getList()
+    this.handleSearch()
   },
   methods: {
-    sortChange(column) {
+    caclColSpan(type) {
+      const colSpan = this.listQuery.search.colSpan ? this.listQuery.search.colSpan : 5
+      const search = this.listQuery.search.cols && this.listQuery.search.cols.length > 0 ? colSpan : 0
+      const addButton = this.options.addAction.enable ? 2 : 0
+      switch (type) {
+        case 'search':
+          return search
+        case 'addButton':
+          return addButton
+        default:
+          return 24 - search - addButton
+      }
+    },
+    handleSortChange(column) {
       const sortRule = {
         sortOrder: (column.order && column.order === 'descending') ? 'DESC' : 'ASC',
         sortName: column.prop
@@ -223,16 +247,22 @@ export default {
       this.listQuery.pageModule.params.sortRules = []
       this.listQuery.pageModule.params.sortRules.push(sortRule)
       if (column.prop) {
-        this.getList()
+        this.handleSearch()
       }
+      // 向外回调的操作
+      this.$emit('handle-sort-change', column)
     },
-    handleSizeChange(val) {
-      this.listQuery.pageModule.pageSize = val
-      this.getList()
+    handleSizeChange(pageSize) {
+      this.listQuery.pageModule.pageSize = pageSize
+      this.handleSearch()
+      // 向外回调的操作
+      this.$emit('handle-size-change', pageSize)
     },
-    handleCurrentChange(val) {
-      this.listQuery.pageModule.pageNumber = val
-      this.getList()
+    handleCurrentChange(pageNumber) {
+      this.listQuery.pageModule.pageNumber = pageNumber
+      this.handleSearch()
+      // 向外回调的操作
+      this.$emit('handle-current-change', pageNumber)
     },
     /**
      * 添加数据跳转
@@ -252,9 +282,6 @@ export default {
       this.listLoading = true
       this.listQuery.pageModule.t = new Date().getTime()
       const cols = this.listQuery.search.cols
-      if (!this.listQuery.search.input) {
-        this.listQuery.search.input = ''
-      }
       if (cols && cols.length > 0) {
         for (let i = 0; i < cols.length; i++) {
           const col = cols[i]
@@ -263,6 +290,12 @@ export default {
       }
       this.postRequest(this.listQuery.listUrl, this.listQuery.pageModule).then(response => {
         this.dataList = response.data
+        if (!this.dataList.data) {
+          this.dataList.data = []
+        }
+        if (!this.dataList.total) {
+          this.dataList.total = 0
+        }
         this.listLoading = false
       }).catch((reason) => {
         this.listLoading = false
@@ -277,9 +310,11 @@ export default {
     /**
      * 搜索
      */
-    handleFilter() {
+    handleSearch() {
       // 重新搜索
       this.getList()
+      // 向外回调的操作
+      this.$emit('handle-search', this.listQuery.search.input)
     },
     /**
      * 批量操作回调
@@ -310,18 +345,18 @@ export default {
         }
       }
       // 向外回调的操作
-      this.$emit('handle-action', { opt: actionData, ids: this.selectedIds })
+      this.$emit('multi-actions', { opt: actionData, ids: this.selectedIds })
     },
     httpRequest(actionData) {
       const data = { url: actionData.url, data: this.selectedIds, method: actionData.method || 'post' }
-      allRequest(data).then(() => {
+      this.allRequest(data).then(() => {
         this.$notify({
           title: actionData.label + '成功!',
           message: actionData.successMsg ? actionData.successMsg : actionData.label + '成功!',
           type: 'success',
           duration: 5000
         })
-        this.getList()
+        this.handleSearch()
       }).catch((reason) => {
         this.$notify({
           title: actionData.failureMsg ? actionData.failureMsg : actionData.label + '失败!',
@@ -358,6 +393,12 @@ export default {
       this.selectedLabel = '已选' + ids.length + '项'
 
       this.$emit('handle-row-selected', { ids: this.selectedIds, objs: this.selectedObjs })
+    },
+    handleRowClick(row, event, column) {
+      if (!this.selectedRow || this.selectedRow.id !== row.id) {
+        this.selectedRow = row
+      }
+      this.$emit('handle-row-click', row, event, column)
     },
     tableRowClassName({ row }) {
       if (this.options.tableRowClass) {

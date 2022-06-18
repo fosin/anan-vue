@@ -114,8 +114,8 @@
   </div>
 </template>
 <script>
-import { listPatientinfoPageByStatus } from './patientinfo'
 import { formatDate } from '@/utils/date'
+import { listPatientinfoPageByStatus } from './patientinfo'
 export default {
   name: 'MpiPatientinfoList',
   filters: {
@@ -218,7 +218,7 @@ export default {
     getList() {
       this.listLoading = true
       listPatientinfoPageByStatus(this.pageModule, this.status || 0).then(response => {
-        this.list = response.data.rows
+        this.list = response.data.data
         this.total = response.data.total
         this.listLoading = false
       }).catch(reason => {

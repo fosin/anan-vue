@@ -1,64 +1,36 @@
 <template>
   <div class="app-container calendar-list-container">
-    <div class="filter-container">
-      <el-input
-        v-model="pageModule.params.name"
-        style="width: 200px;"
-        class="filter-item"
-        placeholder="支持服务标识、服务名称查找"
-        @keyup.enter.native="handleSearch()"
-      />
-      <el-button-group>
-        <el-button v-waves round class="filter-item" style="margin-left: 5px;" type="primary" icon="el-icon-search" @click="handleSearch()">
-          {{ $t('table.search') }}
-        </el-button>
-        <el-button
-          v-waves
-          v-permission="'171'"
-          round
-          class="filter-item"
-          style="margin-left: 10px;"
-          type="primary"
-          icon="el-icon-circle-plus"
-          @click="handleAdd()"
-        >{{ $t('table.add') }}
-        </el-button>
-      </el-button-group>
-    </div>
-    <el-table
-      v-loading="listLoading"
-      :data="list"
-      element-loading-text="努力加载中"
-      border
-      fit
-      highlight-current-row
+    <data-table
+      ref="pagingTable"
+      :options="options"
+      :list-query="listQuery"
       style="width: 100%"
-      @sort-change="sortChange"
-      @row-click="rowClick"
+      @handle-add="handleAdd()"
     >
-      <el-table-column label="唯一标识" align="center" sortable prop="id" />
-      <el-table-column label="服务标识" align="center" sortable prop="code" />
-      <el-table-column label="服务名称" align="center" sortable prop="name" />
-      <el-table-column label="状态码" align="center" class-name="status-col" sortable prop="status">
-        <template slot-scope="scope">
-          <el-tag>{{ scope.row.status | statusFilter }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column
-        :label="$t('table.updateBy.label')"
-        align="center"
-        sortable
-        prop="updateBy"
-        width="100px"
-      >
-        <template slot-scope="scope">
-          <span>{{ getDicValue(organizTopUsers,"id",scope.row.updateBy,"username") }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('table.updateTime.label')" width="160px" align="center" sortable prop="updateTime" />
-      <el-table-column :label="$t('table.actions')" align="center">
-        <template slot-scope="scope">
-          <el-button-group>
+      <template slot="filter-content" />
+      <template slot="data-columns">
+        <el-table-column label="唯一标识" align="center" sortable prop="id" />
+        <el-table-column label="服务标识" align="center" sortable prop="code" />
+        <el-table-column label="服务名称" align="center" sortable prop="name" />
+        <el-table-column label="状态码" align="center" class-name="status-col" sortable prop="status" width="100px">
+          <template slot-scope="scope">
+            <el-tag>{{ scope.row.status | statusFilter }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="$t('table.updateBy.label')"
+          align="center"
+          sortable
+          prop="updateBy"
+          width="100px"
+        >
+          <template slot-scope="scope">
+            <span>{{ getDicValue(organizTopUsers,"id",scope.row.updateBy,"username") }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('table.updateTime.label')" width="160px" align="center" sortable prop="updateTime" />
+        <el-table-column :label="$t('table.actions')" align="center" width="100px">
+          <template slot-scope="scope">
             <el-button
               v-waves
               v-permission="'172'"
@@ -71,35 +43,10 @@
             >
               {{ $t('table.edit') }}
             </el-button>
-            <el-button
-              v-waves
-              v-permission="'173'"
-              round
-              size="mini"
-              type="danger"
-              class="filter-item"
-              style="margin-left: 5px;"
-              icon="el-icon-delete"
-              @click="handleDelete(scope.row)"
-            >
-              {{ $t('table.delete') }}
-            </el-button>
-          </el-button-group>
-        </template>
-      </el-table-column>
-    </el-table>
-
-    <div v-show="!listLoading" class="pagination-container">
-      <el-pagination
-        :current-page.sync="pageModule.pageNumber"
-        :page-sizes="pageSizes"
-        :page-size="pageModule.pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
-    </div>
+          </template>
+        </el-table-column>
+      </template>
+    </data-table>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
@@ -141,13 +88,17 @@
   </div>
 </template>
 <script>
-import { getService, postService, putService, deleteService, listServicePage } from './service'
 import { loadServiceNames } from '@/api/application'
+import DataTable from '@/components/DataTable'
 import waves from '@/directive/waves/index.js'
 import { formatDate } from '@/utils/date'
-import { listUserByTopId } from '@/views/platform/user/user' // 水波纹指令
+import { listUserByTopId } from '@/views/platform/user/user'
+import { getService, postService, putService } from './service'
 export default {
   name: 'AnanService',
+  components: {
+    DataTable
+  },
   directives: {
     waves
   },
@@ -165,31 +116,66 @@ export default {
   },
   data() {
     return {
-      list: null,
-      total: null,
-      listLoading: false,
-      pageModule: {
-        pageNumber: 1,
-        pageSize: 10,
-        params: {
-          name: '',
-          code: '',
-          queryRule: {
-            logiOperator: 'or',
-            relaRules: [
-              {
-                fieldName: 'name',
-                relaOperator: 'like'
-              },
-              {
-                fieldName: 'code',
-                relaOperator: 'like'
-              }
+      listQuery: {
+        listUrl: 'gateway/platform/v1/service/paging',
+        pageSizes: [5, 10, 25, 50, 100],
+        search: {
+          input: null,
+          cols: ['name', 'code'],
+          placeholder: '支持服务标识、服务名称查找'
+        },
+        pageModule: {
+          pageNumber: 1,
+          pageSize: 10,
+          params: {
+            name: null,
+            code: null,
+            queryRule: {
+              logiOperator: 'or',
+              relaRules: [
+                {
+                  fieldName: 'name',
+                  relaOperator: 'like'
+                },
+                {
+                  fieldName: 'code',
+                  relaOperator: 'like'
+                }
+              ]
+            },
+            sortRules: [{
+              sortName: 'id',
+              sortOrder: 'ASC' }
             ]
-          },
-          sortRules: [{
-            sortName: 'id',
-            sortOrder: 'ASC' }
+          }
+        }
+      },
+      options: {
+        // 可批量操作
+        multi: true,
+        // 批量操作列表
+        multiActions: [
+          {
+            value: 'delete',
+            label: this.$t('table.delete'),
+            url: 'gateway/platform/v1/service/ids',
+            method: 'delete',
+            permissionId: '173',
+            confirm: true
+          }
+        ],
+        addAction: {
+          enable: true,
+          route: '',
+          permissionId: '171'
+        },
+        tableRowClass: {
+          column: 'status',
+          data: [
+            {
+              key: 1,
+              value: 'info-row'
+            }
           ]
         }
       },
@@ -209,7 +195,7 @@ export default {
   },
   created() {
     this.loadOrganizParameterValue('DefaultPageSize', '10', '表格默认每页记录数').then(res => {
-      this.pageModule.pageSize = parseInt(res)
+      this.listQuery.pageModule.pageSize = parseInt(res)
     })
     this.loadOrganizParameterValue('DefaultPageSizes', '5,10,25,50,100', '表格默认每页记录数可选择项').then(res => {
       const temp = res.split(',')
@@ -218,7 +204,7 @@ export default {
       }
     })
     loadServiceNames().then(response => {
-      this.onlineServices = response.data
+      this.onlineServices = response.data.data
     }).catch(reason => {
       this.$notify({
         title: '获取在线服务列表失败',
@@ -228,7 +214,7 @@ export default {
       })
     })
     listUserByTopId().then(response => {
-      this.organizTopUsers = response.data
+      this.organizTopUsers = response.data.data
     }).catch(reason => {
       this.$notify({
         title: '获取所有用户失败',
@@ -237,37 +223,8 @@ export default {
         duration: 5000
       })
     })
-    this.getList()
   },
   methods: {
-    getList() {
-      this.listLoading = true
-      this.pageModule.params.code = this.pageModule.params.name
-      listServicePage(this.pageModule).then(response => {
-        this.list = response.data.rows
-        this.total = response.data.total
-        this.listLoading = false
-      }).catch(reason => {
-        this.$notify({
-          title: '获取列表失败',
-          message: reason.message,
-          type: 'error',
-          duration: 5000
-        })
-      })
-    },
-    handleSearch() {
-      this.pageModule.pageNumber = 1
-      this.getList()
-    },
-    handleSizeChange(val) {
-      this.pageModule.pageSize = val
-      this.getList()
-    },
-    handleCurrentChange(val) {
-      this.pageModule.pageNumber = val
-      this.getList()
-    },
     handleAdd() {
       this.resetForm()
       this.dialogStatus = 'create'
@@ -275,7 +232,7 @@ export default {
     },
     handleEdit(row) {
       getService(row.id).then(response => {
-        this.form = response.data
+        this.form = response.data.data
         this.dialogFormVisible = true
         this.dialogStatus = 'update'
       }).catch(reason => {
@@ -287,43 +244,13 @@ export default {
         })
       })
     },
-    handleDelete(row) {
-      this.$confirm(
-        '此操作将永久删除相关数据, 是否继续?',
-        '提示',
-        {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }
-      ).then(() => {
-        deleteService(row.id).then(response => {
-          this.dialogFormVisible = false
-          this.getList()
-          this.$notify({
-            title: '成功',
-            message: '删除成功!',
-            type: 'success',
-            duration: 2000
-          })
-        }).catch(reason => {
-          this.$notify({
-            title: '删除失败',
-            message: reason.message,
-            type: 'error',
-            duration: 5000
-          })
-        })
-      }).catch(reason => {
-      })
-    },
     create(formName) {
       const set = this.$refs
       set[formName].validate(valid => {
         if (valid) {
           postService(this.form).then(() => {
             this.dialogFormVisible = false
-            this.getList()
+            this.$refs.pagingTable.getList()
             this.$notify({
               title: '成功',
               message: '创建成功',
@@ -356,7 +283,7 @@ export default {
           this.dialogFormVisible = false
           putService(this.form).then(() => {
             this.dialogFormVisible = false
-            this.getList()
+            this.$refs.pagingTable.getList()
             this.$notify({
               title: '成功',
               message: '修改成功',
@@ -380,20 +307,6 @@ export default {
       this.form = {
         status: 0
       }
-    },
-    sortChange(column) {
-      const sortRule = {
-        sortOrder: (column.order && column.order === 'descending') ? 'DESC' : 'ASC',
-        sortName: column.prop
-      }
-      this.pageModule.params.sortRules = []
-      this.pageModule.params.sortRules.push(sortRule)
-      if (column.prop) {
-        this.getList()
-      }
-    },
-    rowClick(row, event, column) {
-      this.form = row
     }
   }
 }
