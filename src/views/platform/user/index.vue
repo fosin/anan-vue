@@ -323,6 +323,7 @@ export default {
       addExpandKeys: [],
       subExpandKeys: [],
       userRoles: [],
+      userPermissions: [],
       organizTree: [],
       checkedKeys: [],
       list: [],
@@ -813,6 +814,7 @@ export default {
             this.versionId = versionId
           }
           listUserPermissions(row.id, row.organizId).then(response => {
+            this.userPermissions = response.data.data
             this.addCheckedKeys = this.getCheckedKeys(1, response.data.data)
             this.subCheckedKeys = this.getCheckedKeys(2, response.data.data)
             this.dialogStatus = 'permission'
@@ -897,26 +899,33 @@ export default {
         this.dialogUserPermissionVisible = false
         return
       }
-
       // 组装成后台需要的数据格式
       const newRolePermissions = []
       for (let i = 0; i < resultAddPermission.length; i++) {
-        const permission = {
+        const permissionId = resultAddPermission[i]
+        const permissions = this.userPermissions.filter(function(v) {
+          return permissionId === v.permissionId && v.addMode === 0
+        })
+        const permission = permissions && permissions.length === 1 ? permissions[0] : {
           id: undefined,
           organizId: this.form.organizId,
           userId: this.form.id,
           addMode: 0,
-          permissionId: resultAddPermission[i]
+          permissionId: permissionId
         }
         newRolePermissions.push(permission)
       }
       for (let i = 0; i < resultSubPermission.length; i++) {
-        const permission = {
+        const permissionId = resultAddPermission[i]
+        const permissions = this.userPermissions.filter(function(v) {
+          return permissionId === v.permissionId && v.addMode === 1
+        })
+        const permission = permissions && permissions.length === 1 ? permissions[0] : {
           id: undefined,
           organizId: this.form.organizId,
           userId: this.form.id,
           addMode: 1,
-          permissionId: resultSubPermission[i]
+          permissionId: permissionId
         }
         newRolePermissions.push(permission)
       }
@@ -924,7 +933,7 @@ export default {
         this.dialogUserPermissionVisible = false
         this.$notify({
           title: '成功',
-          message: '修改用户权限成功!',
+          message: '更新用户权限成功!',
           type: 'success',
           duration: 2000
         })

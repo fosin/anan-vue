@@ -179,12 +179,12 @@ export default {
                   fieldName: 'name'
                 }
               ]
-            }
-          },
-          sortRules: [{
-            sortName: 'defaultFlag',
-            sortOrder: 'DESC'
-          }]
+            },
+            sortRules: [{
+              sortName: 'defaultFlag',
+              sortOrder: 'DESC'
+            }]
+          }
         }
       },
       options: {

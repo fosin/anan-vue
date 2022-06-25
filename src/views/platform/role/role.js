@@ -1,6 +1,6 @@
 import request, { postRequest } from '@/utils/request'
 
-// 获取角色的所有用户列表
+// 获取角色的已拥有用户列表
 export function listRoleUsers(id) {
   return request({
     url: 'gateway/platform/v1/role/users/' + id,

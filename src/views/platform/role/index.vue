@@ -180,6 +180,7 @@ export default {
       oraganizOptions: [],
       organizList: [],
       roleUsers: [],
+      rolePermissions: [],
       OrganUsers: [],
       organizTopUsers: [],
       versionId: -1,
@@ -402,6 +403,7 @@ export default {
     },
     handleRolePermission(row) {
       listRolePermissions(row.id).then(response1 => {
+        this.rolePermissions = response1.data.data
         getOrganiz(row.organizId).then((response2) => {
           this.topId = response2.data.data.topId
           this.form = row
@@ -438,10 +440,14 @@ export default {
       // 组装成后台需要的数据格式
       const newRolePermissions = []
       for (let i = 0; i < unionPermissions.length; i++) {
-        const permission = {
+        const permissionId = unionPermissions[i]
+        const permissions = this.rolePermissions.filter(function(v) {
+          return permissionId === v.permissionId
+        })
+        const permission = permissions && permissions.length === 1 ? permissions[0] : {
           id: undefined,
           roleId: id,
-          permissionId: unionPermissions[i]
+          permissionId: permissionId
         }
         newRolePermissions.push(permission)
       }

@@ -10,7 +10,7 @@
     >
       <template slot="filter-content" />
       <template slot="data-columns">
-        <el-table-column :label="$t('anan_dictionary.id.label')" align="center" sortable prop="id" width="70px" />
+        <el-table-column :label="$t('anan_dictionary.id.label')" align="center" sortable prop="id" width="80px" />
         <el-table-column :label="$t('anan_dictionary.name.label')" align="center" sortable prop="name" width="120px" />
         <el-table-column :label="$t('anan_dictionary.type.label')" align="center" sortable prop="type" width="150px">
           <template slot-scope="scope">

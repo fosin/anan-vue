@@ -289,6 +289,7 @@ export default {
       typeOptions: [],
       statusOptions: [],
       organizTopUsers: [],
+      versionPermissions: [],
       form: {},
       rules: {
         name: [
@@ -484,6 +485,7 @@ export default {
       listVersionPermissions(row.id)
         .then(response => {
           this.form = row
+          this.versionPermissions = response.data.data
           this.$refs.grantPermission.initData(this, this.form, response.data.data, '125')
         }).catch(reason => {
           this.$notify({
@@ -498,10 +500,14 @@ export default {
       // 组装成后台需要的数据格式
       const newRolePermissions = []
       for (let i = 0; i < unionPermissions.length; i++) {
-        const permission = {
+        const permissionId = unionPermissions[i]
+        const permissions = this.versionPermissions.filter(function(v) {
+          return permissionId === v.permissionId
+        })
+        const permission = permissions && permissions.length === 1 ? permissions[0] : {
           id: undefined,
           versionId: id,
-          permissionId: unionPermissions[i]
+          permissionId: permissionId
         }
         newRolePermissions.push(permission)
       }

@@ -64,6 +64,7 @@
       </el-row>
     </div>
     <el-table
+      ref="dataTable"
       v-loading="listLoading"
       :data="dataList.data"
       border
@@ -392,7 +393,7 @@ export default {
       this.multiShow = ids.length > 0
       this.selectedLabel = '已选' + ids.length + '项'
 
-      this.$emit('handle-row-selected', { ids: this.selectedIds, objs: this.selectedObjs })
+      this.$emit('handle-row-selected', val)
     },
     handleRowClick(row, event, column) {
       if (!this.selectedRow || this.selectedRow.id !== row.id) {

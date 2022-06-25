@@ -174,6 +174,7 @@ export default {
   data() {
     return {
       versionOptions: [],
+      versionRolePermissions: [],
       versionList: [],
       versionId: -1,
       defaultProps: {
@@ -375,6 +376,7 @@ export default {
 
     handleVersionRolePermission(row) {
       listVersionRolePermissions(row.id).then(response => {
+        this.versionRolePermissions = response.data.data
         this.$refs.grantPermission.initData(this, row, response.data.data, '126', row.versionId !== this.versionId)
         this.form = row
         this.versionId = row.versionId
@@ -391,10 +393,14 @@ export default {
       // 组装成后台需要的数据格式
       const newRolePermissions = []
       for (let i = 0; i < unionPermissions.length; i++) {
-        const permission = {
+        const permissionId = unionPermissions[i]
+        const permissions = this.versionRolePermissions.filter(function(v) {
+          return permissionId === v.permissionId
+        })
+        const permission = permissions && permissions.length === 1 ? permissions[0] : {
           id: undefined,
           roleId: id,
-          permissionId: unionPermissions[i]
+          permissionId: permissionId
         }
         newRolePermissions.push(permission)
       }

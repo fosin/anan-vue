@@ -98,16 +98,16 @@ export default {
       // 得到当前已展开项目中被选中的权限
       const checkedPermissions = this.$refs.permissionTree.getCheckedKeys().sort() // 当前选中的权限集合
       const halfCheckedPermissions = this.$refs.permissionTree.getHalfCheckedKeys().sort() // 当前半选中的权限集合
-      const rolePermissions = this.checkedKeys.sort() // 当前角色已拥有的所有权限集合
+      const beforePermissions = this.checkedKeys.sort() // 当前角色已拥有的所有权限集合
       const expandPermissions = this.expandKeys.sort() // 树中已展开的权限集合
 
-      // 求并集，到的所有实际被选中的权限 checkedPermissions + halfCheckedPermissions
+      // 求并集，得到的所有实际被选中的权限 checkedPermissions + halfCheckedPermissions
       const allCheckedPermissions = checkedPermissions.concat(halfCheckedPermissions.filter(function(v) {
         return checkedPermissions.indexOf(v) === -1
       })).sort()
 
       // 求差集
-      const differencePermissions = rolePermissions.filter(function(v) {
+      const differencePermissions = beforePermissions.filter(function(v) {
         return expandPermissions.indexOf(v) === -1
       })
 
@@ -117,7 +117,7 @@ export default {
       })).sort()
 
       // 如果没有修改过数据则直接返回
-      if (unionPermissions.toString() === rolePermissions.toString()) {
+      if (unionPermissions.toString() === beforePermissions.toString()) {
         this.dialogPermissionVisible = false
         return
       }
@@ -125,7 +125,7 @@ export default {
         this.dialogPermissionVisible = false
         this.$notify({
           title: '成功',
-          message: '修改权限成功!',
+          message: '更新权限成功!',
           type: 'success',
           duration: 2000
         })
