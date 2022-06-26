@@ -1,26 +1,13 @@
 <template>
   <div class="app-container">
     <el-row :gutter="24">
-      <el-col :span="24">
-        <el-card style="margin-bottom: 10px">
-          距离考试结束还有：<span style="color: #ff0000;">{{ min }}分钟{{ sec }}秒</span>
-          <el-button
-            style="float: right; margin-top: -10px"
-            type="danger"
-            icon="el-icon-check"
-            :loading="loading"
-            @click="handHandExam()"
-          >
-            {{ handleText }}
-          </el-button>
-        </el-card>
-      </el-col>
       <el-col
         :span="6"
         :xs="24"
         style="margin-bottom: 10px"
       >
         <el-card>
+          距离考试结束还有：<span style="color: #ff0000;">{{ min }}分钟{{ sec }}秒</span>
           <p class="card-title">答题卡</p>
           <el-row
             :gutter="24"
@@ -30,6 +17,15 @@
             <el-tag type="info">未作答</el-tag>
             <el-tag type="success">已作答</el-tag>
             <el-tag type="warning">当前题</el-tag>
+            <el-button
+              style="margin-bottom: 10px;margin-left: 20px;"
+              type="danger"
+              icon="el-icon-check"
+              :loading="loading"
+              @click="handHandExam()"
+            >
+              {{ handleText }}
+            </el-button>
           </el-row>
           <div v-if="paperData.radioList!==undefined && paperData.radioList.length > 0">
             <p class="card-title">单选题</p>
@@ -97,92 +93,102 @@
         :span="18"
         :xs="24"
       >
-        <el-card class="qu-content">
+        <el-row>
+          <el-col :span="24">
+            <el-card class="qu-content">
+              <el-row>
+                <el-col :span="1">
+                  <el-tag type="primary">{{ quData.score }}分</el-tag>
+                </el-col>
+                <el-col :span="23">
+                  <el-input
+                    v-model="quData.quTitle"
+                    autosize
+                    type="textarea"
+                    resize="none"
+                    readonly
+                    style="margin-bottom: 20px"
+                  />
+                </el-col>
+              </el-row>
+              <div v-if="quData.quType === 1 || quData.quType===3">
+                <el-radio-group v-model="radioValue">
+                  <el-radio
+                    v-for="item in quData.answerList"
+                    :key="item.id"
+                    :label="item.id"
+                    @change="handNext()"
+                  >
+                    {{ item.quContent }}
+                    <div
+                      v-if="item.image"
+                      style="clear: both"
+                    />
+                  </el-radio>
+                </el-radio-group>
+              </div>
+              <div v-if="quData.quType === 2">
+                <el-checkbox-group v-model="multiValue">
+                  <el-checkbox
+                    v-for="item in quData.answerList"
+                    :key="item.id"
+                    :label="item.id"
+                  >
+                    {{ item.quContent }}
+                    <div
+                      v-if="item.image"
+                      style="clear: both"
+                    />
+                  </el-checkbox>
+                </el-checkbox-group>
+              </div>
+              <div v-if="quData.quType === 4">
+                <el-tag type="primary">答题：</el-tag>
+                <el-input
+                  v-model="quData.answer"
+                  :autosize="{ minRows: 12, maxRows: 99}"
+                  type="textarea"
+                />
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
+        <div style="margin-top: 20px">
           <el-row>
-            <el-col :span="1">
-              <el-tag type="primary">{{ quData.score }}分</el-tag>
+            <el-col :span="8">
+              <el-button
+                v-if="showPrevious"
+                type="primary"
+                icon="el-icon-arrow-left"
+                @click="handPrevious()"
+              >
+                上一题
+              </el-button>
+              <el-button
+                v-if="showNext"
+                type="warning"
+                @click="handNext()"
+              >
+                下一题 <i class="el-icon-arrow-right el-icon--right" />
+              </el-button>
             </el-col>
-            <el-col :span="23">
-              <el-input
-                v-model="quData.quTitle"
-                autosize
-                type="textarea"
-                resize="none"
-                readonly
-                style="margin-bottom: 20px"
+            <el-col :span="8">
+              <canvas
+                ref="canvasCamera"
+                style="display: none;"
+                :width="canvas.width"
+                :height="canvas.height"
               />
             </el-col>
-          </el-row>
-          <div v-if="quData.quType === 1 || quData.quType===3">
-            <el-radio-group v-model="radioValue">
-              <el-radio
-                v-for="item in quData.answerList"
-                :key="item.id"
-                :label="item.id"
-                @change="handNext()"
-              >
-                {{ item.quContent }}
-                <div
-                  v-if="item.image"
-                  style="clear: both"
-                />
-              </el-radio>
-            </el-radio-group>
-          </div>
-          <div v-if="quData.quType === 2">
-            <el-checkbox-group v-model="multiValue">
-              <el-checkbox
-                v-for="item in quData.answerList"
-                :key="item.id"
-                :label="item.id"
-              >
-                {{ item.quContent }}
-                <div
-                  v-if="item.image"
-                  style="clear: both"
-                />
-              </el-checkbox>
-            </el-checkbox-group>
-          </div>
-          <div v-if="quData.quType === 4">
-            <el-tag type="primary">答题：</el-tag>
-            <el-input
-              v-model="quData.answer"
-              :autosize="{ minRows: 12, maxRows: 99}"
-              type="textarea"
+            <el-col :span="8" />
+            <video
+              ref="videoCamera"
+              :width="videoWidth"
+              :height="videoHeight"
+              autoplay
+              style="float: right"
             />
-          </div>
-        </el-card>
-        <div style="margin-top: 20px">
-          <el-button
-            v-if="showPrevious"
-            type="primary"
-            icon="el-icon-arrow-left"
-            @click="handPrevious()"
-          >
-            上一题
-          </el-button>
-          <el-button
-            v-if="showNext"
-            type="warning"
-            @click="handNext()"
-          >
-            下一题 <i class="el-icon-arrow-right el-icon--right" />
-          </el-button>
-          <video
-            ref="videoCamera"
-            :width="videoWidth"
-            :height="videoHeight"
-            autoplay
-            style="float: right"
-          />
-          <canvas
-            ref="canvasCamera"
-            style="display:none;"
-            :width="canvas.width"
-            :height="canvas.height"
-          />
-        </div>
+          </el-row></div>
       </el-col>
     </el-row>
   </div>
@@ -344,7 +350,7 @@ export default {
     },
 
     doHandler() {
-      this.handleText = '正在交卷，请等待...'
+      this.handleText = '交卷中...'
       this.loading = true
       handExam(this.paperId).then(() => {
         this.$message({
@@ -353,6 +359,8 @@ export default {
         })
         if (this.paperData.photoFrequency > 0) {
           this.photographFrequency('last')
+        } else {
+          this.$router.push({ name: 'ExamOnlineDoResult', params: { id: this.paperId + ',0' }})
         }
       }).catch((reason) => {
         this.$notify({
@@ -361,7 +369,7 @@ export default {
           type: 'error',
           duration: 5000
         })
-        this.handleText = '再尝试交卷'
+        this.handleText = '再交卷'
         this.loading = false
       })
     },
