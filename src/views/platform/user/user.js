@@ -5,7 +5,7 @@ import CryptoJS from 'crypto-js'
 // 获取用户的所有角色列表
 export function listUserRoles(id) {
   return request({
-    url: 'gateway/platform/v1/user/roles/' + id,
+    url: 'gateway/platform/api/user/roles/' + id,
     method: 'post'
   })
 }
@@ -13,7 +13,7 @@ export function listUserRoles(id) {
 // 获取用户的所有未拥有的角色列表
 export function listOtherRoles(id) {
   return request({
-    url: 'gateway/platform/v1/user/otherRoles/' + id,
+    url: 'gateway/platform/api/user/otherRoles/' + id,
     method: 'post'
   })
 }
@@ -21,7 +21,7 @@ export function listOtherRoles(id) {
 // 更新用户的角色
 export function putUserRoles(id, obj) {
   return request({
-    url: 'gateway/platform/v1/user/roles/' + id,
+    url: 'gateway/platform/api/user/roles/' + id,
     method: 'put',
     data: obj
   })
@@ -30,7 +30,7 @@ export function putUserRoles(id, obj) {
 // 获取用户的所有权限列表
 export function listUserPermissions(id, organizId) {
   return request({
-    url: 'gateway/platform/v1/user/permissions/' + id + '?organizId=' + organizId,
+    url: 'gateway/platform/api/user/permissions/' + id + '?organizId=' + organizId,
     method: 'post'
   })
 }
@@ -38,7 +38,7 @@ export function listUserPermissions(id, organizId) {
 // 更新用户权限
 export function putUserPermissions(id, permissions) {
   return request({
-    url: 'gateway/platform/v1/user/permissions/' + id,
+    url: 'gateway/platform/api/user/permissions/' + id,
     method: 'put',
     data: permissions
   })
@@ -46,14 +46,14 @@ export function putUserPermissions(id, permissions) {
 
 export function listUserPage(page) {
   return request({
-    url: 'gateway/platform/v1/user/paging',
+    url: 'gateway/platform/api/user/paging',
     method: 'post',
     data: page
   })
 }
 
 export function listUser(data = {}) {
-  return postRequest('gateway/platform/v1/user/list', data)
+  return postRequest('gateway/platform/api/user/list', data)
 }
 
 // 根据机构ID查询该机构及子机构的所有用户
@@ -62,7 +62,7 @@ export function listByOrganizId(organizId, status) {
     status = -1
   }
   return request({
-    url: 'gateway/platform/v1/user/list/organizId/' + organizId + '/' + status,
+    url: 'gateway/platform/api/user/list/organizId/' + organizId + '/' + status,
     method: 'post'
   })
 }
@@ -76,14 +76,14 @@ export function listUserByTopId(topId, status) {
     status = -1
   }
   return request({
-    url: 'gateway/platform/v1/user/list/topId/' + topId + '/' + status,
+    url: 'gateway/platform/api/user/list/topId/' + topId + '/' + status,
     method: 'post'
   })
 }
 
 export function resetPassword(id) {
   return request({
-    url: 'gateway/platform/v1/user/resetPassword/' + id,
+    url: 'gateway/platform/api/user/resetPassword/' + id,
     method: 'post'
   })
 }
@@ -102,14 +102,14 @@ export function changePassword(passObj) {
     i: passObj.id
   }
   return request({
-    url: 'gateway/platform/v1/user/changePassword',
+    url: 'gateway/platform/api/user/changePassword',
     method: 'post',
     params: cipher
   })
 }
 export function postUser(obj) {
   return request({
-    url: 'gateway/platform/v1/user/',
+    url: 'gateway/platform/api/user/',
     method: 'post',
     data: obj
   })
@@ -117,7 +117,7 @@ export function postUser(obj) {
 
 export function postUserRoles(obj) {
   return request({
-    url: 'gateway/platform/v1/user/',
+    url: 'gateway/platform/api/user/',
     method: 'post',
     data: obj
   })
@@ -125,21 +125,21 @@ export function postUserRoles(obj) {
 
 export function getUser(id, method) {
   return request({
-    url: 'gateway/platform/v1/user/' + id,
+    url: 'gateway/platform/api/user/' + id,
     method: method || 'post'
   })
 }
 
 export function deleteUser(id) {
   return request({
-    url: 'gateway/platform/v1/user/' + id,
+    url: 'gateway/platform/api/user/' + id,
     method: 'delete'
   })
 }
 
 export function putUser(obj) {
   return request({
-    url: 'gateway/platform/v1/user',
+    url: 'gateway/platform/api/user',
     method: 'put',
     data: obj
   })

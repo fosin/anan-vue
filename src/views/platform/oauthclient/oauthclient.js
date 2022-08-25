@@ -3,19 +3,19 @@ import request, { postRequest } from '@/utils/request'
 // 获取客户端授权数据分页列表
 export function listClientPage(page) {
   return request({
-    url: 'gateway/platform/v1/oauthclient/paging',
+    url: 'gateway/platform/api/oauthclient/paging',
     method: 'post',
     data: page
   })
 }
 // 获取所有客户端授权数据列表
 export function listClient(data = {}) {
-  return postRequest('gateway/platform/v1/oauthclient/list', data)
+  return postRequest('gateway/platform/api/oauthclient/list', data)
 }
 
 export function postClient(obj) {
   return request({
-    url: 'gateway/platform/v1/oauthclient/',
+    url: 'gateway/platform/api/oauthclient/',
     method: 'post',
     data: obj
   })
@@ -23,21 +23,21 @@ export function postClient(obj) {
 
 export function getClient(id, method) {
   return request({
-    url: 'gateway/platform/v1/oauthclient/' + id,
+    url: 'gateway/platform/api/oauthclient/' + id,
     method: method || 'post'
   })
 }
 
 export function deleteClient(id) {
   return request({
-    url: 'gateway/platform/v1/oauthclient/' + id,
+    url: 'gateway/platform/api/oauthclient/' + id,
     method: 'delete'
   })
 }
 
 export function putClient(obj) {
   return request({
-    url: 'gateway/platform/v1/oauthclient',
+    url: 'gateway/platform/api/oauthclient',
     method: 'put',
     data: obj
   })

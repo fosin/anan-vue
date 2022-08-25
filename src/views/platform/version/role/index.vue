@@ -184,7 +184,7 @@ export default {
         disabled: 'disabled'
       },
       listQuery: {
-        listUrl: 'gateway/platform/v1/version/role/paging',
+        listUrl: 'gateway/platform/api/version/role/paging',
         pageSizes: [5, 10, 25, 50, 100],
         search: {
           input: null,
@@ -225,7 +225,7 @@ export default {
           {
             value: 'delete',
             label: this.$t('table.delete'),
-            url: 'gateway/platform/v1/version/role/ids',
+            url: 'gateway/platform/api/version/role/ids',
             method: 'delete',
             permissionId: '123',
             confirm: true

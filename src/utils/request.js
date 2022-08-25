@@ -39,6 +39,12 @@ request.interceptors.request.use(config => {
     // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
     config.headers['Authorization'] = wordCap(store.getters.ananToken.token_type) + ' ' + store.getters.ananToken.access_token
   }
+  // 如果请求没有附加API版本号，则附加默认版本号
+  const params = config.params
+  if (!params || (!params['version'] && config.url.indexOf('version') < 1)) {
+    if (!params) config.params = {}
+    config.params['version'] = '2018-10-17'
+  }
   return config
 }, error => {
   NProgress.done()
@@ -131,19 +137,19 @@ function getRealError(from, error) {
 }
 export default request
 
-export const postRequest = (url, data, params, notify = true) => {
+export const postRequest = (url, data, params) => {
   return request({ url: url, data: data, params: params, method: 'post' })
 }
 
-export const putRequest = (url, data, notify = true) => {
-  return request({ url: url, data: data, method: 'put' })
+export const putRequest = (url, data, params) => {
+  return request({ url: url, data: data, params: params, method: 'put' })
 }
 
-export const deleteRequest = (url, data, notify = true) => {
-  return request({ url: url, data: data, method: 'delete' })
+export const deleteRequest = (url, data, params) => {
+  return request({ url: url, data: data, params: params, method: 'delete' })
 }
 
-export const getRequest = (url, params, notify = true) => {
+export const getRequest = (url, params) => {
   return request({ url: url, params: params, method: 'get' })
 }
 

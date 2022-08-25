@@ -59,7 +59,7 @@ module.exports = {
     // it can be accessed in index.html to inject the correct title.
     name: name,
     // devtool: 'cheap-module-eval-source-map',
-    devtool: 'source-map',
+    devtool: process.env.NODE_ENV === 'development' ? 'source-map' : false,
     resolve: {
       alias: {
         '@': resolve('src')

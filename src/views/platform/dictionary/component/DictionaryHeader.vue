@@ -115,7 +115,7 @@ export default {
     return {
       dictionaryList: null,
       listQuery: {
-        listUrl: 'gateway/platform/v1/dictionary/paging',
+        listUrl: 'gateway/platform/api/dictionary/paging',
         pageSizes: [5, 10, 25, 50, 100],
         search: {
           colSpan: 12,
@@ -157,7 +157,7 @@ export default {
           {
             value: 'delete',
             label: this.$t('table.delete'),
-            url: 'gateway/platform/v1/dictionary/ids',
+            url: 'gateway/platform/api/dictionary/ids',
             method: 'delete',
             permissionId: '61',
             confirm: true
@@ -165,7 +165,7 @@ export default {
           {
             value: 'disable',
             label: this.$t('table.disable'),
-            url: 'gateway/platform/v1/dictionary/field/status/1',
+            url: 'gateway/platform/api/dictionary/field/status/1',
             method: 'post',
             permissionId: '60',
             confirm: false
@@ -173,7 +173,7 @@ export default {
           {
             value: 'enable',
             label: this.$t('table.enable'),
-            url: 'gateway/platform/v1/dictionary/field/status/0',
+            url: 'gateway/platform/api/dictionary/field/status/0',
             method: 'post',
             permissionId: '60',
             confirm: false

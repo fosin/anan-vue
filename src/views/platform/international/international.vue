@@ -153,7 +153,7 @@ export default {
   data() {
     return {
       listQuery: {
-        listUrl: 'gateway/platform/v1/international/paging',
+        listUrl: 'gateway/platform/api/international/paging',
         pageSizes: [5, 10, 25, 50, 100],
         search: {
           colSpan: 12,
@@ -195,7 +195,7 @@ export default {
           {
             value: 'delete',
             label: this.$t('table.delete'),
-            url: 'gateway/platform/v1/international/ids',
+            url: 'gateway/platform/api/international/ids',
             method: 'delete',
             permissionId: '179',
             confirm: true
@@ -203,7 +203,7 @@ export default {
           {
             value: 'disable',
             label: this.$t('table.disable'),
-            url: 'gateway/platform/v1/international/field/status/1',
+            url: 'gateway/platform/api/international/field/status/1',
             method: 'post',
             permissionId: '178',
             confirm: false
@@ -211,7 +211,7 @@ export default {
           {
             value: 'enable',
             label: this.$t('table.enable'),
-            url: 'gateway/platform/v1/international/field/status/0',
+            url: 'gateway/platform/api/international/field/status/0',
             method: 'post',
             permissionId: '178',
             confirm: false

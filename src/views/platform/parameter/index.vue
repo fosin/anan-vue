@@ -203,7 +203,7 @@ export default {
   data() {
     return {
       listQuery: {
-        listUrl: 'gateway/platform/v1/parameter/paging',
+        listUrl: 'gateway/platform/api/parameter/paging',
         pageSizes: [5, 10, 25, 50, 100],
         search: {
           input: null,
@@ -256,7 +256,7 @@ export default {
           {
             value: 'delete',
             label: this.$t('table.delete'),
-            url: 'gateway/platform/v1/parameter/ids',
+            url: 'gateway/platform/api/parameter/ids',
             method: 'delete',
             permissionId: '55',
             confirm: true,
@@ -265,7 +265,7 @@ export default {
           {
             value: 'cancelDelete',
             label: this.$t('table.cancel') + this.$t('table.delete'),
-            url: 'gateway/platform/v1/parameter/cancelDelete/ids',
+            url: 'gateway/platform/api/parameter/cancelDelete/ids',
             method: 'post',
             permissionId: '55',
             confirm: false
@@ -273,7 +273,7 @@ export default {
           {
             value: 'applys',
             label: this.$t('table.apply'),
-            url: 'gateway/platform/v1/parameter/applys/ids',
+            url: 'gateway/platform/api/parameter/applys/ids',
             method: 'post',
             permissionId: '57',
             confirm: false

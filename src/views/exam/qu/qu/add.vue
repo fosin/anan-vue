@@ -296,7 +296,7 @@ export default {
         if (!valid) {
           return
         }
-        createOrUpdate(this.postForm).then(response => {
+        createOrUpdate(this.postForm).then(() => {
           this.$notify({
             title: '成功',
             message: '试题保存成功！',

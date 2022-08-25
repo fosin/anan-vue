@@ -194,7 +194,7 @@ export default {
         disabled: 'disabled'
       },
       listQuery: {
-        listUrl: 'gateway/platform/v1/role/paging',
+        listUrl: 'gateway/platform/api/role/paging',
         pageSizes: [5, 10, 25, 50, 100],
         search: {
           input: null,
@@ -235,7 +235,7 @@ export default {
           {
             value: 'delete',
             label: this.$t('table.delete'),
-            url: 'gateway/platform/v1/role/ids',
+            url: 'gateway/platform/api/role/ids',
             method: 'delete',
             permissionId: '26',
             confirm: true
@@ -243,7 +243,7 @@ export default {
           {
             value: 'enableStatus',
             label: this.$t('table.enable'),
-            url: 'gateway/platform/v1/role/field/status/0',
+            url: 'gateway/platform/api/role/field/status/0',
             method: 'post',
             permissionId: '25',
             confirm: false
@@ -251,7 +251,7 @@ export default {
           {
             value: 'disableStatus',
             label: this.$t('table.disable'),
-            url: 'gateway/platform/v1/role/field/status/1',
+            url: 'gateway/platform/api/role/field/status/1',
             method: 'post',
             permissionId: '25',
             confirm: false

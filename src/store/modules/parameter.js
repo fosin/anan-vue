@@ -30,7 +30,7 @@ const parameter = {
           resolve(pValue)
           return
         }
-        postRequest('gateway/platform/v1/parameter/value', paras, false).then(response => {
+        postRequest('gateway/platform/api/parameter/value', paras, false).then(response => {
           if (!response.data.data) {
             reject('error')
           }

@@ -161,7 +161,7 @@ export default {
       organizTopUsers: [],
       DefaultDictionaryDetailNameAndSort: 1,
       listQuery: {
-        listUrl: 'gateway/platform/v1/dictionarydetail/paging',
+        listUrl: 'gateway/platform/api/dictionarydetail/paging',
         pageSizes: [5, 10, 25, 50, 100],
         search: {
           colSpan: 12,
@@ -202,7 +202,7 @@ export default {
           {
             value: 'delete',
             label: this.$t('table.delete'),
-            url: 'gateway/platform/v1/dictionarydetail/ids',
+            url: 'gateway/platform/api/dictionarydetail/ids',
             method: 'delete',
             permissionId: '64',
             confirm: true
@@ -210,7 +210,7 @@ export default {
           {
             value: 'disable',
             label: this.$t('table.disable'),
-            url: 'gateway/platform/v1/dictionarydetail/field/status/1',
+            url: 'gateway/platform/api/dictionarydetail/field/status/1',
             method: 'post',
             permissionId: '63',
             confirm: false
@@ -218,7 +218,7 @@ export default {
           {
             value: 'enable',
             label: this.$t('table.enable'),
-            url: 'gateway/platform/v1/dictionarydetail/field/status/0',
+            url: 'gateway/platform/api/dictionarydetail/field/status/0',
             method: 'post',
             permissionId: '63',
             confirm: false

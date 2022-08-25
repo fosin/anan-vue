@@ -27,7 +27,7 @@ export function getDicValue(data, keyName, keyValue, valueName) {
 // 获取数据分页列表
 export function findDictionaryPage(page) {
   return request({
-    url: 'gateway/platform/v1/dictionary/paging',
+    url: 'gateway/platform/api/dictionary/paging',
     method: 'post',
     data: page
   })
@@ -35,12 +35,12 @@ export function findDictionaryPage(page) {
 
 // 获取所有数据列表
 export function listDictionary(data = {}) {
-  return postRequest('gateway/platform/v1/dictionary/list', data)
+  return postRequest('gateway/platform/api/dictionary/list', data)
 }
 
 export function postDictionary(obj) {
   return request({
-    url: 'gateway/platform/v1/dictionary/',
+    url: 'gateway/platform/api/dictionary/',
     method: 'post',
     data: obj
   })
@@ -48,21 +48,21 @@ export function postDictionary(obj) {
 
 export function getDictionary(id, method) {
   return request({
-    url: 'gateway/platform/v1/dictionary/' + id,
+    url: 'gateway/platform/api/dictionary/' + id,
     method: method || 'post'
   })
 }
 
 export function deleteDictionary(id) {
   return request({
-    url: 'gateway/platform/v1/dictionary/' + id,
+    url: 'gateway/platform/api/dictionary/' + id,
     method: 'delete'
   })
 }
 
 export function putDictionary(obj) {
   return request({
-    url: 'gateway/platform/v1/dictionary',
+    url: 'gateway/platform/api/dictionary',
     method: 'put',
     data: obj
   })
@@ -72,7 +72,7 @@ export function putDictionary(obj) {
 // 获取数据分页列表
 export function findDictionaryDetailPage(page) {
   return request({
-    url: 'gateway/platform/v1/dictionarydetail/paging',
+    url: 'gateway/platform/api/dictionarydetail/paging',
     method: 'post',
     data: page
   })
@@ -80,12 +80,12 @@ export function findDictionaryDetailPage(page) {
 
 // 获取所有数据列表
 export function listDictionaryDetail(data = {}) {
-  return postRequest('gateway/platform/v1/dictionarydetail/list', data)
+  return postRequest('gateway/platform/api/dictionarydetail/list', data)
 }
 
 export function postDictionaryDetail(obj) {
   return request({
-    url: 'gateway/platform/v1/dictionarydetail/',
+    url: 'gateway/platform/api/dictionarydetail/',
     method: 'post',
     data: obj
   })
@@ -93,28 +93,28 @@ export function postDictionaryDetail(obj) {
 
 export function listDictionaryDetailsByDicId(dicId, method) {
   return request({
-    url: 'gateway/platform/v1/dictionarydetail/batch/' + dicId,
+    url: 'gateway/platform/api/dictionarydetail/batch/' + dicId,
     method: method || 'post'
   })
 }
 
 export function getDictionaryDetail(id, method) {
   return request({
-    url: 'gateway/platform/v1/dictionarydetail/' + id,
+    url: 'gateway/platform/api/dictionarydetail/' + id,
     method: method || 'post'
   })
 }
 
 export function deleteDictionaryDetail(id) {
   return request({
-    url: 'gateway/platform/v1/dictionarydetail/' + id,
+    url: 'gateway/platform/api/dictionarydetail/' + id,
     method: 'delete'
   })
 }
 
 export function putDictionaryDetail(obj) {
   return request({
-    url: 'gateway/platform/v1/dictionarydetail',
+    url: 'gateway/platform/api/dictionarydetail',
     method: 'put',
     data: obj
   })

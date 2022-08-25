@@ -331,7 +331,7 @@ export default {
       listLoading: false,
       hackReset: true,
       listQuery: {
-        listUrl: 'gateway/platform/v1/user/paging',
+        listUrl: 'gateway/platform/api/user/paging',
         pageSizes: [5, 10, 25, 50, 100],
         search: {
           input: null,
@@ -382,7 +382,7 @@ export default {
           {
             value: 'delete',
             label: this.$t('table.delete'),
-            url: 'gateway/platform/v1/user/ids',
+            url: 'gateway/platform/api/user/ids',
             method: 'delete',
             permissionId: '15',
             confirm: true
@@ -390,7 +390,7 @@ export default {
           {
             value: 'disable',
             label: this.$t('table.disable'),
-            url: 'gateway/platform/v1/user/field/status/1',
+            url: 'gateway/platform/api/user/field/status/1',
             method: 'post',
             permissionId: '14',
             confirm: false
@@ -398,7 +398,7 @@ export default {
           {
             value: 'enable',
             label: this.$t('table.enable'),
-            url: 'gateway/platform/v1/user/field/status/0',
+            url: 'gateway/platform/api/user/field/status/0',
             method: 'post',
             permissionId: '14',
             confirm: false
@@ -406,7 +406,7 @@ export default {
           {
             value: 'lock',
             label: this.$t('anan_user.lock'),
-            url: 'gateway/platform/v1/user/field/status/9',
+            url: 'gateway/platform/api/user/field/status/9',
             method: 'post',
             permissionId: '14',
             confirm: false
@@ -414,7 +414,7 @@ export default {
           {
             value: 'sendMsg',
             label: this.$t('anan_user.sendMsg'),
-            url: 'gateway/platform/v1/user/sendMsg',
+            url: 'gateway/platform/api/user/sendMsg',
             method: 'post',
             permissionId: '-1',
             confirm: false

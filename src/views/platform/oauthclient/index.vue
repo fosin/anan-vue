@@ -154,7 +154,7 @@ export default {
   data() {
     return {
       listQuery: {
-        listUrl: 'gateway/platform/v1/oauthclient/paging',
+        listUrl: 'gateway/platform/api/oauthclient/paging',
         pageSizes: [5, 10, 25, 50, 100],
         search: {
           input: null,
@@ -195,7 +195,7 @@ export default {
           {
             value: 'delete',
             label: this.$t('table.delete'),
-            url: 'gateway/platform/v1/oauthclient/ids',
+            url: 'gateway/platform/api/oauthclient/ids',
             method: 'delete',
             permissionId: '52',
             confirm: true

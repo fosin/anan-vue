@@ -1,5 +1,5 @@
-import request from '@/utils/request'
 import { encrypt } from '@/utils/aesUtil'
+import request from '@/utils/request'
 import CryptoJS from 'crypto-js'
 
 const basic = 'Basic d2ViQXBwOndlYkFwcA=='
@@ -61,7 +61,7 @@ export function getUserInfo(method) {
 
 export function getUserPermissionTree(userId, method) {
   return request({
-    url: 'gateway/auth/v1/permission/user/tree/' + userId,
+    url: 'gateway/auth/api/permission/user/tree/' + userId,
     method: method || 'post'
   })
 }

@@ -1,7 +1,7 @@
 import request, { postRequest } from '@/utils/request'
 
 export function listPermissions(data = {}) {
-  return postRequest('gateway/platform/v1/permission/list', data)
+  return postRequest('gateway/platform/api/permission/list', data)
 }
 
 export function listChildPermissions(pid) {
@@ -12,26 +12,26 @@ export function listChildPermissions(pid) {
       sortOrder: 'ASC'
     }]
   }
-  return postRequest('gateway/platform/v1/permission/listChild', data)
+  return postRequest('gateway/platform/api/permission/listChild', data)
 }
 
 export function treePermissions(type) {
   return request({
-    url: 'gateway/platform/v1/permission/tree/' + type,
+    url: 'gateway/platform/api/permission/tree/' + type,
     method: 'post'
   })
 }
 
 export function treeUserPermissions(userId, type) {
   return request({
-    url: 'gateway/platform/v1/permission/userPermissionsTree/' + userId + '/' + type,
+    url: 'gateway/platform/api/permission/userPermissionsTree/' + userId + '/' + type,
     method: 'get'
   })
 }
 
 export function postPermission(obj) {
   return request({
-    url: 'gateway/platform/v1/permission/',
+    url: 'gateway/platform/api/permission/',
     method: 'post',
     data: obj
   })
@@ -39,21 +39,21 @@ export function postPermission(obj) {
 
 export function getPermission(id, method) {
   return request({
-    url: 'gateway/platform/v1/permission/' + id,
+    url: 'gateway/platform/api/permission/' + id,
     method: method || 'post'
   })
 }
 
 export function deletePermission(id) {
   return request({
-    url: 'gateway/platform/v1/permission/' + id,
+    url: 'gateway/platform/api/permission/' + id,
     method: 'delete'
   })
 }
 
 export function putPermission(obj) {
   return request({
-    url: 'gateway/platform/v1/permission/',
+    url: 'gateway/platform/api/permission/',
     method: 'put',
     data: obj
   })
