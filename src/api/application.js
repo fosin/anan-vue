@@ -10,6 +10,6 @@ export function loadUIUrl(url, method) {
 export function loadServiceNames(method) {
   return request({
     url: 'gateway/platform/api/application/serviceNames',
-    method: method || 'post'
+    method: method || 'get'
   })
 }

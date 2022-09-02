@@ -149,7 +149,7 @@
 
 <script>
 import IconsSelect from '@/components/IconsSelect/index'
-import { getServiceByStatus } from '@/views/platform/service/service'
+import { listServiceByStatus } from '@/views/platform/service/service'
 import { deletePermission, getPermission, getPermissionVname, listChildPermissions, postPermission, putPermission } from './permission'
 
 export default {
@@ -235,7 +235,7 @@ export default {
     this.loadDictionaryById(12).then(res => {
       this.methodOptions = res.details
     })
-    getServiceByStatus().then(response => {
+    listServiceByStatus().then(response => {
       this.validServices = response.data.data
     }).catch(reason => {
       this.$notify({

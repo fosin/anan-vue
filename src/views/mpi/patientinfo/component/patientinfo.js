@@ -1,4 +1,4 @@
-import request, { postRequest } from '@/utils/request'
+import request, { getRequest, postRequest } from '@/utils/request'
 
 // 获取个人基本信息表数据分页列表
 export function listPatientinfoPage(page) {
@@ -29,11 +29,8 @@ export function postPatientinfo(obj) {
   })
 }
 // 根据主键ID获取个人基本信息表数据
-export function getPatientinfo(id, method) {
-  return request({
-    url: 'gateway/mpi/api/patientinfo/' + id,
-    method: method || 'post'
-  })
+export function getPatientinfo(id, params) {
+  return getRequest('gateway/mpi/api/patientinfo/' + id, params)
 }
 // 根据主键ID删除个人基本信息表一条数据
 export function deletePatientinfo(id) {

@@ -1,4 +1,4 @@
-import request, { postRequest } from '@/utils/request'
+import request, { getRequest, postRequest } from '@/utils/request'
 
 // 获取联系方式数据分页列表
 export function listContactinfoPage(page) {
@@ -29,11 +29,8 @@ export function postContactinfo(obj) {
   })
 }
 // 根据主键ID获取联系方式数据
-export function getContactinfo(id, method) {
-  return request({
-    url: 'gateway/mpi/api/contactinfo/' + id,
-    method: method || 'post'
-  })
+export function getContactinfo(id, params) {
+  return getRequest('gateway/mpi/api/contactinfo/' + id, params)
 }
 // 根据主键ID删除联系方式一条数据
 export function deleteContactinfo(id) {

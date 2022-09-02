@@ -1,10 +1,10 @@
-import { postRequest } from '@/utils/request'
+import { getRequest, postRequest } from '@/utils/request'
 
 /**
  * 题库详情
  */
 export function fetchDetail(id, refs = '1') {
-  return postRequest('gateway/exam/api/repo/' + id, { refs: refs })
+  return getRequest('gateway/exam/api/repo/' + id, { refs: refs })
 }
 
 /**

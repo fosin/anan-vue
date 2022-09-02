@@ -1,4 +1,4 @@
-import request, { postRequest } from '@/utils/request'
+import request, { getRequest, postRequest } from '@/utils/request'
 
 // 获取操作日志数据分页列表
 export function listOperationlogPage(page) {
@@ -29,11 +29,8 @@ export function postOperationlog(obj) {
   })
 }
 // 根据主键ID获取操作日志数据
-export function getOperationlog(id, method) {
-  return request({
-    url: 'gateway/mpi/api/operationlog/' + id,
-    method: method || 'post'
-  })
+export function getOperationlog(id, params) {
+  return getRequest('gateway/mpi/api/operationlog/' + id, params)
 }
 // 根据主键ID删除操作日志一条数据
 export function deleteOperationlog(id) {

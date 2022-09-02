@@ -35,7 +35,7 @@
 
 <script>
 import { getPermissionVname } from '@/views/platform/permission/permission'
-import { getServiceByStatus } from '@/views/platform/service/service'
+import { listServiceByStatus } from '@/views/platform/service/service'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -74,7 +74,7 @@ export default {
     this.loadDictionaryById(13).then(res => {
       this.typeOptions = res.details
     })
-    getServiceByStatus().then(res => {
+    listServiceByStatus().then(res => {
       this.validServices = res.data.data
     })
   },

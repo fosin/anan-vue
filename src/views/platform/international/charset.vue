@@ -127,7 +127,7 @@ import JsonEditor from '@/components/JsonEditor/index'
 import waves from '@/directive/waves/index.js'
 import { formatDate } from '@/utils/date'
 import { listInternational } from '@/views/platform/international/international'
-import { listService } from '@/views/platform/service/service'
+import { listServiceByStatus } from '@/views/platform/service/service'
 import { listUserByTopId } from '@/views/platform/user/user'
 import { getCharset, postCharset, putCharset } from './charset'
 
@@ -266,7 +266,7 @@ export default {
         duration: 5000
       })
     })
-    listService().then(response => {
+    listServiceByStatus().then(response => {
       this.allServices = response.data.data
     }).catch(reason => {
       this.$notify({

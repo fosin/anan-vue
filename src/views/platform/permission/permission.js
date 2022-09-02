@@ -1,4 +1,4 @@
-import request, { postRequest } from '@/utils/request'
+import request, { getRequest, postRequest } from '@/utils/request'
 
 export function listPermissions(data = {}) {
   return postRequest('gateway/platform/api/permission/list', data)
@@ -37,11 +37,8 @@ export function postPermission(obj) {
   })
 }
 
-export function getPermission(id, method) {
-  return request({
-    url: 'gateway/platform/api/permission/' + id,
-    method: method || 'post'
-  })
+export function getPermission(id, params) {
+  return getRequest('gateway/platform/api/permission/' + id, params)
 }
 
 export function deletePermission(id) {

@@ -1,4 +1,4 @@
-import request, { postRequest } from '@/utils/request'
+import request, { getRequest, postRequest } from '@/utils/request'
 
 // 获取相关证件信息数据分页列表
 export function listCertificatePage(page) {
@@ -29,11 +29,8 @@ export function postCertificate(obj) {
   })
 }
 // 根据主键ID获取相关证件信息数据
-export function getCertificate(id, method) {
-  return request({
-    url: 'gateway/mpi/api/certificate/' + id,
-    method: method || 'post'
-  })
+export function getCertificate(id, params) {
+  return getRequest('gateway/mpi/api/certificate/' + id, params)
 }
 // 根据主键ID删除相关证件信息一条数据
 export function deleteCertificate(id) {

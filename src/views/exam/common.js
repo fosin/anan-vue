@@ -1,11 +1,11 @@
-import { postRequest } from '@/utils/request'
+import { getRequest, postRequest } from '@/utils/request'
 
 export function fetchList(url, query) {
   return postRequest(url, query)
 }
 
 export function fetchDetail(url, id) {
-  return postRequest(url, { 'id': id })
+  return getRequest(url, { 'id': id })
 }
 
 export function createOrUpdate(url, data) {

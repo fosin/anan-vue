@@ -1,10 +1,10 @@
-import request, { postRequest } from '@/utils/request'
+import request, { getRequest, postRequest } from '@/utils/request'
 
 // 获取角色的已拥有用户列表
 export function listRoleUsers(id) {
   return request({
     url: 'gateway/platform/api/role/users/' + id,
-    method: 'post'
+    method: 'get'
   })
 }
 
@@ -12,7 +12,7 @@ export function listRoleUsers(id) {
 export function listOtherUsers(id) {
   return request({
     url: 'gateway/platform/api/role/otherUsers/' + id,
-    method: 'post'
+    method: 'get'
   })
 }
 
@@ -38,7 +38,7 @@ export function listRolePage(page) {
 export function listRolePermissions(id) {
   return request({
     url: 'gateway/platform/api/role/permissions/' + id,
-    method: 'post'
+    method: 'get'
   })
 }
 
@@ -59,7 +59,7 @@ export function listRole(data = {}) {
 export function listOrganizRole(organizId) {
   return request({
     url: 'gateway/platform/api/role/list/organizId/' + organizId,
-    method: 'post'
+    method: 'get'
   })
 }
 export function postRole(obj) {
@@ -70,11 +70,8 @@ export function postRole(obj) {
   })
 }
 
-export function getRole(id, method) {
-  return request({
-    url: 'gateway/platform/api/role/' + id,
-    method: method || 'post'
-  })
+export function getRole(id, params) {
+  return getRequest('gateway/platform/api/role/' + id, params)
 }
 
 export function deleteRole(id) {

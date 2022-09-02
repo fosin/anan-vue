@@ -1,4 +1,4 @@
-import request, { postRequest } from '@/utils/request'
+import request, { getRequest, postRequest } from '@/utils/request'
 
 // 获取数据分页列表
 export function listParameterPage(page) {
@@ -21,11 +21,8 @@ export function postParameter(obj) {
   })
 }
 
-export function getParameter(id, method) {
-  return request({
-    url: 'gateway/platform/api/parameter/' + id,
-    method: method || 'post'
-  })
+export function getParameter(id, params) {
+  return getRequest('gateway/platform/api/parameter/' + id, params)
 }
 
 export function deleteParameter(id) {
@@ -44,12 +41,9 @@ export function putParameter(obj) {
 }
 
 export function applyParameter(id) {
-  return request({
-    url: 'gateway/platform/api/parameter/apply/' + id,
-    method: 'post'
-  })
+  return getRequest('gateway/platform/api/parameter/apply/' + id)
 }
 
 export function applysParameter() {
-  return postRequest('gateway/platform/api/parameter/applys')
+  return getRequest('gateway/platform/api/parameter/applys')
 }

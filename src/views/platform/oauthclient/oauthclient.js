@@ -1,4 +1,4 @@
-import request, { postRequest } from '@/utils/request'
+import request, { getRequest, postRequest } from '@/utils/request'
 
 // 获取客户端授权数据分页列表
 export function listClientPage(page) {
@@ -21,11 +21,8 @@ export function postClient(obj) {
   })
 }
 
-export function getClient(id, method) {
-  return request({
-    url: 'gateway/platform/api/oauthclient/' + id,
-    method: method || 'post'
-  })
+export function getClient(id, params) {
+  return getRequest('gateway/platform/api/oauthclient/' + id, params)
 }
 
 export function deleteClient(id) {

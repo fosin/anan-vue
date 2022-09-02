@@ -1,4 +1,4 @@
-import request, { postRequest } from '@/utils/request'
+import request, { getRequest, postRequest } from '@/utils/request'
 
 export function getDicData(data, keyName, keyValue) {
   for (const dicDetail of data) {
@@ -46,11 +46,8 @@ export function postDictionary(obj) {
   })
 }
 
-export function getDictionary(id, method) {
-  return request({
-    url: 'gateway/platform/api/dictionary/' + id,
-    method: method || 'post'
-  })
+export function getDictionary(id, params) {
+  return getRequest('gateway/platform/api/dictionary/' + id, params)
 }
 
 export function deleteDictionary(id) {
@@ -94,15 +91,12 @@ export function postDictionaryDetail(obj) {
 export function listDictionaryDetailsByDicId(dicId, method) {
   return request({
     url: 'gateway/platform/api/dictionarydetail/batch/' + dicId,
-    method: method || 'post'
+    method: method || 'get'
   })
 }
 
-export function getDictionaryDetail(id, method) {
-  return request({
-    url: 'gateway/platform/api/dictionarydetail/' + id,
-    method: method || 'post'
-  })
+export function getDictionaryDetail(id, params) {
+  return getRequest('gateway/platform/api/dictionarydetail/' + id, params)
 }
 
 export function deleteDictionaryDetail(id) {

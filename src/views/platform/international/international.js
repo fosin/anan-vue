@@ -1,4 +1,4 @@
-import request, { deleteRequest, getRequest, postRequest, putRequest } from '@/utils/request'
+import { deleteRequest, getRequest, postRequest, putRequest } from '@/utils/request'
 
 // 获取国际化语言集数据分页列表
 export function listInternationalPage(page) {
@@ -16,11 +16,8 @@ export function postInternational(obj) {
 }
 
 // 根据主键ID获取国际化语言集数据
-export function getInternational(id, method) {
-  if (method) {
-    return request({ url: 'gateway/platform/api/international/' + id, method: method })
-  }
-  return postRequest('gateway/platform/api/international/' + id)
+export function getInternational(id, params) {
+  return getRequest('gateway/platform/api/international/' + id, params)
 }
 
 // 根据主键ID删除国际化语言集一条数据
@@ -41,10 +38,10 @@ export function getInternationlsByStatus(status) {
 
 // 根据国际化语言编码查找国际化语言
 export function getInternationlByCode(code) {
-  return postRequest('gateway/platform/api/international/code/' + code)
+  return getRequest('gateway/platform/api/international/code/' + code)
 }
 
 // 查找默认语言
 export function findByDefaultFlag() {
-  return postRequest('gateway/platform/api/international/default')
+  return getRequest('gateway/platform/api/international/default')
 }

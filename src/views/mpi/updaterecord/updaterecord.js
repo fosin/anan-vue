@@ -1,4 +1,4 @@
-import request, { postRequest } from '@/utils/request'
+import request, { getRequest, postRequest } from '@/utils/request'
 
 // 获取人员信息更新记录数据分页列表
 export function listUpdaterecordPage(page) {
@@ -29,11 +29,8 @@ export function postUpdaterecord(obj) {
   })
 }
 // 根据主键ID获取人员信息更新记录数据
-export function getUpdaterecord(id, method) {
-  return request({
-    url: 'gateway/mpi/api/updaterecord/' + id,
-    method: method || 'post'
-  })
+export function getUpdaterecord(id, params) {
+  return getRequest('gateway/mpi/api/updaterecord/' + id, params)
 }
 // 根据主键ID删除人员信息更新记录一条数据
 export function deleteUpdaterecord(id) {

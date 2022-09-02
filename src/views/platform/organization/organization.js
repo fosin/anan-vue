@@ -17,11 +17,8 @@ export function postOrganiz(obj) {
   return postRequest('gateway/platform/api/organiz/', obj)
 }
 
-export function getOrganiz(id, method) {
-  return request({
-    url: 'gateway/platform/api/organiz/' + id,
-    method: method || 'post'
-  })
+export function getOrganiz(id, params) {
+  return getRequest('gateway/platform/api/organiz/' + id, params)
 }
 
 export function deleteOrganiz(id) {
@@ -41,7 +38,7 @@ export function putOrganiz(obj) {
 
 // 获取机构的所有权限列表
 export function listOrganizPermissions(id) {
-  return postRequest('gateway/platform/api/organiz/permissions/' + id)
+  return getRequest('gateway/platform/api/organiz/permissions/' + id)
 }
 
 // 更新机构权限
@@ -56,6 +53,6 @@ export function putOrganizPermissions(id, permissions) {
 export function getOrganizAuth(organizId, method) {
   return request({
     url: 'gateway/platform/api/organiz/auth/' + organizId,
-    method: method || 'post'
+    method: method || 'get'
   })
 }

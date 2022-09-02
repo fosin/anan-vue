@@ -1,4 +1,4 @@
-import request, { postRequest } from '@/utils/request'
+import request, { getRequest, postRequest } from '@/utils/request'
 
 // 获取系统版本表数据分页列表
 export function listVersionPage(page) {
@@ -23,11 +23,8 @@ export function postVersion(obj) {
   })
 }
 // 根据主键ID获取系统版本表数据
-export function getVersion(id, method) {
-  return request({
-    url: 'gateway/platform/api/version/' + id,
-    method: method || 'post'
-  })
+export function getVersion(id, params) {
+  return getRequest('gateway/platform/api/version/' + id, params)
 }
 // 根据主键ID删除系统版本表一条数据
 export function deleteVersion(id) {
@@ -49,7 +46,7 @@ export function putVersion(obj) {
 export function listVersionPermissions(id) {
   return request({
     url: 'gateway/platform/api/version/permissions/' + id,
-    method: 'post'
+    method: 'get'
   })
 }
 
@@ -66,6 +63,6 @@ export function putVersionPermissions(id, permissions) {
 export function listVersionChildPermissions(pid, versionId) {
   return request({
     url: 'gateway/platform/api/version/listChild/' + pid + '?versionId=' + versionId,
-    method: 'post'
+    method: 'get'
   })
 }

@@ -1,4 +1,4 @@
-import { postRequest } from '@/utils/request'
+import { getRequest, postRequest } from '@/utils/request'
 
 export function pagingTree(data) {
   return postRequest('gateway/exam/api/sys/depart/paging', data)
@@ -9,7 +9,7 @@ export function fetchTree(data) {
 }
 
 export function fetchDetail(id, refs = '1') {
-  return postRequest('gateway/exam/api/sys/depart/' + id, { refs: refs })
+  return getRequest('gateway/exam/api/sys/depart/' + id, { refs: refs })
 }
 
 export function deleteData(ids) {

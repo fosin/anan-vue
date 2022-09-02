@@ -1,11 +1,11 @@
-import { exportExcelRequest, postRequest, uploadFileRequest } from '@/utils/request'
+import { exportExcelRequest, getRequest, postRequest, uploadFileRequest } from '@/utils/request'
 
 /**
  * 试题详情
  * @param data
  */
 export function fetchDetail(id, refs = '1') {
-  return postRequest('gateway/exam/api/qu/qu/' + id, { refs: refs })
+  return getRequest('gateway/exam/api/qu/qu/' + id, { refs: refs })
 }
 
 /**

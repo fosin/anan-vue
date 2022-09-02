@@ -1,4 +1,4 @@
-import request, { postRequest } from '@/utils/request'
+import request, { getRequest, postRequest } from '@/utils/request'
 
 // 获取地址信息表数据分页列表
 export function listAddressPage(page) {
@@ -29,11 +29,8 @@ export function postAddress(obj) {
   })
 }
 // 根据主键ID获取地址信息表数据
-export function getAddress(id, method) {
-  return request({
-    url: 'gateway/mpi/api/address/' + id,
-    method: method || 'post'
-  })
+export function getAddress(id, params) {
+  return getRequest('gateway/mpi/api/address/' + id, params)
 }
 // 根据主键ID删除地址信息表一条数据
 export function deleteAddress(id) {

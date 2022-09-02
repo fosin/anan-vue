@@ -1,4 +1,4 @@
-import request, { postRequest } from '@/utils/request'
+import request, { getRequest, postRequest } from '@/utils/request'
 
 // 获取版本角色分页列表
 export function listVersionRolePage(page) {
@@ -22,7 +22,7 @@ export function listVersionRolePageByVersionId(page, versionId) {
 export function listVersionRolePermissions(id) {
   return request({
     url: 'gateway/platform/api/version/role/permissions/' + id,
-    method: 'post'
+    method: 'get'
   })
 }
 
@@ -47,11 +47,8 @@ export function postVersionRole(obj) {
   })
 }
 
-export function getVersionRole(id, method) {
-  return request({
-    url: 'gateway/platform/api/version/role/' + id,
-    method: method || 'post'
-  })
+export function getVersionRole(id, params) {
+  return getRequest('gateway/platform/api/version/role/' + id, params)
 }
 
 export function deleteVersionRole(id) {

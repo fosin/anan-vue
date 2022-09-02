@@ -100,8 +100,9 @@
     "admin",
     "dashboard",
     "element-ui",
-    "boilerplate",
-    "admin-template",
+    "anan",
+    "anan-cloud",
+    "anan-vue",
     "management-system"
   ],
   "license": "MIT",

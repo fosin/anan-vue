@@ -16,11 +16,8 @@ export function postCharset(obj) {
 }
 
 // 根据主键ID获取国际化语言字符集数据
-export function getCharset(id, method) {
-  if (method) {
-    return request({ url: 'gateway/platform/api/international/charset/' + id, method: method })
-  }
-  return postRequest('gateway/platform/api/international/charset/' + id)
+export function getCharset(id, params) {
+  return getRequest('gateway/platform/api/international/charset/' + id, params)
 }
 
 // 根据主键ID删除国际化语言字符集一条数据
@@ -33,17 +30,17 @@ export function putCharset(obj) {
   return putRequest('gateway/platform/api/international/charset', obj)
 }
 
-// 根据语言ID查找所有字符集清单,不传参数默认使用post查询所有的数据
+// 根据语言ID查找所有字符集清单
 export function getInternationlCharsets(internationalId, method) {
   if (!internationalId) internationalId = 0
   const url = 'gateway/platform/api/international/charset/internationalId/' + internationalId
-  if (method === 'get') {
-    return getRequest(url, method)
-  }
-  return postRequest(url)
+  return request({
+    url: url,
+    method: method || 'get'
+  })
 }
 
-// 根据语言ID查找所有字符集数据,不传参数默认使用post查询所有的数据
+// 根据语言ID查找所有字符集数据
 export function findAllByInternationalIdAndServiceId(internationalId, serviceId) {
   return listCharset({
     internationalId: internationalId,

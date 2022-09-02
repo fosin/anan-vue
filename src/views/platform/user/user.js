@@ -1,12 +1,12 @@
 import { encrypt } from '@/utils/aesUtil'
-import request, { postRequest } from '@/utils/request'
+import request, { getRequest, postRequest } from '@/utils/request'
 import CryptoJS from 'crypto-js'
 
 // 获取用户的所有角色列表
 export function listUserRoles(id) {
   return request({
     url: 'gateway/platform/api/user/roles/' + id,
-    method: 'post'
+    method: 'get'
   })
 }
 
@@ -14,7 +14,7 @@ export function listUserRoles(id) {
 export function listOtherRoles(id) {
   return request({
     url: 'gateway/platform/api/user/otherRoles/' + id,
-    method: 'post'
+    method: 'get'
   })
 }
 
@@ -31,7 +31,7 @@ export function putUserRoles(id, obj) {
 export function listUserPermissions(id, organizId) {
   return request({
     url: 'gateway/platform/api/user/permissions/' + id + '?organizId=' + organizId,
-    method: 'post'
+    method: 'get'
   })
 }
 
@@ -63,7 +63,7 @@ export function listByOrganizId(organizId, status) {
   }
   return request({
     url: 'gateway/platform/api/user/list/organizId/' + organizId + '/' + status,
-    method: 'post'
+    method: 'get'
   })
 }
 
@@ -77,14 +77,14 @@ export function listUserByTopId(topId, status) {
   }
   return request({
     url: 'gateway/platform/api/user/list/topId/' + topId + '/' + status,
-    method: 'post'
+    method: 'get'
   })
 }
 
 export function resetPassword(id) {
   return request({
     url: 'gateway/platform/api/user/resetPassword/' + id,
-    method: 'post'
+    method: 'get'
   })
 }
 export function changePassword(passObj) {
@@ -104,7 +104,7 @@ export function changePassword(passObj) {
   return request({
     url: 'gateway/platform/api/user/changePassword',
     method: 'post',
-    params: cipher
+    data: cipher
   })
 }
 export function postUser(obj) {
@@ -123,11 +123,8 @@ export function postUserRoles(obj) {
   })
 }
 
-export function getUser(id, method) {
-  return request({
-    url: 'gateway/platform/api/user/' + id,
-    method: method || 'post'
-  })
+export function getUser(id, params) {
+  return getRequest('gateway/platform/api/user/' + id, params)
 }
 
 export function deleteUser(id) {

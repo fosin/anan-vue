@@ -1,4 +1,4 @@
-import request, { postRequest } from '@/utils/request'
+import request, { getRequest, postRequest } from '@/utils/request'
 
 // 获取卡信息数据分页列表
 export function listCardinfoPage(page) {
@@ -29,11 +29,8 @@ export function postCardinfo(obj) {
   })
 }
 // 根据主键ID获取卡信息数据
-export function getCardinfo(id, method) {
-  return request({
-    url: 'gateway/mpi/api/cardinfo/' + id,
-    method: method || 'post'
-  })
+export function getCardinfo(id, params) {
+  return getRequest('gateway/mpi/api/cardinfo/' + id, params)
 }
 // 根据主键ID删除卡信息一条数据
 export function deleteCardinfo(id) {
