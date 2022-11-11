@@ -46,3 +46,9 @@ export function fetchRepoChild(data) {
 export function fetchRepoTree(userId) {
   return postRequest('gateway/exam/api/repo/tree/' + userId)
 }
+/**
+ * 手动刷新指定题库及其父题库的统计数据
+ */
+export function refreshData(repoId) {
+  return getRequest('gateway/exam/api/repo/refresh-data/' + repoId)
+}

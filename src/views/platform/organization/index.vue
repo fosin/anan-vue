@@ -421,7 +421,8 @@ export default {
         if (valid) {
           postOrganiz(this.form).then(response => {
             const pNode = this.$refs.organizTree.getNode(this.form.pid)
-            this.$refs.organizTree.append(response.data.data, pNode)
+            this.form.id = response.data.data
+            this.$refs.organizTree.append(this.form, pNode)
             // TODO 以下代码启用后可以解决tree控件bug(会导致原有子节点丢失问题)
             pNode.data.children = null
 

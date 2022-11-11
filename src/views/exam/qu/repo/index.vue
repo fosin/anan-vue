@@ -76,8 +76,19 @@
         </template>
       </el-table-column>
       <el-table-column :label="$t('table.updateTime.label')" width="160px" align="center" sortable prop="updateTime" />
-      <el-table-column :label="$t('table.actions')" align="center" width="120" fixed="right">
+      <el-table-column :label="$t('table.actions')" align="center" width="190" fixed="right">
         <template slot-scope="scope">
+          <el-tooltip class="item" effect="dark" :content="$t('table.refresh')" placement="top">
+            <el-button
+              v-waves
+              round
+              size="mini"
+              class="filter-item"
+              type="warning"
+              icon="el-icon-refresh"
+              @click="handleRefreshData(scope.row)"
+            />
+          </el-tooltip>
           <el-tooltip class="item" effect="dark" :content="$t('table.edit')" placement="top">
             <el-button
               v-waves
@@ -111,7 +122,7 @@
 
 <script>
 import ExamManagementRepoAdd from '@/views/exam/qu/repo/form'
-import { deleteRepoById, fetchRepoChild } from '@/views/exam/qu/repo/repo'
+import { deleteRepoById, fetchRepoChild, refreshData } from '@/views/exam/qu/repo/repo'
 import { listUserByTopId } from '@/views/platform/user/user'
 
 export default {
@@ -205,6 +216,31 @@ export default {
         this.dataChanged = false
         this.handleSearch()
       }
+    },
+    handleRefreshData(row) {
+      this.repoForm = row
+      if (!this.repoForm || !this.repoForm.id) {
+        this.$message({
+          message: '操作前请先选择一条数据!'
+        })
+        return
+      }
+      this.repoId = this.repoForm.id
+      refreshData(row.id).then(() => {
+        this.$notify({
+          title: '统计题库试题数据成功',
+          type: 'success',
+          duration: 5000
+        })
+        this.handleSearch()
+      }).catch(reason => {
+        this.$notify({
+          title: '统计题库试题数据',
+          message: reason.message,
+          type: 'error',
+          duration: 5000
+        })
+      })
     },
     handleEdit(row) {
       this.repoForm = row
