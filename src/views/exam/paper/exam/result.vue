@@ -87,7 +87,7 @@
               {{ paperData.totalScore }} / 合格分：{{ paperData.qualifyScore }}
             </el-form-item>
             <el-form-item label="评级" prop="">
-              <span :style="{ color: rankColor[paperData.rank] }">{{ getAnanDicValue(rankDics, paperData.rank) }}</span>
+              <span :style="{ color: gradeColor[paperData.grade] }">{{ getAnanDicValue(gradeDics, paperData.grade) }}</span>
             </el-form-item>
             <el-form-item label="时间" prop="">
               {{ paperData.createTime }}
@@ -112,8 +112,8 @@ export default {
       // 试卷ID
       dynamicStyle: {},
       paperStates: [],
-      rankDics: [],
-      rankColor: {
+      gradeDics: [],
+      gradeColor: {
         0: '#ff0000',
         1: '#00ff00',
         2: '#0000FF',
@@ -141,7 +141,7 @@ export default {
       this.paperStates = res.details
     })
     this.loadDictionaryById(148).then(res => {
-      this.rankDics = res.details
+      this.gradeDics = res.details
     })
     const params = this.$route.params.id.split(',')
     const id = params[0]

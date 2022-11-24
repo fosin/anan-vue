@@ -88,7 +88,7 @@
           label="评级"
           align="center"
           width="90px"
-          prop="rank"
+          prop="grade"
           sortable="custom"
           :sort-orders="['ascending','descending']"
         >
@@ -96,7 +96,7 @@
             <span v-if="scope.row.state===1">待阅卷</span>
             <span v-else-if="scope.row.state===0">待交卷</span>
             <span v-else>
-              <span :style="{ color: rankColor[scope.row.rank] }">{{ getAnanDicValue(rankDics, scope.row.rank) }}</span>
+              <span :style="{ color: gradeColor[scope.row.grade] }">{{ getAnanDicValue(gradeDics, scope.row.grade) }}</span>
             </span>
           </template>
         </el-table-column>
@@ -170,8 +170,8 @@ export default {
   components: { DataTable },
   data() {
     return {
-      rankDics: [],
-      rankColor: {
+      gradeDics: [],
+      gradeColor: {
         0: '#ff0000',
         1: '#00ff00',
         2: '#0000FF',
@@ -266,7 +266,7 @@ export default {
       this.paperStates = res.details
     })
     this.loadDictionaryById(148).then(res => {
-      this.rankDics = res.details
+      this.gradeDics = res.details
     })
     treeAllChildOrganiz(this.ananUserInfo.organizId).then(response => {
       this.treeData = response.data.data || []
@@ -283,7 +283,7 @@ export default {
     getAccuracyColor(data) {
       const qualifyAcc = data.qualifyScore / data.totalScore * 100
       if (qualifyAcc > data.accuracy) {
-        return this.rankColor[0]
+        return this.gradeColor[0]
       } else {
         return '#000000'
       }

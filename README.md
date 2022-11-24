@@ -58,10 +58,13 @@ npm config set disturl https://npm.taobao.org/dist --global
 npm install -g @vue/cli@4.5.17
 
 # 安装依赖包
-#如果报错The unauthenticated git protocol on port 9418 is no longer supported.，则需要设置git
-#git config --global url."https://".insteadOf git://
 
 npm install
+
+# 常见错误
+## 问题1：如果报错The unauthenticated git protocol on port 9418 is no longer supported.，则需要设置git
+## 或者error D:\Git\Git\bin\git.EXE ls-remote -h -t git://github.com/adobe-webplatform/eve.git
+## git config --global url."https://".insteadOf git://
 
 # 启动开发调试 http://localhost:9528/anan-vue/
 npm run dev

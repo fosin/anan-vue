@@ -35,12 +35,12 @@
         <el-table-column
           label="最高评级"
           align="center"
-          prop="rank"
+          prop="grade"
           sortable="true"
           width="120px"
         >
           <template slot-scope="scope">
-            <span :style="{ color: rankColor[scope.row.rank] }">{{ getAnanDicValue(rankDics, scope.row.rank) }}</span>
+            <span :style="{ color: gradeColor[scope.row.grade] }">{{ getAnanDicValue(gradeDics, scope.row.grade) }}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -101,8 +101,8 @@ export default {
   components: { MyPaperList, DataTable },
   data() {
     return {
-      rankDics: [],
-      rankColor: {
+      gradeDics: [],
+      gradeColor: {
         0: '#ff0000',
         1: '#00ff00',
         2: '#0000FF',
@@ -177,7 +177,7 @@ export default {
   },
   created() {
     this.loadDictionaryById(148).then(res => {
-      this.rankDics = res.details
+      this.gradeDics = res.details
     })
     this.listQuery.pageModule.params.userId = this.ananUserInfo.id
   },

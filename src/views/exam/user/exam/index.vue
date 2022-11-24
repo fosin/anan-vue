@@ -26,7 +26,7 @@
           align="center"
         >
           <template slot-scope="scope">
-            <span :style="{ color: rankColor[scope.row.rank] }">{{ getAnanDicValue(rankDics, scope.row.rank) }}</span>
+            <span :style="{ color: gradeColor[scope.row.grade] }">{{ getAnanDicValue(gradeDics, scope.row.grade) }}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -61,8 +61,8 @@ export default {
   components: { MyPaperList, DataTable },
   data() {
     return {
-      rankDics: [],
-      rankColor: {
+      gradeDics: [],
+      gradeColor: {
         0: '#ff0000',
         1: '#00ff00',
         2: '#0000FF',
@@ -130,7 +130,7 @@ export default {
   created() {
     this.listQuery.pageModule.params.examId = this.$route.params.examId
     this.loadDictionaryById(148).then(res => {
-      this.rankDics = res.details
+      this.gradeDics = res.details
     })
   },
   methods: {

@@ -18,7 +18,7 @@
           得分/正确率：{{ item.userScore }} / {{ item.accuracy }}%
         </el-col>
         <el-col v-if="item.state ===2 || item.state ===3" :span="5">
-          考试评级：<span :style="{ color: rankColor[item.rank] }">{{ getAnanDicValue(rankDics, item.rank) }}</span>
+          考试评级：<span :style="{ color: gradeColor[item.grade] }">{{ getAnanDicValue(gradeDics, item.grade) }}</span>
         </el-col>
         <el-col v-if="item.showPaper" :span="6">
           <el-button type="primary" size="mini" icon="el-icon-user" @click="handleExamResult(item.id)">考试详情</el-button>
@@ -50,8 +50,8 @@ export default {
   },
   data() {
     return {
-      rankDics: [],
-      rankColor: {
+      gradeDics: [],
+      gradeColor: {
         0: '#ff0000',
         1: '#00ff00',
         2: '#0000FF',
@@ -85,7 +85,7 @@ export default {
       this.paperStates = res.details
     })
     this.loadDictionaryById(148).then(res => {
-      this.rankDics = res.details
+      this.gradeDics = res.details
     })
     this.fetchPaperList()
   },
