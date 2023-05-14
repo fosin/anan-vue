@@ -244,7 +244,7 @@ export default {
             value: 'enableStatus',
             label: this.$t('table.enable'),
             url: 'gateway/platform/api/role/field/status/0',
-            method: 'post',
+            method: 'put',
             permissionId: '25',
             confirm: false
           },
@@ -252,7 +252,7 @@ export default {
             value: 'disableStatus',
             label: this.$t('table.disable'),
             url: 'gateway/platform/api/role/field/status/1',
-            method: 'post',
+            method: 'put',
             permissionId: '25',
             confirm: false
           }

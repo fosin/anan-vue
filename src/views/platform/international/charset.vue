@@ -202,7 +202,7 @@ export default {
             value: 'disable',
             label: this.$t('table.disable'),
             url: 'gateway/platform/api/international/charset/field/status/1',
-            method: 'post',
+            method: 'put',
             permissionId: '183',
             confirm: false
           },
@@ -210,7 +210,7 @@ export default {
             value: 'enable',
             label: this.$t('table.enable'),
             url: 'gateway/platform/api/international/charset/field/status/0',
-            method: 'post',
+            method: 'put',
             permissionId: '183',
             confirm: false
           }

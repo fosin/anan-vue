@@ -61,9 +61,9 @@
           <el-select v-model="form.type" :placeholder="$t('anan_dictionary.type.placeholder')" class="filter-item">
             <el-option
               v-for="item in typeOptions"
-              :key="item.name"
-              :label="item.value"
-              :value="item.name"
+              :key="item.code"
+              :value="item.code"
+              :label="item.name"
               :disabled="item.status === 1"
             />
           </el-select>
@@ -166,7 +166,7 @@ export default {
             value: 'disable',
             label: this.$t('table.disable'),
             url: 'gateway/platform/api/dictionary/field/status/1',
-            method: 'post',
+            method: 'put',
             permissionId: '60',
             confirm: false
           },
@@ -174,7 +174,7 @@ export default {
             value: 'enable',
             label: this.$t('table.enable'),
             url: 'gateway/platform/api/dictionary/field/status/0',
-            method: 'post',
+            method: 'put',
             permissionId: '60',
             confirm: false
           }
@@ -250,9 +250,9 @@ export default {
   methods: {
     getTypeName(type) {
       const typeOption = this.typeOptions.filter(value => {
-        return value.name === type
+        return value.code === type
       })
-      return typeOption.length > 0 ? typeOption[0].value : type
+      return typeOption.length > 0 ? typeOption[0].name : type
     },
     handleAdd() {
       this.resetForm()

@@ -80,9 +80,9 @@
 </template>
 
 <script>
+import { formatDate } from '@/utils/date'
 import { mapGetters } from 'vuex'
 import { changePassword } from './user'
-import { formatDate } from '@/utils/date'
 
 export default {
   filters: {
@@ -187,9 +187,9 @@ export default {
     },
     getSexName(type) {
       const typeOption = this.sexOptions.filter(value => {
-        return value.name === type
+        return value.code === type
       })
-      return typeOption.length > 0 ? typeOption[0].value : type
+      return typeOption.length > 0 ? typeOption[0].name : type
     },
     resetForm() {
       this.$refs.user.resetFields()

@@ -42,7 +42,7 @@ export const constantRouterMap = [
       }
     ]
   },
-  { path: '/login', component: () => import('@/views/platform/login/index'), hidden: true },
+  // { path: '/login', component: () => import('@/views/platform/login/index'), hidden: true },
   { path: '/authredirect', component: () => import('@/views/platform/login/authredirect'), hidden: true },
   { path: '/401', component: () => import('@/views/platform/errorPage/401'), hidden: true },
   { path: '/404', component: Page404, hidden: true },

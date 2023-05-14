@@ -10,17 +10,17 @@
       <template slot="filter-content" />
       <template slot="data-columns">
         <el-table-column
+          :label="$t('anan_dictionary_detail.code.label')"
+          align="center"
+          sortable
+          prop="code"
+          width="120px"
+        />
+        <el-table-column
           :label="$t('anan_dictionary_detail.name.label')"
           align="center"
           sortable
           prop="name"
-          width="120px"
-        />
-        <el-table-column
-          :label="$t('anan_dictionary_detail.value.label')"
-          align="center"
-          sortable
-          prop="value"
           width="150px"
         />
         <el-table-column
@@ -90,11 +90,11 @@
         <el-form-item :label="$t('anan_dictionary.name.label')">
           <el-input v-model="selectedDictionary.name" :disabled="true" />
         </el-form-item>
+        <el-form-item :label="$t('anan_dictionary_detail.code.label')" prop="code">
+          <el-input v-model="form.code" :placeholder="$t('anan_dictionary_detail.code.placeholder')" />
+        </el-form-item>
         <el-form-item :label="$t('anan_dictionary_detail.name.label')" prop="name">
           <el-input v-model="form.name" :placeholder="$t('anan_dictionary_detail.name.placeholder')" />
-        </el-form-item>
-        <el-form-item :label="$t('anan_dictionary_detail.value.label')" prop="value">
-          <el-input v-model="form.value" :placeholder="$t('anan_dictionary_detail.value.placeholder')" />
         </el-form-item>
         <el-form-item :label="$t('anan_dictionary_detail.sort.label')" prop="sort">
           <el-input v-model="form.sort" :placeholder="$t('anan_dictionary_detail.sort.placeholder')" />
@@ -188,7 +188,7 @@ export default {
               ]
             },
             sortRules: [{
-              sortName: 'name',
+              sortName: 'code',
               sortOrder: 'ASC'
             }]
           }
@@ -211,7 +211,7 @@ export default {
             value: 'disable',
             label: this.$t('table.disable'),
             url: 'gateway/platform/api/dictionarydetail/field/status/1',
-            method: 'post',
+            method: 'put',
             permissionId: '63',
             confirm: false
           },
@@ -219,7 +219,7 @@ export default {
             value: 'enable',
             label: this.$t('table.enable'),
             url: 'gateway/platform/api/dictionarydetail/field/status/0',
-            method: 'post',
+            method: 'put',
             permissionId: '63',
             confirm: false
           }
@@ -248,7 +248,7 @@ export default {
             trigger: 'blur'
           }
         ],
-        name: [
+        code: [
           {
             required: true,
             message: '字典明细项键不能为空',
@@ -293,9 +293,9 @@ export default {
     getStatusValue(status) {
       if (this.statusOptions && this.statusOptions.length > 0) {
         const statusOption = this.statusOptions.filter(value => {
-          return value.name === status
+          return value.code === status
         })
-        return statusOption.length > 0 ? statusOption[0].value : status
+        return statusOption.length > 0 ? statusOption[0].name : status
       }
       return status
     },
@@ -388,8 +388,8 @@ export default {
       const sort = this.$refs.pagingTable.dataList.total + 1
       this.form = {
         id: undefined,
-        name: this.DefaultDictionaryDetailNameAndSort === 1 ? sort : undefined,
-        value: undefined,
+        code: this.DefaultDictionaryDetailNameAndSort === 1 ? sort : undefined,
+        name: undefined,
         scode: undefined,
         scope: undefined,
         sort: this.DefaultDictionaryDetailNameAndSort === 1 ? sort : undefined,

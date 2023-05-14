@@ -2,7 +2,6 @@ import axios from 'axios'
 import { MessageBox, Notification } from 'element-ui'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
-import store from '../store'
 // import { cacheAdapterEnhancer } from '@/utils/cache'
 
 // progress bar style
@@ -26,8 +25,8 @@ const request = axios.create({
   // }),
   withCredentials: true // 跨域请求，允许保存cookie
 })
-let reLogin = false
-let errorStatus = false
+// const reLogin = false
+const errorStatus = false
 
 // request interceptor
 request.interceptors.request.use(config => {
@@ -35,10 +34,10 @@ request.interceptors.request.use(config => {
   if (errorStatus) {
     return Promise.reject('系统崩溃了，请重新登陆系统，再尝试！')
   }
-  if (store.getters.ananToken.access_token && store.getters.ananUserInfo) {
-    // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
-    config.headers['Authorization'] = wordCap(store.getters.ananToken.token_type) + ' ' + store.getters.ananToken.access_token
-  }
+  // if (store.getters.ananToken.access_token && store.getters.ananUserInfo) {
+  //   // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
+  //   config.headers['Authorization'] = wordCap(store.getters.ananToken.token_type) + ' ' + store.getters.ananToken.access_token
+  // }
   // 如果请求没有附加API版本号，则附加默认版本号
   const params = config.params
   if (!params || (!params['version'] && config.url.indexOf('version') < 1)) {
@@ -66,19 +65,25 @@ request.interceptors.response.use(response => {
   // 我们可以在这里对异常状态作统一处理
   // 尝试刷新access_toekn续用登录状态
   const status = error.response.status
+  const location = error.response.Location
   switch (status) {
-    case 401:
-      directReLogin()
+    case 302:
+      if (location.indexOf('/sso/login') > 0) {
+        window.location.href = location
+      }
       break
-    case 403:
-      store.dispatch('RefreshAccessToken').then(() => {
-        reLogin = false
-        return Promise.resolve()
-      }).catch(() => {
-        directReLogin()
-        reLogin = false
-      })
-      break
+      //   case 401:
+      //     directReLogin()
+      //     break
+      //   case 403:
+      //     store.dispatch('RefreshAccessToken').then(() => {
+      //       reLogin = false
+      //       return Promise.resolve()
+      //     }).catch(() => {
+      //       directReLogin()
+      //       reLogin = false
+      //     })
+      //     break
     default:
       break
   }
@@ -87,33 +92,33 @@ request.interceptors.response.use(response => {
 /**
  * 重新登陆
  */
-function directReLogin() {
-  if (!reLogin) {
-    reLogin = true
-    MessageBox.confirm('无效的登陆信息，取消继续留在该页面或者重新登录', '确定登出', {
-      confirmButtonText: '重新登录',
-      cancelButtonText: '取消',
-      type: 'error'
-    }).then(() => {
-      store.dispatch('FedLogOut').then(() => {
-        location.reload() // 为了重新实例化vue-router对象 避免bug
-      })
-    }).catch(() => {
-      reLogin = false
-      errorStatus = true
-    })
-  }
-}
+// function directReLogin() {
+// if (!reLogin) {
+//   reLogin = true
+//   MessageBox.confirm('无效的登陆信息，取消继续留在该页面或者重新登录', '确定登出', {
+//     confirmButtonText: '重新登录',
+//     cancelButtonText: '取消',
+//     type: 'error'
+//   }).then(() => {
+//     store.dispatch('FedLogOut').then(() => {
+//       location.reload() // 为了重新实例化vue-router对象 避免bug
+//     })
+//   }).catch(() => {
+//     reLogin = false
+//     errorStatus = true
+//   })
+// }
+// }
 
 /**
  * 首字母大写
  * @return {string}
  */
-function wordCap(s) {
-  return s.toLowerCase().replace(/\b([\w|']+)\b/g, function(word) {
-    return word.replace(word.charAt(0), word.charAt(0).toUpperCase())
-  })
-}
+// function wordCap(s) {
+//   return s.toLowerCase().replace(/\b([\w|']+)\b/g, function(word) {
+//     return word.replace(word.charAt(0), word.charAt(0).toUpperCase())
+//   })
+// }
 function getRealError(from, error) {
   switch (from) {
     case 1:

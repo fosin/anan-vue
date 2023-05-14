@@ -45,7 +45,7 @@ export function putVersion(obj) {
 // 获取版本的所有权限列表
 export function listVersionPermissions(id) {
   return request({
-    url: 'gateway/platform/api/version/permissions/' + id,
+    url: 'gateway/platform/api/version/permission/batch/' + id,
     method: 'get'
   })
 }
@@ -53,7 +53,7 @@ export function listVersionPermissions(id) {
 // 更新版本权限
 export function putVersionPermissions(id, permissions) {
   return request({
-    url: 'gateway/platform/api/version/permissions/' + id,
+    url: 'gateway/platform/api/version/permission/batch/' + id,
     method: 'put',
     data: permissions
   })

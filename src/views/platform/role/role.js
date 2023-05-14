@@ -3,7 +3,7 @@ import request, { getRequest, postRequest } from '@/utils/request'
 // 获取角色的已拥有用户列表
 export function listRoleUsers(id) {
   return request({
-    url: 'gateway/platform/api/role/users/' + id,
+    url: 'gateway/platform/api/role/user/batch/' + id,
     method: 'get'
   })
 }
@@ -11,7 +11,7 @@ export function listRoleUsers(id) {
 // 获取角色的所有未拥有的用户列表
 export function listOtherUsers(id) {
   return request({
-    url: 'gateway/platform/api/role/otherUsers/' + id,
+    url: 'gateway/platform/api/role/user/other/' + id,
     method: 'get'
   })
 }
@@ -19,7 +19,7 @@ export function listOtherUsers(id) {
 // 更新角色的用户
 export function putRoleUsers(id, obj) {
   return request({
-    url: 'gateway/platform/api/role/users/' + id,
+    url: 'gateway/platform/api/role/user/batch/' + id,
     method: 'put',
     data: obj
   })
@@ -37,7 +37,7 @@ export function listRolePage(page) {
 // 获取角色的所有权限列表
 export function listRolePermissions(id) {
   return request({
-    url: 'gateway/platform/api/role/permissions/' + id,
+    url: 'gateway/platform/api/role/permission/batch/' + id,
     method: 'get'
   })
 }
@@ -45,7 +45,7 @@ export function listRolePermissions(id) {
 // 更新角色权限
 export function putRolePermissions(id, rolePermissions) {
   return request({
-    url: 'gateway/platform/api/role/permissions/' + id,
+    url: 'gateway/platform/api/role/permission/batch/' + id,
     method: 'put',
     data: rolePermissions
   })

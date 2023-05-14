@@ -290,7 +290,7 @@ import { mapGetters } from 'vuex'
 import { getOrganiz, getOrganizAuth, listOrganizAllChild, treeAllChildOrganiz } from '../organization/organization'
 import { listOrganizRole } from '../role/role'
 import { listVersionChildPermissions } from '../version/version'
-import { getUser, listUserByTopId, listUserPermissions, listUserRoles, postUser, putUser, putUserPermissions, putUserRoles, resetPassword } from './user'
+import { getUser, listOrganizUserPermissions, listUserByTopId, listUserRoles, postUser, putUser, putUserPermissions, putUserRoles, resetPassword } from './user'
 
 export default {
   name: 'SystemUser',
@@ -391,7 +391,7 @@ export default {
             value: 'disable',
             label: this.$t('table.disable'),
             url: 'gateway/platform/api/user/field/status/1',
-            method: 'post',
+            method: 'put',
             permissionId: '14',
             confirm: false
           },
@@ -399,7 +399,7 @@ export default {
             value: 'enable',
             label: this.$t('table.enable'),
             url: 'gateway/platform/api/user/field/status/0',
-            method: 'post',
+            method: 'put',
             permissionId: '14',
             confirm: false
           },
@@ -407,7 +407,7 @@ export default {
             value: 'lock',
             label: this.$t('anan_user.lock'),
             url: 'gateway/platform/api/user/field/status/9',
-            method: 'post',
+            method: 'put',
             permissionId: '14',
             confirm: false
           },
@@ -630,9 +630,9 @@ export default {
     },
     getSexName(type) {
       const sexOption = this.sexOptions.filter(value => {
-        return value.name === type
+        return value.code === type
       })
-      return sexOption.length > 0 ? sexOption[0].value : type
+      return sexOption.length > 0 ? sexOption[0].name : type
     },
     loadOrganizAllChild(pid) {
       listOrganizAllChild(pid).then(response => {
@@ -813,7 +813,7 @@ export default {
             })
             this.versionId = versionId
           }
-          listUserPermissions(row.id, row.organizId).then(response => {
+          listOrganizUserPermissions(row.id, row.organizId).then(response => {
             this.userPermissions = response.data.data
             this.addCheckedKeys = this.getCheckedKeys(1, response.data.data)
             this.subCheckedKeys = this.getCheckedKeys(2, response.data.data)

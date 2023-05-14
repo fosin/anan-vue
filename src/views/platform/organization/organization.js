@@ -38,13 +38,13 @@ export function putOrganiz(obj) {
 
 // 获取机构的所有权限列表
 export function listOrganizPermissions(id) {
-  return getRequest('gateway/platform/api/organiz/permissions/' + id)
+  return getRequest('gateway/platform/api/organiz/permission/batch/' + id)
 }
 
 // 更新机构权限
 export function putOrganizPermissions(id, permissions) {
   return request({
-    url: 'gateway/platform/api/organiz/permissions/' + id,
+    url: 'gateway/platform/api/organiz/permission/batch/' + id,
     method: 'put',
     data: permissions
   })

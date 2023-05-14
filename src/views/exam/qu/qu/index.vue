@@ -191,7 +191,7 @@ export default {
             value: 'disable',
             label: this.$t('table.disable'),
             url: 'gateway/exam/api/qu/qu/field/state/1',
-            method: 'post',
+            method: 'put',
             permissionId: '0',
             confirm: true
           },
@@ -199,7 +199,7 @@ export default {
             value: 'enable',
             label: this.$t('table.enable'),
             url: 'gateway/exam/api/qu/qu/field/state/0',
-            method: 'post',
+            method: 'put',
             permissionId: '0',
             confirm: false
           },

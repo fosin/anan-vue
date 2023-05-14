@@ -422,9 +422,9 @@ export default {
     },
     getTypeName(type) {
       const typeOption = this.typeOptions.filter(value => {
-        return value.name === type
+        return value.code === type
       })
-      return typeOption.length > 0 ? typeOption[0].value : type
+      return typeOption.length > 0 ? typeOption[0].name : type
     },
     getScopeName(type, scope) {
       const scopeOptions = this.typeScopeOptions[type]
@@ -432,9 +432,9 @@ export default {
         return scope
       }
       const scopeOption = scopeOptions.filter(value => {
-        return value.name === scope
+        return value.code === scope
       })
-      return scopeOption && scopeOption.length && scopeOption.length > 0 ? scopeOption[0].value : scope
+      return scopeOption && scopeOption.length && scopeOption.length > 0 ? scopeOption[0].name : scope
     },
     handleAdd() {
       this.resetForm()

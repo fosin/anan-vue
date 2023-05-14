@@ -21,7 +21,7 @@ export function listVersionRolePageByVersionId(page, versionId) {
 // 获取版本角色的所有权限列表
 export function listVersionRolePermissions(id) {
   return request({
-    url: 'gateway/platform/api/version/role/permissions/' + id,
+    url: 'gateway/platform/api/version/role/permission/batch/' + id,
     method: 'get'
   })
 }
@@ -29,7 +29,7 @@ export function listVersionRolePermissions(id) {
 // 更新版本角色权限
 export function putVersionRolePermissions(id, rolePermissions) {
   return request({
-    url: 'gateway/platform/api/version/role/permissions/' + id,
+    url: 'gateway/platform/api/version/role/permission/batch/' + id,
     method: 'put',
     data: rolePermissions
   })

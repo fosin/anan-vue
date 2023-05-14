@@ -1,4 +1,4 @@
-import { getAccessToken, getUserInfo, getUserPermissionTree, logout, refreshAccessToken } from '@/api/login'
+import { getAccessToken, getUserDetail, getUserPermissionTree, logout, refreshAccessToken } from '@/api/login'
 import { getWebStore, removeWebStore, setWebStore } from '@/utils/webStorage'
 
 const user = {
@@ -126,11 +126,11 @@ const user = {
     // 获取用户信息
     GetUserInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
-        getUserInfo().then(response => {
+        getUserDetail().then(response => {
           if (!response.data.data) {
             reject('error')
           }
-          const data = response.data.data.claims
+          const data = response.data.data
           if (!data.enabled || !data.accountNonExpired || !data.accountNonLocked || !data.credentialsNonExpired) { // 验证返回的user是否有效用户
             reject('getInfo: user is disabled!')
           }
@@ -202,7 +202,7 @@ const user = {
       return new Promise(resolve => {
         commit('SET_TOKEN', role)
         setWebStore(role)
-        getUserInfo(role).then(response => {
+        getUserDetail(role).then(response => {
           const data = response.data.data
           commit('SET_CURRENT_ROLE', data.roles)
           resolve()

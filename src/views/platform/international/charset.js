@@ -33,7 +33,8 @@ export function putCharset(obj) {
 // 根据语言ID查找所有字符集清单
 export function getInternationlCharsets(internationalId, method) {
   if (!internationalId) internationalId = 0
-  const url = 'gateway/platform/api/international/charset/internationalId/' + internationalId
+  // const url = 'gateway/platform/api/international/charset/internationalId/' + internationalId
+  const url = 'gateway/platform/api/international/charset/batch/' + internationalId
   return request({
     url: url,
     method: method || 'get'

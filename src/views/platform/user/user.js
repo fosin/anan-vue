@@ -5,7 +5,7 @@ import CryptoJS from 'crypto-js'
 // 获取用户的所有角色列表
 export function listUserRoles(id) {
   return request({
-    url: 'gateway/platform/api/user/roles/' + id,
+    url: 'gateway/platform/api/user/role/' + id,
     method: 'get'
   })
 }
@@ -13,7 +13,7 @@ export function listUserRoles(id) {
 // 获取用户的所有未拥有的角色列表
 export function listOtherRoles(id) {
   return request({
-    url: 'gateway/platform/api/user/otherRoles/' + id,
+    url: 'gateway/platform/api/user/role/other/' + id,
     method: 'get'
   })
 }
@@ -21,24 +21,29 @@ export function listOtherRoles(id) {
 // 更新用户的角色
 export function putUserRoles(id, obj) {
   return request({
-    url: 'gateway/platform/api/user/roles/' + id,
+    url: 'gateway/platform/api/user/role/' + id,
     method: 'put',
     data: obj
   })
 }
 
 // 获取用户的所有权限列表
-export function listUserPermissions(id, organizId) {
-  return request({
-    url: 'gateway/platform/api/user/permissions/' + id + '?organizId=' + organizId,
-    method: 'get'
-  })
+export function listOrganizUserPermissions(id, organizId) {
+  const data = {
+    userId: id,
+    organizId: organizId
+  }
+  return listUserPermissions(data)
+}
+
+export function listUserPermissions(data = {}) {
+  return postRequest('gateway/platform/api/user/permission/list', data)
 }
 
 // 更新用户权限
 export function putUserPermissions(id, permissions) {
   return request({
-    url: 'gateway/platform/api/user/permissions/' + id,
+    url: 'gateway/platform/api/user/permission/batch' + id,
     method: 'put',
     data: permissions
   })

@@ -1,9 +1,5 @@
 import request, { getRequest, postRequest } from '@/utils/request'
 
-export function listPermissions(data = {}) {
-  return postRequest('gateway/platform/api/permission/list', data)
-}
-
 export function listChildPermissions(pid) {
   const data = {
     pid: pid,

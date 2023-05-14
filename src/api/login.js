@@ -20,7 +20,7 @@ export function getAccessToken(loginForm) {
   const cipheru = encrypt(keySize, iterationCount, salt, iv, passPhrase, username)
   const cipherp = encrypt(keySize, iterationCount, salt, iv, passPhrase, password)
   return request({
-    url: 'gateway/auth/oauth/token',
+    url: 'gateway/auth/oauth2/token',
     method: 'post',
     headers: {
       'Authorization': basic
@@ -36,7 +36,7 @@ export function refreshAccessToken(refresh_token) {
     return {}
   }
   return request({
-    url: 'gateway/auth/oauth/token',
+    url: 'gateway/auth/oauth2/token',
     method: 'post',
     headers: {
       'Authorization': basic
@@ -47,21 +47,21 @@ export function refreshAccessToken(refresh_token) {
 
 export function logout() {
   return request({
-    url: 'gateway/auth/oauth/removeToken',
+    url: 'gateway/auth/sso/logout',
     method: 'post'
   })
 }
 
-export function getUserInfo(method) {
+export function getUserDetail(method) {
   return request({
-    url: 'gateway/auth/oauth/userinfo/jwt',
+    url: 'gateway/auth/api/userdetail',
     method: method || 'post'
   })
 }
 
-export function getUserPermissionTree(userId, method) {
+export function getUserPermissionTree(userId) {
   return request({
-    url: 'gateway/auth/api/permission/user/tree/' + userId,
-    method: method || 'post'
+    url: 'gateway/auth/api/user/tree/' + userId,
+    method: 'get'
   })
 }
